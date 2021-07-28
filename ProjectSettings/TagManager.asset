@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Player
+  - Letter
   - 
   - 
   - 
@@ -40,6 +40,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Terrain
+    uniqueID: 3272147723
+    locked: 0
+  - name: Letters
+    uniqueID: 2006724999
     locked: 0
   - name: Actors
     uniqueID: 791868953
