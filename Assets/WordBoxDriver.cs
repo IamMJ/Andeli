@@ -8,7 +8,8 @@ using TMPro;
 public class WordBoxDriver : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI wordBoxTMP = null;
-    [SerializeField] Slider wordBoxSliderBG = null;
+    [SerializeField] Slider wordEraseSliderBG = null;
+    [SerializeField] Slider wordFiringSliderBG = null;
     string currentWord;
 
     //state
@@ -38,13 +39,23 @@ public class WordBoxDriver : MonoBehaviour
         wordBoxTMP.text = currentWord;
     }
 
-    public void FillWordSlider(float amount)
+    public void FillWordEraseSlider(float amount)
     {
-        wordBoxSliderBG.value = amount;
+        wordEraseSliderBG.value = amount;
     }
 
-    public void ClearWordSlider()
+    public void ClearWordEraseSlider()
     {
-        wordBoxSliderBG.value = 0f;
+        wordEraseSliderBG.value = 0f;
+    }
+
+    public void FillWordFiringSlider(float amount)
+    {
+        wordFiringSliderBG.value = amount;
+    }
+
+    public void ClearWordFiringSlider()
+    {
+        wordFiringSliderBG.value = 0;
     }
 }

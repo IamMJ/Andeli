@@ -15,9 +15,9 @@ TagManager:
   - 
   - Player
   - Letter
-  - 
-  - 
-  - 
+  - Enemy
+  - PlayerWeapon
+  - EnemyWeapon
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Letters
     uniqueID: 2006724999
+    locked: 0
+  - name: Weaponry
+    uniqueID: 358666835
     locked: 0
   - name: Actors
     uniqueID: 791868953
