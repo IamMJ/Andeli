@@ -8,13 +8,14 @@ public class PlayerInput : MonoBehaviour
     //init
     DebugHelper dh;
     WordBoxDriver wbd;
-    Collider2D[] targetHits = new Collider2D[10];
+    LetterCollector lc;
+    [SerializeField] Collider2D targetHit;
 
-    private enum TouchIntent { Move, EraseWord, FireWord };
+    private enum Intent { Move, EraseWord, FireWord, Unknown };
 
     //param
-    float longPressTime = 1.2f;
-    float pressRadius = 100f;
+    float longPressTime = 0.7f;
+    float pressRadius = 1.5f;
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -23,14 +24,9 @@ public class PlayerInput : MonoBehaviour
     Vector2 touchEndPos = Vector2.zero;
     float moveRate = 3f;
     Touch currentTouch;
-    TouchIntent touchIntent;
+    Intent intent = Intent.Unknown;
     bool isMobile = false;
-    float timeSpentLongPressing;
-    bool isSelectingWord = false;
-    bool isSelectingDirection = false;
-
-
-   
+    public float timeSpentLongPressing { get; private set; }  
 
     void Start()
     {
@@ -51,34 +47,35 @@ public class PlayerInput : MonoBehaviour
         else
         {
             HandleKeyboardInput();
-
-            if (GridHelper.CheckIfTouchingWordSection(Input.mousePosition))
-            {
-                HandleMouseClick();
-            }
+            HandleMouseInput();
         }
         CardinalizeDesiredMovement();
     }
 
     #region Touch Input
     private void HandleTouchInput()
-    {
+    { 
+        if (Input.touchCount == 0)
+        {
+            intent = Intent.Unknown;
+            return;
+        }
         if (Input.touchCount > 0)
         {
             currentTouch = Input.GetTouch(0);
             DetermineTouchIntent();
 
-            switch (touchIntent)
+            switch (intent)
             {
-                case TouchIntent.Move:
+                case Intent.Move:
                     HandleMovementTouch();
                     break;
 
-                case TouchIntent.FireWord:
-                    HandleTargetingTouch();
+                case Intent.FireWord:
+                    HandleFiringTouch();
                     break;
 
-                case TouchIntent.EraseWord:
+                case Intent.EraseWord:
                     HandleEraseWordTouch();
                     break;
             }
@@ -89,9 +86,14 @@ public class PlayerInput : MonoBehaviour
     private void DetermineTouchIntent()
     {
         //if touching a target, then intent is FireWeapon
-        if (Physics2D.OverlapCircleNonAlloc(currentTouch.position, pressRadius, targetHits, 1 << 10) > 0)
+        targetHit = null;
+        targetHit = Physics2D.OverlapCircle(Camera.main.ScreenToWorldPoint(currentTouch.position), pressRadius, 1 << 10);
+        if (targetHit)
         {
-            touchIntent = TouchIntent.FireWord;
+            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.DrawLine(pos, Vector3.up + pos, Color.blue, 2f);
+            Debug.DrawLine(pos, Vector3.left + pos, Color.blue, 2f);
+            intent = Intent.FireWord;
             dh.DisplayDebugLog("targeting something");
             return;
         }
@@ -99,14 +101,14 @@ public class PlayerInput : MonoBehaviour
         //if touching in main area, but not on a target, then intent is Move
         if (GridHelper.CheckIfTouchingWordSection(currentTouch.position) == false)
         {
-            touchIntent = TouchIntent.Move;
+            intent = Intent.Move;
             dh.DisplayDebugLog("intend to move");
             return;
         }
 
         else
         {
-            touchIntent = TouchIntent.EraseWord;
+            intent = Intent.EraseWord;
             dh.DisplayDebugLog("intend to erase word");
             return;
         }
@@ -119,15 +121,13 @@ public class PlayerInput : MonoBehaviour
             case TouchPhase.Began:
                 touchStartPos = currentTouch.position;
                 dh.DisplayDebugLog($"touched here: {touchStartPos}");
-                isSelectingDirection = true;
                 break;
 
             case TouchPhase.Ended:
                 touchEndPos = currentTouch.position;
-                dh.DisplayDebugLog($"ended here: {touchEndPos}");
+                //dh.DisplayDebugLog($"ended here: {touchEndPos}");
                 desMove = (touchStartPos - touchEndPos).normalized;
-                dh.DisplayDebugLog($"direction: {desMove}");
-                isSelectingDirection = false;
+                //dh.DisplayDebugLog($"direction: {desMove}");
                 break;
 
         }
@@ -135,36 +135,34 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleEraseWordTouch()
     {
+        if (!wbd.HasLetters) { return; }  //can't erase what isn't there. Possibility to fake-erase to gain advantage.
         if (currentTouch.phase == TouchPhase.Began)
         {
             timeSpentLongPressing = 0;
-            isSelectingWord = true;
             return;
         }
         if (currentTouch.phase == TouchPhase.Stationary || currentTouch.phase == TouchPhase.Stationary)
         {
-            timeSpentLongPressing += Time.deltaTime;
             wbd.FillWordEraseSlider(timeSpentLongPressing / longPressTime);
+            timeSpentLongPressing += Time.unscaledDeltaTime;
+            Time.timeScale = 0;
         }
         if (timeSpentLongPressing >= longPressTime)
         {
             //erase the word
-            wbd.ClearOutWordBox();
-            wbd.ClearWordEraseSlider();
-            isSelectingWord = false;
-            timeSpentLongPressing = 0;
+            CompleteLongPress_WordBoxActions();
+            return;
         }
         if (currentTouch.phase == TouchPhase.Ended)
         {
-            wbd.ClearWordEraseSlider();
-            isSelectingWord = false;
-            timeSpentLongPressing = 0;
+            IncompleteLongPress_WordBoxActions();
         }
 
     }
 
-    private void HandleTargetingTouch()
+    private void HandleFiringTouch()
     {
+        if (!wbd.HasLetters) { return; }
         if (currentTouch.phase == TouchPhase.Began)
         {
             timeSpentLongPressing = 0;
@@ -172,21 +170,18 @@ public class PlayerInput : MonoBehaviour
         }
         if (currentTouch.phase == TouchPhase.Stationary || currentTouch.phase == TouchPhase.Moved)
         {
-            timeSpentLongPressing += Time.deltaTime;
+            timeSpentLongPressing += Time.unscaledDeltaTime;
             wbd.FillWordFiringSlider(timeSpentLongPressing / longPressTime);
+            Time.timeScale = 0;
         }
         if (timeSpentLongPressing >= longPressTime)
         {
             //Fire the word!
-            dh.DisplayDebugLog("Shooting off the word!");
-            wbd.ClearOutWordBox();
-            wbd.ClearWordFiringSlider();
-            timeSpentLongPressing = 0;
+            CompleteLongPress_WordBoxActions();
         }
         if (currentTouch.phase == TouchPhase.Ended)
         {
-            wbd.ClearWordFiringSlider();
-            timeSpentLongPressing = 0;
+            IncompleteLongPress_WordBoxActions();
         }
     }
 
@@ -203,41 +198,128 @@ public class PlayerInput : MonoBehaviour
         desMove.y = Input.GetAxisRaw("Vertical");
 
     }
-
-    private void HandleMouseClick()
+    private void HandleMouseInput()
     {
-
         if (Input.GetMouseButtonDown(0))
         {
-            timeSpentLongPressing = 0;
-            isSelectingWord = true;
+            DetermineMouseIntent();            
+        }
+        switch (intent)
+        {
+            case Intent.Move:
+                //do nothing; movement not handled by mouse, just keyboard
+                return;
+
+            case Intent.EraseWord:
+                HandleEraseWordMouse();
+                return;
+
+            case Intent.FireWord:
+                HandleFireWordMouse();
+                return;
+
+            case Intent.Unknown:
+                //do nothing
+                return;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            intent = Intent.Unknown;
+        }
+    }
+
+    private void DetermineMouseIntent()
+    {
+        //if touching an enemy, then intent is FireWeapon
+        targetHit = null;
+        targetHit = Physics2D.OverlapCircle(Camera.main.ScreenToWorldPoint(Input.mousePosition), pressRadius, 1 << 10);
+        if (targetHit)
+        {
+            Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.DrawLine(pos, Vector3.up + pos, Color.blue, 2f);
+            Debug.DrawLine(pos, Vector3.left + pos, Color.blue, 2f);
+            intent = Intent.FireWord;
+            dh.DisplayDebugLog("targeting something");
+            return;
         }
 
-        if (Input.GetMouseButton(0) && isSelectingWord)
+        //if touching in main area, but not on a target, then intent is Move
+        if (GridHelper.CheckIfTouchingWordSection(Input.mousePosition) == false)
         {
-            timeSpentLongPressing += Time.deltaTime;
+            intent = Intent.Move;
+            dh.DisplayDebugLog("intend to move");
+            return;
+        }
+
+        else
+        {
+            intent = Intent.EraseWord;
+            dh.DisplayDebugLog("intend to erase word");
+            return;
+        }
+    }
+    private void HandleEraseWordMouse()
+    {
+        if (!wbd.HasLetters) { return; }
+        if (Input.GetMouseButton(0))
+        {
+            timeSpentLongPressing += Time.unscaledDeltaTime;
+            Time.timeScale = 0;
             wbd.FillWordEraseSlider(timeSpentLongPressing / longPressTime);
-            //Debug.Log($"time spent: {timeSpentTouchingWordSection}");
+        }
+
+        if (timeSpentLongPressing >= longPressTime)
+        {
+            Debug.Log("Erase off the word");
+            //Placeholder for anything related to erasing the word here.
+            CompleteLongPress_WordBoxActions();
+            return;
+        }
+
+        if (Input.GetMouseButtonUp(0))  // Early release catcher
+        {
+            IncompleteLongPress_WordBoxActions();
+        }
+    }
+    private void HandleFireWordMouse()
+    {
+        if (!wbd.HasLetters) { return; }
+        if (Input.GetMouseButton(0))
+        {
+            timeSpentLongPressing += Time.unscaledDeltaTime;
+            wbd.FillWordFiringSlider(timeSpentLongPressing / longPressTime);
+            Time.timeScale = 0;
         }
 
         if (timeSpentLongPressing >= longPressTime)
         {
             Debug.Log("Fire off the word");
-            //activate the word!
-            wbd.ClearOutWordBox();
-            wbd.ClearWordEraseSlider();
-            timeSpentLongPressing = 0;
-            isSelectingWord = false;
+            //Placeholder for whatever action is required when a word if fired off.
+            CompleteLongPress_WordBoxActions();
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))  // Early release catcher
         {
-            timeSpentLongPressing = 0;
-            //early release.
-            wbd.ClearWordEraseSlider();
-            isSelectingWord = false;
+            IncompleteLongPress_WordBoxActions();
         }
-
     }
+
+    private void CompleteLongPress_WordBoxActions()
+    {
+        wbd.ClearOutWordBox();
+        IncompleteLongPress_WordBoxActions();
+    }
+
+    private void IncompleteLongPress_WordBoxActions()
+    {
+        wbd.ClearWordEraseSlider();
+        wbd.ClearWordFiringSlider();
+        timeSpentLongPressing = 0;
+        intent = Intent.Unknown;
+        Time.timeScale = 1f;
+    }
+
+
+
     #endregion
 
     private void CardinalizeDesiredMovement()

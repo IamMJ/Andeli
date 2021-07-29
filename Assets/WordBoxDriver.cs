@@ -10,6 +10,9 @@ public class WordBoxDriver : MonoBehaviour
     [SerializeField] TextMeshProUGUI wordBoxTMP = null;
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Slider wordFiringSliderBG = null;
+
+    //state
+    public bool HasLetters { get; private set; } = false;
     string currentWord;
 
     //state
@@ -30,6 +33,7 @@ public class WordBoxDriver : MonoBehaviour
         currentWord += newLetter;
         //Debug.Log("Current word: " + currentWord);
         wordBoxTMP.text = currentWord;
+        HasLetters = true;
     }
 
     public void ClearOutWordBox()
@@ -37,6 +41,7 @@ public class WordBoxDriver : MonoBehaviour
         Debug.Log("Clear out word box");
         currentWord = "";
         wordBoxTMP.text = currentWord;
+        HasLetters = false;
     }
 
     public void FillWordEraseSlider(float amount)

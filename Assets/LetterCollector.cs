@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class LetterCollector : MonoBehaviour
 {
+    //init
     WordBoxDriver wbd;
+    PlayerInput pi;
+
     void Start()
     {
         wbd = FindObjectOfType<WordBoxDriver>();
+        pi = GetComponent<PlayerInput>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (pi.timeSpentLongPressing > 0) { return; } //Don't pick up letters if pressing the screen. Prevents accidental misspells.
         LetterTile letterTile;
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {

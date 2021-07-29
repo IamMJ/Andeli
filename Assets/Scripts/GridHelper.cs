@@ -23,13 +23,12 @@ public static class GridHelper : object
     {
         if (touchPos.y < highestYValueForWordSection * Screen.height)
         {
-            Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection*Screen.height}. true");
-            
+            //Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection*Screen.height}. true");
             return true;
         }
         else
         {
-            Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection * Screen.height}. false");
+            //Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection * Screen.height}. false");
             return false;
         }
     }
