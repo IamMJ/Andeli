@@ -5,17 +5,35 @@ using UnityEngine;
 public class SpellMaker : MonoBehaviour
 {
     [SerializeField] GameObject spellPrefab = null;
-    LetterCollector lc;
+    WordBuilder wbd;
+    DebugHelper dh;
+    WordValidater wv;
+    string testWord;
 
     // Start is called before the first frame update
     void Start()
     {
-        lc = GetComponent<LetterCollector>();
+        dh = FindObjectOfType<DebugHelper>();
+        wbd = FindObjectOfType<WordBuilder>();
+        wv = FindObjectOfType<WordValidater>();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void FireCurrentWord()
     {
-        
+        testWord = wbd.GetCurrentWord();
+        if (wv.CheckWordValidity(testWord))
+        {
+            Debug.Log("Fire off the word!");
+        }
+        else
+        {
+            Debug.Log("stun the player.");
+        }
+
+
+
     }
+
+
 }

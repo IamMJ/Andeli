@@ -7,9 +7,10 @@ public class PlayerInput : MonoBehaviour
 {
     //init
     DebugHelper dh;
-    WordBoxDriver wbd;
+    WordBuilder wbd;
     LetterCollector lc;
     [SerializeField] Collider2D targetHit;
+    SpellMaker sm;
 
     private enum Intent { Move, EraseWord, FireWord, Unknown };
 
@@ -31,8 +32,8 @@ public class PlayerInput : MonoBehaviour
     void Start()
     {
         dh = FindObjectOfType<DebugHelper>();
-        wbd = FindObjectOfType<WordBoxDriver>();
-
+        wbd = FindObjectOfType<WordBuilder>();
+        sm = GetComponent<SpellMaker>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
     }
@@ -94,7 +95,7 @@ public class PlayerInput : MonoBehaviour
             Debug.DrawLine(pos, Vector3.up + pos, Color.blue, 2f);
             Debug.DrawLine(pos, Vector3.left + pos, Color.blue, 2f);
             intent = Intent.FireWord;
-            dh.DisplayDebugLog("targeting something");
+            //dh.DisplayDebugLog("targeting something");
             return;
         }
 
@@ -102,14 +103,14 @@ public class PlayerInput : MonoBehaviour
         if (GridHelper.CheckIfTouchingWordSection(currentTouch.position) == false)
         {
             intent = Intent.Move;
-            dh.DisplayDebugLog("intend to move");
+            //dh.DisplayDebugLog("intend to move");
             return;
         }
 
         else
         {
             intent = Intent.EraseWord;
-            dh.DisplayDebugLog("intend to erase word");
+            //dh.DisplayDebugLog("intend to erase word");
             return;
         }
     }
@@ -120,7 +121,7 @@ public class PlayerInput : MonoBehaviour
         {
             case TouchPhase.Began:
                 touchStartPos = currentTouch.position;
-                dh.DisplayDebugLog($"touched here: {touchStartPos}");
+                //dh.DisplayDebugLog($"touched here: {touchStartPos}");
                 break;
 
             case TouchPhase.Ended:
@@ -176,7 +177,7 @@ public class PlayerInput : MonoBehaviour
         }
         if (timeSpentLongPressing >= longPressTime)
         {
-            //Fire the word!
+            sm.FireCurrentWord();
             CompleteLongPress_WordBoxActions();
         }
         if (currentTouch.phase == TouchPhase.Ended)
@@ -270,7 +271,6 @@ public class PlayerInput : MonoBehaviour
 
         if (timeSpentLongPressing >= longPressTime)
         {
-            Debug.Log("Erase off the word");
             //Placeholder for anything related to erasing the word here.
             CompleteLongPress_WordBoxActions();
             return;
@@ -293,8 +293,7 @@ public class PlayerInput : MonoBehaviour
 
         if (timeSpentLongPressing >= longPressTime)
         {
-            Debug.Log("Fire off the word");
-            //Placeholder for whatever action is required when a word if fired off.
+            sm.FireCurrentWord();
             CompleteLongPress_WordBoxActions();
         }
         if (Input.GetMouseButtonUp(0))  // Early release catcher

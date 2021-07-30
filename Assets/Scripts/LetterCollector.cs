@@ -5,12 +5,12 @@ using UnityEngine;
 public class LetterCollector : MonoBehaviour
 {
     //init
-    WordBoxDriver wbd;
+    WordBuilder wbd;
     PlayerInput pi;
 
     void Start()
     {
-        wbd = FindObjectOfType<WordBoxDriver>();
+        wbd = FindObjectOfType<WordBuilder>();
         pi = GetComponent<PlayerInput>();
     }
 

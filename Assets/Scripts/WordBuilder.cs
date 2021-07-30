@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public class WordBoxDriver : MonoBehaviour
+public class WordBuilder : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI wordBoxTMP = null;
     [SerializeField] Slider wordEraseSliderBG = null;
@@ -34,6 +34,11 @@ public class WordBoxDriver : MonoBehaviour
         //Debug.Log("Current word: " + currentWord);
         wordBoxTMP.text = currentWord;
         HasLetters = true;
+    }
+
+    public string GetCurrentWord()
+    {
+        return currentWord;
     }
 
     public void ClearOutWordBox()
