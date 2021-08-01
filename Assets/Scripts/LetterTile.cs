@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LetterTile : MonoBehaviour
+public class LetterTile : ScriptableObject
 {
     //param
     [SerializeField] public char Letter;
