@@ -98,7 +98,7 @@ public class PlayerInput : MonoBehaviour
     
     private void ConvertRawDesMoveIntoValidDesMove()
     {
-        if (transform.position.x % 1f > 0f && transform.position.y % 1f > 0f)
+        if (transform.position.x % 1 > 0 && transform.position.y % 1 > 0)
         {
             return;
         }

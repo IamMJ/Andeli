@@ -7,8 +7,8 @@ using TMPro;
 public class LetterTileDropper : MonoBehaviour
 {
     [SerializeField] GameObject letterTilePrefab = null;
-    string letterOptionsString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    char[] letterOptionsChar;
+    [SerializeField] TrueLetter[] trueLetters = null;
+
 
     //param
     float timeBetweenDrops = 2f;
@@ -16,11 +16,22 @@ public class LetterTileDropper : MonoBehaviour
 
     //state
     float timeForNextDrop;
+    int currentProbabilityCount = 0;
 
     private void Start()
     {
         timeForNextDrop = Time.time + timeBetweenDrops;
-        letterOptionsChar = letterOptionsString.ToCharArray();
+        GenerateProbabilityStarts();
+    }
+
+    private void GenerateProbabilityStarts()
+    {
+        foreach (TrueLetter tl in trueLetters)
+        {
+            currentProbabilityCount += tl.GetWeight();
+            tl.ProbabilityTop = currentProbabilityCount;
+        }
+        Debug.Log("prob weight total" + currentProbabilityCount);
     }
 
     private void Update()
@@ -29,8 +40,8 @@ public class LetterTileDropper : MonoBehaviour
         {
             DropLetterTile();
             timeForNextDrop = Time.time + timeBetweenDrops;
-            //Debug.Log($"current time: {Time.time}. Next drop at: {timeForNextDrop}");
         }
+        
     }
 
     private void DropLetterTile()
@@ -42,8 +53,25 @@ public class LetterTileDropper : MonoBehaviour
 
         GameObject newTile = Instantiate(letterTilePrefab, randomPos, Quaternion.identity) as GameObject;
 
-        int rand = UnityEngine.Random.Range(0, letterOptionsChar.Length);
-        newTile.GetComponent<LetterTile>().Letter = letterOptionsChar[rand];
-        newTile.GetComponentInChildren<TextMeshPro>().text = letterOptionsChar[rand].ToString();
+        TrueLetter randomLetter = ReturnWeightedRandomTrueLetter();
+        char letter = randomLetter.Letter;
+        newTile.GetComponent<LetterTile>().Letter = letter;
+        newTile.GetComponentInChildren<TextMeshPro>().text = letter.ToString();
+    }
+
+    private TrueLetter ReturnWeightedRandomTrueLetter()
+    {
+        int rand = UnityEngine.Random.Range(0, currentProbabilityCount);
+
+        foreach (var tl in trueLetters)
+        {
+            if (rand <= tl.ProbabilityTop)
+            {
+                //Debug.Log($"saw {rand}, choosing {tl.Letter} with top of {tl.ProbabilityTop}");
+                return tl;
+            }
+        }
+
+        return null;
     }
 }

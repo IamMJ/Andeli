@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LetterTile : ScriptableObject
+public class LetterTile : MonoBehaviour
 {
-    //param
-    [SerializeField] public char Letter;
-    void Start()
-    {
-        
-    }
+    //init
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public char Letter;
+    public int Power;
+    
 }
