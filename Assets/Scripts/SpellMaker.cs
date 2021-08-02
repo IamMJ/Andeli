@@ -8,6 +8,8 @@ public class SpellMaker : MonoBehaviour
     WordBuilder wbd;
     DebugHelper dh;
     WordValidater wv;
+    PowerMeter pm;
+    VictoryMeter vm;
     string testWord;
 
     // Start is called before the first frame update
@@ -16,6 +18,8 @@ public class SpellMaker : MonoBehaviour
         dh = FindObjectOfType<DebugHelper>();
         wbd = FindObjectOfType<WordBuilder>();
         wv = FindObjectOfType<WordValidater>();
+        pm = FindObjectOfType<PowerMeter>();
+        vm = FindObjectOfType<VictoryMeter>();
     }
 
 
@@ -25,6 +29,7 @@ public class SpellMaker : MonoBehaviour
         if (wv.CheckWordValidity(testWord))
         {
             Debug.Log("Fire off the word!");
+            vm.ModifyBalance(pm.CurrentPower);
         }
         else
         {

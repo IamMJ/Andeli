@@ -13,6 +13,7 @@ public class WordBuilder : MonoBehaviour
     DebugHelper dh;
     PlayerInput pi;
     SpellMaker sm;
+    PowerMeter pm;
 
     //state
     public bool HasLetters { get; private set; } = false;
@@ -28,6 +29,7 @@ public class WordBuilder : MonoBehaviour
         longPressTime = pi.LongPressTime;
         dh = FindObjectOfType<DebugHelper>();
         sm = FindObjectOfType<SpellMaker>();
+        pm = FindObjectOfType<PowerMeter>();
     }
 
     #region Initial Button Press Handlers
@@ -110,8 +112,6 @@ public class WordBuilder : MonoBehaviour
         HasLetters = true;
     }
 
-
-
     public string GetCurrentWord()
     {
         return currentWord;
@@ -119,7 +119,6 @@ public class WordBuilder : MonoBehaviour
 
     public void ClearOutWordBox()
     {
-        Debug.Log("Clear out word box");
         currentWord = "";
         wordBoxTMP.text = currentWord;
         HasLetters = false;
@@ -149,6 +148,7 @@ public class WordBuilder : MonoBehaviour
     private void CompleteLongPress_WordBoxActions()
     {
         ClearOutWordBox();
+        pm.ClearPowerLevel();
         IncompleteLongPress_WordBoxActions();
     }
     private void IncompleteLongPress_WordBoxActions()

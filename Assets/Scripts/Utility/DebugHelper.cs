@@ -19,6 +19,11 @@ public class DebugHelper : MonoBehaviour
     float timeToHideDebugLog = Mathf.Infinity;
 
     // Update is called once per frame
+
+    private void Start()
+    {
+        timeToHideDebugLog = Time.time;
+    }
     void Update()
     {
         HandleDebugLogVisibility();
@@ -37,13 +42,13 @@ public class DebugHelper : MonoBehaviour
 
     public void DisplayDebugLog(string newText)
     {
-        debugLogPanel.gameObject.SetActive(true);
-        textline_0.gameObject.SetActive(true);
-        textline_1.gameObject.SetActive(true);
-        textline_2.gameObject.SetActive(true);
-        timeToHideDebugLog = Time.time + timeToDisplayDebugLog;
-        PushUpOldTexts();
-        textline_0.text = newText;
+        //debugLogPanel.gameObject.SetActive(true);
+        //textline_0.gameObject.SetActive(true);
+        //textline_1.gameObject.SetActive(true);
+        //textline_2.gameObject.SetActive(true);
+        //timeToHideDebugLog = Time.time + timeToDisplayDebugLog;
+        //PushUpOldTexts();
+        //textline_0.text = newText;
     }
 
     private void PushUpOldTexts()

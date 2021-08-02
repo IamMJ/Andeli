@@ -7,11 +7,13 @@ public class LetterCollector : MonoBehaviour
     //init
     WordBuilder wbd;
     PlayerInput pi;
+    PowerMeter pm;
 
     void Start()
     {
         wbd = FindObjectOfType<WordBuilder>();
         pi = GetComponent<PlayerInput>();
+        pm = FindObjectOfType<PowerMeter>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -21,6 +23,7 @@ public class LetterCollector : MonoBehaviour
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
             wbd.AddLetter(letterTile.Letter);
+            pm.IncreasePower(letterTile.Power);
             Destroy(collision.gameObject);
         }
     }

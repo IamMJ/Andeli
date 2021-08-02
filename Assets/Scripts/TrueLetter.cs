@@ -6,15 +6,25 @@ using UnityEngine;
 public class TrueLetter : ScriptableObject
 {
     //param
-    [SerializeField] public char Letter;
+    [SerializeField] char Letter;
     [SerializeField] int weight;
-    [SerializeField] public int Power;
+    [SerializeField] int Power;
 
     public int ProbabilityTop;
 
     public int GetWeight()
     {
         return weight;
+    }
+
+    public char GetLetter()
+    {
+        return Letter;
+    }
+
+    public int GetPower()
+    {
+        return Power;
     }
     
 }

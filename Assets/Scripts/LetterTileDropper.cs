@@ -54,9 +54,10 @@ public class LetterTileDropper : MonoBehaviour
         GameObject newTile = Instantiate(letterTilePrefab, randomPos, Quaternion.identity) as GameObject;
 
         TrueLetter randomLetter = ReturnWeightedRandomTrueLetter();
-        char letter = randomLetter.Letter;
-        newTile.GetComponent<LetterTile>().Letter = letter;
-        newTile.GetComponentInChildren<TextMeshPro>().text = letter.ToString();
+        LetterTile letterTile = newTile.GetComponent<LetterTile>();
+        letterTile.Letter = randomLetter.GetLetter();
+        letterTile.Power = randomLetter.GetPower();
+        newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
     }
 
     private TrueLetter ReturnWeightedRandomTrueLetter()

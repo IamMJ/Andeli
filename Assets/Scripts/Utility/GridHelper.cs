@@ -7,7 +7,7 @@ public static class GridHelper : object
     //int horizUnits = 20;
     //int vertUnits = 40;
     static float gridUnit = 1f;
-    static float highestYValueForWordSection = 0.25f;
+    static float highestYValueForWordSection = 0.21f;
 
     public static Vector2 SnapToGrid(Vector2 inputPos, int subStepAmt)
     {

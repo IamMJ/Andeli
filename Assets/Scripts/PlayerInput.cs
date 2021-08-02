@@ -2,15 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerInput : MonoBehaviour
 {
     //init
     DebugHelper dh;
-    WordBuilder wbd;
-    LetterCollector lc;
-    [SerializeField] Collider2D targetHit;
-    SpellMaker sm;
 
     //param
     public float LongPressTime { get; private set; } = 0.7f;
@@ -29,9 +26,12 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
+        Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
+        Screen.autorotateToLandscapeLeft = false;
+        Screen.autorotateToLandscapeRight = false;
+        Screen.autorotateToPortraitUpsideDown = false;
+
         dh = FindObjectOfType<DebugHelper>();
-        wbd = FindObjectOfType<WordBuilder>();
-        sm = GetComponent<SpellMaker>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
     }

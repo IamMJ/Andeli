@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Letter: 67
   weight: 271
-  Power: 0
-  ProbabilityTop: 44
+  Power: 3
+  ProbabilityTop: 1232
