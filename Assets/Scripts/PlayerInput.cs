@@ -98,13 +98,14 @@ public class PlayerInput : MonoBehaviour
     
     private void ConvertRawDesMoveIntoValidDesMove()
     {
-        if (transform.position.x % 1 > 0 && transform.position.y % 1 > 0)
+        if (Mathf.Abs(transform.position.x % 1) > 0 || Mathf.Abs(transform.position.y % 1) > 0)
         {
             return;
         }
         else
         {
             validDesMove = rawDesMove;
+            rawDesMove = validDesMove;
         }
     }
     private void CardinalizeDesiredMovement()
