@@ -8,11 +8,15 @@ public class LetterTileDropper : MonoBehaviour
 {
     [SerializeField] GameObject letterTilePrefab = null;
     [SerializeField] TrueLetter[] trueLetters = null;
+    GameObject[] wordMakers;
 
 
     //param
-    float timeBetweenDrops = 2f;
-    float distanceFromOrigin = 10f;
+    float timeBetweenDrops = 0.5f;
+    float distanceFromOrigin = 15f;
+    float minDistanceToWordMaker = 5f;
+    float minDistanceBetweenLetters = 2f;
+    int layerMask_Letter = 1 << 9;
 
     //state
     float timeForNextDrop;
@@ -20,6 +24,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Start()
     {
+        wordMakers = GameObject.FindGameObjectsWithTag("Wordmaker");
         timeForNextDrop = Time.time + timeBetweenDrops;
         GenerateProbabilityStarts();
     }
@@ -31,7 +36,7 @@ public class LetterTileDropper : MonoBehaviour
             currentProbabilityCount += tl.GetWeight();
             tl.ProbabilityTop = currentProbabilityCount;
         }
-        Debug.Log("prob weight total" + currentProbabilityCount);
+        //Debug.Log("prob weight total" + currentProbabilityCount);
     }
 
     private void Update()
@@ -46,10 +51,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void DropLetterTile()
     {
-        float randomX = UnityEngine.Random.Range(-distanceFromOrigin, distanceFromOrigin);
-        float randomY = UnityEngine.Random.Range(-distanceFromOrigin, distanceFromOrigin);
-        Vector2 randomPos = new Vector2(randomX, randomY);
-        randomPos = GridHelper.SnapToGrid(randomPos, 1);
+        Vector2 randomPos = GetRandomValidPositionOutsideOfMinRange();
 
         GameObject newTile = Instantiate(letterTilePrefab, randomPos, Quaternion.identity) as GameObject;
 
@@ -58,6 +60,55 @@ public class LetterTileDropper : MonoBehaviour
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
+    }
+
+    private Vector2 GetRandomValidPositionOutsideOfMinRange()
+    {
+        Vector2 randomPos;
+        int attempts = 0;
+        do
+        {
+            float randomX = UnityEngine.Random.Range(-distanceFromOrigin, distanceFromOrigin);
+            float randomY = UnityEngine.Random.Range(-distanceFromOrigin, distanceFromOrigin);
+            randomPos = new Vector2(randomX, randomY);
+            attempts++;
+            if (attempts > 100)
+            {
+                break;
+            }
+        }
+        while (!VerifyAllWordMakersOutsideMinDistance(randomPos) || !VerifyAllLettersOutsideMinDistance(randomPos));
+        randomPos = GridHelper.SnapToGrid(randomPos, 1);
+        return randomPos;
+    }
+
+    private bool VerifyAllWordMakersOutsideMinDistance(Vector2 randomPos)
+    {
+        bool isOutsideMinRange = true;
+        foreach (var wordmaker in wordMakers)
+        {
+            if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < minDistanceToWordMaker)
+            {
+                isOutsideMinRange = false;
+                Debug.Log("isOutsideMinRange: " + isOutsideMinRange);
+                break;
+            }
+        }
+        return isOutsideMinRange;
+    }
+    private bool VerifyAllLettersOutsideMinDistance(Vector2 randomPos)
+    {
+        var coll = Physics2D.OverlapCircle(randomPos, minDistanceBetweenLetters, layerMask_Letter);
+        if (coll)
+        {
+            Debug.Log("too close!");
+            return false;
+        }
+        else
+        {
+            Debug.Log("not too close.");
+            return true;
+        }
     }
 
     private TrueLetter ReturnWeightedRandomTrueLetter()

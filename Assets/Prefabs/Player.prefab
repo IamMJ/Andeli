@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -2375094335787212340}
   m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Wordmaker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 791868953
   m_SortingLayer: 4
-  m_SortingOrder: 9
+  m_SortingOrder: 0
   m_Sprite: {fileID: -4464185934544814259, guid: ddc2b7cca02d13e4e9bb951e3d1d74af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50cb0d842981741a5f516c3366538b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetHit: {fileID: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class PlayerInput : MonoBehaviour
     Vector2 touchStartPos = Vector2.zero;
     bool isValidStartPosition = false;
     Vector2 touchEndPos = Vector2.zero;
-    float moveRate = 3f;
+    float moveRate = 0f;
     Touch currentTouch;
     bool isMobile = false;
     public float timeSpentLongPressing { get; private set; }  
