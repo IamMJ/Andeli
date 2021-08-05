@@ -12,7 +12,7 @@ public class LetterTileDropper : MonoBehaviour
 
 
     //param
-    float timeBetweenDrops = 0.5f;
+    float timeBetweenDrops = 2f;
     float distanceFromOrigin = 15f;
     float minDistanceToWordMaker = 5f;
     float minDistanceBetweenLetters = 2f;
@@ -44,7 +44,7 @@ public class LetterTileDropper : MonoBehaviour
         if (Time.time >= timeForNextDrop)
         {
             DropLetterTile();
-            timeForNextDrop = Time.time + timeBetweenDrops;
+            timeForNextDrop = Time.time + timeBetweenDrops + UnityEngine.Random.Range(-timeBetweenDrops/4f, timeBetweenDrops/4f);
         }
         
     }
@@ -59,6 +59,7 @@ public class LetterTileDropper : MonoBehaviour
         LetterTile letterTile = newTile.GetComponent<LetterTile>();
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
+        letterTile.Lifetime = 7f + UnityEngine.Random.Range(-2f, 2f);
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
     }
 
