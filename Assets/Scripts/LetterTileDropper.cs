@@ -10,9 +10,8 @@ public class LetterTileDropper : MonoBehaviour
     [SerializeField] TrueLetter[] trueLetters = null;
     GameObject[] wordMakers;
 
-
     //param
-    float timeBetweenDrops = 2f;
+    float timeBetweenDrops = 1f;
     float distanceFromOrigin = 15f;
     float minDistanceToWordMaker = 5f;
     float minDistanceBetweenLetters = 2f;
@@ -91,7 +90,6 @@ public class LetterTileDropper : MonoBehaviour
             if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < minDistanceToWordMaker)
             {
                 isOutsideMinRange = false;
-                Debug.Log("isOutsideMinRange: " + isOutsideMinRange);
                 break;
             }
         }
@@ -102,12 +100,10 @@ public class LetterTileDropper : MonoBehaviour
         var coll = Physics2D.OverlapCircle(randomPos, minDistanceBetweenLetters, layerMask_Letter);
         if (coll)
         {
-            Debug.Log("too close!");
             return false;
         }
         else
         {
-            Debug.Log("not too close.");
             return true;
         }
     }

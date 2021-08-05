@@ -19,7 +19,7 @@ public class PlayerInput : MonoBehaviour
     Vector2 touchStartPos = Vector2.zero;
     bool isValidStartPosition = false;
     Vector2 touchEndPos = Vector2.zero;
-    float moveRate = 2f;
+    float moveRate = 3f;
     Touch currentTouch;
     bool isMobile = false;
     public float timeSpentLongPressing { get; private set; }  
@@ -153,7 +153,7 @@ public class PlayerInput : MonoBehaviour
     private void SnapDepictedPositionToTruePositionViaGrid()
     {
         Vector2 oldPosition = transform.position;
-        transform.position = GridHelper.SnapToGrid(truePosition, 4);
+        transform.position = GridHelper.SnapToGrid(truePosition, 8);
         Vector2 dir = transform.position - (Vector3)oldPosition;
         //if (dir.x > 0)
         //{
