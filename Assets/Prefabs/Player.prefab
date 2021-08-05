@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5996083012857787361}
   - component: {fileID: 3319382006745120615}
   - component: {fileID: -2375094335787212340}
+  - component: {fileID: 5293917446488848811}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -161,3 +162,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellPrefab: {fileID: 0}
+--- !u!95 &5293917446488848811
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 286768e2728bfbe41a5ebadf7aeeac3e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

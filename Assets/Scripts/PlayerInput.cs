@@ -8,6 +8,7 @@ public class PlayerInput : MonoBehaviour
 {
     //init
     DebugHelper dh;
+    Animator anim;
 
     //param
     public float LongPressTime { get; private set; } = 0.7f;
@@ -26,6 +27,7 @@ public class PlayerInput : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
         Screen.autorotateToLandscapeLeft = false;
         Screen.autorotateToLandscapeRight = false;
@@ -49,7 +51,9 @@ public class PlayerInput : MonoBehaviour
         }
         ConvertRawDesMoveIntoValidDesMove();
         CardinalizeDesiredMovement();
+        UpdateAnimation();
     }
+
 
     #region Touch Input
     private void HandleTouchInput()
@@ -174,4 +178,9 @@ public class PlayerInput : MonoBehaviour
 
     }
     #endregion
+    private void UpdateAnimation()
+    {
+        anim.SetFloat("Horizontal", validDesMove.x);
+        anim.SetFloat("Vertical", validDesMove.y);
+    }
 }
