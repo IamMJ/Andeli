@@ -8,32 +8,32 @@ public class LetterTile : MonoBehaviour
     //init
     public char Letter;
     public int Power;
-    public float Lifetime;
+    public float StartingLifetime;
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;
     LetterTileDropper letterTileDropper;
 
     //state
-    float lifetimeRemaining;
+    public float LifetimeRemaining { get; private set; }
     float factor;
 
     private void Start()
     {
-        lifetimeRemaining = Lifetime;
+        LifetimeRemaining = StartingLifetime;
     }
 
     private void Update()
     {
-        lifetimeRemaining -= Time.deltaTime;
+        LifetimeRemaining -= Time.deltaTime;
         
-        if (lifetimeRemaining <= 0.5f * Lifetime)
+        if (LifetimeRemaining <= 0.5f * StartingLifetime)
         {
-            factor = lifetimeRemaining / (0.5f * Lifetime);
+            factor = LifetimeRemaining / (0.5f * StartingLifetime);
             FadeRenderers(factor);
         }
 
-        if (lifetimeRemaining <= 0f)
+        if (LifetimeRemaining <= 0f)
         {
             Destroy(gameObject);
         }

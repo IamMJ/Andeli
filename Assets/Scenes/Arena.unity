@@ -10258,6 +10258,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyCat
       objectReference: {fileID: 0}
+    - target: {fileID: 6355354703827149805, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
+      propertyPath: m_TagString
+      value: Wordmaker
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
 --- !u!1001 &9174662285479754656

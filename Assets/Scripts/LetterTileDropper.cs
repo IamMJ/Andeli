@@ -12,7 +12,7 @@ public class LetterTileDropper : MonoBehaviour
     GameObject[] wordMakers;
     ArenaBuilder ab;
     SpeedKeeper sk;
-    List<LetterTile> spawnedLetterTiles = new List<LetterTile>();
+    List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
@@ -25,6 +25,7 @@ public class LetterTileDropper : MonoBehaviour
     //state
     float timeForNextDrop;
     int currentProbabilityCount = 0;
+    public bool doesBoardHaveLettersAvailable { get; private set; } = true;
 
     private void Start()
     {
@@ -65,7 +66,7 @@ public class LetterTileDropper : MonoBehaviour
         LetterTile letterTile = newTile.GetComponent<LetterTile>();
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
-        letterTile.Lifetime = 10f + UnityEngine.Random.Range(-2f, 2f);
+        letterTile.StartingLifetime = 10f + UnityEngine.Random.Range(-2f, 2f);
         letterTile.SetLetterTileDropper(this);
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
         AddLetterToSpawnedLetterList(letterTile);
@@ -145,21 +146,42 @@ public class LetterTileDropper : MonoBehaviour
     private void AddLetterToSpawnedLetterList(LetterTile newLetterTile)
     {
         OnLetterListModified?.Invoke(newLetterTile, true);
-        spawnedLetterTiles.Add(newLetterTile);
+        letterTilesOnBoard.Add(newLetterTile);
+        doesBoardHaveLettersAvailable = true;
     }
 
     public void RemoveLetterFromSpawnedLetterList(LetterTile letterTileToRemove)
     {
         OnLetterListModified?.Invoke(letterTileToRemove, false);
-        spawnedLetterTiles.Remove(letterTileToRemove);
+        letterTilesOnBoard.Remove(letterTileToRemove);
+        if (letterTilesOnBoard.Count == 0)
+        {
+            doesBoardHaveLettersAvailable = false;
+        }
     }
 
     public void DestroyAllLetters()
     {
-        for (int i = 0; i < spawnedLetterTiles.Count; i++)
+        for (int i = 0; i < letterTilesOnBoard.Count; i++)
         {
-            Destroy(spawnedLetterTiles[i]);
+            Destroy(letterTilesOnBoard[i]);
         }
-        spawnedLetterTiles.Clear();
+        letterTilesOnBoard.Clear();
+    }
+
+    public List<LetterTile> FindAllReachableLetterTiles(Vector2 originPosition, float speed)
+    {
+        List<LetterTile> letterTilesInRange = new List<LetterTile>();
+
+        foreach (var letterTile in letterTilesOnBoard)
+        {
+            float dist = (letterTile.transform.position - (Vector3)originPosition).magnitude;
+            float timeRequiredToReach = dist * 1.5f / speed;
+            if (timeRequiredToReach <= letterTile.LifetimeRemaining)
+            {
+                letterTilesInRange.Add(letterTile);
+            }
+        }
+        return letterTilesInRange;
     }
 }

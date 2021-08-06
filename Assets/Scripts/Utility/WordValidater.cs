@@ -27,7 +27,7 @@ public class WordValidater : MonoBehaviour
         //Debug.Log($"word list hash contains {wordListProcessed.Count} words");
         //Debug.Log($"word list list contains {wordListAZ.Count} words");
         //dh.DisplayDebugLog($"Loaded {wordListProcessed.Count} words");
-        FindPossibleWordCountWithStubWord("ANGER");
+        //FindPossibleWordCountWithStubWord("ANGER");
     }
 
     public bool CheckWordValidity(string testWord)
@@ -56,17 +56,21 @@ public class WordValidater : MonoBehaviour
 
     public int FindPossibleWordCountWithStubWord(string stubWord)
     {
-        //char[] stubWordAsChars = stubWord.ToCharArray();
-        int possibleWords = 0;
-
         StringComparison sc = new StringComparison(stubWord);
 
         int firstInstance = masterWordList.FindIndex(sc.CompareString);
         int lastInstance = masterWordList.FindLastIndex(sc.CompareString);
-        int value = lastInstance - firstInstance;
-
-        Debug.Log($"{stubWord} has {value} possible words ({firstInstance}, {lastInstance})");
-        Debug.Log($"first word: {masterWordList[firstInstance]}. last word: {masterWordList[lastInstance]}");
+        int possibleWords = lastInstance - firstInstance;
+        
+        if (possibleWords > 0)
+        {
+            Debug.Log($"{stubWord} has {possibleWords} possible words");
+            //Debug.Log($"first word: {masterWordList[firstInstance]}. last word: {masterWordList[lastInstance]}");
+        }
+        else
+        {
+            Debug.Log($"{stubWord} has no possible words!");
+        }
 
         return possibleWords;
     }
