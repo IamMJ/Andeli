@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 3319382006745120615}
   - component: {fileID: -2375094335787212340}
   - component: {fileID: 5293917446488848811}
+  - component: {fileID: -7819186653885371754}
+  - component: {fileID: -5630972937777679914}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -101,9 +103,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.2}
+  m_Offset: {x: 0, y: -0.3}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.45
 --- !u!50 &1564904675
 Rigidbody2D:
   serializedVersion: 4
@@ -149,6 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50cb0d842981741a5f516c3366538b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  validDesMove: {x: 0, y: 0}
+  rawDesMove: {x: 0, y: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,3 +185,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-7819186653885371754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba05eee4346492d4cb27a64deeeda018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5630972937777679914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0779bd952808024449fbf46c6c046b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

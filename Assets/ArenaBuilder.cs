@@ -11,10 +11,10 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject wallPrefab = null;
 
     //parameters
-    float minX = -8f;
-    float minY = -6;
-    float maxX = 8;
-    float maxY = 9;
+    int minX = -9;
+    int minY = -7;
+    int maxX = 9;
+    int maxY = 10;
 
     //state
     GameObject statue;
@@ -57,10 +57,6 @@ public class ArenaBuilder : MonoBehaviour
             wallSection = GridHelper.SnapToGrid(wallSection, 1);
             Instantiate(wallPrefab, wallSection, Quaternion.identity);
         }
-
-
-
-
     }
 
     private void SetupStatuePlayerCameraMouse()
@@ -73,9 +69,13 @@ public class ArenaBuilder : MonoBehaviour
         cameraMouse1.SetPlayer(player);
     }
 
-    // Update is called once per frame
-    void Update()
+    public Vector2 CreateRandomPointWithinArena()
     {
-        
+        float randX = UnityEngine.Random.Range(minX + 1, maxX);
+        float randY = UnityEngine.Random.Range(minY + 1, maxY);
+        Vector2 randPos = new Vector2(randX, randY);
+        return randPos;
     }
+
+
 }

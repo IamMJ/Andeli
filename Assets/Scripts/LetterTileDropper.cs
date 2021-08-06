@@ -10,11 +10,11 @@ public class LetterTileDropper : MonoBehaviour
     [SerializeField] TrueLetter[] trueLetters = null;
     GameObject[] wordMakers;
     ArenaBuilder ab;
+    SpeedKeeper sk;
 
     //param
     float timeBetweenDrops = 1f;
-    float distanceFromOrigin = 15f;
-    float minDistanceToWordMaker = 5f;
+    float universalMinDistanceToWordMaker = 2f;
     float minDistanceBetweenLetters = 2f;
     int layerMask_Letter = 1 << 9;
 
@@ -24,6 +24,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Start()
     {
+        sk = FindObjectOfType<SpeedKeeper>();
         ab = FindObjectOfType<ArenaBuilder>();
         wordMakers = GameObject.FindGameObjectsWithTag("Wordmaker");
         timeForNextDrop = Time.time + timeBetweenDrops;
@@ -52,7 +53,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void DropLetterTile()
     {
-        Vector2 randomPos = GetRandomValidPositionOutsideOfMinRange();
+        Vector2 randomPos = GetRandomPositionOutsideOfMinRangeAndInsideArena();
 
         GameObject newTile = Instantiate(letterTilePrefab, randomPos, Quaternion.identity) as GameObject;
 
@@ -60,19 +61,21 @@ public class LetterTileDropper : MonoBehaviour
         LetterTile letterTile = newTile.GetComponent<LetterTile>();
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
-        letterTile.Lifetime = 7f + UnityEngine.Random.Range(-2f, 2f);
+        letterTile.Lifetime = 10f + UnityEngine.Random.Range(-2f, 2f);
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
     }
 
-    private Vector2 GetRandomValidPositionOutsideOfMinRange()
+    private Vector2 GetRandomPositionOutsideOfMinRangeAndInsideArena()
     {
+        if (!ab)
+        {
+            ab = FindObjectOfType<ArenaBuilder>();
+        }
         Vector2 randomPos;
         int attempts = 0;
         do
         {
-            float randomX = UnityEngine.Random.Range(-distanceFromOrigin, distanceFromOrigin);
-            float randomY = UnityEngine.Random.Range(-distanceFromOrigin, distanceFromOrigin);
-            randomPos = new Vector2(randomX, randomY);
+            randomPos = ab.CreateRandomPointWithinArena();
             attempts++;
             if (attempts > 100)
             {
@@ -86,10 +89,16 @@ public class LetterTileDropper : MonoBehaviour
 
     private bool VerifyAllWordMakersOutsideMinDistance(Vector2 randomPos)
     {
+        if (!sk)
+        {
+            sk = FindObjectOfType<SpeedKeeper>();
+        }
+        float currentMinDistance = Mathf.RoundToInt(sk.CurrentSpeed);
+        currentMinDistance = Mathf.Clamp(currentMinDistance, universalMinDistanceToWordMaker, 10f);
         bool isOutsideMinRange = true;
         foreach (var wordmaker in wordMakers)
         {
-            if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < minDistanceToWordMaker)
+            if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < currentMinDistance)
             {
                 isOutsideMinRange = false;
                 break;

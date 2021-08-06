@@ -18,5 +18,6 @@ public class ArenaWall : MonoBehaviour
         sr.sprite = spriteOptions[rand];
         sr.flipX = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
     }
+    
 
 }

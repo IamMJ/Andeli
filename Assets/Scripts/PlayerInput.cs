@@ -9,9 +9,14 @@ public class PlayerInput : MonoBehaviour
     //init
     DebugHelper dh;
     Animator anim;
+    SpeedKeeper sk;
 
-    //param
+    //UI param
     public float LongPressTime { get; private set; } = 0.7f;
+
+    //game param
+    float startingSpeed = 2f;
+    float acceleration = 0.05f; //speed gain per second;
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -20,13 +25,13 @@ public class PlayerInput : MonoBehaviour
     Vector2 touchStartPos = Vector2.zero;
     bool isValidStartPosition = false;
     Vector2 touchEndPos = Vector2.zero;
-    float moveRate = 4f;
     Touch currentTouch;
     bool isMobile = false;
     public float timeSpentLongPressing { get; private set; }  
 
     void Start()
     {
+        sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
         //Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
         Screen.autorotateToLandscapeLeft = false;
@@ -105,7 +110,7 @@ public class PlayerInput : MonoBehaviour
     {
         if (Mathf.Abs(transform.position.x % 1) > 0 || Mathf.Abs(transform.position.y % 1) > 0)
         {
-            return;
+
         }
         else
         {
@@ -115,7 +120,6 @@ public class PlayerInput : MonoBehaviour
     }
     private void CardinalizeDesiredMovement()
     {
-
         if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
         {
             validDesMove.y = 0;
@@ -152,14 +156,14 @@ public class PlayerInput : MonoBehaviour
 
     private void UpdateTruePosition()
     {
-        truePosition += validDesMove * moveRate * Time.deltaTime;
+        truePosition += validDesMove * sk.CurrentSpeed * Time.deltaTime;
     }
 
     private void SnapDepictedPositionToTruePositionViaGrid()
     {
         Vector2 oldPosition = transform.position;
         transform.position = GridHelper.SnapToGrid(truePosition, 8);
-        Vector2 dir = transform.position - (Vector3)oldPosition;
+        //Vector2 dir = transform.position - (Vector3)oldPosition;
         //if (dir.x > 0)
         //{
         //    dh.DisplayDebugLog("moved right");
@@ -184,4 +188,13 @@ public class PlayerInput : MonoBehaviour
         anim.SetFloat("Horizontal", validDesMove.x);
         anim.SetFloat("Vertical", validDesMove.y);
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 13)
+        {
+            validDesMove *= -1f;
+            rawDesMove *= -1f;
+        }
+    }
+
 }
