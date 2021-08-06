@@ -17,6 +17,19 @@ public static class GridHelper : object
         return inputPos;
 
     }
+    
+    public static bool CheckIfSnappedToGrid(Vector2 inputPos)
+    {
+        if (Mathf.Abs(inputPos.x) % 1 > 0 || Mathf.Abs(inputPos.y) % 1 < 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
 
     public static bool CheckIfTouchingWordSection(Vector2 touchPos)
     {

@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 488698419698802937}
   - component: {fileID: 1796046149123940893}
   - component: {fileID: -4428386896512461276}
+  - component: {fileID: 92002657}
   m_Layer: 10
   m_Name: EnemyCat
-  m_TagString: Untagged
+  m_TagString: Wordmaker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!58 &8376137853996036260
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -114,6 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58403573c0a2f94c8114a3053b1ff15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentWord: 
+  currentTargetChar: 0
 --- !u!114 &1796046149123940893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b01dd650199ee84ab3c159d94a1d5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TacticalDestination: {x: 0, y: 0}
 --- !u!50 &-4428386896512461276
 Rigidbody2D:
   serializedVersion: 4
@@ -147,3 +151,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &92002657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6355354703827149805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b9ea83dc2867144904574d0cb86c94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -12,7 +12,7 @@ public class MoveBrain_NPC : MonoBehaviour
     public float moveSpeed { get; private set; } = 3.0f;
 
     //state
-    Vector2 destination;
+    public Vector2 TacticalDestination;
     Vector2 truePosition = Vector2.one;
     Vector2 rawDesMove = Vector2.zero;
     Vector2 validDesMove = Vector2.zero;
@@ -20,6 +20,7 @@ public class MoveBrain_NPC : MonoBehaviour
     private void Start()
     {
         wb = GetComponent<WordBrain_NPC>();
+        truePosition = transform.position;
     }
 
     // Update is called once per frame
@@ -32,16 +33,7 @@ public class MoveBrain_NPC : MonoBehaviour
 
     private void UpdateRawDesMove()
     {
-        if (wb.TargetLetterTile)
-        {
-            destination = wb.TargetLetterTile.transform.position;
-            rawDesMove = ((Vector3)destination - transform.position);
-        }
-        else
-        {
-            destination = Vector2.one * 2;
-        }
-
+        rawDesMove = ((Vector3)TacticalDestination - transform.position);
     }
 
     private void ConvertRawDesMoveIntoValidDesMove()
@@ -107,5 +99,10 @@ public class MoveBrain_NPC : MonoBehaviour
     public void UpdateDesiredMoveDirection(Vector2 desiredMoveDirection)
     {
         rawDesMove = desiredMoveDirection;
+    }
+
+    public Vector2 GetValidDesMove()
+    {
+        return validDesMove;
     }
 }

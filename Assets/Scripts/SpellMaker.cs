@@ -26,7 +26,7 @@ public class SpellMaker : MonoBehaviour
     public void FireCurrentWord()
     {
         testWord = wbd.GetCurrentWord();
-        if (wv.CheckWordValidity(testWord))
+        if (wv.CheckWordValidity(testWord, gameObject))
         {
             Debug.Log("Fire off the word!");
             vm.ModifyBalance(pm.CurrentPower);

@@ -19,10 +19,19 @@ public class WordBrain_NPC : MonoBehaviour
 
     void Start()
     {
+        
         wv = FindObjectOfType<WordValidater>();
         mb = GetComponent<MoveBrain_NPC>();
         ltd = FindObjectOfType<LetterTileDropper>();
         ltd.OnLetterListModified += DetermineBestTargetLetter;
+    }
+
+    private void Update()
+    {
+        if (TargetLetterTile)
+        {
+            currentTargetChar = TargetLetterTile.Letter;
+        }
     }
 
     #region Simple Tasks
@@ -64,9 +73,9 @@ public class WordBrain_NPC : MonoBehaviour
 
     private void DetermineValueOfCurrentWord()
     {
-        if (wv.CheckWordValidity(currentWord))
+        if (wv.CheckWordValidity(currentWord,gameObject))
         {
-            Debug.Log("simplest word made - fire it off!");
+            Debug.Log($"firing off {currentWord}");
 
             //Fire the word
             ClearCurrentWord();
@@ -84,7 +93,6 @@ public class WordBrain_NPC : MonoBehaviour
         {
  
             TargetLetterTile = FindBestLetterFromAllOnBoard();
-            currentTargetChar = TargetLetterTile.Letter;
 
             return;
         }
@@ -94,14 +102,12 @@ public class WordBrain_NPC : MonoBehaviour
             if (currentWord.Length == 0 && !TargetLetterTile)
             {
                 TargetLetterTile = changedLetterTile;
-                currentTargetChar = TargetLetterTile.Letter;
                 Debug.Log($"targeting {TargetLetterTile.Letter} by default");
                 return;
             }
             else
             {
                 TargetLetterTile = FindBestLetterFromAllOnBoard();
-                currentTargetChar = TargetLetterTile.Letter;
             }
         }
     }
@@ -109,7 +115,7 @@ public class WordBrain_NPC : MonoBehaviour
     private LetterTile FindBestLetterFromAllOnBoard()
     {
         List<LetterTile> letterTilesToEvaluate = ltd.FindAllReachableLetterTiles(transform.position, mb.moveSpeed);
-        Debug.Log($"evaluating {letterTilesToEvaluate.Count} letters");
+        //Debug.Log($"evaluating {letterTilesToEvaluate.Count} letters");
         LetterTile currentBestOption = null;
         float currentBestValue = 0;
         foreach (var letterTile in letterTilesToEvaluate)
@@ -121,7 +127,7 @@ public class WordBrain_NPC : MonoBehaviour
                 currentBestValue = hValue;
             }
         }
-        Debug.Log($"best Option: {TargetLetterTile.Letter} at hValue: {currentBestValue}");
+        //Debug.Log($"best Option: {TargetLetterTile.Letter} at hValue: {currentBestValue}");
         return currentBestOption;
 
     }

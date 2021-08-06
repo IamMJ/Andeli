@@ -30,7 +30,7 @@ public class WordValidater : MonoBehaviour
         //FindPossibleWordCountWithStubWord("ANGER");
     }
 
-    public bool CheckWordValidity(string testWord)
+    public bool CheckWordValidity(string testWord, GameObject wordSubmitter)
     {
         if (!pm)
         {
@@ -41,7 +41,11 @@ public class WordValidater : MonoBehaviour
         {
             //Debug.Log($"{testWord} is valid");
             dh.DisplayDebugLog($"{testWord} is valid");
-            pm.IncrementWordCount();
+            if (wordSubmitter == pm.gameObject)
+            {
+                pm.IncrementWordCount();
+            }
+
             return true;
         }
         else
@@ -64,12 +68,12 @@ public class WordValidater : MonoBehaviour
         
         if (possibleWords > 0)
         {
-            Debug.Log($"{stubWord} has {possibleWords} possible words");
+            //Debug.Log($"{stubWord} has {possibleWords} possible words");
             //Debug.Log($"first word: {masterWordList[firstInstance]}. last word: {masterWordList[lastInstance]}");
         }
         else
         {
-            Debug.Log($"{stubWord} has no possible words!");
+            //Debug.Log($"{stubWord} has no possible words!");
         }
 
         return possibleWords;
