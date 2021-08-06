@@ -15,8 +15,7 @@ public static class GridHelper : object
         inputPos.y = Mathf.Round(inputPos.y * subStepAmt) / (float)subStepAmt;
 
         return inputPos;
-            //new Vector2(Mathf.Round(inputPos.x / gridUnit), Mathf.Round(inputPos.y * subStepAmt/ gridUnit));
-        //return gridSnappedPos;
+
     }
 
     public static bool CheckIfTouchingWordSection(Vector2 touchPos)

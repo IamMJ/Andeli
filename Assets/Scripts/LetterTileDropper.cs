@@ -9,6 +9,7 @@ public class LetterTileDropper : MonoBehaviour
     [SerializeField] GameObject letterTilePrefab = null;
     [SerializeField] TrueLetter[] trueLetters = null;
     GameObject[] wordMakers;
+    ArenaBuilder ab;
 
     //param
     float timeBetweenDrops = 1f;
@@ -23,6 +24,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Start()
     {
+        ab = FindObjectOfType<ArenaBuilder>();
         wordMakers = GameObject.FindGameObjectsWithTag("Wordmaker");
         timeForNextDrop = Time.time + timeBetweenDrops;
         GenerateProbabilityStarts();

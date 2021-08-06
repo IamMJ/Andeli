@@ -15,12 +15,12 @@ public class PlayerInput : MonoBehaviour
 
     //state
     Vector2 truePosition = Vector2.zero;
-    Vector2 validDesMove = Vector2.zero;
-    Vector2 rawDesMove = Vector2.zero;
+    [SerializeField] Vector2 validDesMove = Vector2.zero;
+    [SerializeField] Vector2 rawDesMove = Vector2.zero;
     Vector2 touchStartPos = Vector2.zero;
     bool isValidStartPosition = false;
     Vector2 touchEndPos = Vector2.zero;
-    float moveRate = 3f;
+    float moveRate = 4f;
     Touch currentTouch;
     bool isMobile = false;
     public float timeSpentLongPressing { get; private set; }  
@@ -28,7 +28,7 @@ public class PlayerInput : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
+        //Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
         Screen.autorotateToLandscapeLeft = false;
         Screen.autorotateToLandscapeRight = false;
         Screen.autorotateToPortraitUpsideDown = false;
@@ -36,6 +36,7 @@ public class PlayerInput : MonoBehaviour
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
+
     }
 
     // Update is called once per frame

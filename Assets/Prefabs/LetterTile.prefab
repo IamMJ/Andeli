@@ -301,7 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Letter: 0
   Power: 0
-  Lifetime: 0
+  Lifetime: 10
   sr: {fileID: 3580959457978190092}
   mr: {fileID: 601876841}
   tmp: {fileID: 601876840}
