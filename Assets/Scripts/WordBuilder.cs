@@ -17,6 +17,7 @@ public class WordBuilder : MonoBehaviour
     PowerMeter pm;
 
     //state
+
     public bool HasLetters { get; private set; } = false;
     string currentWord;
     bool isFireWeaponButtonPressed = false;

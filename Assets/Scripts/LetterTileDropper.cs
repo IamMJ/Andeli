@@ -8,9 +8,13 @@ public class LetterTileDropper : MonoBehaviour
 {
     [SerializeField] GameObject letterTilePrefab = null;
     [SerializeField] TrueLetter[] trueLetters = null;
+
     GameObject[] wordMakers;
     ArenaBuilder ab;
     SpeedKeeper sk;
+    List<LetterTile> spawnedLetterTiles = new List<LetterTile>();
+
+    public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
     float timeBetweenDrops = 1f;
@@ -62,7 +66,10 @@ public class LetterTileDropper : MonoBehaviour
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
         letterTile.Lifetime = 10f + UnityEngine.Random.Range(-2f, 2f);
+        letterTile.SetLetterTileDropper(this);
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
+        AddLetterToSpawnedLetterList(letterTile);
+
     }
 
     private Vector2 GetRandomPositionOutsideOfMinRangeAndInsideArena()
@@ -133,5 +140,26 @@ public class LetterTileDropper : MonoBehaviour
         }
 
         return null;
+    }
+
+    private void AddLetterToSpawnedLetterList(LetterTile newLetterTile)
+    {
+        OnLetterListModified?.Invoke(newLetterTile, true);
+        spawnedLetterTiles.Add(newLetterTile);
+    }
+
+    public void RemoveLetterFromSpawnedLetterList(LetterTile letterTileToRemove)
+    {
+        OnLetterListModified?.Invoke(letterTileToRemove, false);
+        spawnedLetterTiles.Remove(letterTileToRemove);
+    }
+
+    public void DestroyAllLetters()
+    {
+        for (int i = 0; i < spawnedLetterTiles.Count; i++)
+        {
+            Destroy(spawnedLetterTiles[i]);
+        }
+        spawnedLetterTiles.Clear();
     }
 }

@@ -55,6 +55,7 @@ public class PlayerInput : MonoBehaviour
         {
             HandleKeyboardInput();
         }
+
         ConvertRawDesMoveIntoValidDesMove();
         CardinalizeDesiredMovement();
         UpdateAnimation();

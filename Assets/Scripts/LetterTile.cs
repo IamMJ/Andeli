@@ -12,6 +12,7 @@ public class LetterTile : MonoBehaviour
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;
+    LetterTileDropper letterTileDropper;
 
     //state
     float lifetimeRemaining;
@@ -59,4 +60,13 @@ public class LetterTile : MonoBehaviour
         tmp.color = fadeColor;
     }
 
+    public void SetLetterTileDropper(LetterTileDropper ltd)
+    {
+        letterTileDropper = ltd;
+    }
+
+    private void OnDestroy()
+    {
+        letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
+    }
 }
