@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 92002657}
   - component: {fileID: 2921803689892871040}
   - component: {fileID: 403647073182039751}
+  - component: {fileID: 8010466577468766873}
   m_Layer: 10
   m_Name: EnemyCat
   m_TagString: Wordmaker
@@ -176,3 +177,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbeafa16615e56c40a138d21fda160a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &8010466577468766873
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6355354703827149805}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 577821d2d4c77ff449f76fddd7d3730b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

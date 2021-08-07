@@ -7,6 +7,7 @@ public class MoveBrain_NPC : MonoBehaviour
 {
     //init
     WordBrain_NPC wb;
+    Animator anim;
 
     //param
     public float moveSpeed { get; private set; } = 3.0f;
@@ -21,6 +22,7 @@ public class MoveBrain_NPC : MonoBehaviour
     {
         wb = GetComponent<WordBrain_NPC>();
         truePosition = transform.position;
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -29,7 +31,11 @@ public class MoveBrain_NPC : MonoBehaviour
         UpdateRawDesMove();
         ConvertRawDesMoveIntoValidDesMove();
         CardinalizeDesiredMovement();
+
+        HandleAnimation();
     }
+
+
 
     private void UpdateRawDesMove()
     {
@@ -75,6 +81,12 @@ public class MoveBrain_NPC : MonoBehaviour
             }
         }
 
+    }
+
+    private void HandleAnimation()
+    {
+        anim.SetFloat("Horiz", validDesMove.x);
+        anim.SetFloat("Vert", validDesMove.y);
     }
 
     #region Handle Movement
