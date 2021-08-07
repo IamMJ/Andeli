@@ -14,10 +14,7 @@ public class WordBrain_NPC : MonoBehaviour
     DebugHelper dh;
     SpellingStrategy ss;
     VictoryMeter vm;
-
-    //param
-    int minWordOptionsToContinue = 200;
-
+    
     //state
     [SerializeField] string currentWord = "";
     [SerializeField] char currentTargetChar;
@@ -97,6 +94,7 @@ public class WordBrain_NPC : MonoBehaviour
 
     public void EraseWord()
     {
+        
         ClearCurrentWord();
         ClearPower();
     }

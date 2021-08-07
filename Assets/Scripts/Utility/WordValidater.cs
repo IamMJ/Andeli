@@ -45,13 +45,82 @@ public class WordValidater : MonoBehaviour
         //Debug.Log($"word list hash contains {wordListProcessed.Count} words");
         //Debug.Log($"word list list contains {wordListAZ.Count} words");
         //dh.DisplayDebugLog($"Loaded {wordListProcessed.Count} words");
-        //FindPossibleWordCountWithStubWord("ANGER");
-
-        //FindWordBandWithStubWord("B");
-        //FindWordBandWithStubWord("BO");
-        FindWordBandWithStubWord("BOB");
     }
 
+    #region Public Methods
+    public bool CheckWordValidity(string testWord)
+    {
+        if (masterWordHashSet.Contains(testWord))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    public WordBand FindWordBandWithStubWord(string stubWord)
+    {
+        StringComparison sc = new StringComparison(stubWord);
+        //Debug.Log($"Searching for {stubWord}, starting at {bandToSearch.StartIndex}, count: {bandToSearch.Range}");
+
+        int actualStartIndex = 0;
+        int actualRange = 123;
+        int actualEndIndex = 122;
+
+        char[] stubWordAsChar = stubWord.ToCharArray();
+
+
+        if (stubWordAsChar.Length < 2)
+        {
+            WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0]);
+            actualStartIndex = wb.StartIndex;
+            actualRange = wb.Range;
+            actualEndIndex = wb.EndIndex;
+        }
+        if (stubWordAsChar.Length >= 2)
+        {
+            WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0], stubWordAsChar[1]);
+            actualStartIndex = wb.StartIndex;
+            actualRange = wb.Range;
+            actualEndIndex = wb.EndIndex;
+        }
+
+        if (actualStartIndex < 0) //Then there are no instances of this 2-letter stub in TOC_2Deep
+        {
+            WordBand wb = new WordBand(0, 0, 0);
+            return wb;
+        }
+
+        int firstInstance = masterWordList.FindIndex(actualStartIndex, actualRange, sc.CompareString);
+        int lastInstance = masterWordList.FindLastIndex(actualEndIndex, actualRange, sc.CompareString);
+        int possibleWords = lastInstance - firstInstance;
+
+        WordBand wordBand = new WordBand(firstInstance, possibleWords, lastInstance);
+
+        if (possibleWords > 0)
+        {
+            // Debug.Log($"{stubWord} has {possibleWords} possible words");
+            //Debug.Log($"first word: {masterWordList[firstInstance]}. last word: {masterWordList[lastInstance]}");
+        }
+        else
+        {
+            //Debug.Log($"{stubWord} has no possible words!");
+        }
+
+        return wordBand;
+    }
+
+    public int GetMasterWordListCount()
+    {
+        return masterWordList.Count;
+    }
+
+    #endregion
+
+    #region Private Methods
     private void PrepTableOfContents()
     {
         char[] alphabetAsChars = alphabet.ToCharArray();
@@ -93,94 +162,21 @@ public class WordValidater : MonoBehaviour
         }
     }
 
-    public WordBand GetWordBandForStartingChar(char startingChar)
+    private WordBand GetWordBandForStartingChar(char startingChar)
     {
         //Debug.Log($"Invoked 1 Deep Search for {startingChar}, which yields: {TOC_1Deep[startingChar].StartIndex}, {TOC_1Deep[startingChar].Range}");
         return TOC_1Deep[startingChar];
     }
 
-    public WordBand GetWordBandForStartingChar(char startingChar, char secondChar)
+    private WordBand GetWordBandForStartingChar(char startingChar, char secondChar)
     {
         //Debug.Log($"Invoked 2 Deep Search for {startingChar},{secondChar}");
         Dictionary<char, WordBand> subTOCtoPull = TOC_2Deep[startingChar];
         return subTOCtoPull[secondChar];
     }
 
-    public List<string> GetMasterWordList()
-    {
-        return masterWordList;
-    }
+    #endregion
 
-    public bool CheckWordValidity(string testWord)
-    {
-        if (masterWordHashSet.Contains(testWord))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
-
-    public WordBand FindWordBandWithStubWord(string stubWord)
-    {
-        StringComparison sc = new StringComparison(stubWord);
-        //Debug.Log($"Searching for {stubWord}, starting at {bandToSearch.StartIndex}, count: {bandToSearch.Range}");
-
-        int actualStartIndex = 0;
-        int actualRange = 123;
-        int actualEndIndex = 122;
-
-        char[] stubWordAsChar = stubWord.ToCharArray();
-
-
-        if (stubWordAsChar.Length < 2)
-        {
-            WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0]);
-            actualStartIndex = wb.StartIndex;
-            actualRange = wb.Range;
-            actualEndIndex = wb.EndIndex;
-        }
-        if (stubWordAsChar.Length >= 2)
-        {
-
-            WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0], stubWordAsChar[1]);
-            actualStartIndex = wb.StartIndex;
-            actualRange = wb.Range;
-            actualEndIndex = wb.EndIndex;
-        }
-
-        //Debug.Log($"Starting search at {actualStartIndex}, {actualRange}, which is {masterWordList[actualStartIndex]}");
-
-        //int refinedStartIndex = masterWordList.BinarySearch(actualStartIndex, actualRange, stubWord, sc);
-        //Debug.Log($"refining the search start to {refinedStartIndex}, which is {masterWordList[refinedStartIndex]}");
-
-        //Debug.Log($"stub: {stubWord} start: {actualStartIndex}, range: {actualRange}");
-        int firstInstance = masterWordList.FindIndex(actualStartIndex, actualRange, sc.CompareString);
-        int lastInstance = masterWordList.FindLastIndex(actualEndIndex, actualRange, sc.CompareString);
-        int possibleWords = lastInstance - firstInstance;
-
-        WordBand wordBand = new WordBand(firstInstance, possibleWords, lastInstance);
-        
-        if (possibleWords > 0)
-        {
-            Debug.Log($"{stubWord} has {possibleWords} possible words");
-            //Debug.Log($"first word: {masterWordList[firstInstance]}. last word: {masterWordList[lastInstance]}");
-        }
-        else
-        {
-            Debug.Log($"{stubWord} has no possible words!");
-        }
-
-        return wordBand;
-    }
-
-    public int GetMasterWordListCount()
-    {
-        return masterWordList.Count;
-    }
 }
 
 
