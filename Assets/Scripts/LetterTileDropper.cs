@@ -53,7 +53,6 @@ public class LetterTileDropper : MonoBehaviour
             DropLetterTile();
             timeForNextDrop = Time.time + timeBetweenDrops + UnityEngine.Random.Range(-timeBetweenDrops/4f, timeBetweenDrops/4f);
         }
-        
     }
 
     private void DropLetterTile()
@@ -85,7 +84,7 @@ public class LetterTileDropper : MonoBehaviour
         {
             randomPos = ab.CreateRandomPointWithinArena();
             attempts++;
-            if (attempts > 100)
+            if (attempts > 2)
             {
                 break;
             }

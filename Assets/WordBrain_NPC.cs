@@ -10,7 +10,10 @@ public class WordBrain_NPC : MonoBehaviour
     public LetterTile TargetLetterTile { get; private set; }
     WordValidater wv;
     LetterTileDropper ltd;
-    
+    DebugHelper dh;
+
+    //param
+    int minWordOptionsToContinue = 200;
 
     //state
     [SerializeField] string currentWord = "";
@@ -19,7 +22,7 @@ public class WordBrain_NPC : MonoBehaviour
 
     void Start()
     {
-        
+        dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         mb = GetComponent<MoveBrain_NPC>();
         ltd = FindObjectOfType<LetterTileDropper>();
@@ -32,6 +35,7 @@ public class WordBrain_NPC : MonoBehaviour
         {
             currentTargetChar = TargetLetterTile.Letter;
         }
+        else { currentTargetChar = '?'; }
     }
 
     #region Simple Tasks
@@ -66,21 +70,34 @@ public class WordBrain_NPC : MonoBehaviour
             AddLetter(letterTile.Letter);
             IncreasePower(letterTile.Power);
             Destroy(collision.gameObject);
-            DetermineValueOfCurrentWord();
+            FireOffCurrentWordIfPossible();
+            EraseWordIfLowChanceOfFinishing();
         }
 
     }
 
-    private void DetermineValueOfCurrentWord()
+    private void EraseWordIfLowChanceOfFinishing()
+    {
+        int count = wv.FindWordBandWithStubWord(currentWord).Range;
+        if (count < minWordOptionsToContinue)
+        {
+            //erase word;
+            dh.DisplayDebugLog($"erasing {currentWord} with only {count} options");
+            ClearCurrentWord();
+        }
+    }
+
+    private void FireOffCurrentWordIfPossible()
     {
         if (wv.CheckWordValidity(currentWord,gameObject))
         {
             Debug.Log($"firing off {currentWord}");
-
+            dh.DisplayDebugLog(currentWord);
             //Fire the word
             ClearCurrentWord();
         }
     }
+
 
     private void DetermineBestTargetLetter(LetterTile changedLetterTile, bool wasLetterAdded)
     {
@@ -102,7 +119,7 @@ public class WordBrain_NPC : MonoBehaviour
             if (currentWord.Length == 0 && !TargetLetterTile)
             {
                 TargetLetterTile = changedLetterTile;
-                Debug.Log($"targeting {TargetLetterTile.Letter} by default");
+                //Debug.Log($"targeting {TargetLetterTile.Letter} by default");
                 return;
             }
             else
@@ -120,33 +137,45 @@ public class WordBrain_NPC : MonoBehaviour
         float currentBestValue = 0;
         foreach (var letterTile in letterTilesToEvaluate)
         {
-            float hValue = CalculateHValue(letterTile);
+            float hValue = CalculatePowerDistanceValue(letterTile) * CalculateFollowOnWordPotential(letterTile);
+            //Debug.Log($"adding a {letterTile.Letter} to {currentWord} is worth {hValue} hValue. Follow-on Words: {possibleRefinedWordBand.Range}");
             if (hValue > currentBestValue)
             {
                 currentBestOption = letterTile;
                 currentBestValue = hValue;
+                Debug.Log($"best Option: {letterTile.Letter} at hValue: {currentBestValue}");
+                //Debug.Log($"updated current word band to {currentWordBandToSearch.StartIndex}, {currentWordBandToSearch.Range}");
+            }
+            else
+            {
+                Debug.Log("couldn't find a better option for TargetLetter");
             }
         }
-        //Debug.Log($"best Option: {TargetLetterTile.Letter} at hValue: {currentBestValue}");
         return currentBestOption;
 
     }
-
-    private float CalculateHValue(LetterTile letterTile)
+    private float CalculatePowerDistanceValue(LetterTile letterTile)
     {
         float dist = (letterTile.transform.position - transform.position).magnitude * 1.5f;
+        float value = (letterTile.Power / dist);
+
+        return value;
+    }
+    private float CalculateFollowOnWordPotential(LetterTile letterTile)
+    {
         string hypotheticalWord;
-        if (currentWord.Length > 0)
-        {
-            hypotheticalWord = currentWord + letterTile.Letter;
-        }
-        else
+        if (currentWord.Length == 0)
         {
             hypotheticalWord = letterTile.Letter.ToString();
         }
-        //float value = (letterTile.Power / dist) + (wv.FindPossibleWordCountWithStubWord(hypotheticalWord) / 10000f);
-        float value = (wv.FindPossibleWordCountWithStubWord(hypotheticalWord));
+        else
+        {
+            hypotheticalWord = currentWord + letterTile.Letter;
+        }
 
-        return value;
+        int count = wv.FindWordBandWithStubWord(hypotheticalWord).Range;
+        //Debug.Log($"{letterTile.Letter} hypothetical option: {hypotheticalWordBand.StartIndex}, {hypotheticalWordBand.Range}");
+
+        return count/10000f;
     }
 }
