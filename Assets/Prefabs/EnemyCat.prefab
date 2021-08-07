@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58403573c0a2f94c8114a3053b1ff15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wordPuffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
   currentWord: 
   currentTargetChar: 0
 --- !u!114 &403647073182039751

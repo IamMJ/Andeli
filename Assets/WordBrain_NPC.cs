@@ -7,11 +7,13 @@ public class WordBrain_NPC : MonoBehaviour
 {
     //init
     MoveBrain_NPC mb;
+    [SerializeField] GameObject wordPuffPrefab = null;
     public LetterTile TargetLetterTile { get; private set; }
     WordValidater wv;
     LetterTileDropper ltd;
     DebugHelper dh;
     SpellingStrategy ss;
+    VictoryMeter vm;
 
     //param
     int minWordOptionsToContinue = 200;
@@ -29,6 +31,8 @@ public class WordBrain_NPC : MonoBehaviour
         mb = GetComponent<MoveBrain_NPC>();
         ltd = FindObjectOfType<LetterTileDropper>();
         ltd.OnLetterListModified += DetermineBestTargetLetter;
+        vm = FindObjectOfType<VictoryMeter>();
+        
     }
 
     private void Update()
@@ -69,6 +73,7 @@ public class WordBrain_NPC : MonoBehaviour
     private void IncreasePower(int amount)
     {
         currentPower += amount;
+        
     }
     private void ClearPower()
     {
@@ -81,7 +86,13 @@ public class WordBrain_NPC : MonoBehaviour
 
     public void FireOffWord()
     {
+        vm.ModifyBalance(-currentPower);
 
+        GameObject puff = Instantiate(wordPuffPrefab, transform.position, Quaternion.identity) as GameObject;
+        WordPuff wordpuff = puff.GetComponent<WordPuff>();
+        wordpuff.SetColorByPower(currentPower);
+        wordpuff.SetText(currentWord);
+        EraseWord();
     }
 
     public void EraseWord()

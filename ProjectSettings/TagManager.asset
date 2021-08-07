@@ -54,3 +54,6 @@ TagManager:
   - name: Actors
     uniqueID: 791868953
     locked: 0
+  - name: VisualFX
+    uniqueID: 3971941485
+    locked: 0

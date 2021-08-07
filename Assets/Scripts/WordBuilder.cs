@@ -27,8 +27,7 @@ public class WordBuilder : MonoBehaviour
 
     private void Start()
     {
-        pi = FindObjectOfType<PlayerInput>();
-        longPressTime = pi.LongPressTime;
+
         dh = FindObjectOfType<DebugHelper>();
         sm = FindObjectOfType<SpellMaker>();
         pm = FindObjectOfType<PowerMeter>();
@@ -37,6 +36,11 @@ public class WordBuilder : MonoBehaviour
     #region Initial Button Press Handlers
     public void OnPressDownFireWord()
     {
+        if (!pi)
+        {
+            pi = FindObjectOfType<PlayerInput>();
+            longPressTime = pi.LongPressTime;
+        }
         if (!HasLetters) { return; }
 
         if (isEraseWeaponButtonPressed == false)
@@ -53,6 +57,11 @@ public class WordBuilder : MonoBehaviour
 
     public void OnPressDownEraseWord()
     {
+        if (!pi)
+        {
+            pi = FindObjectOfType<PlayerInput>();
+            longPressTime = pi.LongPressTime;
+        }
         if (!HasLetters) { return; }
 
         if (isFireWeaponButtonPressed == false)

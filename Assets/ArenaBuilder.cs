@@ -9,6 +9,7 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject statuePrefab = null;
     [SerializeField] GameObject cameraMousePrefab = null;
     [SerializeField] GameObject wallPrefab = null;
+    [SerializeField] GameObject catPrefab = null;
 
     //parameters
     int minX = -9;
@@ -19,11 +20,12 @@ public class ArenaBuilder : MonoBehaviour
     //state
     GameObject statue;
     GameObject player;
+    GameObject cat;
 
 
     void Start()
     {
-        SetupStatuePlayerCameraMouse();
+        SetupStatuePlayerCameraMouseCat();
         SetupArenaBoundaries();
     }
     private void SetupArenaBoundaries()
@@ -59,7 +61,7 @@ public class ArenaBuilder : MonoBehaviour
         }
     }
 
-    private void SetupStatuePlayerCameraMouse()
+    private void SetupStatuePlayerCameraMouseCat()
     {
         statue = Instantiate(statuePrefab, Vector2.zero, Quaternion.identity) as GameObject;
         player = Instantiate(playerPrefab, Vector2.one, Quaternion.identity) as GameObject;
@@ -67,6 +69,8 @@ public class ArenaBuilder : MonoBehaviour
         CameraMouse cameraMouse1 = cameraMouse.GetComponent<CameraMouse>();
         cameraMouse1.SetAnchor(statue);
         cameraMouse1.SetPlayer(player);
+
+        cat = Instantiate(catPrefab, Vector2.one * -3f, Quaternion.identity) as GameObject;
     }
 
     public Vector2 CreateRandomPointWithinArena()

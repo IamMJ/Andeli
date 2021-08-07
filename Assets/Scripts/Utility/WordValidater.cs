@@ -110,14 +110,14 @@ public class WordValidater : MonoBehaviour
         int actualEndIndex;
 
         char[] stubWordAsChar = stubWord.ToCharArray();
-        Debug.Log($"stubWordAsChar[0]: {stubWordAsChar[0] }");
+        Debug.Log($"stubWordAsChar[0]: {stubWordAsChar[0]}");
         actualStartIndex = GetWordBandForStartingChar(stubWordAsChar[0]).StartIndex;
         actualRange = GetWordBandForStartingChar(stubWordAsChar[0]).Range;
         actualEndIndex = GetWordBandForStartingChar(stubWordAsChar[0]).EndIndex;
         //Debug.Log($"given search band is too big. Helped out. start: {actualStartIndex}, range: {actualRange}");
 
 
-        Debug.Log($"stub: {stubWord} start: {actualStartIndex}, range: {actualRange}");
+        //Debug.Log($"stub: {stubWord} start: {actualStartIndex}, range: {actualRange}");
         int firstInstance = masterWordList.FindIndex(actualStartIndex, actualRange, sc.CompareString);
         int lastInstance = masterWordList.FindLastIndex(actualEndIndex, actualRange, sc.CompareString);
         int possibleWords = lastInstance - firstInstance;

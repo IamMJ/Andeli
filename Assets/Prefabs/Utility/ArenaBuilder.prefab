@@ -46,6 +46,5 @@ MonoBehaviour:
   playerPrefab: {fileID: 5608652954252347955, guid: fc824f60e6ce99d43b57f4208cde4b67, type: 3}
   statuePrefab: {fileID: 6135404392772274270, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
   cameraMousePrefab: {fileID: 2732463253256724971, guid: f93d13bed616d9e488d5649a27c0d787, type: 3}
-  wallPrefab_Horiz: {fileID: 3938315443836569316, guid: 787b7579d24655c4a9c4e10d674de4a4, type: 3}
-  wallPrefab_Vert: {fileID: 7279848711684845256, guid: c8bfa68ed32adde47bb7dfed8ea64050, type: 3}
-  wallPrefab_Corner: {fileID: 3640245994597352341, guid: 493480b9fa88eb54ba0e668bffebeb49, type: 3}
+  wallPrefab: {fileID: 3920682680305924606, guid: a2b180e6275bc7e4c949ef1b7138dfbb, type: 3}
+  catPrefab: {fileID: 6355354703827149805, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
