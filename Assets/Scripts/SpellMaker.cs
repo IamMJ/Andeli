@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpellMaker : MonoBehaviour
 {
-    [SerializeField] GameObject spellPrefab = null;
+    [SerializeField] GameObject puffPrefab = null;
     WordBuilder wbd;
     DebugHelper dh;
     WordValidater wv;
@@ -28,7 +28,11 @@ public class SpellMaker : MonoBehaviour
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord, gameObject))
         {
-            Debug.Log("Fire off the word!");
+            GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
+            WordPuff wordPuff = puff.GetComponent<WordPuff>();
+            wordPuff.SetText(testWord);
+            wordPuff.SetColorByPower(pm.CurrentPower);
+
             vm.ModifyBalance(pm.CurrentPower);
         }
         else

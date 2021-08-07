@@ -27,7 +27,8 @@ public class WordBuilder : MonoBehaviour
 
     private void Start()
     {
-
+        pi = FindObjectOfType<PlayerInput>();
+        longPressTime = pi.LongPressTime;
         dh = FindObjectOfType<DebugHelper>();
         sm = FindObjectOfType<SpellMaker>();
         pm = FindObjectOfType<PowerMeter>();
@@ -38,8 +39,7 @@ public class WordBuilder : MonoBehaviour
     {
         if (!pi)
         {
-            pi = FindObjectOfType<PlayerInput>();
-            longPressTime = pi.LongPressTime;
+            Start();
         }
         if (!HasLetters) { return; }
 
@@ -59,8 +59,7 @@ public class WordBuilder : MonoBehaviour
     {
         if (!pi)
         {
-            pi = FindObjectOfType<PlayerInput>();
-            longPressTime = pi.LongPressTime;
+            Start();
         }
         if (!HasLetters) { return; }
 

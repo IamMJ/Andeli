@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellPrefab: {fileID: 0}
+  puffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
 --- !u!95 &5293917446488848811
 Animator:
   serializedVersion: 3

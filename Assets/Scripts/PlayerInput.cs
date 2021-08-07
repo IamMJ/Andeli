@@ -85,7 +85,7 @@ public class PlayerInput : MonoBehaviour
             if (isValidStartPosition && currentTouch.phase == TouchPhase.Ended)
             {
                 touchEndPos = currentTouch.position;
-                rawDesMove = (touchStartPos - touchEndPos).normalized;
+                rawDesMove = (touchEndPos - touchStartPos).normalized;
                 isValidStartPosition = false;
             }
         }
