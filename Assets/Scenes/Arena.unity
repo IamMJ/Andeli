@@ -619,7 +619,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8065,7 +8065,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &892461443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8513,7 +8513,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.026222223, y: 0.8637813}
   m_AnchorMax: {x: 0.9778334, y: 0.9287813}
-  m_AnchoredPosition: {x: 146.2, y: 30.523682}
+  m_AnchoredPosition: {x: 146.2, y: 1.7598877}
   m_SizeDelta: {x: -290.20572, y: -1.4854736}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1038895897
@@ -8639,7 +8639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.026222223, y: 0.9287813}
   m_AnchorMax: {x: 0.9778334, y: 0.9905937}
-  m_AnchoredPosition: {x: 146.2, y: -1.5}
+  m_AnchoredPosition: {x: 146.2, y: -155.40002}
   m_SizeDelta: {x: -290.20572, y: 2.5145264}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1294238294
@@ -9023,7 +9023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.026222223, y: 0.8034376}
   m_AnchorMax: {x: 0.9778334, y: 0.87000006}
-  m_AnchoredPosition: {x: 146.2, y: 30.523682}
+  m_AnchoredPosition: {x: 146.2, y: 155.99988}
   m_SizeDelta: {x: -290.20572, y: -3.4854736}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1384712115
@@ -9725,8 +9725,8 @@ RectTransform:
   m_Father: {fileID: 136475722}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9801,7 +9801,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -2.5, y: 0}
   m_SizeDelta: {x: 5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10258,7 +10258,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyCat
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 488698419698802937, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
 --- !u!1001 &9174662285479754656
 PrefabInstance:
