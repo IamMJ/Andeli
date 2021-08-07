@@ -13,6 +13,7 @@ public class V1_SS : SpellingStrategy
     //param
     int minPossibleWordsToConsider = 10;
     float timeBetweenPickups = 10f;
+    float timeReductionPerLetter = 0.75f;
 
     //state
     float timeToShiftStrategy = Mathf.Infinity;
@@ -30,7 +31,7 @@ public class V1_SS : SpellingStrategy
     public override void EvaluateWordAfterGainingALetter()
     {
         FireOffOREraseCurrentWordIfFutureWordsUnlikely(minPossibleWordsToConsider);
-        timeToShiftStrategy = Time.time + timeBetweenPickups;
+        timeToShiftStrategy = Time.time + (timeBetweenPickups * (float)Math.Pow(.75f, wb.GetCurrentWord().Length));
         shouldFireOrEraseNow = false;
     }
 
@@ -39,7 +40,7 @@ public class V1_SS : SpellingStrategy
         List<LetterTile> possibleLetters =  ltd.FindAllReachableLetterTiles(transform.position, mb.moveSpeed);
 
         LetterTile bestLetterTile = null;
-        int bestWordCount = 0;
+        int bestWordCount = minPossibleWordsToConsider;
         foreach(var firstLetter in possibleLetters)
         {
             string hypotheticalWord_1Deep = wb.GetCurrentWord() + firstLetter.Letter.ToString();

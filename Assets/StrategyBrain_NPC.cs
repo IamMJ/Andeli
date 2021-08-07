@@ -9,7 +9,11 @@ public class StrategyBrain_NPC : MonoBehaviour
     WordBrain_NPC wb;
     MoveBrain_NPC mb;
 
+    //param
+    float castLength = 1.5f;
+
     //state
+    Vector2 workingTacticalDestination;
     Vector2 strategicDestination;
 
     // Start is called before the first frame update
@@ -22,8 +26,12 @@ public class StrategyBrain_NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateStrategicDestination();
-        ConvertStrategicDestinationToTacticalDestination();
+        if (GridHelper.CheckIfSnappedToGrid(transform.position))
+        {
+            UpdateStrategicDestination();
+            UpdateTacticalDestination();
+        }
+
     }
 
     private void UpdateStrategicDestination()
@@ -35,27 +43,20 @@ public class StrategyBrain_NPC : MonoBehaviour
         else
         {
             strategicDestination = Vector2.one * 4;
-            //implement a random wander while waiting.
+            //TODO implement a random wander while waiting.
         }
-
     }
 
-    private void ConvertStrategicDestinationToTacticalDestination()
+    private void UpdateTacticalDestination()
     {
-        Vector2 workingTacDestination = strategicDestination;
-        if (GridHelper.CheckIfSnappedToGrid(transform.position))
-        {
-            workingTacDestination = AdjustToAvoidUntargetedLetterTiles();
-        }
+        workingTacticalDestination = DetermineBetweenStrategicOrTacticalDestination();
 
-        AdjustToAvoidImpassableThings();
-
-        mb.TacticalDestination = workingTacDestination;
+        mb.TacticalDestination = workingTacticalDestination;
     }
 
-    private Vector2 AdjustToAvoidUntargetedLetterTiles()
+    private Vector2 DetermineBetweenStrategicOrTacticalDestination()
     {
-        Vector3 currentDir = mb.GetValidDesMove();
+        Vector3 currentDir = mb.GetValidDesMove() * castLength;
         RaycastHit2D hit = Physics2D.Linecast(transform.position, transform.position + currentDir, 1<<9);
         Debug.DrawLine(transform.position, transform.position + currentDir, Color.blue, Time.deltaTime) ;
         if (hit)
@@ -78,21 +79,21 @@ public class StrategyBrain_NPC : MonoBehaviour
 
     private Vector2 FindAWorkingTacticalDestination()
     {
-        Vector3 currentDir = mb.GetValidDesMove();
+        Vector3 currentDir = mb.GetValidDesMove() * castLength;
         Vector3 testDir = new Vector2(currentDir.y, currentDir.x);
         RaycastHit2D hit = Physics2D.Linecast(transform.position, transform.position + testDir, 1 << 9);
         Debug.DrawLine(transform.position, transform.position + testDir, Color.green, Time.deltaTime);
 
         if (hit)
         {
-            Vector3 testDir2 = new Vector2(-currentDir.y, -currentDir.x);
-            RaycastHit2D hit2 = Physics2D.Linecast(transform.position, transform.position + testDir, 1 << 9);
-            Debug.DrawLine(transform.position, transform.position + testDir, Color.yellow, Time.deltaTime);
+            Vector3 testDir2 = new Vector2(-currentDir.y, -currentDir.x) * castLength;
+            RaycastHit2D hit2 = Physics2D.Linecast(transform.position, transform.position + testDir2, 1 << 9);
+            Debug.DrawLine(transform.position, transform.position + testDir2, Color.yellow, Time.deltaTime);
 
             if (!hit2)
             {
                 Debug.Log("using second reroute;");
-                Vector2 newTacDest = transform.position + testDir;
+                Vector2 newTacDest = transform.position + testDir2;
                 newTacDest = GridHelper.SnapToGrid(newTacDest, 1);
                 return newTacDest;
             }
