@@ -38,7 +38,7 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected void FireOffCurrentWordIfPossible()
     {
         string currentWord = wb.GetCurrentWord();
-        if (wv.CheckWordValidity(currentWord, gameObject))
+        if (wv.CheckWordValidity(currentWord))
         {
             dh.DisplayDebugLog("firing off " + currentWord);
             wb.FireOffWord();

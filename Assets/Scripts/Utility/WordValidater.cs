@@ -7,85 +7,14 @@ using System;
 public class WordValidater : MonoBehaviour
 {
     [SerializeField] TextAsset wordListRaw = null;
-    HashSet<string> wordListProcessed;
+    HashSet<string> masterWordHashSet;
     string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     List<string> masterWordList;
-    Dictionary<char, WordBand> wordListLetterIndex = new Dictionary<char, WordBand>(26);
+    Dictionary<char, WordBand> TOC_1Deep = new Dictionary<char, WordBand>();
+    Dictionary<char, Dictionary<char, WordBand>> TOC_2Deep = new Dictionary<char, Dictionary<char, WordBand>>(26);
 
     DebugHelper dh;
     PlayerMemory pm;
-
-    void Start()
-    {
-        pm = FindObjectOfType<PlayerMemory>();
-        dh = FindObjectOfType<DebugHelper>();
-        var arr = wordListRaw.text.Split();
-        wordListProcessed = new HashSet<string>(arr);
-        masterWordList = new List<string>(arr);
-        masterWordList.RemoveAll(x => x == "");
-
-        PrepLetterIndex();
-
-        //Debug.Log($"raw array contains {arr.Length} words");
-        //Debug.Log($"word list hash contains {wordListProcessed.Count} words");
-        //Debug.Log($"word list list contains {wordListAZ.Count} words");
-        //dh.DisplayDebugLog($"Loaded {wordListProcessed.Count} words");
-        //FindPossibleWordCountWithStubWord("ANGER");
-    }
-
-    private void PrepLetterIndex()
-    {
-        char[] alphabetAsChars = alphabet.ToCharArray();
-        for (int i = 0; i < 26; i++)
-        {
-            StringComparison sc = new StringComparison(alphabetAsChars[i].ToString());
-            int firstInstance = masterWordList.FindIndex(sc.CompareString);
-            int lastInstance = masterWordList.FindLastIndex(sc.CompareString);
-            int range = lastInstance - firstInstance;
-
-            WordBand wordband = new WordBand(firstInstance, range, lastInstance);
-            //Debug.Log($"adding {alphabetAsChars[i]} with a WordBand: {firstInstance},{range}");
-            wordListLetterIndex.Add(alphabetAsChars[i], wordband);
-        }
-    }
-
-    public WordBand GetWordBandForStartingChar(char startingChar)
-    {
-        return wordListLetterIndex[startingChar];
-    }
-
-    public List<string> GetMasterWordList()
-    {
-        return masterWordList;
-    }
-
-    public bool CheckWordValidity(string testWord, GameObject wordSubmitter)
-    {
-        if (!pm)
-        {
-            pm = FindObjectOfType<PlayerMemory>();
-        }
-
-        if (wordListProcessed.Contains(testWord))
-        {
-            //Debug.Log($"{testWord} is valid");
-            //dh.DisplayDebugLog($"{testWord} is valid");
-            if (wordSubmitter == pm.gameObject)
-            {
-                pm.IncrementWordCount();
-            }
-
-            return true;
-        }
-        else
-        {
-            pm.ResetConsecutiveWordCount();
-            //Debug.Log($"{testWord} is invalid");
-            //dh.DisplayDebugLog($"{testWord} is invalid");
-            return false;
-        }
-
-    }
 
     public struct WordBand
     {
@@ -100,22 +29,133 @@ public class WordValidater : MonoBehaviour
         public int Range;
         public int EndIndex;
     }
+
+    void Start()
+    {
+        pm = FindObjectOfType<PlayerMemory>();
+        dh = FindObjectOfType<DebugHelper>();
+        var arr = wordListRaw.text.Split();
+        masterWordHashSet = new HashSet<string>(arr);
+        masterWordList = new List<string>(arr);
+        masterWordList.RemoveAll(x => x == "");
+
+        PrepTableOfContents();
+
+        //Debug.Log($"raw array contains {arr.Length} words");
+        //Debug.Log($"word list hash contains {wordListProcessed.Count} words");
+        //Debug.Log($"word list list contains {wordListAZ.Count} words");
+        //dh.DisplayDebugLog($"Loaded {wordListProcessed.Count} words");
+        //FindPossibleWordCountWithStubWord("ANGER");
+
+        //FindWordBandWithStubWord("B");
+        //FindWordBandWithStubWord("BO");
+        FindWordBandWithStubWord("BOB");
+    }
+
+    private void PrepTableOfContents()
+    {
+        char[] alphabetAsChars = alphabet.ToCharArray();
+
+        //Create the 1-deep TOC
+        for (int k = 0; k < 26; k++)
+        {
+            StringComparison sc = new StringComparison(alphabetAsChars[k].ToString());
+            int firstInstance = masterWordList.FindIndex(sc.CompareString);
+            int lastInstance = masterWordList.FindLastIndex(sc.CompareString);
+            int range = lastInstance - firstInstance;
+
+            WordBand wordband = new WordBand(firstInstance, range, lastInstance);
+            TOC_1Deep.Add(alphabetAsChars[k], wordband);
+        }
+
+        //Create the volume of 2-deep subTOCs
+        for (int j = 0; j < 26; j++)
+        {
+            Dictionary<char, WordBand> subTOC = new Dictionary<char, WordBand>(26);
+            WordBand momentWB = GetWordBandForStartingChar(alphabetAsChars[j]);
+            //Debug.Log($"moment WB: {momentWB.StartIndex}, {momentWB.Range}");
+
+            for (int i = 0; i < 26; i++)
+            {
+                string testStub = alphabetAsChars[j].ToString() + alphabetAsChars[i].ToString();
+                //Debug.Log($"test word: {testStub}");
+                StringComparison sc = new StringComparison(testStub);
+                int firstInstance = masterWordList.FindIndex(momentWB.StartIndex, momentWB.Range, sc.CompareString);
+                int lastInstance = masterWordList.FindLastIndex(momentWB.EndIndex, momentWB.Range, sc.CompareString);
+                int range = lastInstance - firstInstance;
+
+                WordBand wordband = new WordBand(firstInstance, range, lastInstance);
+                //Debug.Log($"adding subTOC {alphabetAsChars[j]}, {alphabetAsChars[i]} with a WordBand: {firstInstance},{range}");
+                subTOC.Add(alphabetAsChars[i], wordband);
+            }
+
+            TOC_2Deep.Add(alphabetAsChars[j], subTOC);
+        }
+    }
+
+    public WordBand GetWordBandForStartingChar(char startingChar)
+    {
+        //Debug.Log($"Invoked 1 Deep Search for {startingChar}, which yields: {TOC_1Deep[startingChar].StartIndex}, {TOC_1Deep[startingChar].Range}");
+        return TOC_1Deep[startingChar];
+    }
+
+    public WordBand GetWordBandForStartingChar(char startingChar, char secondChar)
+    {
+        //Debug.Log($"Invoked 2 Deep Search for {startingChar},{secondChar}");
+        Dictionary<char, WordBand> subTOCtoPull = TOC_2Deep[startingChar];
+        return subTOCtoPull[secondChar];
+    }
+
+    public List<string> GetMasterWordList()
+    {
+        return masterWordList;
+    }
+
+    public bool CheckWordValidity(string testWord)
+    {
+        if (masterWordHashSet.Contains(testWord))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
     public WordBand FindWordBandWithStubWord(string stubWord)
     {
         StringComparison sc = new StringComparison(stubWord);
         //Debug.Log($"Searching for {stubWord}, starting at {bandToSearch.StartIndex}, count: {bandToSearch.Range}");
 
-        int actualStartIndex;
-        int actualRange;
-        int actualEndIndex;
+        int actualStartIndex = 0;
+        int actualRange = 123;
+        int actualEndIndex = 122;
 
         char[] stubWordAsChar = stubWord.ToCharArray();
-        Debug.Log($"stubWordAsChar[0]: {stubWordAsChar[0]}");
-        actualStartIndex = GetWordBandForStartingChar(stubWordAsChar[0]).StartIndex;
-        actualRange = GetWordBandForStartingChar(stubWordAsChar[0]).Range;
-        actualEndIndex = GetWordBandForStartingChar(stubWordAsChar[0]).EndIndex;
-        //Debug.Log($"given search band is too big. Helped out. start: {actualStartIndex}, range: {actualRange}");
 
+
+        if (stubWordAsChar.Length < 2)
+        {
+            WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0]);
+            actualStartIndex = wb.StartIndex;
+            actualRange = wb.Range;
+            actualEndIndex = wb.EndIndex;
+        }
+        if (stubWordAsChar.Length >= 2)
+        {
+
+            WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0], stubWordAsChar[1]);
+            actualStartIndex = wb.StartIndex;
+            actualRange = wb.Range;
+            actualEndIndex = wb.EndIndex;
+        }
+
+        //Debug.Log($"Starting search at {actualStartIndex}, {actualRange}, which is {masterWordList[actualStartIndex]}");
+
+        //int refinedStartIndex = masterWordList.BinarySearch(actualStartIndex, actualRange, stubWord, sc);
+        //Debug.Log($"refining the search start to {refinedStartIndex}, which is {masterWordList[refinedStartIndex]}");
 
         //Debug.Log($"stub: {stubWord} start: {actualStartIndex}, range: {actualRange}");
         int firstInstance = masterWordList.FindIndex(actualStartIndex, actualRange, sc.CompareString);
@@ -126,12 +166,12 @@ public class WordValidater : MonoBehaviour
         
         if (possibleWords > 0)
         {
-            //Debug.Log($"{stubWord} has {possibleWords} possible words");
+            Debug.Log($"{stubWord} has {possibleWords} possible words");
             //Debug.Log($"first word: {masterWordList[firstInstance]}. last word: {masterWordList[lastInstance]}");
         }
         else
         {
-            //Debug.Log($"{stubWord} has no possible words!");
+            Debug.Log($"{stubWord} has no possible words!");
         }
 
         return wordBand;
@@ -144,12 +184,59 @@ public class WordValidater : MonoBehaviour
 }
 
 
-public class StringComparison
+public class StringComparison : IComparer<string>
 {
     char[] unchangingWordAsChars;
     public StringComparison(String newUnchangingWord)
     {
         unchangingWordAsChars = newUnchangingWord.ToCharArray();
+    }
+
+    public int Compare(string stubWord, string wordFromDictionary)
+    {
+        char[] stubWordAsChars = stubWord.ToCharArray();
+        char[] dictionaryWordAsChars = wordFromDictionary.ToCharArray();
+
+        if (stubWordAsChars[1] < dictionaryWordAsChars[1])
+        {
+            Debug.Log($"{stubWordAsChars[1]} is before {dictionaryWordAsChars[1]}, returned -1");
+            return -1;
+        }
+        if (stubWordAsChars[1] > dictionaryWordAsChars[1])
+        {
+            Debug.Log($"{stubWordAsChars[1]} is after {dictionaryWordAsChars[1]}, returned 1");
+            return 1;
+        }
+        else
+        {
+            Debug.Log($"{stubWordAsChars[1]} is same as {dictionaryWordAsChars[1]}, returned 0");
+            return 0;
+        }
+
+        //for (int i = 0; i < 20; i++)
+        //{
+        //    if (i >= stubWord.Length-1 || i >= wordFromDictionary.Length-1)
+        //    {
+        //        break;
+        //    }
+        //    if (stubWordAsChars[i] == dictionaryWordAsChars[i])
+        //    {
+        //        value = 0;
+        //        continue;
+        //    }
+        //    if (stubWordAsChars[i] < dictionaryWordAsChars[i])
+        //    {
+        //        value = -1;
+        //        break;
+        //    }
+        //    if (stubWordAsChars[i] > dictionaryWordAsChars[i])
+        //    {
+        //        value = 1;
+        //        break;
+        //    }
+        //}
+        //Debug.Log($"compared {wordFromDictionary} to {stubWord}. Returned {value}. Neg means x is earlier than y.");
+        //return value;
     }
 
     public bool CompareString(String wordToTest)
@@ -158,17 +245,17 @@ public class StringComparison
         char[] wordToTestAsChars = wordToTest.ToCharArray();
         for (int i = 0; i < unchangingWordAsChars.Length; i++)
         {
-            if (i > wordToTestAsChars.Length - 1)
+            if (i > wordToTestAsChars.Length-1)
             {
-                isMatch = false;
+                isMatch = false; // The word to test is shorter than the unchanging word, so not a match.
                 continue;
             }
             if (wordToTestAsChars[i] != unchangingWordAsChars[i])
             {
                 isMatch = false;
-                break;
+                break; //First letters don't match, so don't even look at second letter.
             }
-            else
+            else //Implied: if each word still has remaining letters, and the currently evaluated letters are equal, matched, keep going.
             {
                 isMatch = true;
                 continue;
@@ -176,6 +263,9 @@ public class StringComparison
         }
         return isMatch;
     }
+
+    
+
 
 }
 

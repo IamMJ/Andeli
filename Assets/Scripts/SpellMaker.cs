@@ -10,33 +10,37 @@ public class SpellMaker : MonoBehaviour
     WordValidater wv;
     PowerMeter pm;
     VictoryMeter vm;
+    PlayerMemory playmem;
     string testWord;
 
     // Start is called before the first frame update
     void Start()
     {
+        playmem = GetComponent<PlayerMemory>();
         dh = FindObjectOfType<DebugHelper>();
         wbd = FindObjectOfType<WordBuilder>();
         wv = FindObjectOfType<WordValidater>();
         pm = FindObjectOfType<PowerMeter>();
         vm = FindObjectOfType<VictoryMeter>();
+        
     }
 
 
     public void FireCurrentWord()
     {
         testWord = wbd.GetCurrentWord();
-        if (wv.CheckWordValidity(testWord, gameObject))
+        if (wv.CheckWordValidity(testWord))
         {
             GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
             WordPuff wordPuff = puff.GetComponent<WordPuff>();
             wordPuff.SetText(testWord);
             wordPuff.SetColorByPower(pm.CurrentPower);
-
+            playmem.IncrementWordCount();
             vm.ModifyBalance(pm.CurrentPower);
         }
         else
         {
+            playmem.ResetConsecutiveWordCount();
             Debug.Log("stun the player.");
         }
 
