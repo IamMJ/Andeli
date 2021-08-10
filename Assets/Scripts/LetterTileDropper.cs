@@ -18,7 +18,7 @@ public class LetterTileDropper : MonoBehaviour
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
-    float timeBetweenDrops = 2f;
+    float timeBetweenDrops = 0.4f;
     float universalMinDistanceToWordMaker = 2f;
     float minDistanceBetweenLetters = 2f;
     int layerMask_Letter = 1 << 9;
@@ -32,6 +32,9 @@ public class LetterTileDropper : MonoBehaviour
     [SerializeField] Vector2 randomPosition = Vector2.zero;
     [SerializeField] bool isRandomPositionBeingGenerated = false;
     [SerializeField] bool isNextTileReadyToBeDropped = false;
+
+    bool isRandomPositionTooNearWordMakers = false;
+    bool isRandomPositionTooNearOtherLetters = false;
 
     private void Start()
     {
@@ -112,6 +115,7 @@ public class LetterTileDropper : MonoBehaviour
 
     IEnumerator UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine()
     {
+
         if (!ab)
         {
             ab = FindObjectOfType<ArenaBuilder>();
@@ -119,16 +123,20 @@ public class LetterTileDropper : MonoBehaviour
         int attempts = 0;
         do
         {
+            isRandomPositionTooNearOtherLetters = true;
+            isRandomPositionTooNearWordMakers = true;
             randomPosition = ab.CreateRandomPointWithinArena();
+
             attempts++;
             if (attempts > 50)
             {
                 break;
             }
-            Debug.Log("coroutine thinking");
+            isRandomPositionTooNearOtherLetters = !VerifyAllLettersOutsideMinDistance(randomPosition);
+            isRandomPositionTooNearWordMakers = !VerifyAllWordMakersOutsideMinDistance(randomPosition);
             yield return new WaitForEndOfFrame();
         }
-        while (!VerifyAllWordMakersOutsideMinDistance(randomPosition) || !VerifyAllLettersOutsideMinDistance(randomPosition));
+        while (isRandomPositionTooNearWordMakers || isRandomPositionTooNearOtherLetters);
         randomPosition = GridHelper.SnapToGrid(randomPosition, 1);
         nextTileDropPosition = randomPosition;
         isRandomPositionBeingGenerated = false;
