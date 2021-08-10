@@ -16,22 +16,29 @@ public class V1_SS : SpellingStrategy
     float timeReductionPerLetter = 0.75f;
 
     //state
-    float timeToShiftStrategy = Mathf.Infinity;
+    [SerializeField] float currentTime;
+    [SerializeField] float timeToRethinkStrategy = Mathf.Infinity;
 
 
 
     private void Update()
-    {
-        if (Time.time > timeToShiftStrategy)
+    {        
+        currentTime = Time.time;
+        if (Time.time > timeToRethinkStrategy)
         {
-            shouldFireOrEraseNow = true;
+            if (!wb.TargetLetterTile)
+            {
+                shouldFireOrEraseNow = true;
+                EvaluateWordAfterGainingALetter();
+            }
+
         }
     }
 
     public override void EvaluateWordAfterGainingALetter()
     {
         FireOffOREraseCurrentWordIfFutureWordsUnlikely(minPossibleWordsToConsider);
-        timeToShiftStrategy = Time.time + (timeBetweenPickups * (float)Math.Pow(.75f, wb.GetCurrentWord().Length));
+        timeToRethinkStrategy = Time.time + (timeBetweenPickups * (float)Math.Pow(.75f, wb.GetCurrentWord().Length));
         shouldFireOrEraseNow = false;
     }
 
@@ -81,12 +88,8 @@ public class V1_SS : SpellingStrategy
         {
             shouldFireOrEraseNow = false;
         }
-        else
-        {
-            EvaluateWordAfterGainingALetter();
-        }
 
-        Debug.Log($"Selected {bestLetterTile?.Letter}, with {bestWordCount} possible words");
+        //Debug.Log($"Selected {bestLetterTile?.Letter}, with {bestWordCount} possible words");
         return bestLetterTile;
   
     }

@@ -16,6 +16,9 @@ public class WordValidater : MonoBehaviour
     DebugHelper dh;
     PlayerMemory pm;
 
+    //param
+    float maxTimePerFrame = 0.1f;
+
     public struct WordBand
     {
         public WordBand(int startIndex, int range, int endIndex)
@@ -58,6 +61,7 @@ public class WordValidater : MonoBehaviour
         {
             return false;
         }
+
 
     }
 

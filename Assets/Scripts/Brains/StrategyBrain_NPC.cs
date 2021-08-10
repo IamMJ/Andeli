@@ -8,9 +8,11 @@ public class StrategyBrain_NPC : MonoBehaviour
     //init
     WordBrain_NPC wb;
     MoveBrain_NPC mb;
+    ArenaBuilder ab;
 
     //param
     float castLength = 1.5f;
+    float closeEnough = 1f;
 
     //state
     Vector2 workingTacticalDestination;
@@ -19,6 +21,7 @@ public class StrategyBrain_NPC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ab = FindObjectOfType<ArenaBuilder>();
         wb = GetComponent<WordBrain_NPC>();
         mb = GetComponent<MoveBrain_NPC>();
     }
@@ -42,8 +45,10 @@ public class StrategyBrain_NPC : MonoBehaviour
         }
         else
         {
-            strategicDestination = Vector2.one * 4;
-            //TODO implement a random wander while waiting.
+            if ((transform.position - (Vector3)strategicDestination).magnitude < closeEnough)
+            {
+                strategicDestination = ab.CreateRandomPointWithinArena();
+            }
         }
     }
 

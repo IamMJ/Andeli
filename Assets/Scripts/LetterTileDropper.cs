@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
 
 public class LetterTileDropper : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class LetterTileDropper : MonoBehaviour
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
-    float timeBetweenDrops = 1f;
+    float timeBetweenDrops = 2f;
     float universalMinDistanceToWordMaker = 2f;
     float minDistanceBetweenLetters = 2f;
     int layerMask_Letter = 1 << 9;
@@ -26,6 +27,11 @@ public class LetterTileDropper : MonoBehaviour
     float timeForNextDrop;
     int currentProbabilityCount = 0;
     public bool doesBoardHaveLettersAvailable { get; private set; } = true;
+    [SerializeField] Vector2 nextTileDropPosition = Vector2.zero;
+    [SerializeField] Vector2 previousTileDropPosition = Vector2.zero;
+    [SerializeField] Vector2 randomPosition = Vector2.zero;
+    [SerializeField] bool isRandomPositionBeingGenerated = false;
+    [SerializeField] bool isNextTileReadyToBeDropped = false;
 
     private void Start()
     {
@@ -48,18 +54,27 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time >= timeForNextDrop)
+        if (!isRandomPositionBeingGenerated && (nextTileDropPosition - previousTileDropPosition).magnitude < 0.1f)
+        {
+            Debug.Log("this loop is true");
+            StartCoroutine(UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine());
+            isRandomPositionBeingGenerated = true;
+        }
+        if (isNextTileReadyToBeDropped && Time.time >= timeForNextDrop)
         {
             DropLetterTile();
-            timeForNextDrop = Time.time + timeBetweenDrops + UnityEngine.Random.Range(-timeBetweenDrops/4f, timeBetweenDrops/4f);
+            timeForNextDrop = Time.time + timeBetweenDrops + UnityEngine.Random.Range(-timeBetweenDrops / 4f, timeBetweenDrops / 4f);
+            isNextTileReadyToBeDropped = false;
+            previousTileDropPosition = nextTileDropPosition;
         }
+
     }
 
     private void DropLetterTile()
     {
-        Vector2 randomPos = GetRandomPositionOutsideOfMinRangeAndInsideArena();
+        //Vector2 randomPos = GetRandomPositionOutsideOfMinRangeAndInsideArena();
 
-        GameObject newTile = Instantiate(letterTilePrefab, randomPos, Quaternion.identity) as GameObject;
+        GameObject newTile = Instantiate(letterTilePrefab, nextTileDropPosition, Quaternion.identity) as GameObject;
 
         TrueLetter randomLetter = ReturnWeightedRandomTrueLetter();
         LetterTile letterTile = newTile.GetComponent<LetterTile>();
@@ -84,7 +99,7 @@ public class LetterTileDropper : MonoBehaviour
         {
             randomPos = ab.CreateRandomPointWithinArena();
             attempts++;
-            if (attempts > 2)
+            if (attempts > 50)
             {
                 break;
             }
@@ -92,6 +107,32 @@ public class LetterTileDropper : MonoBehaviour
         while (!VerifyAllWordMakersOutsideMinDistance(randomPos) || !VerifyAllLettersOutsideMinDistance(randomPos));
         randomPos = GridHelper.SnapToGrid(randomPos, 1);
         return randomPos;
+    }
+
+
+    IEnumerator UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine()
+    {
+        if (!ab)
+        {
+            ab = FindObjectOfType<ArenaBuilder>();
+        }
+        int attempts = 0;
+        do
+        {
+            randomPosition = ab.CreateRandomPointWithinArena();
+            attempts++;
+            if (attempts > 50)
+            {
+                break;
+            }
+            Debug.Log("coroutine thinking");
+            yield return new WaitForEndOfFrame();
+        }
+        while (!VerifyAllWordMakersOutsideMinDistance(randomPosition) || !VerifyAllLettersOutsideMinDistance(randomPosition));
+        randomPosition = GridHelper.SnapToGrid(randomPosition, 1);
+        nextTileDropPosition = randomPosition;
+        isRandomPositionBeingGenerated = false;
+        isNextTileReadyToBeDropped = true;
     }
 
     private bool VerifyAllWordMakersOutsideMinDistance(Vector2 randomPos)
