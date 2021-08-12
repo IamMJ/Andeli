@@ -20,7 +20,6 @@ public class TailPieceManager : MonoBehaviour
         if (tailPieces.Count == 0)
         {
             newPos = wmm.GetOldestBreadcrumb();
-            Debug.Log($"wmm is: {wmm}");
             GameObject newTailPiece_GO = Instantiate(tailPiecePrefab, newPos, Quaternion.identity) as GameObject;
 
             TailPiece newTailPiece = newTailPiece_GO.GetComponent<TailPiece>();

@@ -11,10 +11,10 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Slider wordFiringSliderBG = null;
     DebugHelper dh;
-    PlayerInput pi;
-    TailPieceManager playerTPM;
-    SpellMaker sm;
-    PowerMeter pm;
+    [SerializeField] PlayerInput pi;
+    [SerializeField]  TailPieceManager playerTPM;
+    [SerializeField] SpellMaker sm;
+    [SerializeField] PowerMeter pm;
 
 
     //state
@@ -79,6 +79,10 @@ public class WordBuilder : MonoBehaviour
 
     private void Update()
     {
+        if (!pi)
+        {
+            Start();
+        }
         HandleFireWordButtonPressed();
         HandleEraseWordButtonPressed();
 
@@ -117,6 +121,11 @@ public class WordBuilder : MonoBehaviour
 
     public void AddLetter(char newLetter)
     {
+        if (!playerTPM)
+        {
+            pi = FindObjectOfType<PlayerInput>();
+            playerTPM = pi.GetComponent<TailPieceManager>();
+        }
         //Debug.Log("adding: " + newLetter);
         currentWord += newLetter;
         //Debug.Log("Current word: " + currentWord);

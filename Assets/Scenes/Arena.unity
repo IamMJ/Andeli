@@ -418,6 +418,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wordEraseSliderBG: {fileID: 659256737}
   wordFiringSliderBG: {fileID: 1817644487}
+  pi: {fileID: 0}
+  playerTPM: {fileID: 0}
+  sm: {fileID: 0}
+  pm: {fileID: 0}
 --- !u!4 &141793032
 Transform:
   m_ObjectHideFlags: 0
@@ -9937,7 +9941,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
