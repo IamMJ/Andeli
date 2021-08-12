@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5293917446488848811}
   - component: {fileID: -7819186653885371754}
   - component: {fileID: -5630972937777679914}
+  - component: {fileID: -5061358904479945670}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -165,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e359333152cd32b4290df3b6669d511d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellPrefab: {fileID: 0}
   puffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
 --- !u!95 &5293917446488848811
 Animator:
@@ -210,3 +210,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0779bd952808024449fbf46c6c046b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5061358904479945670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d85d64b1eb1f4342af2dd6982aded87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}

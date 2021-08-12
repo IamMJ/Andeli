@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 
-public class PlayerInput : MonoBehaviour
+public class PlayerInput : WordMakerMovement
 {
     //init
     DebugHelper dh;
@@ -15,12 +15,11 @@ public class PlayerInput : MonoBehaviour
     public float LongPressTime { get; private set; } = 0.7f;
 
     //game param
-    float startingSpeed = 2f;
-    float acceleration = 0.05f; //speed gain per second;
+    //float startingSpeed = 2f;
+    //float acceleration = 0.05f; //speed gain per second;
 
     //state
     Vector2 truePosition = Vector2.zero;
-    [SerializeField] Vector2 validDesMove = Vector2.zero;
     [SerializeField] Vector2 rawDesMove = Vector2.zero;
     Vector2 touchStartPos = Vector2.zero;
     bool isValidStartPosition = false;
@@ -119,34 +118,6 @@ public class PlayerInput : MonoBehaviour
             rawDesMove = validDesMove;
         }
     }
-    private void CardinalizeDesiredMovement()
-    {
-        if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
-        {
-            validDesMove.y = 0;
-            if (validDesMove.x < 0)
-            {
-                validDesMove.x = -1;
-            }
-            else
-            {
-                validDesMove.x = 1;
-            }
-        }
-        else
-        {
-            validDesMove.x = 0;
-            if (validDesMove.y < 0)
-            {
-                validDesMove.y = -1;
-            }
-            else
-            {
-                validDesMove.y = 1;
-            }
-        }
-
-    }
 
     #region Handle Movement
     private void FixedUpdate()
@@ -158,29 +129,19 @@ public class PlayerInput : MonoBehaviour
     private void UpdateTruePosition()
     {
         truePosition += validDesMove * sk.CurrentSpeed * Time.deltaTime;
+
     }
 
     private void SnapDepictedPositionToTruePositionViaGrid()
     {
-        Vector2 oldPosition = transform.position;
+        Vector3 oldPosition = transform.position;
         transform.position = GridHelper.SnapToGrid(truePosition, 8);
-        //Vector2 dir = transform.position - (Vector3)oldPosition;
-        //if (dir.x > 0)
-        //{
-        //    dh.DisplayDebugLog("moved right");
-        //}
-        //if (dir.x < 0)
-        //{
-        //    dh.DisplayDebugLog("moved left");
-        //}
-        //if (dir.y < 0)
-        //{
-        //    dh.DisplayDebugLog("moved down");
-        //}
-        //if (dir.y > 0)
-        //{
-        //    dh.DisplayDebugLog("moved up");
-        //}
+        float moveAmount = (oldPosition - transform.position).magnitude;
+        if (moveAmount > Mathf.Epsilon)
+        {
+            PushWordMakerMovement();
+            DropBreadcrumb();
+        }
 
     }
     #endregion

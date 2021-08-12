@@ -8,13 +8,14 @@ using TMPro;
 
 public class WordBuilder : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI wordBoxTMP = null;
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Slider wordFiringSliderBG = null;
     DebugHelper dh;
     PlayerInput pi;
+    TailPieceManager playerTPM;
     SpellMaker sm;
     PowerMeter pm;
+
 
     //state
 
@@ -29,6 +30,7 @@ public class WordBuilder : MonoBehaviour
     {
         pi = FindObjectOfType<PlayerInput>();
         longPressTime = pi.LongPressTime;
+        playerTPM = pi.GetComponent<TailPieceManager>();
         dh = FindObjectOfType<DebugHelper>();
         sm = FindObjectOfType<SpellMaker>();
         pm = FindObjectOfType<PowerMeter>();
@@ -118,8 +120,8 @@ public class WordBuilder : MonoBehaviour
         //Debug.Log("adding: " + newLetter);
         currentWord += newLetter;
         //Debug.Log("Current word: " + currentWord);
-        wordBoxTMP.text = currentWord;
         HasLetters = true;
+        playerTPM.AddNewTailPiece(newLetter);
     }
 
     public string GetCurrentWord()
@@ -130,8 +132,8 @@ public class WordBuilder : MonoBehaviour
     public void ClearOutWordBox()
     {
         currentWord = "";
-        wordBoxTMP.text = currentWord;
         HasLetters = false;
+        playerTPM.DestroyEntireTail();
     }
 
     public void FillWordEraseSlider(float amount)

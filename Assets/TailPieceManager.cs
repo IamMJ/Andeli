@@ -20,7 +20,7 @@ public class TailPieceManager : MonoBehaviour
         if (tailPieces.Count == 0)
         {
             newPos = wmm.GetOldestBreadcrumb();
-
+            Debug.Log($"wmm is: {wmm}");
             GameObject newTailPiece_GO = Instantiate(tailPiecePrefab, newPos, Quaternion.identity) as GameObject;
 
             TailPiece newTailPiece = newTailPiece_GO.GetComponent<TailPiece>();
@@ -31,13 +31,9 @@ public class TailPieceManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"break 1");
             TailPiece lastTailPiece = tailPieces[tailPieces.Count - 1];
-            Debug.Log($"break 2");
             newPos = lastTailPiece.GetOldestBreadcrumb();
-            Debug.Log($"break 3");
             GameObject newTailPiece_GO = Instantiate(tailPiecePrefab, newPos, Quaternion.identity) as GameObject;
-            Debug.Log($"break 4");
             TailPiece newTailPiece = newTailPiece_GO.GetComponent<TailPiece>();
             newTailPiece.OnCreation(wmm, lastTailPiece, letterToDisplay);
 

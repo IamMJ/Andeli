@@ -7,7 +7,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 {
     public Action OnWordMakerMoved;
     protected Vector3 trailingDir;
-    public float moveSpeed = 3.0f;
+    public float moveSpeed = 1.0f;
 
     protected Vector2 validDesMove = Vector2.zero;
 
