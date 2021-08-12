@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveBrain_NPC : MonoBehaviour
+public class MoveBrain_NPC : WordMakerMovement
 {
     //init
     WordBrain_NPC wb;
     Animator anim;
 
     //param
-    public float moveSpeed { get; private set; } = 3.0f;
+    
 
     //state
     public Vector2 TacticalDestination;
     Vector2 truePosition = Vector2.one;
     Vector2 rawDesMove = Vector2.zero;
-    Vector2 validDesMove = Vector2.zero;
+
 
     private void Start()
     {
@@ -54,34 +54,6 @@ public class MoveBrain_NPC : MonoBehaviour
             rawDesMove = validDesMove;
         }
     }
-    private void CardinalizeDesiredMovement()
-    {
-        if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
-        {
-            validDesMove.y = 0;
-            if (validDesMove.x < 0)
-            {
-                validDesMove.x = -1;
-            }
-            else
-            {
-                validDesMove.x = 1;
-            }
-        }
-        else
-        {
-            validDesMove.x = 0;
-            if (validDesMove.y < 0)
-            {
-                validDesMove.y = -1;
-            }
-            else
-            {
-                validDesMove.y = 1;
-            }
-        }
-
-    }
 
     private void HandleAnimation()
     {
@@ -103,8 +75,15 @@ public class MoveBrain_NPC : MonoBehaviour
 
     private void SnapDepictedPositionToTruePositionViaGrid()
     {
-        Vector2 oldPosition = transform.position;
+        Vector3 oldPosition = transform.position;
         transform.position = GridHelper.SnapToGrid(truePosition, 8);
+        float moveAmount = (oldPosition - transform.position).magnitude;
+        if (moveAmount > Mathf.Epsilon)
+        {
+            PushWordMakerMovement();
+            DropBreadcrumb();
+        }
+
     }
     #endregion
 

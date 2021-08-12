@@ -10066,6 +10066,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dbd28575e835c3b488a27d9186e5990c, type: 2}
   - {fileID: 11400000, guid: 7323ef7c20aa66343ae7c3317f6e426b, type: 2}
   - {fileID: 11400000, guid: 33308c3530a258440aee129ad88dd0b3, type: 2}
+  nextTileDropPosition: {x: 0, y: 0}
+  previousTileDropPosition: {x: 0, y: 0}
+  randomPosition: {x: 0, y: 0}
+  isRandomPositionBeingGenerated: 0
+  isNextTileReadyToBeDropped: 0
 --- !u!4 &1716494824
 Transform:
   m_ObjectHideFlags: 0

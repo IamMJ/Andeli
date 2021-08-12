@@ -8,6 +8,7 @@ public class WordBrain_NPC : MonoBehaviour
     //init
     MoveBrain_NPC mb;
     [SerializeField] GameObject wordPuffPrefab = null;
+    TailPieceManager tpm;
     public LetterTile TargetLetterTile { get; private set; }
     WordValidater wv;
     LetterTileDropper ltd;
@@ -29,6 +30,7 @@ public class WordBrain_NPC : MonoBehaviour
         ltd = FindObjectOfType<LetterTileDropper>();
         ltd.OnLetterListModified += DetermineBestTargetLetter;
         vm = FindObjectOfType<VictoryMeter>();
+        tpm = GetComponent<TailPieceManager>();
         
     }
 
@@ -62,10 +64,12 @@ public class WordBrain_NPC : MonoBehaviour
     private void AddLetter(char newLetter)
     {
         currentWord += newLetter;
+        tpm.AddNewTailPiece(newLetter);
     }
     private void ClearCurrentWord()
     {
         currentWord = "";
+        tpm.DestroyEntireTail();
     }
     private void IncreasePower(int amount)
     {

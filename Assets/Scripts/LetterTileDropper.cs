@@ -18,7 +18,7 @@ public class LetterTileDropper : MonoBehaviour
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
-    float timeBetweenDrops = 0.4f;
+    float timeBetweenDrops = 2f;
     float universalMinDistanceToWordMaker = 2f;
     float minDistanceBetweenLetters = 2f;
     int layerMask_Letter = 1 << 9;
