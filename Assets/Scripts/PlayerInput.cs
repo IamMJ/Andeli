@@ -13,10 +13,8 @@ public class PlayerInput : WordMakerMovement
 
     //UI param
     public float LongPressTime { get; private set; } = 0.7f;
+    public float minTouchSensitivity = 10f;
 
-    //game param
-    //float startingSpeed = 2f;
-    //float acceleration = 0.05f; //speed gain per second;
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -26,6 +24,7 @@ public class PlayerInput : WordMakerMovement
     Vector2 touchEndPos = Vector2.zero;
     Touch currentTouch;
     bool isMobile = false;
+    Vector2 previousTouchPosition;
     public float timeSpentLongPressing { get; private set; }  
 
     void Start()
@@ -40,6 +39,7 @@ public class PlayerInput : WordMakerMovement
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
+        previousTouchPosition = Vector2.zero;
 
     }
 
@@ -71,20 +71,28 @@ public class PlayerInput : WordMakerMovement
         if (Input.touchCount > 0)
         {
             currentTouch = Input.GetTouch(0);
-
-            if (currentTouch.phase == TouchPhase.Began)
+            if (currentTouch.phase == TouchPhase.Began && !GridHelper.CheckIsTouchingWordSection(currentTouch.position))
             {
-                if (GridHelper.CheckIfTouchingWordSection(currentTouch.position) == false)
+                isValidStartPosition = true;
+            }
+
+            if (currentTouch.phase == TouchPhase.Moved && isValidStartPosition == true)
+            {
+                Vector2 possibleMove = (currentTouch.position - previousTouchPosition);
+                previousTouchPosition = currentTouch.position;
+                if (possibleMove.magnitude > minTouchSensitivity)
                 {
-                    touchStartPos = currentTouch.position;
-                    isValidStartPosition = true;
+                    rawDesMove = possibleMove;
+                    dh.DisplayDebugLog($"moved {rawDesMove} with {rawDesMove.magnitude} greater than {minTouchSensitivity}");
+                }
+                else
+                {
+                    dh.DisplayDebugLog($"no move since {rawDesMove.magnitude} less than {minTouchSensitivity}");
                 }
             }
 
-            if (isValidStartPosition && currentTouch.phase == TouchPhase.Ended)
+            if (currentTouch.phase == TouchPhase.Ended)
             {
-                touchEndPos = currentTouch.position;
-                rawDesMove = (touchEndPos - touchStartPos).normalized;
                 isValidStartPosition = false;
             }
         }

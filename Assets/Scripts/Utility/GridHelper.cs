@@ -31,7 +31,7 @@ public static class GridHelper : object
     }
 
 
-    public static bool CheckIfTouchingWordSection(Vector2 touchPos)
+    public static bool CheckIsTouchingWordSection(Vector2 touchPos)
     {
         if (touchPos.y < highestYValueForWordSection * Screen.height)
         {
