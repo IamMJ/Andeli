@@ -83,7 +83,9 @@ public class LetterTileDropper : MonoBehaviour
         LetterTile letterTile = newTile.GetComponent<LetterTile>();
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
+        letterTile.Ability = randomLetter.GetAbility();
         letterTile.StartingLifetime = 10f + UnityEngine.Random.Range(-2f, 2f);
+
         letterTile.SetLetterTileDropper(this);
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
         AddLetterToSpawnedLetterList(letterTile);

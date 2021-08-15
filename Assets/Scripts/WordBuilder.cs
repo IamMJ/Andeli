@@ -19,12 +19,15 @@ public class WordBuilder : MonoBehaviour
 
     //state
 
+    List<LetterTile> lettersCollected = new List<LetterTile>();
     public bool HasLetters { get; private set; } = false;
     string currentWord;
+    int currentWordLength;
     bool isFireWeaponButtonPressed = false;
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
     float longPressTime;
+
 
     private void Start()
     {
@@ -119,19 +122,62 @@ public class WordBuilder : MonoBehaviour
         
     }
 
-    public void AddLetter(char newLetter)
+    public void AddLetter(LetterTile newLetter)
     {
         if (!playerTPM)
         {
             pi = FindObjectOfType<PlayerInput>();
             playerTPM = pi.GetComponent<TailPieceManager>();
         }
-        //Debug.Log("adding: " + newLetter);
-        currentWord += newLetter;
-        //Debug.Log("Current word: " + currentWord);
+        lettersCollected.Add(newLetter);
+        currentWord += newLetter.Letter;
+        currentWordLength = currentWord.Length;
         HasLetters = true;
-        playerTPM.AddNewTailPiece(newLetter);
+        playerTPM.AddNewTailPiece(newLetter.Letter);
+        TestAllLetterLatentAbilities();
     }
+
+    private void TestAllLetterLatentAbilities()
+    {
+        for (int i =0; i < lettersCollected.Count; i++)
+        {
+            TestLetterLatentAbility(lettersCollected[i], i);
+        }
+    }
+
+    private void TestLetterLatentAbility(LetterTile newLetter, int index)
+    {
+        int power = newLetter.Power;
+        int roll = 21 - UnityEngine.Random.Range(1, 21);
+        //Debug.Log($"roll: {roll} vs wordLength: {currentWordLength}.");
+        switch (newLetter.Ability)
+        {
+            case TrueLetter.Ability.Nothing:
+                //
+                break;
+
+            case TrueLetter.Ability.Shiny:
+                if (currentWordLength >= roll)
+                {
+                    power *= 2;
+                    playerTPM.AddFXToSelectedTailPiece(newLetter.Ability, index);
+                }
+                break ;
+
+            case TrueLetter.Ability.Frozen:
+                //
+                break;
+
+            case TrueLetter.Ability.Fiery:
+                //
+                break;
+
+        }
+
+        pm.IncreasePower(power);
+    }
+
+
 
     public string GetCurrentWord()
     {
@@ -142,6 +188,8 @@ public class WordBuilder : MonoBehaviour
     {
         currentWord = "";
         HasLetters = false;
+        currentWordLength = 0;
+        lettersCollected.Clear();
         playerTPM.DestroyEntireTail();
     }
 

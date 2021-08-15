@@ -152,7 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50cb0d842981741a5f516c3366538b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  validDesMove: {x: 0, y: 0}
+  moveSpeed: 1
+  breadcrumbs: []
+  minTouchSensitivity: 10
   rawDesMove: {x: 0, y: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
@@ -223,3 +225,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}
+  letterFX_Shiny: {fileID: 6907797058491934293, guid: 9a6677f4fe83229458446c364cf60294, type: 3}

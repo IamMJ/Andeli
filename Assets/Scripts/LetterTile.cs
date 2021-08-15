@@ -9,6 +9,7 @@ public class LetterTile : MonoBehaviour
     public char Letter;
     public int Power;
     public float StartingLifetime;
+    public TrueLetter.Ability Ability = TrueLetter.Ability.Nothing;
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;
@@ -17,6 +18,7 @@ public class LetterTile : MonoBehaviour
     //state
     public float LifetimeRemaining { get; private set; }
     float factor;
+
 
     private void Start()
     {

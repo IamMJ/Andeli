@@ -15,4 +15,5 @@ MonoBehaviour:
   Letter: 75
   weight: 69
   Power: 4
+  ability: 1
   ProbabilityTop: 4701

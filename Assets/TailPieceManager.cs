@@ -9,6 +9,8 @@ public class TailPieceManager : MonoBehaviour
     List<TailPiece> tailPieces = new List<TailPiece>();
     WordMakerMovement wmm;
 
+    [SerializeField] GameObject letterFX_Shiny = null;
+
     void Start()
     {
         wmm = GetComponent<WordMakerMovement>();
@@ -37,6 +39,16 @@ public class TailPieceManager : MonoBehaviour
             newTailPiece.OnCreation(wmm, lastTailPiece, letterToDisplay);
 
             tailPieces.Add(newTailPiece);
+        }
+    }
+
+    public void AddFXToSelectedTailPiece(TrueLetter.Ability letterAbility, int index)
+    {
+        switch (letterAbility)
+        {
+            case TrueLetter.Ability.Shiny:
+                Instantiate(letterFX_Shiny, tailPieces[index].transform);
+                return;
         }
     }
 

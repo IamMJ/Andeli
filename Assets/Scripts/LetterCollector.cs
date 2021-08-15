@@ -22,8 +22,7 @@ public class LetterCollector : MonoBehaviour
         LetterTile letterTile;
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
-            wbd.AddLetter(letterTile.Letter);
-            pm.IncreasePower(letterTile.Power);
+            wbd.AddLetter(letterTile);
             Destroy(collision.gameObject);
         }
     }
