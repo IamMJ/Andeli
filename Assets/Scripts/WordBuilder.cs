@@ -132,6 +132,7 @@ public class WordBuilder : MonoBehaviour
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
         currentWordLength = currentWord.Length;
+        pm.IncreasePower(newLetter.Power);
         HasLetters = true;
         playerTPM.AddNewTailPiece(newLetter.Letter);
         TestAllLetterLatentAbilities();
@@ -141,15 +142,22 @@ public class WordBuilder : MonoBehaviour
     {
         for (int i =0; i < lettersCollected.Count; i++)
         {
-            TestLetterLatentAbility(lettersCollected[i], i);
+            if (lettersCollected[i].GetLatentAbilityStatus() == false)
+            {
+                TestLetterLatentAbility(lettersCollected[i], i);
+            }
         }
     }
 
     private void TestLetterLatentAbility(LetterTile newLetter, int index)
     {
-        int power = newLetter.Power;
         int roll = 21 - UnityEngine.Random.Range(1, 21);
-        //Debug.Log($"roll: {roll} vs wordLength: {currentWordLength}.");
+        if (currentWordLength < roll)
+        {
+            return;
+        }
+        newLetter.SetLatentAbilityStatus(true);
+
         switch (newLetter.Ability)
         {
             case TrueLetter.Ability.Nothing:
@@ -157,11 +165,10 @@ public class WordBuilder : MonoBehaviour
                 break;
 
             case TrueLetter.Ability.Shiny:
-                if (currentWordLength >= roll)
-                {
-                    power *= 2;
-                    playerTPM.AddFXToSelectedTailPiece(newLetter.Ability, index);
-                }
+
+                int power = newLetter.Power;
+                pm.IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
+                playerTPM.AddFXToSelectedTailPiece(newLetter.Ability, index);                
                 break ;
 
             case TrueLetter.Ability.Frozen:
@@ -173,8 +180,6 @@ public class WordBuilder : MonoBehaviour
                 break;
 
         }
-
-        pm.IncreasePower(power);
     }
 
 

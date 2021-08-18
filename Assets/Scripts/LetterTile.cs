@@ -18,6 +18,7 @@ public class LetterTile : MonoBehaviour
     //state
     public float LifetimeRemaining { get; private set; }
     float factor;
+    bool isLatentAbilityActivated = false;
 
 
     private void Start()
@@ -70,5 +71,15 @@ public class LetterTile : MonoBehaviour
     private void OnDestroy()
     {
         letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
+    }
+
+    public bool GetLatentAbilityStatus()
+    {
+        return isLatentAbilityActivated;
+    }
+
+    public void SetLatentAbilityStatus(bool newStatus)
+    {
+        isLatentAbilityActivated = newStatus;
     }
 }
