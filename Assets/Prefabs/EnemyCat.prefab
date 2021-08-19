@@ -118,6 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b01dd650199ee84ab3c159d94a1d5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 3
+  breadcrumbs: []
   TacticalDestination: {x: 0, y: 0}
 --- !u!50 &-4428386896512461276
 Rigidbody2D:
@@ -213,3 +215,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}
+  letterFX_Shiny: {fileID: 0}

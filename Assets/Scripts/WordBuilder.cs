@@ -4,18 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+[RequireComponent (typeof (SpellMaker), typeof(TailPieceManager), typeof(LetterCollector))]
 
 
 public class WordBuilder : MonoBehaviour
 {
-    [SerializeField] Slider wordEraseSliderBG = null;
-    [SerializeField] Slider wordFiringSliderBG = null;
     DebugHelper dh;
-    [SerializeField] PlayerInput pi;
-    [SerializeField]  TailPieceManager playerTPM;
-    [SerializeField] SpellMaker sm;
-    [SerializeField] PowerMeter pm;
-
+    PlayerInput pi;
+    TailPieceManager tpm;
+    SpellMaker sm;
+    PowerMeter pm;
+    UIDriver uid;
+    WordValidater wv;
 
     //state
 
@@ -23,118 +23,41 @@ public class WordBuilder : MonoBehaviour
     public bool HasLetters { get; private set; } = false;
     string currentWord;
     int currentWordLength;
-    bool isFireWeaponButtonPressed = false;
-    bool isEraseWeaponButtonPressed = false;
-    float timeButtonDepressed = 0;
-    float longPressTime;
+    public int CurrentPower { get; private set; } = 0;
 
 
     private void Start()
     {
-        pi = FindObjectOfType<PlayerInput>();
-        longPressTime = pi.LongPressTime;
-        playerTPM = pi.GetComponent<TailPieceManager>();
         dh = FindObjectOfType<DebugHelper>();
-        sm = FindObjectOfType<SpellMaker>();
-        pm = FindObjectOfType<PowerMeter>();
+        uid = FindObjectOfType<UIDriver>();
+        wv = FindObjectOfType<WordValidater>();
+        uid.SetPlayerObject(this);
+
+        pi = GetComponent<PlayerInput>();
+        tpm = GetComponent<TailPieceManager>();
+        sm = GetComponent<SpellMaker>();
     }
 
-    #region Initial Button Press Handlers
-    public void OnPressDownFireWord()
-    {
-        if (!pi)
-        {
-            Start();
-        }
-        if (!HasLetters) { return; }
 
-        if (isEraseWeaponButtonPressed == false)
-        {
-            isFireWeaponButtonPressed = true;
-        }
-
-    }
-
-    public void OnReleaseFireWord()
-    {
-        IncompleteLongPress_WordBoxActions();
-    }
-
-    public void OnPressDownEraseWord()
-    {
-        if (!pi)
-        {
-            Start();
-        }
-        if (!HasLetters) { return; }
-
-        if (isFireWeaponButtonPressed == false)
-        {
-            isEraseWeaponButtonPressed = true;
-        }
-    }
-
-    public void OnReleaseEraseWord()
-    {
-        IncompleteLongPress_WordBoxActions();
-    }
-    #endregion
 
     private void Update()
     {
-        if (!pi)
-        {
-            Start();
-        }
-        HandleFireWordButtonPressed();
-        HandleEraseWordButtonPressed();
 
-    }
-
-    private void HandleEraseWordButtonPressed()
-    {
-        if (isEraseWeaponButtonPressed)
-        {
-            timeButtonDepressed += Time.unscaledDeltaTime;
-            Time.timeScale = 0;
-            FillWordEraseSlider(timeButtonDepressed / longPressTime);
-            if (timeButtonDepressed >= longPressTime)
-            {
-                //Placeholder for anything related to erasing the word
-                CompleteLongPress_WordBoxActions();
-            }
-        }
-    }
-
-    private void HandleFireWordButtonPressed()
-    {
-        if (isFireWeaponButtonPressed)
-        {
-            timeButtonDepressed += Time.unscaledDeltaTime;
-            Time.timeScale = 0;
-            FillWordFiringSlider(timeButtonDepressed / longPressTime);
-            if (timeButtonDepressed >= longPressTime)
-            {
-                sm.FireCurrentWord();
-                CompleteLongPress_WordBoxActions();
-            }
-        }
-        
-    }
+    }    
 
     public void AddLetter(LetterTile newLetter)
     {
-        if (!playerTPM)
+        if (!tpm)
         {
             pi = FindObjectOfType<PlayerInput>();
-            playerTPM = pi.GetComponent<TailPieceManager>();
+            tpm = pi.GetComponent<TailPieceManager>();
         }
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
         currentWordLength = currentWord.Length;
-        pm.IncreasePower(newLetter.Power);
+        IncreasePower(newLetter.Power);
         HasLetters = true;
-        playerTPM.AddNewTailPiece(newLetter.Letter);
+        tpm.AddNewTailPiece(newLetter.Letter);
         TestAllLetterLatentAbilities();
     }
 
@@ -167,8 +90,8 @@ public class WordBuilder : MonoBehaviour
             case TrueLetter.Ability.Shiny:
 
                 int power = newLetter.Power;
-                pm.IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
-                playerTPM.AddFXToSelectedTailPiece(newLetter.Ability, index);                
+                IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
+                tpm.AddFXToSelectedTailPiece(newLetter.Ability, index);                
                 break ;
 
             case TrueLetter.Ability.Frozen:
@@ -183,56 +106,37 @@ public class WordBuilder : MonoBehaviour
     }
 
 
-
     public string GetCurrentWord()
     {
         return currentWord;
     }
-
-    public void ClearOutWordBox()
+    public void ClearCurrentWord()
     {
         currentWord = "";
         HasLetters = false;
         currentWordLength = 0;
         lettersCollected.Clear();
-        playerTPM.DestroyEntireTail();
+        tpm.DestroyEntireTail();
     }
 
-    public void FillWordEraseSlider(float amount)
+    public void FireCurrentWord()
     {
-        wordEraseSliderBG.value = amount;
+        sm.FireCurrentWord();
     }
 
-    public void ClearWordEraseSlider()
+    public void IncreasePower(int amount)
     {
-        wordEraseSliderBG.value = 0f;
+        CurrentPower += amount;
+        uid.ModifyPowerMeterTMP(CurrentPower);
     }
 
-    public void FillWordFiringSlider(float amount)
+    public void ClearPowerLevel()
     {
-        wordFiringSliderBG.value = amount;
-    }
-
-    public void ClearWordFiringSlider()
-    {
-        wordFiringSliderBG.value = 0;
+        CurrentPower = 0;
+        uid.ModifyPowerMeterTMP(CurrentPower);
     }
 
 
-    private void CompleteLongPress_WordBoxActions()
-    {
-        ClearOutWordBox();
-        pm.ClearPowerLevel();
-        IncompleteLongPress_WordBoxActions();
-    }
-    private void IncompleteLongPress_WordBoxActions()
-    {
-        ClearWordEraseSlider();
-        ClearWordFiringSlider();
-        timeButtonDepressed = 0;
-        Time.timeScale = 1f;
-        isFireWeaponButtonPressed = false;
-        isEraseWeaponButtonPressed = false;
 
-    }
+
 }

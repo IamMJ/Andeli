@@ -59,7 +59,6 @@ public class LetterTileDropper : MonoBehaviour
     {
         if (!isRandomPositionBeingGenerated && (nextTileDropPosition - previousTileDropPosition).magnitude < 0.1f)
         {
-            Debug.Log("this loop is true");
             StartCoroutine(UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine());
             isRandomPositionBeingGenerated = true;
         }

@@ -11,14 +11,14 @@ public class LetterCollector : MonoBehaviour
 
     void Start()
     {
-        wbd = FindObjectOfType<WordBuilder>();
+        wbd = GetComponent<WordBuilder>();
         pi = GetComponent<PlayerInput>();
         pm = FindObjectOfType<PowerMeter>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (pi.timeSpentLongPressing > 0) { return; } //Don't pick up letters if pressing the screen. Prevents accidental misspells.
+        //if (pi.timeSpentLongPressing > 0) { return; } //Don't pick up letters if pressing the screen. Prevents accidental misspells.
         LetterTile letterTile;
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {

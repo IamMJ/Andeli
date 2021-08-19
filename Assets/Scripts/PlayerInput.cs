@@ -11,11 +11,6 @@ public class PlayerInput : WordMakerMovement
     Animator anim;
     SpeedKeeper sk;
 
-    //UI param
-    public float LongPressTime { get; private set; } = 0.7f;
-    public float minTouchSensitivity = 10f;
-
-
     //state
     Vector2 truePosition = Vector2.zero;
     [SerializeField] Vector2 rawDesMove = Vector2.zero;
@@ -25,16 +20,13 @@ public class PlayerInput : WordMakerMovement
     Touch currentTouch;
     bool isMobile = false;
     Vector2 previousTouchPosition;
-    public float timeSpentLongPressing { get; private set; }  
+
 
     void Start()
     {
         sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
         //Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
-        Screen.autorotateToLandscapeLeft = false;
-        Screen.autorotateToLandscapeRight = false;
-        Screen.autorotateToPortraitUpsideDown = false;
 
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;
@@ -80,14 +72,14 @@ public class PlayerInput : WordMakerMovement
             {
                 Vector2 possibleMove = (currentTouch.position - previousTouchPosition);
                 previousTouchPosition = currentTouch.position;
-                if (possibleMove.magnitude > minTouchSensitivity)
+                if (possibleMove.magnitude > UIParameters.MinTouchSensitivity)
                 {
                     rawDesMove = possibleMove;
-                    dh.DisplayDebugLog($"moved {rawDesMove} with {rawDesMove.magnitude} greater than {minTouchSensitivity}");
+                    dh.DisplayDebugLog($"moved {rawDesMove} with {rawDesMove.magnitude} greater than {UIParameters.MinTouchSensitivity}");
                 }
                 else
                 {
-                    dh.DisplayDebugLog($"no move since {rawDesMove.magnitude} less than {minTouchSensitivity}");
+                    dh.DisplayDebugLog($"no move since {rawDesMove.magnitude} less than {UIParameters.MinTouchSensitivity}");
                 }
             }
 

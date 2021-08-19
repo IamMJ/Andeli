@@ -17,15 +17,13 @@ public class SpellMaker : MonoBehaviour
     void Start()
     {
         playmem = GetComponent<PlayerMemory>();
+        wbd = GetComponent<WordBuilder>();
+
         dh = FindObjectOfType<DebugHelper>();
-        wbd = FindObjectOfType<WordBuilder>();
         wv = FindObjectOfType<WordValidater>();
-        pm = FindObjectOfType<PowerMeter>();
         vm = FindObjectOfType<VictoryMeter>();
         
     }
-
-
     public void FireCurrentWord()
     {
         testWord = wbd.GetCurrentWord();
@@ -34,18 +32,15 @@ public class SpellMaker : MonoBehaviour
             GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
             WordPuff wordPuff = puff.GetComponent<WordPuff>();
             wordPuff.SetText(testWord);
-            wordPuff.SetColorByPower(pm.CurrentPower);
+            wordPuff.SetColorByPower(wbd.CurrentPower);
             playmem.IncrementWordCount();
-            vm.ModifyBalance(pm.CurrentPower);
+            vm.ModifyBalance(wbd.CurrentPower);
         }
         else
         {
             playmem.ResetConsecutiveWordCount();
             Debug.Log("stun the player.");
         }
-
-
-
     }
 
 

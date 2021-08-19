@@ -12,13 +12,15 @@ GameObject:
   - component: {fileID: 5608652954252347952}
   - component: {fileID: 786270578}
   - component: {fileID: 1564904675}
-  - component: {fileID: 5996083012857787361}
   - component: {fileID: 3319382006745120615}
   - component: {fileID: -2375094335787212340}
   - component: {fileID: 5293917446488848811}
   - component: {fileID: -7819186653885371754}
   - component: {fileID: -5630972937777679914}
   - component: {fileID: -5061358904479945670}
+  - component: {fileID: 2514741202502210731}
+  - component: {fileID: -3760845450975832475}
+  - component: {fileID: 5745040115539129987}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -128,18 +130,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5996083012857787361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5608652954252347955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e5e782827d781241ba639daba3df09d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3319382006745120615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +144,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   breadcrumbs: []
-  minTouchSensitivity: 10
   rawDesMove: {x: 0, y: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
@@ -226,3 +215,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}
   letterFX_Shiny: {fileID: 6907797058491934293, guid: 9a6677f4fe83229458446c364cf60294, type: 3}
+--- !u!114 &2514741202502210731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d2d549f77163624d9ccfd0b24ca0759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-3760845450975832475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5e782827d781241ba639daba3df09d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5745040115539129987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d4274fef04f0a4f8c3ad4d6ce33906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
