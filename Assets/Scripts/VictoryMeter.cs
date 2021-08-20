@@ -49,13 +49,13 @@ public class VictoryMeter : MonoBehaviour
         if (currentBalance >= victoryAmount)
         {
             //handle victory;
-            sl.LoadThirdScene();
+            sl.LoadEndingScene();
         }
 
         if (currentBalance <= defeatAmount)
         {
             //handle defeat;
-            sl.LoadThirdScene();
+            sl.LoadEndingScene();
         }
     }
 

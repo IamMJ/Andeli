@@ -33,6 +33,20 @@ public class WordValidater : MonoBehaviour
         public int EndIndex;
     }
 
+    void Awake()
+    {
+        int count = FindObjectsOfType<GameController>().Length;
+        if (count > 1)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+
     void Start()
     {
         pm = FindObjectOfType<PlayerMemory>();

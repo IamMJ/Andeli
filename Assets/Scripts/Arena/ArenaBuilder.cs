@@ -10,6 +10,7 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject cameraMousePrefab = null;
     [SerializeField] GameObject wallPrefab = null;
     [SerializeField] GameObject catPrefab = null;
+    [SerializeField] GameObject letterTileDropperPrefab = null;
 
     //parameters
     int minX = -9;
@@ -21,14 +22,15 @@ public class ArenaBuilder : MonoBehaviour
     GameObject statue;
     GameObject player;
     GameObject cat;
+    GameObject letterTileDropper;
+    
 
-
-    void Start()
+    public void SetupArena(Vector2 centroid)
     {
-        SetupStatuePlayerCameraMouseCat();
-        SetupArenaBoundaries();
+        SetupStatuePlayerCameraMouseCat(centroid);
+        SetupArenaBoundaries(centroid);
     }
-    private void SetupArenaBoundaries()
+    private void SetupArenaBoundaries(Vector2 centroid)
     {
         Vector2 wallSection = new Vector2(0, minY);
         for (float x = minX; x < maxX; x += 1f)
@@ -61,16 +63,17 @@ public class ArenaBuilder : MonoBehaviour
         }
     }
 
-    private void SetupStatuePlayerCameraMouseCat()
+    private void SetupStatuePlayerCameraMouseCat(Vector2 centroid)
     {
-        statue = Instantiate(statuePrefab, Vector2.zero, Quaternion.identity) as GameObject;
-        player = Instantiate(playerPrefab, Vector2.one, Quaternion.identity) as GameObject;
-        GameObject cameraMouse = Instantiate(cameraMousePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+        letterTileDropper = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity) as GameObject;
+        statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
+        player = Instantiate(playerPrefab, centroid + Vector2.one, Quaternion.identity) as GameObject;
+        GameObject cameraMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
         CameraMouse cameraMouse1 = cameraMouse.GetComponent<CameraMouse>();
         cameraMouse1.SetAnchor(statue);
         cameraMouse1.SetPlayer(player);
 
-        cat = Instantiate(catPrefab, Vector2.one * -3f, Quaternion.identity) as GameObject;
+        cat = Instantiate(catPrefab, centroid, Quaternion.identity) as GameObject;
     }
 
     public Vector2 CreateRandomPointWithinArena()
