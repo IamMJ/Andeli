@@ -9,7 +9,7 @@ public class LetterTileDropper : MonoBehaviour
 {
     [SerializeField] GameObject letterTilePrefab = null;
     [SerializeField] TrueLetter[] trueLetters = null;
-
+    WordValidater wv;
     GameObject[] wordMakers;
     ArenaBuilder ab;
     SpeedKeeper sk;
@@ -38,6 +38,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Start()
     {
+        wv = FindObjectOfType<WordValidater>();
         sk = FindObjectOfType<SpeedKeeper>();
         ab = FindObjectOfType<ArenaBuilder>();
         wordMakers = GameObject.FindGameObjectsWithTag("Wordmaker");
@@ -57,6 +58,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Update()
     {
+        if (!wv.GetPreppedStatus()) { return; }
         if (!isRandomPositionBeingGenerated && (nextTileDropPosition - previousTileDropPosition).magnitude < 0.1f)
         {
             StartCoroutine(UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine());

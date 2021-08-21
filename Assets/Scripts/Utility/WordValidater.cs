@@ -12,13 +12,6 @@ public class WordValidater : MonoBehaviour
     List<string> masterWordList;
     Dictionary<char, WordBand> TOC_1Deep = new Dictionary<char, WordBand>();
     Dictionary<char, Dictionary<char, WordBand>> TOC_2Deep = new Dictionary<char, Dictionary<char, WordBand>>(26);
-
-    DebugHelper dh;
-    PlayerMemory pm;
-
-    //param
-    float maxTimePerFrame = 0.1f;
-
     public struct WordBand
     {
         public WordBand(int startIndex, int range, int endIndex)
@@ -32,6 +25,15 @@ public class WordValidater : MonoBehaviour
         public int Range;
         public int EndIndex;
     }
+
+    DebugHelper dh;
+    PlayerMemory pm;
+
+    //param
+    float maxTimePerFrame = 0.1f;
+
+    //state
+    bool isPrepped = false;
 
     void Awake()
     {
@@ -56,7 +58,7 @@ public class WordValidater : MonoBehaviour
         masterWordList = new List<string>(arr);
         masterWordList.RemoveAll(x => x == "");
 
-        PrepTableOfContents();
+        StartCoroutine(PrepTableOfContents_Coroutine());
 
         //Debug.Log($"raw array contains {arr.Length} words");
         //Debug.Log($"word list hash contains {wordListProcessed.Count} words");
@@ -136,10 +138,15 @@ public class WordValidater : MonoBehaviour
         return masterWordList.Count;
     }
 
+    public bool GetPreppedStatus()
+    {
+        return isPrepped;
+    }
+
     #endregion
 
     #region Private Methods
-    private void PrepTableOfContents()
+    IEnumerator PrepTableOfContents_Coroutine()
     {
         char[] alphabetAsChars = alphabet.ToCharArray();
 
@@ -153,6 +160,8 @@ public class WordValidater : MonoBehaviour
 
             WordBand wordband = new WordBand(firstInstance, range, lastInstance);
             TOC_1Deep.Add(alphabetAsChars[k], wordband);
+            yield return new WaitForEndOfFrame();
+
         }
 
         //Create the volume of 2-deep subTOCs
@@ -174,10 +183,13 @@ public class WordValidater : MonoBehaviour
                 WordBand wordband = new WordBand(firstInstance, range, lastInstance);
                 //Debug.Log($"adding subTOC {alphabetAsChars[j]}, {alphabetAsChars[i]} with a WordBand: {firstInstance},{range}");
                 subTOC.Add(alphabetAsChars[i], wordband);
+                yield return new WaitForEndOfFrame();
             }
 
             TOC_2Deep.Add(alphabetAsChars[j], subTOC);
+            yield return new WaitForEndOfFrame();
         }
+        isPrepped = true;
     }
 
     private WordBand GetWordBandForStartingChar(char startingChar)

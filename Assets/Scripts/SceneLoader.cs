@@ -31,13 +31,22 @@ public class SceneLoader : MonoBehaviour
 
     void Start()
     {
-        loadingOperation = SceneManager.LoadSceneAsync(MainGameScene,LoadSceneMode.Single); //Load this at start because it takes a while.
-        loadingOperation.allowSceneActivation = false;
+        SceneManager.sceneLoaded += HandleOnSceneLoad;
+        //loadingOperation = SceneManager.LoadSceneAsync(MainGameScene,LoadSceneMode.Single); //Load this at start because it takes a while.
+        //loadingOperation.allowSceneActivation = false;
     }
+
     public void GoToMainGameScene()
     {
-        loadingOperation.allowSceneActivation = true;
-        StartCoroutine(WaitForLoadToFinish());
+        //loadingOperation.allowSceneActivation = true;
+        //StartCoroutine(WaitForLoadToFinish());
+        //SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(MainGameScene));
+        SceneManager.LoadScene(MainGameScene);
+    }
+
+    private void HandleOnSceneLoad(Scene loadedScene, LoadSceneMode lsm)
+    {
+        OnSceneChange.Invoke(loadedScene.buildIndex);
     }
 
     IEnumerator WaitForLoadToFinish()

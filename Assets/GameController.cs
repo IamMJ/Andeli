@@ -7,10 +7,12 @@ using Cinemachine;
 public class GameController : MonoBehaviour
 {
     //init
-    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject playerPrefab = null;
+    [SerializeField] GameObject wordValidaterPrefab = null;
     GameObject player;
     CinemachineVirtualCamera cvc;
     SceneLoader sl;
+    GameObject wv;
 
     //state
     bool isPaused = false;
@@ -54,8 +56,10 @@ public class GameController : MonoBehaviour
     {
         isInGame = true;
         SpawnPlayer();
+        SpawnWordUtilities();
         SetCameraToFollowPlayer();
     }
+
     private void SpawnPlayer()
     {
         if (!player)
@@ -63,6 +67,11 @@ public class GameController : MonoBehaviour
             player = Instantiate(playerPrefab, Vector2.zero, Quaternion.identity) as GameObject;
         }
     }
+    private void SpawnWordUtilities()
+    {
+        wv = Instantiate(wordValidaterPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+    }
+
     private void SetCameraToFollowPlayer()
     {
         if (!cvc)
