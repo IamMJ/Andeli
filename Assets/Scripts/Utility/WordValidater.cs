@@ -29,11 +29,9 @@ public class WordValidater : MonoBehaviour
     DebugHelper dh;
     PlayerMemory pm;
 
-    //param
-    float maxTimePerFrame = 0.1f;
 
     //state
-    bool isPrepped = false;
+    [SerializeField] bool isPrepped = false;
 
     void Awake()
     {
@@ -149,14 +147,16 @@ public class WordValidater : MonoBehaviour
     IEnumerator PrepTableOfContents_Coroutine()
     {
         char[] alphabetAsChars = alphabet.ToCharArray();
+        int startIndex = 0;
 
         //Create the 1-deep TOC
         for (int k = 0; k < 26; k++)
         {
             StringComparison sc = new StringComparison(alphabetAsChars[k].ToString());
-            int firstInstance = masterWordList.FindIndex(sc.CompareString);
+            int firstInstance = masterWordList.FindIndex(startIndex, sc.CompareString);
             int lastInstance = masterWordList.FindLastIndex(sc.CompareString);
             int range = lastInstance - firstInstance;
+            startIndex = lastInstance + 1;
 
             WordBand wordband = new WordBand(firstInstance, range, lastInstance);
             TOC_1Deep.Add(alphabetAsChars[k], wordband);
