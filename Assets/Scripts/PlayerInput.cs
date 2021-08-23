@@ -53,8 +53,8 @@ public class PlayerInput : WordMakerMovement
         {
             HandleKeyboardInput();
         }
-        DisplayPlannedMoveArrows();
         validDesMove = CardinalizeDesiredMovement(rawDesMove);
+        DisplayPlannedMoveArrows();
         UpdateAnimation();
     }
 
@@ -121,19 +121,53 @@ public class PlayerInput : WordMakerMovement
     #region Computer Input
     private void HandleKeyboardInput()
     {
-        if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) <= Mathf.Epsilon)
+        //if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) <= Mathf.Epsilon)
+        //{
+        //    movesToDisplay = 0;
+        //    return;
+        //}
+        //else
+        //{
+        //    followOnMoves[0].x = Input.GetAxisRaw("Horizontal");
+        //    followOnMoves[0].y = Input.GetAxisRaw("Vertical");
+        //    followOnMoves[0] = CardinalizeDesiredMovement(followOnMoves[0]);
+        //    programmedMoves = 1;
+        //    movesToDisplay = 1;
+        //}
+
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            movesToDisplay = 0;
-            return;
-        }
-        else
-        {
-            followOnMoves[0].x = Input.GetAxisRaw("Horizontal");
-            followOnMoves[0].y = Input.GetAxisRaw("Vertical");
-            followOnMoves[0] = CardinalizeDesiredMovement(followOnMoves[0]);
+            followOnMoves[0].x = 0;
+            followOnMoves[0].y = 1;
             programmedMoves = 1;
             movesToDisplay = 1;
+            return;
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            followOnMoves[0].x = 0;
+            followOnMoves[0].y = -1;
+            programmedMoves = 1;
+            movesToDisplay = 1;
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            followOnMoves[0].y = 0;
+            followOnMoves[0].x = -1;
+            programmedMoves = 1;
+            movesToDisplay = 1;
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            followOnMoves[0].y = 0;
+            followOnMoves[0].x = 1;
+            programmedMoves = 1;
+            movesToDisplay = 1;
+            return;
+        }
+
 
     }
 
@@ -141,6 +175,7 @@ public class PlayerInput : WordMakerMovement
 
     private void DisplayPlannedMoveArrows()
     {
+        
         if (movesToDisplay > 0)
         {
             for (int k = 0; k < moveArrows.Length; k++)
@@ -149,14 +184,26 @@ public class PlayerInput : WordMakerMovement
             }
             for (int i = 0; i < movesToDisplay; i++)
             {
-                Vector2 snappedPosition = GridHelper.SnapToGrid(transform.position, 1);
-                GameObject arrow = Instantiate(moveArrowPrefab, snappedPosition + followOnMoves[i], Quaternion.identity) as GameObject;
+                Vector2 arrowPos;
+                if (GridHelper.CheckIfSnappedToGrid(transform.position))
+                {
+                    arrowPos = truePosition + followOnMoves[i];
+
+                }
+                else
+                {
+                    arrowPos = truePosition + followOnMoves[i] + validDesMove/2f;
+                }
+
+                arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
+                GameObject arrow = Instantiate(moveArrowPrefab, arrowPos, Quaternion.identity) as GameObject;
                 arrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(followOnMoves[i]);
                 moveArrows[i] = arrow;
+                movesToDisplay--;
+                //Debug.Log($"Arrow placed at: {arrowPos}, snapped pos: {snappedPosition}, follow: {followOnMoves[0]}, curr: {validDesMove}");
             }
         }
 
-        movesToDisplay = 0;
     }
 
     #region Handle Movement
@@ -184,13 +231,15 @@ public class PlayerInput : WordMakerMovement
             DropBreadcrumb();
         }
 
+
     }
     private void DetectIfSnapped()
     {
         if (GridHelper.CheckIfSnappedToGrid(transform.position))
         {
-            Debug.Log($"thinks it is snapped at {transform.position}");
+            //Debug.Log($"thinks it is snapped at {transform.position}");
             FeedNextFollowOnMoveIntoRawDesMove();
+
             validDesMove = rawDesMove;
         }
     }
