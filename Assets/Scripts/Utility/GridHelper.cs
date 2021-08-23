@@ -20,8 +20,9 @@ public static class GridHelper : object
     
     public static bool CheckIfSnappedToGrid(Vector2 inputPos)
     {
-        if (Mathf.Abs(inputPos.x) % 1 > 0 || Mathf.Abs(inputPos.y) % 1 < 0)
+        if (Mathf.Abs(inputPos.x) % 1 > 0 || Mathf.Abs(inputPos.y) % 1 > 0)
         {
+
             return false;
         }
         else

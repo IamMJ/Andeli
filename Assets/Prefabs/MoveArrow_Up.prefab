@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6160719834766047820}
   - component: {fileID: 6160719834766047819}
+  - component: {fileID: 509437806218658447}
   m_Layer: 0
   m_Name: MoveArrow_Up
   m_TagString: Untagged
@@ -82,3 +83,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &509437806218658447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6160719834766047818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390d565d60f06854a8c06cde9e70e192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrow_up: {fileID: 21300000, guid: ce2c2a81f260c2048a8e626ffc29e052, type: 3}
+  arrow_down: {fileID: 21300000, guid: 70b8039bb0541334499e5e41896630b1, type: 3}
+  arrow_left: {fileID: 21300000, guid: ea43e40a092e7164b99a0c830bf4801b, type: 3}
+  arrow_right: {fileID: 21300000, guid: 5879b93802ced814b978b9a8fe26ed86, type: 3}
+  Direction: 0

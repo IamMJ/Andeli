@@ -144,6 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1
   breadcrumbs: []
+  moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
   rawDesMove: {x: 0, y: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:

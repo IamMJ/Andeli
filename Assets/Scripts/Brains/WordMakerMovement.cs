@@ -51,7 +51,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     public static Vector2 CardinalizeDesiredMovement(Vector2 inputDir)
     {
         Vector2 moveDir = Vector2.zero;
-        if (Mathf.Abs(inputDir.x) > Mathf.Abs(inputDir.y))
+        if (Mathf.Abs(inputDir.x) >= Mathf.Abs(inputDir.y))
         {
             inputDir.y = 0;
             if (inputDir.x < 0)
@@ -79,6 +79,35 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 
     }
 
+    public static MoveArrow.MoveDirection QuantifyMoveDirection(Vector2 inputDir)
+    {
+        MoveArrow.MoveDirection direction;
+        if (Mathf.Abs(inputDir.x) > Mathf.Abs(inputDir.y))
+        {
+            inputDir.y = 0;
+            if (inputDir.x < 0)
+            {
+                direction = MoveArrow.MoveDirection.Left;
+            }
+            else
+            {
+                direction = MoveArrow.MoveDirection.Right;
+            }
+        }
+        else
+        {
+            inputDir.x = 0;
+            if (inputDir.y < 0)
+            {
+                direction = MoveArrow.MoveDirection.Down;
+            }
+            else
+            {
+                direction = MoveArrow.MoveDirection.Up;
+            }
+        }
+        return direction;
+    }
     public void DropBreadcrumb()
     {
         breadcrumbs.Add(transform.position);

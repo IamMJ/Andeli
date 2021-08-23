@@ -7,9 +7,12 @@ using Cinemachine;
 public class PlayerInput : WordMakerMovement
 {
     //init
+    [SerializeField] GameObject moveArrowPrefab = null;
     DebugHelper dh;
     Animator anim;
     SpeedKeeper sk;
+    public Vector2[] followOnMoves = new Vector2[3];
+    GameObject[] moveArrows = new GameObject[3];
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -20,6 +23,8 @@ public class PlayerInput : WordMakerMovement
     Touch currentTouch;
     bool isMobile = false;
     Vector2 previousTouchPosition;
+    public int programmedMoves = 0;
+    int movesToDisplay = 0;
 
 
     void Start()
@@ -32,7 +37,9 @@ public class PlayerInput : WordMakerMovement
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
         previousTouchPosition = Vector2.zero;
-
+        followOnMoves[0] = Vector2.zero;
+        followOnMoves[1] = Vector2.zero;
+        followOnMoves[2] = Vector2.zero;
     }
 
     // Update is called once per frame
@@ -46,9 +53,8 @@ public class PlayerInput : WordMakerMovement
         {
             HandleKeyboardInput();
         }
-
-        ConvertRawDesMoveIntoValidDesMove();
-        CardinalizeDesiredMovement();
+        DisplayPlannedMoveArrows();
+        validDesMove = CardinalizeDesiredMovement(rawDesMove);
         UpdateAnimation();
     }
 
@@ -66,20 +72,40 @@ public class PlayerInput : WordMakerMovement
             if (currentTouch.phase == TouchPhase.Began && !GridHelper.CheckIsTouchingWordSection(currentTouch.position))
             {
                 isValidStartPosition = true;
+                programmedMoves = 0;
+                followOnMoves[0] = validDesMove;
+                followOnMoves[1] = validDesMove;
+                followOnMoves[2] = validDesMove;
             }
 
             if (currentTouch.phase == TouchPhase.Moved && isValidStartPosition == true)
             {
                 Vector2 possibleMove = (currentTouch.position - previousTouchPosition);
                 previousTouchPosition = currentTouch.position;
+                possibleMove = CardinalizeDesiredMovement(possibleMove);
+
                 if (possibleMove.magnitude > UIParameters.MinTouchSensitivity)
                 {
-                    rawDesMove = possibleMove;
-                    dh.DisplayDebugLog($"moved {rawDesMove} with {rawDesMove.magnitude} greater than {UIParameters.MinTouchSensitivity}");
+                    if (programmedMoves == 0)
+                    {
+                        followOnMoves[0] = possibleMove;
+                        programmedMoves++;
+                        movesToDisplay++;
+                    }
+                    else
+                    {
+                        if (!possibleMove.Equals(followOnMoves[programmedMoves - 1]) && programmedMoves < followOnMoves.Length)
+                        {
+                            followOnMoves[programmedMoves] = possibleMove;
+                            programmedMoves++;
+                            movesToDisplay++;
+                        }
+                    }
+                    //dh.DisplayDebugLog($"moved {rawDesMove} with {rawDesMove.magnitude} greater than {UIParameters.MinTouchSensitivity}");
                 }
                 else
                 {
-                    dh.DisplayDebugLog($"no move since {rawDesMove.magnitude} less than {UIParameters.MinTouchSensitivity}");
+                    //dh.DisplayDebugLog($"no move since {rawDesMove.magnitude} less than {UIParameters.MinTouchSensitivity}");
                 }
             }
 
@@ -88,7 +114,7 @@ public class PlayerInput : WordMakerMovement
                 isValidStartPosition = false;
             }
         }
-    }     
+    }
 
     #endregion
 
@@ -97,39 +123,54 @@ public class PlayerInput : WordMakerMovement
     {
         if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) <= Mathf.Epsilon)
         {
+            movesToDisplay = 0;
             return;
         }
-        rawDesMove.x = Input.GetAxisRaw("Horizontal");
-        rawDesMove.y = Input.GetAxisRaw("Vertical");
+        else
+        {
+            followOnMoves[0].x = Input.GetAxisRaw("Horizontal");
+            followOnMoves[0].y = Input.GetAxisRaw("Vertical");
+            followOnMoves[0] = CardinalizeDesiredMovement(followOnMoves[0]);
+            programmedMoves = 1;
+            movesToDisplay = 1;
+        }
 
     }
 
     #endregion
-    
-    private void ConvertRawDesMoveIntoValidDesMove()
-    {
-        if (Mathf.Abs(transform.position.x % 1) > 0 || Mathf.Abs(transform.position.y % 1) > 0)
-        {
 
-        }
-        else
+    private void DisplayPlannedMoveArrows()
+    {
+        if (movesToDisplay > 0)
         {
-            validDesMove = rawDesMove;
-            rawDesMove = validDesMove;
+            for (int k = 0; k < moveArrows.Length; k++)
+            {
+                Destroy(moveArrows[k]);
+            }
+            for (int i = 0; i < movesToDisplay; i++)
+            {
+                Vector2 snappedPosition = GridHelper.SnapToGrid(transform.position, 1);
+                GameObject arrow = Instantiate(moveArrowPrefab, snappedPosition + followOnMoves[i], Quaternion.identity) as GameObject;
+                arrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(followOnMoves[i]);
+                moveArrows[i] = arrow;
+            }
         }
+
+        movesToDisplay = 0;
     }
 
     #region Handle Movement
     private void FixedUpdate()
     {
+        DetectIfSnapped();
         UpdateTruePosition();
         SnapDepictedPositionToTruePositionViaGrid();
+
     }
 
     private void UpdateTruePosition()
     {
         truePosition += validDesMove * sk.CurrentSpeed * Time.deltaTime;
-
     }
 
     private void SnapDepictedPositionToTruePositionViaGrid()
@@ -144,6 +185,26 @@ public class PlayerInput : WordMakerMovement
         }
 
     }
+    private void DetectIfSnapped()
+    {
+        if (GridHelper.CheckIfSnappedToGrid(transform.position))
+        {
+            Debug.Log($"thinks it is snapped at {transform.position}");
+            FeedNextFollowOnMoveIntoRawDesMove();
+            validDesMove = rawDesMove;
+        }
+    }
+    private void FeedNextFollowOnMoveIntoRawDesMove()
+    {
+        if (programmedMoves > 0)
+        {
+            rawDesMove = followOnMoves[0];
+            followOnMoves[0] = followOnMoves[1];
+            followOnMoves[1] = followOnMoves[2];
+            programmedMoves--;
+        }
+    }
+
     #endregion
     private void UpdateAnimation()
     {
