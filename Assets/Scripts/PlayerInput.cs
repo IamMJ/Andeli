@@ -185,14 +185,24 @@ public class PlayerInput : WordMakerMovement
             for (int i = 0; i < movesToDisplay; i++)
             {
                 Vector2 arrowPos;
+                Vector2 earlierPos = Vector2.zero;
                 if (GridHelper.CheckIfSnappedToGrid(transform.position))
                 {
-                    arrowPos = truePosition + followOnMoves[i];
+
+                    if (i == 1)
+                    {
+                        earlierPos = followOnMoves[0];
+                    }
+                    if (i == 2)
+                    {
+                        earlierPos = followOnMoves[0] + followOnMoves[1];
+                    }
+                    arrowPos = truePosition + followOnMoves[i] + earlierPos;
 
                 }
                 else
                 {
-                    arrowPos = truePosition + followOnMoves[i] + validDesMove/2f;
+                    arrowPos = truePosition + followOnMoves[i] + earlierPos + validDesMove/2f;
                 }
 
                 arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
