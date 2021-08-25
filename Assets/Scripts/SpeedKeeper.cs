@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpeedKeeper : MonoBehaviour
 {
     //param
-    float startingSpeed = 2.7f;
+    float startingSpeed = 1.7f;
     float accelPerValidWord = 0.3f;
     float maxSpeed = 6.0f;
 

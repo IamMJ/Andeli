@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6160719834766047819}
   - component: {fileID: 509437806218658447}
   m_Layer: 0
-  m_Name: MoveArrow_Up
+  m_Name: MoveArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,8 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390d565d60f06854a8c06cde9e70e192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrow_up: {fileID: 21300000, guid: ce2c2a81f260c2048a8e626ffc29e052, type: 3}
-  arrow_down: {fileID: 21300000, guid: 70b8039bb0541334499e5e41896630b1, type: 3}
-  arrow_left: {fileID: 21300000, guid: ea43e40a092e7164b99a0c830bf4801b, type: 3}
-  arrow_right: {fileID: 21300000, guid: 5879b93802ced814b978b9a8fe26ed86, type: 3}
+  arrow_up: {fileID: 21300000, guid: f974a13cfe7c4994cb80428f5091be56, type: 3}
+  arrow_down: {fileID: 21300000, guid: 3f0a5503fa6906647bcad083d9365b93, type: 3}
+  arrow_left: {fileID: 21300000, guid: f05b436b5ea250243840a673be425b43, type: 3}
+  arrow_right: {fileID: 21300000, guid: 4fd1177b2d43eac4cabb78580088ebf0, type: 3}
   Direction: 0

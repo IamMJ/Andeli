@@ -8,7 +8,6 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     public Action OnWordMakerMoved;
     protected Vector3 trailingDir;
     public float moveSpeed = 1f;
-
     protected Vector2 validDesMove = Vector2.zero;
 
     [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>();
