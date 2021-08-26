@@ -38,6 +38,8 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Start()
     {
+        // Rather than starting will all 26 True Letters, probably should pull this from the player every time an Arena is built
+
         wv = FindObjectOfType<WordValidater>();
         sk = FindObjectOfType<SpeedKeeper>();
         ab = FindObjectOfType<ArenaBuilder>();
@@ -53,7 +55,6 @@ public class LetterTileDropper : MonoBehaviour
             currentProbabilityCount += tl.GetWeight();
             tl.ProbabilityTop = currentProbabilityCount;
         }
-        //Debug.Log("prob weight total" + currentProbabilityCount);
     }
 
     private void Update()

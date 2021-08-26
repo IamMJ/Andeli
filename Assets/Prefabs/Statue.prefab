@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6135404392772274267}
   - component: {fileID: 6135404392772274264}
   - component: {fileID: 6135404392772274265}
-  m_Layer: 0
+  - component: {fileID: -2493888066154458748}
+  m_Layer: 13
   m_Name: Statue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 791868953
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: be5076f38b18271479f07e3a86ae3a1f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -109,3 +110,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.0365}
   m_EdgeRadius: 0
+--- !u!114 &-2493888066154458748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6135404392772274270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b108dadf0677314aaec9d36e5b7abc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arenaBuilderPrefab: {fileID: 7351801026652380497, guid: a2f7ccd8cac18f14bbddbcce0f833d87, type: 3}

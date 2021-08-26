@@ -13,11 +13,12 @@ public class GameController : MonoBehaviour
     CinemachineVirtualCamera cvc;
     SceneLoader sl;
     GameObject wv;
+    VictoryMeter vm;
 
     //state
-    bool isPaused = false;
-    bool isInArena = false;
-    bool isInGame = false;
+    public bool isPaused { get; set; } = false;
+    public bool isInArena { get; set; } = false;
+    public bool isInGame { get; set; } = false;
 
     void Awake()
     {
@@ -92,6 +93,19 @@ public class GameController : MonoBehaviour
 
     #endregion
 
+    #region Public Methods
+
+    public GameObject GetPlayer()
+    {
+        return player;
+    }
+
+    public VictoryMeter GetVictoryMeter()
+    {
+        return vm;
+    }
+
+    #endregion
     void OnDestroy()
     {
         sl.OnSceneChange -= CheckGameStateBasedOnSceneChange;

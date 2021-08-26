@@ -15,7 +15,10 @@ public class VictoryMeter : MonoBehaviour
     float victoryAmount = 50f;
     float defeatAmount = 0f;
     float startingBalance = 25f;
-    float decreasePerSecond = 0.1f; 
+    float decreasePerSecond = 0.1f;
+
+    public Action<bool> OnArenaVictory_TrueForPlayerWin;
+
 
     //state
     float currentBalance;
@@ -49,13 +52,15 @@ public class VictoryMeter : MonoBehaviour
         if (currentBalance >= victoryAmount)
         {
             //handle victory;
-            sl.LoadEndingScene();
+            OnArenaVictory_TrueForPlayerWin.Invoke(true);
+            //sl.LoadEndingScene();
         }
 
         if (currentBalance <= defeatAmount)
         {
             //handle defeat;
-            sl.LoadEndingScene();
+            OnArenaVictory_TrueForPlayerWin.Invoke(false);
+            //sl.LoadEndingScene();
         }
     }
 

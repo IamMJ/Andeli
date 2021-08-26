@@ -48,3 +48,4 @@ MonoBehaviour:
   cameraMousePrefab: {fileID: 2732463253256724971, guid: f93d13bed616d9e488d5649a27c0d787, type: 3}
   wallPrefab: {fileID: 3920682680305924606, guid: a2b180e6275bc7e4c949ef1b7138dfbb, type: 3}
   catPrefab: {fileID: 6355354703827149805, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
+  letterTileDropperPrefab: {fileID: 7061575934574750077, guid: 2ff7dc08238502c418b5341965d53746, type: 3}

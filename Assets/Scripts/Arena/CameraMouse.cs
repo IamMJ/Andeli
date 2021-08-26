@@ -8,10 +8,12 @@ public class CameraMouse : MonoBehaviour
     //init
     GameObject anchorObject;
     GameObject player;
+    CinemachineVirtualCamera cvc;
 
     void Start()
     {
-        Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = transform;
+        cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
+        cvc.Follow = transform;
     }
     public void SetPlayer(GameObject newPlayer)
     {
@@ -28,5 +30,10 @@ public class CameraMouse : MonoBehaviour
     {
         Vector3 dir = (player.transform.position - anchorObject.transform.position) * (2f/3f);
         transform.position = anchorObject.transform.position + dir;
+    }
+
+    private void OnDestroy()
+    {
+        cvc.Follow = player.transform;
     }
 }
