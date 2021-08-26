@@ -56,9 +56,11 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         isInGame = true;
+        vm = FindObjectOfType<VictoryMeter>();
         SpawnPlayer();
         SpawnWordUtilities();
         SetCameraToFollowPlayer();
+        
     }
 
     private void SpawnPlayer()

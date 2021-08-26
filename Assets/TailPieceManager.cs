@@ -61,4 +61,9 @@ public class TailPieceManager : MonoBehaviour
 
         tailPieces.Clear();
     }
+
+    private void OnDestroy()
+    {
+        DestroyEntireTail();
+    }
 }

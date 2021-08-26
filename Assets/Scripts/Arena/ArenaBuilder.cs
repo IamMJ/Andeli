@@ -40,7 +40,8 @@ public class ArenaBuilder : MonoBehaviour
 
         gc = FindObjectOfType<GameController>();
         gc.isInArena = true;
-
+        vm = gc.GetVictoryMeter();
+        vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         SetupStatueCameraMouseCat(centroid);
         SetupArenaBoundaries(centroid);
 
@@ -58,7 +59,8 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                arenaWallObjects.Add(wallPiece);
             }
 
         }
@@ -73,7 +75,8 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                arenaWallObjects.Add(wallPiece);
             }
         }
         wallSection.x = minX;
@@ -87,7 +90,8 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                arenaWallObjects.Add(wallPiece);
             }
         }
         wallSection.x = maxX;
@@ -101,7 +105,8 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                arenaWallObjects.Add(wallPiece);
             }
         }
     }
@@ -126,6 +131,13 @@ public class ArenaBuilder : MonoBehaviour
         return randPos;
     }
 
+    private void HandleArenaCompletion(bool didPlayerWin)
+    {
+        // if (didplayerwin) leads to different outcomes, such as awarding a True Letter, or some currency
+        CloseDownArena();
+        vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
+    }
+
     public void CloseDownArena()
     {
         Destroy(camMouse);
@@ -135,6 +147,7 @@ public class ArenaBuilder : MonoBehaviour
         {
             Destroy(element);
         }
+        Destroy(gameObject); // For now, destroy the statue, but later replace with a broken statue, perhaps?
     }
 
 

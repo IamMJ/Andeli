@@ -22,6 +22,10 @@ public class DebugHelper : MonoBehaviour
 
     private void Start()
     {
+        debugLogPanel.gameObject.SetActive(false);
+        textline_0.gameObject.SetActive(false);
+        textline_1.gameObject.SetActive(false);
+        textline_2.gameObject.SetActive(false);
         timeToHideDebugLog = Time.time;
     }
     void Update()

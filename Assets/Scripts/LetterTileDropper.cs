@@ -116,7 +116,6 @@ public class LetterTileDropper : MonoBehaviour
         return randomPos;
     }
 
-
     IEnumerator UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine()
     {
 
@@ -235,5 +234,10 @@ public class LetterTileDropper : MonoBehaviour
             }
         }
         return letterTilesInRange;
+    }
+
+    private void OnDestroy()
+    {
+        DestroyAllLetters();
     }
 }

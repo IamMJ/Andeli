@@ -9,13 +9,14 @@ public class VictoryMeter : MonoBehaviour
     //init
     [SerializeField] Slider victorySlider = null;
     SceneLoader sl;
+    GameController gc;
     [SerializeField] Image sliderFillImage = null;
 
     //param
     float victoryAmount = 50f;
     float defeatAmount = 0f;
-    float startingBalance = 25f;
-    float decreasePerSecond = 0.1f;
+    float startingBalance = 40f;
+    float decreasePerSecond = -1f;
 
     public Action<bool> OnArenaVictory_TrueForPlayerWin;
 
@@ -24,6 +25,7 @@ public class VictoryMeter : MonoBehaviour
     float currentBalance;
     void Start()
     {
+        gc = FindObjectOfType<GameController>();
         sl = FindObjectOfType<SceneLoader>();
         victorySlider.maxValue = victoryAmount;
         victorySlider.minValue = defeatAmount;
@@ -34,7 +36,8 @@ public class VictoryMeter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HandleDecrease();
+        if (!gc.isInArena) { return; }
+        HandleDecay();
         UpdateSliderUI();
         DetectWinLoss();
     }
@@ -52,19 +55,19 @@ public class VictoryMeter : MonoBehaviour
         if (currentBalance >= victoryAmount)
         {
             //handle victory;
-            OnArenaVictory_TrueForPlayerWin.Invoke(true);
+            OnArenaVictory_TrueForPlayerWin?.Invoke(true);
             //sl.LoadEndingScene();
         }
 
         if (currentBalance <= defeatAmount)
         {
             //handle defeat;
-            OnArenaVictory_TrueForPlayerWin.Invoke(false);
+            OnArenaVictory_TrueForPlayerWin?.Invoke(false);
             //sl.LoadEndingScene();
         }
     }
 
-    private void HandleDecrease()
+    private void HandleDecay()
     {
         currentBalance -= decreasePerSecond * Time.deltaTime;
     }
