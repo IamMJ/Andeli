@@ -13,6 +13,7 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject letterTileDropperPrefab = null;
     GameController gc;
     VictoryMeter vm;
+    UIDriver uid;
     List<GameObject> arenaWallObjects = new List<GameObject>();
     int layerMask_Impassable = 1 << 13;
 
@@ -38,6 +39,8 @@ public class ArenaBuilder : MonoBehaviour
         minY += Mathf.RoundToInt(transform.position.y);
         maxY += Mathf.RoundToInt(transform.position.y);
 
+        uid = FindObjectOfType<UIDriver>();
+        uid.EnterArena();
         gc = FindObjectOfType<GameController>();
         gc.isInArena = true;
         vm = gc.GetVictoryMeter();
@@ -140,6 +143,7 @@ public class ArenaBuilder : MonoBehaviour
 
     public void CloseDownArena()
     {
+        uid.EnterOverworld();
         Destroy(camMouse);
         Destroy(cat);
         Destroy(letterTileDropper);

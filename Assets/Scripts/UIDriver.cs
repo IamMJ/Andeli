@@ -8,10 +8,19 @@ using TMPro;
 public class UIDriver : MonoBehaviour
 {
     //init
+    [SerializeField] Slider victoryBarSlider = null;
+    [SerializeField] GameObject topBarPanel = null;
+    [SerializeField] GameObject bottomBarPanel = null;
+
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Slider wordFiringSliderBG = null;
     [SerializeField] TextMeshProUGUI powerMeterTMP = null;
     WordBuilder playerWB;
+
+    //param
+    float panelDeployRate = 100f; // pixels per second
+    float topPanelShown_Y = -77f;
+    float topPanelHidden_Y = 100f;
 
     //state
     bool isFireWeaponButtonPressed = false;
@@ -19,10 +28,6 @@ public class UIDriver : MonoBehaviour
     float timeButtonDepressed = 0;
     public float timeSpentLongPressing { get; private set; }
 
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -102,9 +107,6 @@ public class UIDriver : MonoBehaviour
         }
     }
 
-
-
-
     public void FillWordEraseSlider(float amount)
     {
         wordEraseSliderBG.value = amount;
@@ -147,4 +149,62 @@ public class UIDriver : MonoBehaviour
     {
         powerMeterTMP.text = valueToShow.ToString();
     }
+
+    public void EnterOverworld()
+    {
+        ShowHideBottomPanel(false);
+        ShowHideTopPanel(false);
+        ShowHideVictoryMeter(false);
+    }
+
+    public void EnterArena()
+    {
+        ShowHideBottomPanel(true);
+        ShowHideTopPanel(true);
+        ShowHideVictoryMeter(true);
+    }
+
+
+    private void ShowHideTopPanel(bool shouldBeShown)
+    {
+        //StartCoroutine(ShowHideTopPanel_Coroutine(shouldBeShown));
+        topBarPanel.SetActive(shouldBeShown);
+    }
+
+    private void ShowHideBottomPanel(bool shouldBeShown)
+    {
+        bottomBarPanel.SetActive(shouldBeShown);
+    }
+
+    private void ShowHideVictoryMeter(bool shouldBeShown)
+    {
+        victoryBarSlider.gameObject.SetActive(shouldBeShown);
+    }
+
+    //IEnumerator ShowHideTopPanel_Coroutine(bool shouldBeShown)
+    //{
+    //    float value = topBarPanel.anchoredPosition.y;
+    //    Debug.Log($"value: {value}");
+    //    if (shouldBeShown)
+    //    {
+    //        while (topBarPanel.anchoredPosition.y > topPanelShown_Y)
+    //        {
+    //            Debug.Log($"value: {value}, target is {topPanelShown_Y}");
+    //            value = Mathf.MoveTowards(value, topPanelShown_Y, panelDeployRate * Time.unscaledDeltaTime);
+    //            topBarPanel.position = new Vector2(0, value);
+    //            yield return new WaitForEndOfFrame();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        while (topBarPanel.anchoredPosition.y < topPanelHidden_Y)
+    //        {
+    //            Debug.Log($"value: {value}, target is {topPanelHidden_Y}");
+    //            value = Mathf.MoveTowards(value, topPanelHidden_Y, panelDeployRate * Time.unscaledDeltaTime);
+    //            topBarPanel.position = new Vector2(0, value);
+    //            yield return new WaitForEndOfFrame();
+    //        }
+    //    }
+    //}
+
 }

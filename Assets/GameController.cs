@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour
     SceneLoader sl;
     GameObject wv;
     VictoryMeter vm;
+    UIDriver uid;
 
     //state
     public bool isPaused { get; set; } = false;
@@ -56,6 +57,8 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         isInGame = true;
+        uid = FindObjectOfType<UIDriver>();
+        uid.EnterOverworld();
         vm = FindObjectOfType<VictoryMeter>();
         SpawnPlayer();
         SpawnWordUtilities();
@@ -106,6 +109,7 @@ public class GameController : MonoBehaviour
     {
         return vm;
     }
+
 
     #endregion
     void OnDestroy()
