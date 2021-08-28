@@ -14,6 +14,7 @@ public class ArenaBuilder : MonoBehaviour
     GameController gc;
     VictoryMeter vm;
     UIDriver uid;
+    public GameObject arenaStarter;
     List<GameObject> arenaWallObjects = new List<GameObject>();
     int layerMask_Impassable = 1 << 13;
 
@@ -25,12 +26,9 @@ public class ArenaBuilder : MonoBehaviour
     float checkRadius = 0.01f;
 
     //state
-    GameObject statue;
     GameObject cat;
     GameObject letterTileDropper;
     GameObject camMouse;
-
-
 
     public void SetupArena(Vector2 centroid)
     {
@@ -117,10 +115,11 @@ public class ArenaBuilder : MonoBehaviour
     private void SetupStatueCameraMouseCat(Vector2 centroid)
     {
         letterTileDropper = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity) as GameObject;
-        statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
+        //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
         camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
         CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
-        cameraMouse1.SetAnchor(statue);
+        Debug.Log($"Arena Starter is {arenaStarter}");
+        cameraMouse1.SetAnchor(arenaStarter);
         cameraMouse1.SetPlayer(gc.GetPlayer());
 
         cat = Instantiate(catPrefab, centroid, Quaternion.identity) as GameObject;
@@ -134,6 +133,12 @@ public class ArenaBuilder : MonoBehaviour
         return randPos;
     }
 
+    public void SetArenaStarter(GameObject go)
+    {
+        arenaStarter = go;
+    }
+
+    
     private void HandleArenaCompletion(bool didPlayerWin)
     {
         // if (didplayerwin) leads to different outcomes, such as awarding a True Letter, or some currency
@@ -151,7 +156,9 @@ public class ArenaBuilder : MonoBehaviour
         {
             Destroy(element);
         }
-        Destroy(gameObject); // For now, destroy the statue, but later replace with a broken statue, perhaps?
+        Destroy(arenaStarter); // For now, destroy the statue, but later replace with a broken statue, perhaps?
+        gc.GetPlayer().GetComponent<WordBuilder>().ClearCurrentWord();
+        Destroy(gameObject);
     }
 
 

@@ -15,8 +15,8 @@ public class VictoryMeter : MonoBehaviour
     //param
     float victoryAmount = 50f;
     float defeatAmount = 0f;
-    float startingBalance = 40f;
-    float decreasePerSecond = -1f;
+    float startingBalance = 44f;
+    float decreasePerSecond = 0f;
 
     public Action<bool> OnArenaVictory_TrueForPlayerWin;
 

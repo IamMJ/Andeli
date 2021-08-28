@@ -13,7 +13,8 @@ public class LetterTileDropper : MonoBehaviour
     GameObject[] wordMakers;
     ArenaBuilder ab;
     SpeedKeeper sk;
-    List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
+    int layerMask_Impassable = 1 << 13;
+    public List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
@@ -111,7 +112,7 @@ public class LetterTileDropper : MonoBehaviour
                 break;
             }
         }
-        while (!VerifyAllWordMakersOutsideMinDistance(randomPos) || !VerifyAllLettersOutsideMinDistance(randomPos));
+        while (!VerifyPositionIsNotNearWordMakers(randomPos) || !VerifyPositionIsNotNearLetters(randomPos));
         randomPos = GridHelper.SnapToGrid(randomPos, 1);
         return randomPos;
     }
@@ -135,18 +136,19 @@ public class LetterTileDropper : MonoBehaviour
             {
                 break;
             }
-            isRandomPositionTooNearOtherLetters = !VerifyAllLettersOutsideMinDistance(randomPosition);
-            isRandomPositionTooNearWordMakers = !VerifyAllWordMakersOutsideMinDistance(randomPosition);
+            isRandomPositionTooNearOtherLetters = !VerifyPositionIsNotNearLetters(randomPosition);
+            isRandomPositionTooNearWordMakers = !VerifyPositionIsNotNearWordMakers(randomPosition);
+            
             yield return new WaitForEndOfFrame();
         }
-        while (isRandomPositionTooNearWordMakers || isRandomPositionTooNearOtherLetters);
+        while (VerifyPositionIsNotNearWordMakers(randomPosition) || VerifyPositionIsNotNearLetters(randomPosition) || VerifyPositionIsReachable(randomPosition));
         randomPosition = GridHelper.SnapToGrid(randomPosition, 1);
         nextTileDropPosition = randomPosition;
         isRandomPositionBeingGenerated = false;
         isNextTileReadyToBeDropped = true;
     }
 
-    private bool VerifyAllWordMakersOutsideMinDistance(Vector2 randomPos)
+    private bool VerifyPositionIsNotNearWordMakers(Vector2 randomPos)
     {
         if (!sk)
         {
@@ -154,27 +156,39 @@ public class LetterTileDropper : MonoBehaviour
         }
         float currentMinDistance = Mathf.RoundToInt(sk.CurrentSpeed);
         currentMinDistance = Mathf.Clamp(currentMinDistance, universalMinDistanceToWordMaker, 10f);
-        bool isOutsideMinRange = true;
+        bool isOutsideMinRange = false;
         foreach (var wordmaker in wordMakers)
         {
             if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < currentMinDistance)
             {
-                isOutsideMinRange = false;
+                isOutsideMinRange = true;
                 break;
             }
         }
         return isOutsideMinRange;
     }
-    private bool VerifyAllLettersOutsideMinDistance(Vector2 randomPos)
+    private bool VerifyPositionIsNotNearLetters(Vector2 randomPos)
     {
         var coll = Physics2D.OverlapCircle(randomPos, minDistanceBetweenLetters, layerMask_Letter);
         if (coll)
         {
-            return false;
+            return true;
         }
         else
         {
+            return false;
+        }
+    }
+    private bool VerifyPositionIsReachable(Vector2 randomPos)
+    {
+        var coll = Physics2D.OverlapCircle(randomPos, 0.05f, layerMask_Impassable);
+        if (coll)
+        {
             return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -215,7 +229,7 @@ public class LetterTileDropper : MonoBehaviour
     {
         for (int i = 0; i < letterTilesOnBoard.Count; i++)
         {
-            Destroy(letterTilesOnBoard[i]);
+            Destroy(letterTilesOnBoard[i].gameObject);
         }
         letterTilesOnBoard.Clear();
     }
@@ -238,6 +252,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void OnDestroy()
     {
+        Debug.Log("this called");
         DestroyAllLetters();
     }
 }
