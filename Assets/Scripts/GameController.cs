@@ -60,6 +60,7 @@ public class GameController : MonoBehaviour
         uid = FindObjectOfType<UIDriver>();
         uid.EnterOverworld();
         vm = FindObjectOfType<VictoryMeter>();
+        UnpauseGame();
         SpawnPlayer();
         SpawnWordUtilities();
         SetCameraToFollowPlayer();
@@ -75,7 +76,10 @@ public class GameController : MonoBehaviour
     }
     private void SpawnWordUtilities()
     {
-        wv = Instantiate(wordValidaterPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+        if (!wv)
+        {
+            wv = Instantiate(wordValidaterPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+        }
     }
 
     private void SetCameraToFollowPlayer()
@@ -90,9 +94,10 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region End Game Methods
-    private void EndCurrentGame()
+    public void EndCurrentGame()
     {
         isInGame = false;
+        Destroy(player);
 
     }
 
@@ -108,6 +113,18 @@ public class GameController : MonoBehaviour
     public VictoryMeter GetVictoryMeter()
     {
         return vm;
+    }
+
+    public void PauseGame()
+    {
+        isPaused = true;
+        Time.timeScale = 0;
+    }
+
+    public void UnpauseGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
     }
 
 

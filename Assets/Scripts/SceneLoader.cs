@@ -65,4 +65,10 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(EndingScene);
         OnSceneChange.Invoke(EndingScene);
     }
+    
+    public void LoadWelcomeScene()
+    {
+        SceneManager.LoadScene(WelcomeScene);
+        OnSceneChange.Invoke(WelcomeScene);
+    }
 }

@@ -15,8 +15,8 @@ public class VictoryMeter : MonoBehaviour
     //param
     float victoryAmount = 50f;
     float defeatAmount = 0f;
-    float startingBalance = 44f;
-    float decreasePerSecond = 0f;
+    float startingBalance = 25;
+    float decayPerSecond = 0f;
 
     public Action<bool> OnArenaVictory_TrueForPlayerWin;
 
@@ -48,7 +48,11 @@ public class VictoryMeter : MonoBehaviour
         UpdateSliderUI();
     }
 
-
+    public void SetBalance(float newBalance)
+    {
+        currentBalance = newBalance;
+        UpdateSliderUI();
+    }
 
     private void DetectWinLoss()
     {
@@ -69,7 +73,7 @@ public class VictoryMeter : MonoBehaviour
 
     private void HandleDecay()
     {
-        currentBalance -= decreasePerSecond * Time.deltaTime;
+        currentBalance -= decayPerSecond * Time.deltaTime;
     }
 
     private void UpdateSliderUI()
@@ -80,5 +84,10 @@ public class VictoryMeter : MonoBehaviour
         float blue = 0.1f;
         sliderFillImage.color = new Color(red, green, blue);
         
+    }
+
+    public void SetDecayAmount(float amount)
+    {
+        decayPerSecond = amount;
     }
 }

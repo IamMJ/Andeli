@@ -148,6 +148,7 @@ public class ArenaBuilder : MonoBehaviour
 
     public void CloseDownArena()
     {
+        gc.isInArena = false;
         uid.EnterOverworld();
         Destroy(camMouse);
         Destroy(cat);

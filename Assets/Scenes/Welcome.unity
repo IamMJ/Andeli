@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &287497557 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8038013535838252741, guid: b2ed48c6bdec48743b947b6dd1d4c5ac, type: 3}
-  m_PrefabInstance: {fileID: 8038013535550796688}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a075a4de00d2204409f1538ed1ff5f26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &526850978
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,9 +271,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 287497557}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: GoToMainGameScene
+      - m_Target: {fileID: 1943208166}
+        m_TargetAssemblyTypeName: MainMenuDriver, Assembly-CSharp
+        m_MethodName: StartGameSelected
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -781,6 +770,7 @@ GameObject:
   - component: {fileID: 1943208164}
   - component: {fileID: 1943208163}
   - component: {fileID: 1943208162}
+  - component: {fileID: 1943208166}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -869,6 +859,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1943208166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1943208161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34be2991c0be7b542967639b5aeb71b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8038013535550796688
 PrefabInstance:
   m_ObjectHideFlags: 0

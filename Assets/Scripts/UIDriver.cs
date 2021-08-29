@@ -8,6 +8,8 @@ using TMPro;
 public class UIDriver : MonoBehaviour
 {
     //init
+    [SerializeField] GameObject pauseMenuPrefab = null;
+
     [SerializeField] Slider victoryBarSlider = null;
     [SerializeField] GameObject topBarPanel = null;
     [SerializeField] GameObject bottomBarPanel = null;
@@ -16,6 +18,9 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Slider wordFiringSliderBG = null;
     [SerializeField] TextMeshProUGUI powerMeterTMP = null;
     WordBuilder playerWB;
+    GameController gc;
+    SceneLoader sl;
+    GameObject pauseMenu;
 
     //param
     float panelDeployRate = 100f; // pixels per second
@@ -180,6 +185,25 @@ public class UIDriver : MonoBehaviour
     {
         victoryBarSlider.gameObject.SetActive(shouldBeShown);
     }
+
+    public void ShowPauseMenu()
+    {
+        if (!gc)
+        {
+            gc = FindObjectOfType<GameController>();
+        }
+        gc.PauseGame();
+        if (!pauseMenu)
+        {
+            pauseMenu = Instantiate(pauseMenuPrefab);
+        }
+        if (pauseMenu)
+        {
+            pauseMenu.SetActive(true);
+        }
+
+    }
+
 
     //IEnumerator ShowHideTopPanel_Coroutine(bool shouldBeShown)
     //{
