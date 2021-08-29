@@ -149,7 +149,7 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  rawDesMove: {x: 0, y: 0}
+  rawDesMove: {x: 1, y: 0}
   programmedMoves: 0
 --- !u!114 &-2375094335787212340
 MonoBehaviour:

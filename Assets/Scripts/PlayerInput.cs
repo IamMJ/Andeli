@@ -11,12 +11,13 @@ public class PlayerInput : WordMakerMovement
     DebugHelper dh;
     Animator anim;
     SpeedKeeper sk;
+    GameController gc;
     public Vector2[] followOnMoves = new Vector2[3];
     GameObject[] moveArrows = new GameObject[3];
 
     //state
     Vector2 truePosition = Vector2.zero;
-    [SerializeField] Vector2 rawDesMove = Vector2.zero;
+    [SerializeField] Vector2 rawDesMove = new Vector2(1,0);
     bool isMobile = false;
     bool isSnapped = false;
 
@@ -32,6 +33,7 @@ public class PlayerInput : WordMakerMovement
     {
         sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
+        gc = FindObjectOfType<GameController>();
         //Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
 
         dh = FindObjectOfType<DebugHelper>();
@@ -81,6 +83,7 @@ public class PlayerInput : WordMakerMovement
                 followOnMoves[2] = validDesMove;
                 previousTouchPosition = currentTouch.position;
                 ClearMoveArrows();
+                gc.SlowGame();
             }
             //reset everything
 
@@ -116,6 +119,7 @@ public class PlayerInput : WordMakerMovement
             if (currentTouch.phase == TouchPhase.Ended)
             {
                 isValidStartPosition = false;
+                gc.UnpauseGame();
             }
         }
     }

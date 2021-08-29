@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ArenaBuilder : MonoBehaviour
 {
-    [SerializeField] GameObject playerPrefab = null;
-    [SerializeField] GameObject statuePrefab = null;
     [SerializeField] GameObject cameraMousePrefab = null;
     [SerializeField] GameObject wallPrefab = null;
     [SerializeField] GameObject catPrefab = null;

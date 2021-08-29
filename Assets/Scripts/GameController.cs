@@ -78,7 +78,12 @@ public class GameController : MonoBehaviour
     {
         if (!wv)
         {
-            wv = Instantiate(wordValidaterPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+            wv = FindObjectOfType<WordValidater>().gameObject;
+            if (!wv)
+            {
+                wv = Instantiate(wordValidaterPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+            }
+
         }
     }
 
@@ -119,6 +124,11 @@ public class GameController : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0;
+    }
+
+    public void SlowGame()
+    {
+        Time.timeScale = 0.5f;
     }
 
     public void UnpauseGame()
