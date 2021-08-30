@@ -200,11 +200,13 @@ public class PlayerInput : WordMakerMovement
                 }
                 if (GridHelper.CheckIfSnappedToGrid(transform.position))
                 {
-                    arrowPos = truePosition + followOnMoves[i] + earlierPos;
+                    Vector2 distRemaining = GetRemainingDist();
+                    arrowPos = truePosition + followOnMoves[i] + earlierPos + distRemaining;
                 }
                 else
                 {
-                    arrowPos = truePosition + followOnMoves[i] + earlierPos + validDesMove / 2f;
+                    Vector2 distRemaining = GetRemainingDist();
+                    arrowPos = truePosition + followOnMoves[i] + earlierPos + distRemaining;
                     // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
                 }
 
@@ -214,6 +216,74 @@ public class PlayerInput : WordMakerMovement
                 moveArrows[i] = arrow;
             }
         }
+    }
+
+    private Vector2 GetRemainingDist()
+    {
+        float value = 0;
+        if (validDesMove.x > 0)
+        {
+            float remainder = transform.position.x % 1;
+            if (remainder > 0)
+            {
+                value = 1 - remainder;
+            }
+            if (remainder < 0)
+            {
+                value = -1 * remainder;
+            }
+            Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
+            return new Vector2(value, 0);
+        }
+        if (validDesMove.x < 0)
+        {
+            float remainder = transform.position.x % 1;
+            if (remainder > 0)
+            {
+                value = -1 * remainder;
+            }
+            if (remainder < 0)
+            {
+                value = -1 - remainder;
+            }
+            Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
+            return new Vector2(value, 0);
+        }
+        if (validDesMove.y > 0)
+        {
+            float remainder = transform.position.y % 1;
+            if (remainder > 0)
+            {
+                value = 1 - remainder;
+            }
+            if (remainder < 0)
+            {
+                value = -1 * remainder;
+            }
+            Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
+            return new Vector2(0, value);
+        }
+        if (validDesMove.y < 0)
+        {
+            float remainder = transform.position.y % 1;
+            if (remainder > 0)
+            {
+                value = -1 * remainder;
+            }
+            if (remainder < 0)
+            {
+                value = -1 - remainder;
+            }
+            Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
+            return new Vector2(0, value);
+        }
+        return Vector2.zero;
+        
+        // Pos, Dir:
+        // .25, +1 = 0.75
+        // -.25, +1 = 0.25
+        // .25, -1 = -0.25
+        // -.25, -1 = -0.75
     }
 
     private void ClearMoveArrows()
@@ -261,8 +331,6 @@ public class PlayerInput : WordMakerMovement
             PushWordMakerMovement();
             DropBreadcrumb();
         }
-
-
     }
 
     private void FeedNextFollowOnMoveIntoRawDesMove()

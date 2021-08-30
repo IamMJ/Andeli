@@ -19,7 +19,7 @@ public class LetterTileDropper : MonoBehaviour
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
-    float timeBetweenDrops = 2f;
+    float timeBetweenDrops = 1f;
     float universalMinDistanceToWordMaker = 2f;
     float minDistanceBetweenLetters = 2f;
     int layerMask_Letter = 1 << 9;
@@ -40,7 +40,7 @@ public class LetterTileDropper : MonoBehaviour
     private void Start()
     {
         // Rather than starting will all 26 True Letters, probably should pull this from the player every time an Arena is built
-
+        // trueLetters = GetPlayersTrueLetters();
         wv = FindObjectOfType<WordValidater>();
         sk = FindObjectOfType<SpeedKeeper>();
         ab = FindObjectOfType<ArenaBuilder>();
