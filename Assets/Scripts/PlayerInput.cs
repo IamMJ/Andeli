@@ -201,13 +201,16 @@ public class PlayerInput : WordMakerMovement
                 if (GridHelper.CheckIfSnappedToGrid(transform.position))
                 {
                     Vector2 distRemaining = GetRemainingDist();
-                    arrowPos = truePosition + followOnMoves[i] + earlierPos + distRemaining;
+                    arrowPos = (Vector2)transform.position + followOnMoves[i] + earlierPos + distRemaining;
+                    
                 }
                 else
                 {
                     Vector2 distRemaining = GetRemainingDist();
-                    arrowPos = truePosition + followOnMoves[i] + earlierPos + distRemaining;
+                    arrowPos = (Vector2)transform.position + followOnMoves[i] + earlierPos + distRemaining;
                     // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
+
+
                 }
 
                 arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
@@ -232,7 +235,7 @@ public class PlayerInput : WordMakerMovement
             {
                 value = -1 * remainder;
             }
-            Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
+            //Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
             return new Vector2(value, 0);
         }
         if (validDesMove.x < 0)
@@ -246,7 +249,7 @@ public class PlayerInput : WordMakerMovement
             {
                 value = -1 - remainder;
             }
-            Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
+            //Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
             return new Vector2(value, 0);
         }
         if (validDesMove.y > 0)
@@ -260,7 +263,7 @@ public class PlayerInput : WordMakerMovement
             {
                 value = -1 * remainder;
             }
-            Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
+            //Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
             return new Vector2(0, value);
         }
         if (validDesMove.y < 0)
@@ -274,7 +277,7 @@ public class PlayerInput : WordMakerMovement
             {
                 value = -1 - remainder;
             }
-            Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
+            //Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
             return new Vector2(0, value);
         }
         return Vector2.zero;
