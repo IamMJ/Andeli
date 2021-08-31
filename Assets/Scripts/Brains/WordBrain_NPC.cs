@@ -2,19 +2,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 [RequireComponent(typeof(SpellingStrategy))]
 public class WordBrain_NPC : MonoBehaviour
 {
+    // This class is supposed to constantly maintain a Target Letter Tile. 
+    // The LTT is updated anytime a letter tile is added or removed from the board
+
     //init
     MoveBrain_NPC mb;
     [SerializeField] GameObject wordPuffPrefab = null;
     TailPieceManager tpm;
-    public LetterTile TargetLetterTile { get; private set; }
+    public LetterTile TargetLetterTile; //{ get; private set; }
     WordValidater wv;
     LetterTileDropper ltd;
     DebugHelper dh;
     SpellingStrategy ss;
     VictoryMeter vm;
+
+    public Action OnNewTargetLetterTile;
     
     //state
     [SerializeField] string currentWord = "";
@@ -119,8 +125,13 @@ public class WordBrain_NPC : MonoBehaviour
         }
         if (!wasLetterAdded && TargetLetterTile == changedLetterTile) //if a letter was removed, and it was the target letter...
         {
- 
+            LetterTile oldLTT = TargetLetterTile;
             TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
+            if (TargetLetterTile != oldLTT)
+            {
+                Debug.Log("new target letter");
+                OnNewTargetLetterTile?.Invoke();
+            }
 
             return;
         }
@@ -130,12 +141,21 @@ public class WordBrain_NPC : MonoBehaviour
             if (currentWord.Length == 0 && !TargetLetterTile)
             {
                 TargetLetterTile = changedLetterTile;
+                TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = false;
                 //Debug.Log($"targeting {TargetLetterTile.Letter} by default");
                 return;
             }
-            else
+            if (TargetLetterTile)
             {
+                LetterTile oldLTT = TargetLetterTile;
+                TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = true;
                 TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
+                TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = false;
+                if (TargetLetterTile != oldLTT)
+                {
+                    Debug.Log("new target letter");
+                    OnNewTargetLetterTile?.Invoke();
+                }
             }
         }
     }   

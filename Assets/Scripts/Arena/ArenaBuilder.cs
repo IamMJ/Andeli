@@ -15,6 +15,7 @@ public class ArenaBuilder : MonoBehaviour
     public GameObject arenaStarter;
     List<GameObject> arenaWallObjects = new List<GameObject>();
     int layerMask_Impassable = 1 << 13;
+    int layerMask_Passable = 1 << 14;
 
     //parameters
     int minX = -9;
@@ -116,7 +117,7 @@ public class ArenaBuilder : MonoBehaviour
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
         camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
         CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
-        Debug.Log($"Arena Starter is {arenaStarter}");
+       
         cameraMouse1.SetAnchor(arenaStarter);
         cameraMouse1.SetPlayer(gc.GetPlayer());
 
@@ -128,6 +129,20 @@ public class ArenaBuilder : MonoBehaviour
         float randX = UnityEngine.Random.Range(minX + 1, maxX);
         float randY = UnityEngine.Random.Range(minY + 1, maxY);
         Vector2 randPos = new Vector2(randX, randY);
+        return randPos;
+    }
+
+    public Vector2 CreatePassableRandomPointWithinArena()
+    {
+        Vector2 randPos;
+        do
+        {
+            float randX = UnityEngine.Random.Range(minX + 1, maxX);
+            float randY = UnityEngine.Random.Range(minY + 1, maxY);
+            randPos = new Vector2(randX, randY);
+        }
+        while (Physics2D.OverlapCircle(randPos, checkRadius, layerMask_Impassable) != null);
+
         return randPos;
     }
 

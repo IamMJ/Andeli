@@ -20,18 +20,20 @@ public class MoveBrain_NPC : WordMakerMovement
 
     private void Start()
     {
+       
         wb = GetComponent<WordBrain_NPC>();
         truePosition = transform.position;
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateRawDesMove();
+        Debug.DrawLine(transform.position, transform.position + (Vector3)rawDesMove, Color.red);
         ConvertRawDesMoveIntoValidDesMove();
         CardinalizeDesiredMovement();
-
+        Debug.DrawLine(transform.position, transform.position + (Vector3)validDesMove, Color.yellow);
         HandleAnimation();
     }
 
@@ -40,18 +42,19 @@ public class MoveBrain_NPC : WordMakerMovement
     private void UpdateRawDesMove()
     {
         rawDesMove = ((Vector3)TacticalDestination - transform.position);
+
     }
 
     private void ConvertRawDesMoveIntoValidDesMove()
     {
-        if (Mathf.Abs(transform.position.x % 1) > 0 || Mathf.Abs(transform.position.y % 1) > 0)
+        if (Mathf.Abs(transform.position.x % 1) > 0.1f || Mathf.Abs(transform.position.y % 1) > 0.1f)
         {
 
         }
         else
         {
             validDesMove = rawDesMove;
-            rawDesMove = validDesMove;
+            //rawDesMove = validDesMove;
         }
     }
 
@@ -75,10 +78,10 @@ public class MoveBrain_NPC : WordMakerMovement
 
     private void SnapDepictedPositionToTruePositionViaGrid()
     {
-        Vector3 oldPosition = transform.position;
+        Vector2 oldPosition = transform.position;
         transform.position = GridHelper.SnapToGrid(truePosition, 8);
-        float moveAmount = (oldPosition - transform.position).magnitude;
-        if (moveAmount > Mathf.Epsilon)
+        float moveAmount = (oldPosition - (Vector2)transform.position).magnitude;
+        if (moveAmount > 0.1f)
         {
             PushWordMakerMovement();
             DropBreadcrumb();

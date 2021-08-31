@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 4630384003596904042}
   - component: {fileID: 8246121710724419684}
   - component: {fileID: 6612352758663582041}
+  - component: {fileID: 2577485847193351702}
   m_Layer: 9
   m_Name: LetterTile
   m_TagString: Untagged
@@ -319,6 +320,23 @@ MonoBehaviour:
   Letter: 65
   Power: 0
   StartingLifetime: 0
+  Ability: 0
   sr: {fileID: 3580959457978190092}
   mr: {fileID: 601876841}
   tmp: {fileID: 601876840}
+--- !u!208 &2577485847193351702
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098827157649805612}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.25, y: 0.25, z: 0.1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

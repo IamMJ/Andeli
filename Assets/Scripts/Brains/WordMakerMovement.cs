@@ -109,7 +109,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     }
     public void DropBreadcrumb()
     {
-        breadcrumbs.Add(transform.position);
+        breadcrumbs.Add(GridHelper.SnapToGrid(transform.position, 8));
         if (breadcrumbs.Count > 8)
         {
             breadcrumbs.RemoveAt(0);

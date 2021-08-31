@@ -43,9 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893cdc71c3a6f2d4eb3acb784006e654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 5608652954252347955, guid: fc824f60e6ce99d43b57f4208cde4b67, type: 3}
-  statuePrefab: {fileID: 6135404392772274270, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
   cameraMousePrefab: {fileID: 2732463253256724971, guid: f93d13bed616d9e488d5649a27c0d787, type: 3}
   wallPrefab: {fileID: 3920682680305924606, guid: a2b180e6275bc7e4c949ef1b7138dfbb, type: 3}
-  catPrefab: {fileID: 6355354703827149805, guid: 044bba652e4af6a46a14bb62c6124caa, type: 3}
+  catPrefab: {fileID: 6646722358577865907, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
   letterTileDropperPrefab: {fileID: 7061575934574750077, guid: 2ff7dc08238502c418b5341965d53746, type: 3}
+  arenaStarter: {fileID: 0}
