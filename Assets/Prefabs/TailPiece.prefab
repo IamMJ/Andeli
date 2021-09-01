@@ -197,7 +197,6 @@ GameObject:
   - component: {fileID: 7956891001027729828}
   - component: {fileID: 7956891001027729851}
   - component: {fileID: 7956891001027729850}
-  - component: {fileID: 8517862897295281568}
   m_Layer: 0
   m_Name: TailPiece
   m_TagString: Untagged
@@ -285,19 +284,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tmp: {fileID: 7956891000400458911}
   breadcrumbs: []
---- !u!208 &8517862897295281568
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7956891001027729849}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.1}
-  m_MoveThreshold: 0.05
-  m_Carve: 1
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5

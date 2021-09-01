@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 4630384003596904042}
   - component: {fileID: 8246121710724419684}
   - component: {fileID: 6612352758663582041}
-  - component: {fileID: 2577485847193351702}
+  - component: {fileID: 2195103126351899129}
   m_Layer: 9
   m_Name: LetterTile
   m_TagString: Untagged
@@ -324,19 +324,33 @@ MonoBehaviour:
   sr: {fileID: 3580959457978190092}
   mr: {fileID: 601876841}
   tmp: {fileID: 601876840}
---- !u!208 &2577485847193351702
-NavMeshObstacle:
+--- !u!114 &2195103126351899129
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098827157649805612}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.1}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efee954c69f0d421086729bb8df1137f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  uniqueID: 5419025649755913142
+  points: []
+  convex: 1
+  minBoundsHeight: 1
+  penaltyDelta: 0
+  modifyWalkability: 1
+  setWalkability: 0
+  applyOnStart: 1
+  applyOnScan: 1
+  updatePhysics: 0
+  resetPenaltyOnPhysics: 1
+  updateErosion: 0
+  modifyTag: 0
+  setTag: 0
+  legacyMode: 0
+  serializedVersion: 1
+  legacyUseWorldSpace: 0

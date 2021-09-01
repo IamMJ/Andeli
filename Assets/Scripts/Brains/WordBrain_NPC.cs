@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using Pathfinding;
 [RequireComponent(typeof(SpellingStrategy))]
 public class WordBrain_NPC : MonoBehaviour
 {
@@ -55,6 +55,7 @@ public class WordBrain_NPC : MonoBehaviour
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
             AddLetter(letterTile.Letter);
+            letterTile.ReknitGridGraph();
             IncreasePower(letterTile.Power);
             Destroy(collision.gameObject);
             ss.EvaluateWordAfterGainingALetter();
@@ -141,18 +142,20 @@ public class WordBrain_NPC : MonoBehaviour
             if (currentWord.Length == 0 && !TargetLetterTile)
             {
                 TargetLetterTile = changedLetterTile;
-                TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = false;
-                //Debug.Log($"targeting {TargetLetterTile.Letter} by default");
+                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().setWalkability = true;
+                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().Apply();
                 return;
             }
             if (TargetLetterTile)
             {
                 LetterTile oldLTT = TargetLetterTile;
-                TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = true;
+                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().setWalkability = false;
+                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().Apply();
                 TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
                 if (TargetLetterTile)
                 {
-                    TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = false;
+                    TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().setWalkability = true;
+                    TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().Apply();
                 }
 
                 if (TargetLetterTile != oldLTT)

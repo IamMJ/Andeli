@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Pathfinding;
 
 public class LetterTile : MonoBehaviour
 {
@@ -38,8 +39,16 @@ public class LetterTile : MonoBehaviour
 
         if (LifetimeRemaining <= 0f)
         {
+            ReknitGridGraph();
             Destroy(gameObject);
         }
+    }
+
+    public void ReknitGridGraph()
+    {
+        GraphUpdateScene gus = GetComponent<GraphUpdateScene>();
+        gus.setWalkability = true;
+        gus.Apply();
     }
 
     private void ToggleRenderers(bool shouldBeVisible)
