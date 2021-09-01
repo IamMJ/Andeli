@@ -134,7 +134,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6646722358577865907}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8131492068212959177}
@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wordPuffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
+  TargetLetterTile: {fileID: 0}
   currentWord: 
   currentTargetChar: 0
 --- !u!114 &845173618729775029
@@ -194,7 +195,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6646722358577865907}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.1
   m_Speed: 0
   m_Acceleration: 0
   avoidancePriority: 50
@@ -221,7 +222,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strategicDestination: {x: 0, y: 0}
   status: 0
-  targetPos: {x: 0, y: 0}
 --- !u!58 &5268930924742682721
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -26,10 +26,10 @@ public class StrategyBrainV2 : MonoBehaviour
     void Start()
     {
         nma = GetComponent<NavMeshAgent>();
-        nma.updatePosition = true;
+        nma.updatePosition = false;
         mb = GetComponent<MoveBrain_NPC>();
         wb = GetComponent<WordBrain_NPC>();
-        wb.OnNewTargetLetterTile += RecalculatePathToTargetLetterTile;
+        wb.OnNewTargetLetterTile += SetNewTargetLetterTileAsStrategicDestination;
         ab = FindObjectOfType<ArenaBuilder>();
         strategicDestination = ab.CreatePassableRandomPointWithinArena();
         nma.SetDestination(strategicDestination);
@@ -38,20 +38,21 @@ public class StrategyBrainV2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RandomlyWander();
         if (!wb.TargetLetterTile)
         {
-
+            RandomlyWander();
         }
+
+
+        nma.SetDestination(strategicDestination);
+
+
+        PassTacticalDestinationToMoveBrain();
 
         Debug.DrawLine(transform.position, mb.TacticalDestination, Color.white);
         Debug.DrawLine(transform.position, nma.destination, Color.black);
 
-        if (nma.pathStatus == NavMeshPathStatus.PathComplete)  // This loop just keeps updating the path to strategic destination
-        {
-            PassTacticalDestinationToMoveBrain();
-            nma.SetDestination(strategicDestination);
-        }
+        DebugDrawPath(nma.path.corners);
     }
 
     private void RandomlyWander()
@@ -63,10 +64,9 @@ public class StrategyBrainV2 : MonoBehaviour
         }        
     }
 
-    private void RecalculatePathToTargetLetterTile()
+    private void SetNewTargetLetterTileAsStrategicDestination()
     {
-        Debug.Log("asked to recalculate path");
-        nma.SetDestination(wb.TargetLetterTile.transform.position);
+        strategicDestination = wb.TargetLetterTile.transform.position;
     }
 
     private void PassTacticalDestinationToMoveBrain()
@@ -76,8 +76,18 @@ public class StrategyBrainV2 : MonoBehaviour
 
     private void OnDestroy()
     {
-        wb.OnNewTargetLetterTile -= RecalculatePathToTargetLetterTile;
+        wb.OnNewTargetLetterTile -= SetNewTargetLetterTileAsStrategicDestination;
     }
 
-    
+    public static void DebugDrawPath(Vector3[] corners)
+    {
+        if (corners.Length < 2) { return; }
+        int i = 0;
+        for (; i < corners.Length - 1; i++)
+        {
+            Debug.DrawLine(corners[i], corners[i + 1], Color.blue);
+        }
+        Debug.DrawLine(corners[0], corners[1], Color.red);
+    }
+
 }

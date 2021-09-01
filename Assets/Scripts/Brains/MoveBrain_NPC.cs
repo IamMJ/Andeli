@@ -17,10 +17,8 @@ public class MoveBrain_NPC : WordMakerMovement
     Vector2 truePosition = Vector2.one;
     Vector2 rawDesMove = Vector2.zero;
 
-
     private void Start()
-    {
-       
+    {       
         wb = GetComponent<WordBrain_NPC>();
         truePosition = transform.position;
         anim = GetComponentInChildren<Animator>();
@@ -30,14 +28,12 @@ public class MoveBrain_NPC : WordMakerMovement
     void Update()
     {
         UpdateRawDesMove();
-        Debug.DrawLine(transform.position, transform.position + (Vector3)rawDesMove, Color.red);
-        ConvertRawDesMoveIntoValidDesMove();
+        //Debug.DrawLine(transform.position, transform.position + (Vector3)rawDesMove, Color.black);
+        ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid();
         CardinalizeDesiredMovement();
         Debug.DrawLine(transform.position, transform.position + (Vector3)validDesMove, Color.yellow);
         HandleAnimation();
     }
-
-
 
     private void UpdateRawDesMove()
     {
@@ -45,7 +41,7 @@ public class MoveBrain_NPC : WordMakerMovement
 
     }
 
-    private void ConvertRawDesMoveIntoValidDesMove()
+    private void ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid()
     {
         if (Mathf.Abs(transform.position.x % 1) > 0.1f || Mathf.Abs(transform.position.y % 1) > 0.1f)
         {
@@ -89,11 +85,6 @@ public class MoveBrain_NPC : WordMakerMovement
 
     }
     #endregion
-
-    public void UpdateDesiredMoveDirection(Vector2 desiredMoveDirection)
-    {
-        rawDesMove = desiredMoveDirection;
-    }
 
     public Vector2 GetValidDesMove()
     {

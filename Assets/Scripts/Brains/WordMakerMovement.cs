@@ -26,23 +26,32 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
             if (validDesMove.x < 0)
             {
                 validDesMove.x = -1;
+                return;
             }
             else
             {
                 validDesMove.x = 1;
+                return;
             }
         }
-        else
+        if (Mathf.Abs(validDesMove.x) < Mathf.Abs(validDesMove.y))
         {
             validDesMove.x = 0;
             if (validDesMove.y < 0)
             {
                 validDesMove.y = -1;
+                return;
             }
             else
             {
                 validDesMove.y = 1;
+                return;
             }
+        }
+        else
+        {
+            Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
+
         }
 
     }
