@@ -5,17 +5,17 @@ using System;
 
 public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 {
-    public Action OnWordMakerMoved;
+    public Action OnLeaderMoved;
     protected Vector3 trailingDir;
     public float moveSpeed = 1f;
     protected Vector2 validDesMove = Vector2.zero;
 
-    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>();
+    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(7);
 
 
     protected virtual void PushWordMakerMovement()
     {
-        OnWordMakerMoved?.Invoke();
+        OnLeaderMoved?.Invoke();
     }
 
     protected void CardinalizeDesiredMovement()

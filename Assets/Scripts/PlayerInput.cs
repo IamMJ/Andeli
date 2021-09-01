@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Pathfinding;
 
 public class PlayerInput : WordMakerMovement
 {
@@ -14,6 +15,8 @@ public class PlayerInput : WordMakerMovement
     GameController gc;
     public Vector2[] followOnMoves = new Vector2[3];
     GameObject[] moveArrows = new GameObject[3];
+    GraphUpdateScene gus;
+    [SerializeField] GameObject reknitterPrefab = null;
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -43,6 +46,9 @@ public class PlayerInput : WordMakerMovement
         followOnMoves[0] = Vector2.zero;
         followOnMoves[1] = Vector2.zero;
         followOnMoves[2] = Vector2.zero;
+        gus = GetComponent<GraphUpdateScene>();
+        GameObject reknitterGO = Instantiate(reknitterPrefab);
+        reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
     }
 
     // Update is called once per frame
@@ -303,7 +309,10 @@ public class PlayerInput : WordMakerMovement
         DetectIfSnapped();
         UpdateTruePosition();
         SnapDepictedPositionToTruePositionViaGrid();
+        HandleEntryExitIntoNewTilesForGridGraph();
     }
+
+
     private void DetectIfSnapped()
     {
         bool snapStatus = GridHelper.CheckIfSnappedToGrid(transform.position);
@@ -317,6 +326,11 @@ public class PlayerInput : WordMakerMovement
         {
             isSnapped = false;
         }
+        HandleEntryExitIntoNewTilesForGridGraph();
+    }
+    private void HandleEntryExitIntoNewTilesForGridGraph()
+    {
+        gus.Apply();
     }
 
     private void UpdateTruePosition()

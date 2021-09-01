@@ -14,6 +14,7 @@ public class TailPieceManager : MonoBehaviour
     void Start()
     {
         wmm = GetComponent<WordMakerMovement>();
+
     }
 
     public void AddNewTailPiece(char letterToDisplay)
@@ -60,6 +61,21 @@ public class TailPieceManager : MonoBehaviour
         }
 
         tailPieces.Clear();
+    }
+
+    public Vector2 ReturnLastBreadcrumbOfLastTailPiece()
+    {
+        if (tailPieces.Count > 0)
+        {
+            int lastPiece = tailPieces.Count - 1;
+            TailPiece lastTail = tailPieces[lastPiece];
+            return lastTail.GetOldestBreadcrumb();
+        }
+        else
+        {
+            return wmm.GetOldestBreadcrumb();
+        }
+
     }
 
     private void OnDestroy()

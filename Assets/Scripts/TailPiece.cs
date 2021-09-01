@@ -19,7 +19,7 @@ public class TailPiece : MonoBehaviour, IFollowable
     public void OnCreation(WordMakerMovement parentWMM, IFollowable newLeaderToFollow, char letterToDisplay)
     {
         wmm = parentWMM;
-        wmm.OnWordMakerMoved += HandleTailPieceMovement;
+        wmm.OnLeaderMoved += HandleTailPieceMovement;
         leaderToFollow = newLeaderToFollow;
         tmp.text = letterToDisplay.ToString();
     }
@@ -32,7 +32,7 @@ public class TailPiece : MonoBehaviour, IFollowable
 
     private void OnDestroy()
     {
-        wmm.OnWordMakerMoved -= HandleTailPieceMovement;
+        wmm.OnLeaderMoved -= HandleTailPieceMovement;
     }
 
     public void DropBreadcrumb()
