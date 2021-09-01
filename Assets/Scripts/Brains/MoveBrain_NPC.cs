@@ -31,7 +31,7 @@ public class MoveBrain_NPC : WordMakerMovement
         //Debug.DrawLine(transform.position, transform.position + (Vector3)rawDesMove, Color.black);
         ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid();
         CardinalizeDesiredMovement();
-        Debug.DrawLine(transform.position, transform.position + (Vector3)validDesMove, Color.yellow);
+        //Debug.DrawLine(transform.position, transform.position + (Vector3)validDesMove, Color.yellow);
         HandleAnimation();
     }
 

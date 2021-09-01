@@ -150,7 +150,11 @@ public class WordBrain_NPC : MonoBehaviour
                 LetterTile oldLTT = TargetLetterTile;
                 TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = true;
                 TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
-                TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = false;
+                if (TargetLetterTile)
+                {
+                    TargetLetterTile.gameObject.GetComponent<NavMeshObstacle>().carving = false;
+                }
+
                 if (TargetLetterTile != oldLTT)
                 {
                     Debug.Log("new target letter");

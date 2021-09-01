@@ -121,7 +121,7 @@ public class ArenaBuilder : MonoBehaviour
         cameraMouse1.SetAnchor(arenaStarter);
         cameraMouse1.SetPlayer(gc.GetPlayer());
 
-        cat = Instantiate(catPrefab, centroid, Quaternion.identity) as GameObject;
+        cat = Instantiate(catPrefab, centroid + Vector2.one, Quaternion.identity) as GameObject;
     }
 
     public Vector2 CreateRandomPointWithinArena()

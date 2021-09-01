@@ -34,7 +34,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
                 return;
             }
         }
-        if (Mathf.Abs(validDesMove.x) < Mathf.Abs(validDesMove.y))
+        if (Mathf.Abs(validDesMove.x) <= Mathf.Abs(validDesMove.y))
         {
             validDesMove.x = 0;
             if (validDesMove.y < 0)
@@ -50,7 +50,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         }
         else
         {
-            Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
+            //Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
 
         }
 
