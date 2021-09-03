@@ -9,9 +9,18 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     protected Vector3 trailingDir;
     public float moveSpeed = 1f;
     protected Vector2 validDesMove = Vector2.zero;
+    protected Vector2 previousMove = Vector2.zero;
+    [SerializeField] GameObject reknitterPrefab = null;
 
-    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(7);
 
+    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
+
+
+    protected virtual void Start()
+    {
+        GameObject reknitterGO = Instantiate(reknitterPrefab);
+        reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
+    }
 
     protected virtual void PushWordMakerMovement()
     {
@@ -87,6 +96,15 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 
     }
 
+    protected static bool CheckThatDesiredMoveIsntReversal(Vector2 desiredMove, Vector2 previousMove)
+    {
+        if ((desiredMove - previousMove).magnitude <= Mathf.Epsilon)
+        {
+            return false;
+        }
+        else return true;
+    }
+
     public static MoveArrow.MoveDirection QuantifyMoveDirection(Vector2 inputDir)
     {
         MoveArrow.MoveDirection direction;
@@ -129,5 +147,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     {
         return breadcrumbs[0];
     }
+
+
 
 }

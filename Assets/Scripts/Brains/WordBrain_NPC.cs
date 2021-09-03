@@ -62,6 +62,15 @@ public class WordBrain_NPC : MonoBehaviour
         }
 
     }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 13)
+        {
+            Debug.Log("hit an impassable thing");
+            EraseWord();
+            return;
+        }
+    }
 
     #region Simple Private Tasks
     private void OnDestroy()

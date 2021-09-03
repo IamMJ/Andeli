@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Pathfinding;
 
 public class TailPiece : MonoBehaviour, IFollowable
 {
@@ -10,6 +11,9 @@ public class TailPiece : MonoBehaviour, IFollowable
     WordMakerMovement wmm;  //wmm is subscribed to react to movement.
     IFollowable leaderToFollow;
     [SerializeField] TextMeshPro tmp;
+    GraphUpdateScene gus;
+
+    Vector2 lastSnappedPos = Vector2.zero;
 
 
 
@@ -18,22 +22,40 @@ public class TailPiece : MonoBehaviour, IFollowable
 
     public void OnCreation(WordMakerMovement parentWMM, IFollowable newLeaderToFollow, char letterToDisplay)
     {
+        lastSnappedPos = transform.position;
         wmm = parentWMM;
         wmm.OnLeaderMoved += HandleTailPieceMovement;
         leaderToFollow = newLeaderToFollow;
         tmp.text = letterToDisplay.ToString();
+        gus = GetComponent<GraphUpdateScene>();
     }
 
     private void HandleTailPieceMovement()
     {
         transform.position = leaderToFollow.GetOldestBreadcrumb();
         DropBreadcrumb();
+        gus.Apply();
+        if (GridHelper.CheckIfSnappedToGrid(transform.position))
+        {
+            lastSnappedPos = transform.position;
+        }
+
     }
 
-    private void OnDestroy()
+    public void DetachTailPiece()
     {
         wmm.OnLeaderMoved -= HandleTailPieceMovement;
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponentInChildren<TextMeshPro>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        GameObject particles = GetComponentInChildren<ParticleSystem>()?.gameObject;
+        Destroy(particles);
+        transform.position = lastSnappedPos;
+        gus.setWalkability = true;
+        gus.Apply();
+        Destroy(gameObject, 4f);
     }
+
 
     public void DropBreadcrumb()
     {

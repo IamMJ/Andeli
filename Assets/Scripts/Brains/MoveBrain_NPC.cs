@@ -17,8 +17,9 @@ public class MoveBrain_NPC : WordMakerMovement
     Vector2 truePosition = Vector2.one;
     Vector2 rawDesMove = Vector2.zero;
 
-    private void Start()
-    {       
+    protected override void Start()
+    {
+        base.Start();
         wb = GetComponent<WordBrain_NPC>();
         truePosition = transform.position;
         anim = GetComponentInChildren<Animator>();
@@ -38,7 +39,6 @@ public class MoveBrain_NPC : WordMakerMovement
     private void UpdateRawDesMove()
     {
         rawDesMove = ((Vector3)TacticalDestination - transform.position);
-
     }
 
     private void ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid()

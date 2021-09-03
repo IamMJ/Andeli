@@ -55,11 +55,12 @@ public class TailPieceManager : MonoBehaviour
 
     public void DestroyEntireTail()
     {
+        int i = 0;
         foreach (var tailPiece in tailPieces)
         {
-            Destroy(tailPiece.gameObject);
+            tailPiece.DetachTailPiece();
+            i++;
         }
-
         tailPieces.Clear();
     }
 

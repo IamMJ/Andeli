@@ -16,7 +16,7 @@ public class PlayerInput : WordMakerMovement
     public Vector2[] followOnMoves = new Vector2[3];
     GameObject[] moveArrows = new GameObject[3];
     GraphUpdateScene gus;
-    [SerializeField] GameObject reknitterPrefab = null;
+
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -32,8 +32,9 @@ public class PlayerInput : WordMakerMovement
     Vector2 previousTouchPosition = Vector2.zero;
     public int programmedMoves = 0;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
         gc = FindObjectOfType<GameController>();
@@ -47,8 +48,6 @@ public class PlayerInput : WordMakerMovement
         followOnMoves[1] = Vector2.zero;
         followOnMoves[2] = Vector2.zero;
         gus = GetComponent<GraphUpdateScene>();
-        GameObject reknitterGO = Instantiate(reknitterPrefab);
-        reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
     }
 
     // Update is called once per frame
@@ -63,7 +62,10 @@ public class PlayerInput : WordMakerMovement
         {
             HandleKeyboardInput();
         }
+
         validDesMove = CardinalizeDesiredMovement(rawDesMove);
+        CheckThatDesiredMoveIsntReversal(validDesMove, rawDesMove);
+
         UpdateAnimation();
     }
 
