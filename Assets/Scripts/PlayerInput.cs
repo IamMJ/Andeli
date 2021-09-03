@@ -12,11 +12,7 @@ public class PlayerInput : WordMakerMovement
     DebugHelper dh;
     Animator anim;
     SpeedKeeper sk;
-    GameController gc;
-    public Vector2[] followOnMoves = new Vector2[3];
-    GameObject[] moveArrows = new GameObject[3];
     GraphUpdateScene gus;
-
 
     //state
     Vector2 truePosition = Vector2.zero;
@@ -25,34 +21,30 @@ public class PlayerInput : WordMakerMovement
     bool isSnapped = false;
 
     Touch currentTouch;
+    Vector2 previousTouchPosition;
     bool isValidStartPosition = false;
-    Vector2 previousMove;
-    Vector2 currentMove;
+    GameObject moveArrow;
+
     Vector2 possibleMove;
-    Vector2 previousTouchPosition = Vector2.zero;
-    public int programmedMoves = 0;
 
     protected override void Start()
     {
         base.Start();
         sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
-        gc = FindObjectOfType<GameController>();
         //Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
 
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
         previousTouchPosition = Vector2.zero;
-        followOnMoves[0] = Vector2.zero;
-        followOnMoves[1] = Vector2.zero;
-        followOnMoves[2] = Vector2.zero;
         gus = GetComponent<GraphUpdateScene>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        DetectIfSnapped();
         HandleTouchInput();
         if (isMobile)
         {
@@ -64,7 +56,6 @@ public class PlayerInput : WordMakerMovement
         }
 
         validDesMove = CardinalizeDesiredMovement(rawDesMove);
-        CheckThatDesiredMoveIsntReversal(validDesMove, rawDesMove);
 
         UpdateAnimation();
     }
@@ -83,15 +74,9 @@ public class PlayerInput : WordMakerMovement
             if (currentTouch.phase == TouchPhase.Began && !GridHelper.CheckIsTouchingWordSection(currentTouch.position))
             {
                 isValidStartPosition = true;
-                currentMove = Vector2.zero;
-                previousMove = Vector2.zero;
-                programmedMoves = 0;
-                followOnMoves[0] = validDesMove;
-                followOnMoves[1] = validDesMove;
-                followOnMoves[2] = validDesMove;
+                possibleMove = Vector2.zero;
                 previousTouchPosition = currentTouch.position;
                 ClearMoveArrows();
-                gc.SlowGame();
             }
             //reset everything
 
@@ -101,33 +86,14 @@ public class PlayerInput : WordMakerMovement
 
                 if (possibleMove.magnitude > UIParameters.MinTouchSensitivity)
                 {
-                    possibleMove = CardinalizeDesiredMovement(possibleMove);
-                    previousTouchPosition = currentTouch.position;
-                    if (programmedMoves == 0)
-                    {
-                        previousMove = possibleMove;
-                        followOnMoves[0] = possibleMove;
-                        programmedMoves++;
-                        DisplayPlannedMoveArrows();
-                    }
-                    else
-                    {
-                        if (!possibleMove.Equals(previousMove) && programmedMoves < followOnMoves.Length)
-                        {
-                            followOnMoves[programmedMoves] = possibleMove;
-                            previousMove = possibleMove;
-                            programmedMoves++;
-                            DisplayPlannedMoveArrows();
-                        }
-                    }
-
+                    rawDesMove = CardinalizeDesiredMovement(possibleMove);
+                    DisplayPlannedMoveArrows();
                 }
             }
 
             if (currentTouch.phase == TouchPhase.Ended)
             {
                 isValidStartPosition = false;
-                gc.UnpauseGame();
             }
         }
     }
@@ -137,50 +103,53 @@ public class PlayerInput : WordMakerMovement
     #region Computer Input
     private void HandleKeyboardInput()
     {
-        //if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) + Mathf.Abs(Input.GetAxisRaw("Vertical")) <= Mathf.Epsilon)
-        //{
-        //    movesToDisplay = 0;
-        //    return;
-        //}
-        //else
-        //{
-        //    followOnMoves[0].x = Input.GetAxisRaw("Horizontal");
-        //    followOnMoves[0].y = Input.GetAxisRaw("Vertical");
-        //    followOnMoves[0] = CardinalizeDesiredMovement(followOnMoves[0]);
-        //    programmedMoves = 1;
-        //    movesToDisplay = 1;
-        //}
-
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            gc.UnpauseGame();
+        }
         if (Input.GetKeyDown(KeyCode.W))
         {
-            followOnMoves[0].x = 0;
-            followOnMoves[0].y = 1;
-            programmedMoves = 1;
+            ClearMoveArrows();
+            rawDesMove = new Vector2(0, 1);
+
+            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
+            //Debug.Log($"Now at {truePosition}");
+            truePosition = SnapToAxis(truePosition, true);
             DisplayPlannedMoveArrows();
+            //gc.PauseGame();
             return;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            followOnMoves[0].x = 0;
-            followOnMoves[0].y = -1;
-            programmedMoves = 1;
+            ClearMoveArrows();
+            rawDesMove = new Vector2(0, -1);
+            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
+            //Debug.Log($"Now at {truePosition}");
+            truePosition = SnapToAxis(truePosition, true);
             DisplayPlannedMoveArrows();
+            //gc.PauseGame();
             return;
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            followOnMoves[0].y = 0;
-            followOnMoves[0].x = -1;
-            programmedMoves = 1;
+            ClearMoveArrows();
+            rawDesMove = new Vector2(-1, 0);
+            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
+            //Debug.Log($"Now at {truePosition}");
+            truePosition = SnapToAxis(truePosition, false);
             DisplayPlannedMoveArrows();
+            //gc.PauseGame();
             return;
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            followOnMoves[0].y = 0;
-            followOnMoves[0].x = 1;
-            programmedMoves = 1;
+            ClearMoveArrows();
+            rawDesMove = new Vector2(1, 0);
+            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
+            //Debug.Log($"Now at {truePosition}");
+            truePosition = SnapToAxis(truePosition, false);
             DisplayPlannedMoveArrows();
+            //gc.PauseGame();
             return;
         }
 
@@ -190,128 +159,41 @@ public class PlayerInput : WordMakerMovement
     #endregion
 
     private void DisplayPlannedMoveArrows()
-    {       
-        if (programmedMoves > 0)
+    {              
+        Vector2 arrowPos;
+                
+        if (GridHelper.CheckIfSnappedToGrid(transform.position))
         {
-            ClearMoveArrows();  //Might be redundant looping here...
-            for (int i = 0; i < programmedMoves; i++)
-            {
-                Vector2 arrowPos;
-                Vector2 earlierPos = Vector2.zero;
-                if (i == 1)
-                {
-                    earlierPos = followOnMoves[0];
-                }
-                if (i == 2)
-                {
-                    earlierPos = followOnMoves[0] + followOnMoves[1];
-                }
-                if (GridHelper.CheckIfSnappedToGrid(transform.position))
-                {
-                    Vector2 distRemaining = GetRemainingDist();
-                    arrowPos = (Vector2)transform.position + followOnMoves[i] + earlierPos + distRemaining;
+            arrowPos = (Vector2)transform.position + rawDesMove;
                     
-                }
-                else
-                {
-                    Vector2 distRemaining = GetRemainingDist();
-                    arrowPos = (Vector2)transform.position + followOnMoves[i] + earlierPos + distRemaining;
-                    // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
+        }
+        else
+        {
+            Vector2 distRemaining = GetDistToNextGridSnap(validDesMove, transform.position);
+            arrowPos = (Vector2)transform.position + rawDesMove + distRemaining;
+            // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
 
 
-                }
+        }
 
-                arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
-                GameObject arrow = Instantiate(moveArrowPrefab, arrowPos, Quaternion.identity) as GameObject;
-                arrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(followOnMoves[i]);
-                moveArrows[i] = arrow;
-            }
-        }
-    }
-
-    private Vector2 GetRemainingDist()
-    {
-        float value = 0;
-        if (validDesMove.x > 0)
-        {
-            float remainder = transform.position.x % 1;
-            if (remainder > 0)
-            {
-                value = 1 - remainder;
-            }
-            if (remainder < 0)
-            {
-                value = -1 * remainder;
-            }
-            //Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
-            return new Vector2(value, 0);
-        }
-        if (validDesMove.x < 0)
-        {
-            float remainder = transform.position.x % 1;
-            if (remainder > 0)
-            {
-                value = -1 * remainder;
-            }
-            if (remainder < 0)
-            {
-                value = -1 - remainder;
-            }
-            //Debug.Log($"X at {transform.position.x}, rem: {remainder}, dir: {validDesMove.x}. Returned: {value}");
-            return new Vector2(value, 0);
-        }
-        if (validDesMove.y > 0)
-        {
-            float remainder = transform.position.y % 1;
-            if (remainder > 0)
-            {
-                value = 1 - remainder;
-            }
-            if (remainder < 0)
-            {
-                value = -1 * remainder;
-            }
-            //Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
-            return new Vector2(0, value);
-        }
-        if (validDesMove.y < 0)
-        {
-            float remainder = transform.position.y % 1;
-            if (remainder > 0)
-            {
-                value = -1 * remainder;
-            }
-            if (remainder < 0)
-            {
-                value = -1 - remainder;
-            }
-            //Debug.Log($"Y at {transform.position.y}, rem: {remainder}, dir: {validDesMove.y}. Returned: {value}");
-            return new Vector2(0, value);
-        }
-        return Vector2.zero;
+        arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
+        moveArrow = Instantiate(moveArrowPrefab, arrowPos, Quaternion.identity) as GameObject;
+        moveArrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(rawDesMove);          
         
-        // Pos, Dir:
-        // .25, +1 = 0.75
-        // -.25, +1 = 0.25
-        // .25, -1 = -0.25
-        // -.25, -1 = -0.75
     }
+
+
 
     private void ClearMoveArrows()
     {
-        for (int k = 0; k < moveArrows.Length; k++)
-        {
-            Destroy(moveArrows[k]);
-        } //Clear out all existing move arrows from previous inputs
+        Destroy(moveArrow);
     }
 
     #region Handle Movement
     private void FixedUpdate()
     {
-        DetectIfSnapped();
         UpdateTruePosition();
         SnapDepictedPositionToTruePositionViaGrid();
-        HandleEntryExitIntoNewTilesForGridGraph();
     }
 
 
@@ -321,14 +203,16 @@ public class PlayerInput : WordMakerMovement
         if (snapStatus && !isSnapped)
         {
             isSnapped = true;
-            FeedNextFollowOnMoveIntoRawDesMove();
             validDesMove = rawDesMove;
+            HandleEntryExitIntoNewTilesForGridGraph();
+            previousSnappedPosition = transform.position;
+
         }
         if (!snapStatus)
         {
             isSnapped = false;
         }
-        HandleEntryExitIntoNewTilesForGridGraph();
+
     }
     private void HandleEntryExitIntoNewTilesForGridGraph()
     {
@@ -352,16 +236,6 @@ public class PlayerInput : WordMakerMovement
         }
     }
 
-    private void FeedNextFollowOnMoveIntoRawDesMove()
-    {
-        if (programmedMoves > 0)
-        {
-            rawDesMove = followOnMoves[0];
-            followOnMoves[0] = followOnMoves[1];
-            followOnMoves[1] = followOnMoves[2];
-            programmedMoves--;
-        }
-    }
 
     #endregion
     private void UpdateAnimation()
