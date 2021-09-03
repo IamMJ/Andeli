@@ -31582,8 +31582,8 @@ MonoBehaviour:
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
-  m_XDamping: 0
-  m_YDamping: 0
+  m_XDamping: 1
+  m_YDamping: 1
   m_ZDamping: 1
   m_TargetMovementOnly: 1
   m_ScreenX: 0.5
@@ -99511,11 +99511,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6135404392772274267, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6135404392772274267, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6135404392772274267, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
       propertyPath: m_LocalPosition.z

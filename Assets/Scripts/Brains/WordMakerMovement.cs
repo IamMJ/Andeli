@@ -13,6 +13,8 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     [SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
     public Vector3 previousSnappedPosition;
+    protected int layerMask_Impassable = 1 << 13;
+    protected int layerMask_Passable = 1 << 14;
 
 
 

@@ -14,7 +14,7 @@ public class OptionMenuDriver : MonoBehaviour
         {
             gc = FindObjectOfType<GameController>();
         }
-        gc.UnpauseGame();
+        gc.ResumeGameSpeed();
         gameObject.SetActive(false);
     }
     public void ReturnToWelcomeScene()

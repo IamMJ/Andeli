@@ -60,7 +60,7 @@ public class GameController : MonoBehaviour
         uid = FindObjectOfType<UIDriver>();
         uid.EnterOverworld();
         vm = FindObjectOfType<VictoryMeter>();
-        UnpauseGame();
+        ResumeGameSpeed();
         SpawnPlayer();
         SpawnWordUtilities();
         SetCameraToFollowPlayer();
@@ -126,12 +126,12 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    public void SlowGame()
+    public void SlowGameSpeed()
     {
-        Time.timeScale = 0.5f;
+        Time.timeScale = UIParameters.SlowGameCoefficient;
     }
 
-    public void UnpauseGame()
+    public void ResumeGameSpeed()
     {
         isPaused = false;
         Time.timeScale = 1;

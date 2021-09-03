@@ -21,7 +21,7 @@ public class PlayerInput : WordMakerMovement
     bool isSnapped = false;
 
     Touch currentTouch;
-    Vector2 previousTouchPosition;
+    Vector2 startingTouchPosition;
     bool isValidStartPosition = false;
     GameObject moveArrow;
 
@@ -32,16 +32,13 @@ public class PlayerInput : WordMakerMovement
         base.Start();
         sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
-        //Camera.main.GetComponentInChildren<CinemachineVirtualCamera>().Follow = gameObject.transform;
-
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
-        previousTouchPosition = Vector2.zero;
+        startingTouchPosition = Vector2.zero;
         gus = GetComponent<GraphUpdateScene>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         DetectIfSnapped();
@@ -75,26 +72,65 @@ public class PlayerInput : WordMakerMovement
             {
                 isValidStartPosition = true;
                 possibleMove = Vector2.zero;
-                previousTouchPosition = currentTouch.position;
+                startingTouchPosition = currentTouch.position;
                 ClearMoveArrows();
+                gc.SlowGameSpeed();
             }
             //reset everything
 
             if (currentTouch.phase == TouchPhase.Moved && isValidStartPosition == true)
             {
-                possibleMove = (currentTouch.position - previousTouchPosition);
+                possibleMove = (currentTouch.position - startingTouchPosition);
 
                 if (possibleMove.magnitude > UIParameters.MinTouchSensitivity)
                 {
-                    rawDesMove = CardinalizeDesiredMovement(possibleMove);
-                    DisplayPlannedMoveArrows();
+                    possibleMove = CardinalizeDesiredMovement(possibleMove);
+                    if (VerifyTouchMove(possibleMove))
+                    {
+                        ClearMoveArrows();
+                        DisplayPlannedMoveArrows();
+                        rawDesMove = possibleMove;
+                        if (Mathf.Abs(rawDesMove.x) > 0)
+                        {
+                            truePosition = SnapToAxis(truePosition, false);
+                        }
+                        if (Mathf.Abs(rawDesMove.y) > 0)
+                        {
+                            truePosition = SnapToAxis(truePosition, true);
+                        }
+                    }
+                    else
+                    {
+                        //Invalid due to something impassable.
+                    }
+
+
                 }
             }
 
             if (currentTouch.phase == TouchPhase.Ended)
             {
+                gc.ResumeGameSpeed();
                 isValidStartPosition = false;
             }
+        }
+    }
+
+    /// <summary>
+    /// This will return 'true' if there is a clear path in desired move direction.
+    /// </summary>
+    /// <param name="desiredMove"></param>
+    /// <returns></returns>
+    private bool VerifyTouchMove(Vector2 desiredMove)
+    {
+        RaycastHit2D hit = Physics2D.Linecast(truePosition, truePosition + desiredMove, layerMask_Impassable);
+        if (hit)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
@@ -105,17 +141,16 @@ public class PlayerInput : WordMakerMovement
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            gc.UnpauseGame();
+            gc.ResumeGameSpeed();
         }
         if (Input.GetKeyDown(KeyCode.W))
         {
             ClearMoveArrows();
             rawDesMove = new Vector2(0, 1);
-
             //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
             //Debug.Log($"Now at {truePosition}");
             truePosition = SnapToAxis(truePosition, true);
-            DisplayPlannedMoveArrows();
+            //DisplayPlannedMoveArrows();
             //gc.PauseGame();
             return;
         }
@@ -126,7 +161,7 @@ public class PlayerInput : WordMakerMovement
             //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
             //Debug.Log($"Now at {truePosition}");
             truePosition = SnapToAxis(truePosition, true);
-            DisplayPlannedMoveArrows();
+            //DisplayPlannedMoveArrows();
             //gc.PauseGame();
             return;
         }
@@ -137,7 +172,7 @@ public class PlayerInput : WordMakerMovement
             //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
             //Debug.Log($"Now at {truePosition}");
             truePosition = SnapToAxis(truePosition, false);
-            DisplayPlannedMoveArrows();
+            //DisplayPlannedMoveArrows();
             //gc.PauseGame();
             return;
         }
@@ -148,7 +183,7 @@ public class PlayerInput : WordMakerMovement
             //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
             //Debug.Log($"Now at {truePosition}");
             truePosition = SnapToAxis(truePosition, false);
-            DisplayPlannedMoveArrows();
+            //DisplayPlannedMoveArrows();
             //gc.PauseGame();
             return;
         }
@@ -164,15 +199,13 @@ public class PlayerInput : WordMakerMovement
                 
         if (GridHelper.CheckIfSnappedToGrid(transform.position))
         {
-            arrowPos = (Vector2)transform.position + rawDesMove;
-                    
+            arrowPos = (Vector2)transform.position + rawDesMove;                    
         }
         else
         {
             Vector2 distRemaining = GetDistToNextGridSnap(validDesMove, transform.position);
             arrowPos = (Vector2)transform.position + rawDesMove + distRemaining;
             // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
-
 
         }
 
@@ -181,8 +214,6 @@ public class PlayerInput : WordMakerMovement
         moveArrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(rawDesMove);          
         
     }
-
-
 
     private void ClearMoveArrows()
     {
@@ -206,7 +237,10 @@ public class PlayerInput : WordMakerMovement
             validDesMove = rawDesMove;
             HandleEntryExitIntoNewTilesForGridGraph();
             previousSnappedPosition = transform.position;
-
+            if (Input.touchCount == 0)  // Don't display move arrows while inputting touch movements.
+            {
+                DisplayPlannedMoveArrows();
+            }
         }
         if (!snapStatus)
         {
