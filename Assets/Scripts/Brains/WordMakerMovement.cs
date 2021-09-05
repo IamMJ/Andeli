@@ -6,21 +6,24 @@ using System;
 public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 {
     public Action OnLeaderMoved;
-    protected Vector3 trailingDir;
+
     public float moveSpeed = 1f;
-    public Vector2 validDesMove = Vector2.zero;
-    public Vector2 previousMove = Vector2.zero;
+    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
     [SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
-    public Vector3 previousSnappedPosition;
+    TailPieceManager tpm;
+
     protected int layerMask_Impassable = 1 << 13;
     protected int layerMask_Passable = 1 << 14;
     protected int layerMask_Tile = 1 << 15;
     protected int layerMask_TileImpassable = 1 << 13 | 1 << 15;
 
-
-
-    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
+    //state
+    protected Vector2 rawDesMove = new Vector2(1, 0);
+    protected Vector2 validDesMove = Vector2.zero;
+    protected Vector2 previousMove = Vector2.zero;
+    protected Vector2 truePosition = Vector2.zero;
+    protected Vector3 previousSnappedPosition;
 
 
     protected virtual void Start()
@@ -28,6 +31,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         gc = FindObjectOfType<GameController>();
         GameObject reknitterGO = Instantiate(reknitterPrefab);
         reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
+        tpm = GetComponent<TailPieceManager>();
     }
 
     protected virtual void PushWordMakerMovement()
@@ -138,11 +142,15 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         Vector2 output = inputPos;
         if (trueIfXAxis)
         {
+            int invalidSteps = Mathf.RoundToInt((inputPos.x % 1) * 8);
+            RemoveInvalidBreadcrumbs(invalidSteps);
             float amount = Mathf.RoundToInt(inputPos.x);
             output.x = amount;
         }
         else
         {
+            int invalidSteps = Mathf.RoundToInt((inputPos.y % 1) * 8);
+            RemoveInvalidBreadcrumbs(invalidSteps);
             float amount = Mathf.RoundToInt(inputPos.y);
             output.y = amount;
         }
@@ -298,6 +306,49 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         return breadcrumbs[0];
     }
 
+    public void RemoveInvalidBreadcrumbs(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            breadcrumbs.RemoveAt(i);
+        }
+    }
+
+    protected void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.layer == 13 || collision.gameObject.layer == 15)
+        {
+            truePosition = GridHelper.SnapToGrid(truePosition, 1);
+            transform.position = truePosition;
+            Vector2 turn1 = new Vector2(validDesMove.y, validDesMove.x) * (UnityEngine.Random.Range(0, 2) * 2 - 1);
+            Vector2 turn2 = turn1 * -1;
+
+            RaycastHit2D hit1 = Physics2D.Linecast(transform.position,
+            transform.position + (Vector3)turn1, layerMask_TileImpassable);
+            Debug.DrawLine(transform.position, transform.position + (Vector3)turn1, Color.blue, 1f);
+            if (hit1)
+            {
+                RaycastHit2D hit2 = Physics2D.Linecast(transform.position,
+                    transform.position + (Vector3)turn2, layerMask_TileImpassable);
+                Debug.DrawLine(transform.position, transform.position + (Vector3)turn2, Color.cyan, 1f);
+                if (hit2)
+                {
+                    Debug.Log($"dead end post-colliding {hit2.transform.name}");
+                }
+                else
+                {
+                    validDesMove = turn2;
+                    rawDesMove = validDesMove;
+                }
+            }
+            else
+            {
+                validDesMove = turn1;
+                rawDesMove = validDesMove;
+            }
+        }
+    }
 
 
 }

@@ -14,7 +14,6 @@ public class TailPieceManager : MonoBehaviour
     void Start()
     {
         wmm = GetComponent<WordMakerMovement>();
-
     }
 
     public void AddNewTailPiece(char letterToDisplay)
@@ -24,7 +23,7 @@ public class TailPieceManager : MonoBehaviour
         {
             newPos = wmm.GetOldestBreadcrumb();
             GameObject newTailPiece_GO = Instantiate(tailPiecePrefab, newPos, Quaternion.identity) as GameObject;
-
+            newTailPiece_GO.layer = 0;
             TailPiece newTailPiece = newTailPiece_GO.GetComponent<TailPiece>();
 
             newTailPiece.OnCreation(wmm, wmm, letterToDisplay);
