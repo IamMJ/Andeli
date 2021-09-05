@@ -16,7 +16,7 @@ public class Reknitter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = tpm.ReturnLastBreadcrumbOfLastTailPiece();
+        transform.position = wmm.GetOldestBreadcrumb();
         if (!wmm)
         {
             Destroy(gameObject);

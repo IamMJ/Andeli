@@ -310,6 +310,10 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     {
         for (int i = 0; i < count; i++)
         {
+            if (i >= breadcrumbs.Count)
+            {
+                return;
+            }
             breadcrumbs.RemoveAt(i);
         }
     }

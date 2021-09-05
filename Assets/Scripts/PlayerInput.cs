@@ -15,8 +15,6 @@ public class PlayerInput : WordMakerMovement
     GraphUpdateScene gus;
 
     //state
-
-
     bool isMobile = false;
     bool isSnapped = false;
 

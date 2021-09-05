@@ -34,7 +34,7 @@ public class TailPiece : MonoBehaviour, IFollowable
     {
         transform.position = leaderToFollow.GetOldestBreadcrumb();
         DropBreadcrumb();
-        gus.Apply();
+        //gus.Apply();
         if (GridHelper.CheckIfSnappedToGrid(transform.position))
         {
             lastSnappedPos = transform.position;
@@ -52,7 +52,7 @@ public class TailPiece : MonoBehaviour, IFollowable
         Destroy(particles);
         transform.position = lastSnappedPos;
         gus.setWalkability = true;
-        gus.Apply();
+        //gus.Apply();
         Destroy(gameObject, 4f);
     }
 
