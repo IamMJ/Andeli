@@ -15,7 +15,7 @@ public class PlayerInput : WordMakerMovement
     GraphUpdateScene gus;
 
     //state
-    Vector2 truePosition = Vector2.zero;
+    public Vector2 truePosition = Vector2.zero;
     [SerializeField] Vector2 rawDesMove = new Vector2(1,0);
     bool isMobile = false;
     bool isSnapped = false;
@@ -226,8 +226,6 @@ public class PlayerInput : WordMakerMovement
         UpdateTruePosition();
         SnapDepictedPositionToTruePositionViaGrid();
     }
-
-
     private void DetectIfSnapped()
     {
         bool snapStatus = GridHelper.CheckIfSnappedToGrid(transform.position);
@@ -270,7 +268,6 @@ public class PlayerInput : WordMakerMovement
         }
     }
 
-
     #endregion
     private void UpdateAnimation()
     {
@@ -279,10 +276,37 @@ public class PlayerInput : WordMakerMovement
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == 13)
+
+        if (collision.gameObject.layer == 13 || collision.gameObject.layer == 15)
         {
-            validDesMove *= -1f;
-            rawDesMove *= -1f;
+            truePosition = GridHelper.SnapToGrid(truePosition,1);
+            transform.position = truePosition;
+            Vector2 turn1 = new Vector2(validDesMove.y, validDesMove.x) * (UnityEngine.Random.Range(0, 2) * 2 - 1);
+            Vector2 turn2 = turn1 * -1;
+
+            RaycastHit2D hit1 = Physics2D.Linecast(transform.position,
+            transform.position + (Vector3)turn1, layerMask_TileImpassable);
+            Debug.DrawLine(transform.position, transform.position + (Vector3)turn1, Color.blue, 1f);
+            if (hit1)
+            {
+                RaycastHit2D hit2 = Physics2D.Linecast(transform.position,
+                    transform.position + (Vector3)turn2, layerMask_TileImpassable);
+                Debug.DrawLine(transform.position, transform.position + (Vector3)turn2, Color.cyan, 1f);
+                if (hit2)
+                {
+                    Debug.Log($"dead end post-colliding {hit2.transform.name}");
+                }
+                else
+                {
+                    validDesMove = turn2;
+                    rawDesMove = validDesMove;
+                }
+            }
+            else
+            {
+                validDesMove = turn1;
+                rawDesMove = validDesMove;
+            }
         }
     }
 

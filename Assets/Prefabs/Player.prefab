@@ -109,7 +109,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.45
+  m_Radius: 0.47
 --- !u!50 &1564904675
 Rigidbody2D:
   serializedVersion: 4
@@ -144,15 +144,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 0.5
+  validDesMove: {x: 0, y: 0}
+  previousMove: {x: 0, y: 0}
+  reknitterPrefab: {fileID: 356949180654384117, guid: 7fd628fe7075db94cb9dd7ec1a53a38c, type: 3}
+  previousSnappedPosition: {x: 0, y: 0, z: 0}
   breadcrumbs: []
   moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
-  followOnMoves:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  reknitterPrefab: {fileID: 356949180654384117, guid: 7fd628fe7075db94cb9dd7ec1a53a38c, type: 3}
   rawDesMove: {x: 1, y: 0}
-  programmedMoves: 0
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
   m_ObjectHideFlags: 0

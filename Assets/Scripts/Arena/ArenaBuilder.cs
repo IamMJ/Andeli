@@ -41,6 +41,7 @@ public class ArenaBuilder : MonoBehaviour
         gc = FindObjectOfType<GameController>();
         gc.isInArena = true;
         vm = gc.GetVictoryMeter();
+        vm.ResetArena();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         SetupStatueCameraMouseCat(centroid);
         SetupArenaBoundaries(centroid);

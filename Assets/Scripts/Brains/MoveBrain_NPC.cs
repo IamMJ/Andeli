@@ -30,7 +30,7 @@ public class MoveBrain_NPC : WordMakerMovement
     {
         UpdateRawDesMove();
         ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid();
-        CardinalizeDesiredMovement();
+        //CardinalizeDesiredMovement();
         HandleAnimation();
     }
 
@@ -43,11 +43,12 @@ public class MoveBrain_NPC : WordMakerMovement
     {
         if (Mathf.Abs(transform.position.x % 1) > 0.1f || Mathf.Abs(transform.position.y % 1) > 0.1f)
         {
-
+            previousMove = validDesMove;
         }
         else
         {
-            validDesMove = rawDesMove;
+            validDesMove = CardinalizeDesiredMovement(rawDesMove);
+            GetAlternativeValidDesMoveIfReversing();
             //rawDesMove = validDesMove;
         }
     }

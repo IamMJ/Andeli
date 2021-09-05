@@ -200,7 +200,7 @@ GameObject:
   - component: {fileID: 3108925224609209039}
   - component: {fileID: 881681332172943620}
   - component: {fileID: -9160159707642744576}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: TailPiece
   m_TagString: Untagged
   m_Icon: {fileID: 0}

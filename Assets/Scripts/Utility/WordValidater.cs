@@ -146,6 +146,7 @@ public class WordValidater : MonoBehaviour
     #region Private Methods
     IEnumerator PrepTableOfContents_Coroutine()
     {
+        Debug.Log("Started prepping");
         char[] alphabetAsChars = alphabet.ToCharArray();
         int startIndex = 0;
 
@@ -160,8 +161,10 @@ public class WordValidater : MonoBehaviour
 
             WordBand wordband = new WordBand(firstInstance, range, lastInstance);
             TOC_1Deep.Add(alphabetAsChars[k], wordband);
-            yield return new WaitForEndOfFrame();
-
+            if (k % 2 > 0)
+            {
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         //Create the volume of 2-deep subTOCs
@@ -183,7 +186,10 @@ public class WordValidater : MonoBehaviour
                 WordBand wordband = new WordBand(firstInstance, range, lastInstance);
                 //Debug.Log($"adding subTOC {alphabetAsChars[j]}, {alphabetAsChars[i]} with a WordBand: {firstInstance},{range}");
                 subTOC.Add(alphabetAsChars[i], wordband);
-                yield return new WaitForEndOfFrame();
+                if (i % 2 > 0)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
             }
 
             TOC_2Deep.Add(alphabetAsChars[j], subTOC);

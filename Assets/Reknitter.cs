@@ -17,6 +17,10 @@ public class Reknitter : MonoBehaviour
     void Update()
     {
         transform.position = tpm.ReturnLastBreadcrumbOfLastTailPiece();
+        if (!wmm)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void SetOwners(WordMakerMovement owner, TailPieceManager newTPM)

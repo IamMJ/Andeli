@@ -8,13 +8,15 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     public Action OnLeaderMoved;
     protected Vector3 trailingDir;
     public float moveSpeed = 1f;
-    protected Vector2 validDesMove = Vector2.zero;
-    protected Vector2 previousMove = Vector2.zero;
+    public Vector2 validDesMove = Vector2.zero;
+    public Vector2 previousMove = Vector2.zero;
     [SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
     public Vector3 previousSnappedPosition;
     protected int layerMask_Impassable = 1 << 13;
     protected int layerMask_Passable = 1 << 14;
+    protected int layerMask_Tile = 1 << 15;
+    protected int layerMask_TileImpassable = 1 << 13 | 1 << 15;
 
 
 
@@ -33,6 +35,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         OnLeaderMoved?.Invoke();
     }
 
+    
     protected void CardinalizeDesiredMovement()
     {
         if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
@@ -68,7 +71,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
             //Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
 
         }
-
+        Debug.Log($"vdm: {validDesMove}");
     }
 
     public static Vector2 CardinalizeDesiredMovement(Vector2 inputDir)
@@ -146,6 +149,38 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         return output;
     }
 
+    protected void GetAlternativeValidDesMoveIfReversing()
+    {
+        // compare ValidDesMove to previous Move. 
+        //If perfectly opposite, then modify ValidDesMove either left or right randomly.
+        int layerMask_ImpassableTile = layerMask_Impassable | layerMask_Tile;
+        if ((validDesMove + previousMove).magnitude <= Mathf.Epsilon)
+        {
+            //Moves are inverts of each to equal zero.
+            int rand = (UnityEngine.Random.Range(0, 2) * 2 - 1);
+            Vector2 oldMove = validDesMove;
+            validDesMove = new Vector2(validDesMove.y, validDesMove.x) * rand;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.position + (Vector3)validDesMove, 1.0f, layerMask_ImpassableTile);
+            if (hit)
+            {
+                validDesMove = validDesMove * rand; // multiply by the same rand to reverse the "turn"
+            }
+            //Debug.Log($"reversed: old {oldMove} into new: {validDesMove}");
+        }
+
+    }
+
+    protected void GetAlternativeValidDesMoveIfEnteringImpassable()
+    {
+        int layerMask_ImpassableTile = layerMask_Impassable | layerMask_Tile;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, 
+            transform.position + (Vector3)validDesMove, 1.0f, layerMask_ImpassableTile);
+        if (hit)
+        {
+            int rand = (UnityEngine.Random.Range(0, 2) * 2 - 1);
+            validDesMove = validDesMove * rand; // multiply by the same rand to reverse the "turn"
+        }
+    }
     protected Vector2 GetDistToNextGridSnap(Vector2 desiredMove, Vector2 currentPosition)
     {
         float value = 0;

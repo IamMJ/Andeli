@@ -42,6 +42,11 @@ public class VictoryMeter : MonoBehaviour
         DetectWinLoss();
     }
 
+    public void ResetArena()
+    {
+        SetBalance(startingBalance);
+        SetDecayAmount(0);
+    }
     public void ModifyBalance(float amountToAdd)
     {
         currentBalance += amountToAdd;

@@ -7,6 +7,11 @@ using Pathfinding;
 
 public class StrategyBrainV2 : MonoBehaviour
 {
+    /// <summary>
+    /// The Strategy Brain is supposed to take in Target Letter Tiles from the Word Brain.
+    /// It outputs a TacticalDestination to the Move Brain
+    /// </summary>
+
     //init
     AILerp ail;
     Seeker seeker;
@@ -22,12 +27,12 @@ public class StrategyBrainV2 : MonoBehaviour
     float closeEnough = 1.0f;
     float nextWaypointDistance = 1;
 
-
     //state
     bool hasValidPath = false;
     public NavMeshPathStatus status;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
+    Vector2 previousDirection = Vector2.zero;
 
 
 
@@ -58,7 +63,7 @@ public class StrategyBrainV2 : MonoBehaviour
             SetTLLasStrategicDestination();
         }
 
-        ConvertStrategicDestinationToTacticalDestination();
+        StartPathToStrategicDestination();
         PassTacticalDestinationToMoveBrain();
     }
 
@@ -79,7 +84,7 @@ public class StrategyBrainV2 : MonoBehaviour
 
     }
 
-    private void ConvertStrategicDestinationToTacticalDestination()
+    private void StartPathToStrategicDestination()
     {
         if (seeker.IsDone() == true)
         {
@@ -123,7 +128,8 @@ public class StrategyBrainV2 : MonoBehaviour
         }
 
         mb.TacticalDestination = path.vectorPath[currentWaypoint];
-        Debug.DrawLine(transform.position, path.vectorPath[currentWaypoint], Color.red);
+
+        Debug.DrawLine(transform.position, mb.TacticalDestination, Color.red);
 
     }
     private void HandleCompletedPath(Path p)
