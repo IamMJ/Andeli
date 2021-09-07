@@ -83,9 +83,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b01dd650199ee84ab3c159d94a1d5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
   breadcrumbs: []
   reknitterPrefab: {fileID: 356949180654384117, guid: 7fd628fe7075db94cb9dd7ec1a53a38c, type: 3}
+  dustcloudPrefab: {fileID: 8717110635550957212, guid: ed73c7c44d7a05e40ab9bac161c7ff04, type: 3}
   TacticalDestination: {x: 0, y: 0}
 --- !u!114 &7905437399472185518
 MonoBehaviour:
@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}
-  letterFX_Shiny: {fileID: 0}
 --- !u!114 &-1046275462294711525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -262,3 +261,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba05eee4346492d4cb27a64deeeda018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetCurrentSpeed: 0
+  CurrentSpeed: 0

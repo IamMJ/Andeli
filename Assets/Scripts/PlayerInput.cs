@@ -231,6 +231,7 @@ public class PlayerInput : WordMakerMovement
             validDesMove = rawDesMove;
 
             HandleEntryExitIntoNewTilesForGridGraph();
+            Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
             previousSnappedPosition = transform.position;
             if (Input.touchCount == 0)  // Don't display move arrows while inputting touch movements.
             {

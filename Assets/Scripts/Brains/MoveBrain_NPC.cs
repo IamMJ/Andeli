@@ -47,6 +47,7 @@ public class MoveBrain_NPC : WordMakerMovement
         {
             validDesMove = CardinalizeDesiredMovement(rawDesMove);
             GetAlternativeValidDesMoveIfReversing();
+            Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
             //rawDesMove = validDesMove;
         }
     }

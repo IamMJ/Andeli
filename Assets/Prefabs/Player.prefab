@@ -82,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 791868953
   m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -4464185934544814259, guid: ddc2b7cca02d13e4e9bb951e3d1d74af, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -143,9 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f50cb0d842981741a5f516c3366538b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
   breadcrumbs: []
   reknitterPrefab: {fileID: 356949180654384117, guid: 7fd628fe7075db94cb9dd7ec1a53a38c, type: 3}
+  dustcloudPrefab: {fileID: 8717110635550957212, guid: ed73c7c44d7a05e40ab9bac161c7ff04, type: 3}
   moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
@@ -191,6 +191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba05eee4346492d4cb27a64deeeda018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetCurrentSpeed: 0
+  CurrentSpeed: 0
 --- !u!114 &-5630972937777679914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}
-  letterFX_Shiny: {fileID: 6907797058491934293, guid: 9a6677f4fe83229458446c364cf60294, type: 3}
 --- !u!114 &2514741202502210731
 MonoBehaviour:
   m_ObjectHideFlags: 0

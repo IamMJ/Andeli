@@ -10,7 +10,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
     [SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
-    TailPieceManager tpm;
+    [SerializeField] protected GameObject dustcloudPrefab = null;
 
     protected int layerMask_Impassable = 1 << 13;
     protected int layerMask_Passable = 1 << 14;
@@ -31,7 +31,6 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         gc = FindObjectOfType<GameController>();
         GameObject reknitterGO = Instantiate(reknitterPrefab);
         reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
-        tpm = GetComponent<TailPieceManager>();
     }
 
     protected virtual void PushWordMakerMovement()
