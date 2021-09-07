@@ -7,7 +7,7 @@ public class ArenaBuilder : MonoBehaviour
 {
     [SerializeField] GameObject cameraMousePrefab = null;
     [SerializeField] GameObject wallPrefab = null;
-    [SerializeField] GameObject catPrefab = null;
+    [SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
     GameController gc;
     VictoryMeter vm;
@@ -25,7 +25,7 @@ public class ArenaBuilder : MonoBehaviour
     float checkRadius = 0.01f;
 
     //state
-    GameObject cat;
+    GameObject[] enemies;
     GameObject letterTileDropper;
     GameObject camMouse;
 
@@ -43,6 +43,7 @@ public class ArenaBuilder : MonoBehaviour
         vm = gc.GetVictoryMeter();
         vm.ResetArena();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
+        enemies = new GameObject[enemyPrefabs.Length];
         SetupStatueCameraMouseCat(centroid);
         SetupArenaBoundaries(centroid);
 
@@ -122,7 +123,11 @@ public class ArenaBuilder : MonoBehaviour
         cameraMouse1.SetAnchor(arenaStarter);
         cameraMouse1.SetPlayer(gc.GetPlayer());
 
-        cat = Instantiate(catPrefab, centroid + Vector2.one, Quaternion.identity) as GameObject;
+        for (int i = 0; i < enemyPrefabs.Length; i++)
+        {
+            enemies[i] = Instantiate(enemyPrefabs[i], centroid + Vector2.one, Quaternion.identity) as GameObject;
+        }
+
     }
 
     public Vector2 CreateRandomPointWithinArena()
@@ -165,7 +170,11 @@ public class ArenaBuilder : MonoBehaviour
         gc.isInArena = false;
         uid.EnterOverworld();
         Destroy(camMouse);
-        Destroy(cat);
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            Destroy(enemies[i]);
+        }
+
         Destroy(letterTileDropper);
         foreach(var element in arenaWallObjects)
         {
@@ -176,5 +185,8 @@ public class ArenaBuilder : MonoBehaviour
         Destroy(gameObject);
     }
 
-
+    public GameObject[] GetEnemiesInArena()
+    {
+        return enemies;
+    }
 }

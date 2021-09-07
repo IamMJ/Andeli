@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SmallWords_SS : SpellingStrategy
 {
+
     //param
     int minWordOptions = 15;
 
@@ -15,7 +16,7 @@ public class SmallWords_SS : SpellingStrategy
 
     public override LetterTile FindBestLetterFromAllOnBoard()
     {
-        List<LetterTile> letterTilesToEvaluate = ltd.FindAllReachableLetterTiles(transform.position, mb.moveSpeed);
+        List<LetterTile> letterTilesToEvaluate = ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed);
         LetterTile currentBestOption = null;
         float currentBestValue = 0;
         foreach (var letterTile in letterTilesToEvaluate)

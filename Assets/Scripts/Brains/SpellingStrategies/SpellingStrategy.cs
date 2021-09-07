@@ -6,6 +6,7 @@ public abstract class SpellingStrategy : MonoBehaviour
 {
     protected WordBrain_NPC wb;
     protected MoveBrain_NPC mb;
+    protected SpeedKeeper sk;
     protected StrategyBrain_NPC sb;
     protected WordValidater wv;
     protected DebugHelper dh;
@@ -21,6 +22,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         wv = FindObjectOfType<WordValidater>();
         dh = FindObjectOfType<DebugHelper>();
         ltd = FindObjectOfType<LetterTileDropper>();
+        sk = GetComponent<SpeedKeeper>();
     }
     public abstract void EvaluateWordAfterGainingALetter();
 

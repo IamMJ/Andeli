@@ -11,7 +11,6 @@ public class PlayerInput : WordMakerMovement
     [SerializeField] GameObject moveArrowPrefab = null;
     DebugHelper dh;
     Animator anim;
-    SpeedKeeper sk;
     GraphUpdateScene gus;
 
     //state
@@ -28,7 +27,6 @@ public class PlayerInput : WordMakerMovement
     protected override void Start()
     {
         base.Start();
-        sk = GetComponent<SpeedKeeper>();
         anim = GetComponent<Animator>();
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;

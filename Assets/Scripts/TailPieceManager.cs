@@ -42,14 +42,9 @@ public class TailPieceManager : MonoBehaviour
         }
     }
 
-    public void AddFXToSelectedTailPiece(TrueLetter.Ability letterAbility, int index)
+    public TailPiece GetTailPieceAt(int index)
     {
-        switch (letterAbility)
-        {
-            case TrueLetter.Ability.Shiny:
-                Instantiate(letterFX_Shiny, tailPieces[index].transform);
-                return;
-        }
+        return tailPieces[index];
     }
 
     public void DestroyEntireTail()

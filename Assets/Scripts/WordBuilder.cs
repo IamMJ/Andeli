@@ -16,6 +16,8 @@ public class WordBuilder : MonoBehaviour
     PowerMeter pm;
     UIDriver uid;
     WordValidater wv;
+    ArenaBuilder ab;
+    ArenaLetterEffectsHandler aleh;
 
     //state
 
@@ -32,18 +34,10 @@ public class WordBuilder : MonoBehaviour
         uid = FindObjectOfType<UIDriver>();
         wv = FindObjectOfType<WordValidater>();
         uid.SetPlayerObject(this);
-
         pi = GetComponent<PlayerInput>();
         tpm = GetComponent<TailPieceManager>();
         sm = GetComponent<SpellMaker>();
     }
-
-
-
-    private void Update()
-    {
-
-    }    
 
     public void AddLetter(LetterTile newLetter)
     {
@@ -79,30 +73,15 @@ public class WordBuilder : MonoBehaviour
         {
             return;
         }
+
         newLetter.SetLatentAbilityStatus(true);
 
-        switch (newLetter.Ability)
+        if (!aleh)
         {
-            case TrueLetter.Ability.Nothing:
-                //
-                break;
-
-            case TrueLetter.Ability.Shiny:
-
-                int power = newLetter.Power;
-                IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
-                tpm.AddFXToSelectedTailPiece(newLetter.Ability, index);                
-                break ;
-
-            case TrueLetter.Ability.Frozen:
-                //
-                break;
-
-            case TrueLetter.Ability.Fiery:
-                //
-                break;
-
+            ab = FindObjectOfType<ArenaBuilder>();
+            aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
         }
+        aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index);
     }
 
 
@@ -121,7 +100,14 @@ public class WordBuilder : MonoBehaviour
 
     public void FireCurrentWord()
     {
-        sm.FireCurrentWord();
+        if (sm.FireCurrentWordIfValid())
+        {
+            foreach (var letter in lettersCollected)
+            {
+                aleh.ApplyLetterEffectOnFiring(letter, gameObject);
+            }
+        }
+
     }
 
     public void IncreasePower(int amount)
@@ -134,6 +120,11 @@ public class WordBuilder : MonoBehaviour
     {
         CurrentPower = 0;
         uid.ModifyPowerMeterTMP(CurrentPower);
+    }
+
+    public int GetCurrentWordLength()
+    {
+        return currentWordLength;
     }
 
 

@@ -14,8 +14,6 @@ public class MoveBrain_NPC : WordMakerMovement
 
     //state
     public Vector2 TacticalDestination;
-    Vector2 truePosition = Vector2.one;
-    Vector2 rawDesMove = Vector2.zero;
 
     protected override void Start()
     {
@@ -68,7 +66,7 @@ public class MoveBrain_NPC : WordMakerMovement
 
     private void UpdateTruePosition()
     {
-        truePosition += validDesMove * moveSpeed * Time.deltaTime;
+        truePosition += validDesMove * sk.CurrentSpeed * Time.deltaTime;
     }
 
     private void SnapDepictedPositionToTruePositionViaGrid()

@@ -44,7 +44,7 @@ public class V1_SS : SpellingStrategy
 
     public override LetterTile FindBestLetterFromAllOnBoard()
     {
-        List<LetterTile> possibleLetters =  ltd.FindAllReachableLetterTiles(transform.position, mb.moveSpeed);
+        List<LetterTile> possibleLetters =  ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed);
 
         LetterTile bestLetterTile = null;
         int bestWordCount = minPossibleWordsToConsider;
@@ -69,7 +69,7 @@ public class V1_SS : SpellingStrategy
             else
             {
                 int possibleWordCount_2Deep = 0;
-                List<LetterTile> nextPossibleLetters = ltd.FindAllReachableLetterTiles(firstLetter.transform.position, mb.moveSpeed/2f);
+                List<LetterTile> nextPossibleLetters = ltd.FindAllReachableLetterTiles(firstLetter.transform.position, sk.CurrentSpeed/2f);
                 foreach (var nextLetter in nextPossibleLetters)
                 {
                     if (nextLetter == firstLetter) { continue; }

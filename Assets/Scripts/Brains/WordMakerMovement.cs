@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+[RequireComponent(typeof(SpeedKeeper))]
 public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 {
     public Action OnLeaderMoved;
-
-    public float moveSpeed = 1f;
+    protected SpeedKeeper sk;
     [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
     [SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
@@ -28,6 +27,7 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 
     protected virtual void Start()
     {
+        sk = GetComponent<SpeedKeeper>();
         gc = FindObjectOfType<GameController>();
         GameObject reknitterGO = Instantiate(reknitterPrefab);
         reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());

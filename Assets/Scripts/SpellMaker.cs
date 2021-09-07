@@ -24,7 +24,7 @@ public class SpellMaker : MonoBehaviour
         vm = FindObjectOfType<VictoryMeter>();
         
     }
-    public void FireCurrentWord()
+    public bool FireCurrentWordIfValid()
     {
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
@@ -35,11 +35,16 @@ public class SpellMaker : MonoBehaviour
             wordPuff.SetColorByPower(wbd.CurrentPower);
             playmem.IncrementWordCount();
             vm.ModifyBalance(wbd.CurrentPower);
+            return true;
         }
         else
         {
             playmem.ResetConsecutiveWordCount();
             Debug.Log("stun the player.");
+
+            // stun the player
+
+            return false;
         }
     }
 

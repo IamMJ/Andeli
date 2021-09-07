@@ -8,33 +8,43 @@ public class SpeedKeeper : MonoBehaviour
     float startingSpeed = 3f;
     float accelPerValidWord = 0.3f;
     float maxSpeed = 6.0f;
+    float speedRecoveryRate = 0.1f; // speed recovered every second
+
 
     //state
     float stunTimeRemaining = 0;
-    public float CurrentSpeed { get; private set; } = 0;
+    public float targetCurrentSpeed;
 
+    public float CurrentSpeed; //{ get; private set; } = 0;
 
 
     private void Start()
     {
         PlayerMemory pm = GetComponent<PlayerMemory>();
-        pm.OnResetConsecutiveWordCount += ResetToStartingSpeedOnInvalidWord;
-        pm.OnIncrementWordCount += IncreaseSpeedOnValidWord;
-        CurrentSpeed = startingSpeed;
+        if (pm)
+        {
+            pm.OnResetConsecutiveWordCount += ResetToStartingSpeedOnInvalidWord;
+            pm.OnIncrementWordCount += IncreaseSpeedOnValidWord;
+        }
+
+        targetCurrentSpeed = startingSpeed;
+        CurrentSpeed = targetCurrentSpeed;
+    }
+
+    private void Update()
+    {
+        CurrentSpeed = Mathf.MoveTowards(CurrentSpeed, targetCurrentSpeed, speedRecoveryRate * Time.deltaTime);
     }
 
     private void IncreaseSpeedOnValidWord()
     {
         CurrentSpeed += accelPerValidWord;
-        Debug.Log("new speed: " + CurrentSpeed);
         CurrentSpeed = Mathf.Clamp(CurrentSpeed, startingSpeed, maxSpeed);
-        Debug.Log("clamped new speed: " + CurrentSpeed);
     }
 
     private void ResetToStartingSpeedOnInvalidWord()
     {
         CurrentSpeed = startingSpeed;
-        Debug.Log("reset speed to: " + CurrentSpeed);
     }
 
     public void StunPlayer()
@@ -45,7 +55,16 @@ public class SpeedKeeper : MonoBehaviour
     private void OnDestroy()
     {
         PlayerMemory pm = GetComponent<PlayerMemory>();
-        pm.OnResetConsecutiveWordCount -= ResetToStartingSpeedOnInvalidWord;
-        pm.OnIncrementWordCount -= IncreaseSpeedOnValidWord;
+        if (pm)
+        {
+            pm.OnResetConsecutiveWordCount -= ResetToStartingSpeedOnInvalidWord;
+            pm.OnIncrementWordCount -= IncreaseSpeedOnValidWord;
+        }
+    }
+
+    public void FreezeWordMaker(float freezePenalty)
+    {
+        Debug.Log($"{gameObject.name} just was slowed by {freezePenalty}");
+        CurrentSpeed -= freezePenalty;
     }
 }
