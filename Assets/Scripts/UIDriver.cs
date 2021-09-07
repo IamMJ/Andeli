@@ -17,6 +17,11 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Slider wordFiringSliderBG = null;
     [SerializeField] TextMeshProUGUI powerMeterTMP = null;
+
+    [SerializeField] Sprite blankTileDefault = null;
+    [SerializeField] Image[] wordboxImages = null;
+    [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
+
     WordBuilder playerWB;
     GameController gc;
     SceneLoader sl;
@@ -33,6 +38,10 @@ public class UIDriver : MonoBehaviour
     float timeButtonDepressed = 0;
     public float timeSpentLongPressing { get; private set; }
 
+    private void Start()
+    {
+        ClearWordBar();
+    }
 
     // Update is called once per frame
     void Update()
@@ -204,6 +213,33 @@ public class UIDriver : MonoBehaviour
 
     }
 
+
+    public void AddLetterToWordBar(Sprite letterTileSprite, char letter, int indexInWord)
+    {
+        wordboxImages[indexInWord].sprite = letterTileSprite;
+        wordboxTMPs[indexInWord].text = letter.ToString();
+    }
+
+    public void ClearWordBar()
+    {
+        foreach(var image in wordboxImages)
+        {
+            image.sprite = blankTileDefault;
+            if (image.gameObject.transform.childCount > 0)
+            {
+                Destroy(image.gameObject.transform.GetChild(0).gameObject);
+            }
+        }
+        foreach(var TMP in wordboxTMPs)
+        {
+            TMP.text = "";
+        }
+    }
+
+    public GameObject GetGameObjectAt(int index)
+    {
+        return wordboxImages[index].gameObject;
+    }
 
     //IEnumerator ShowHideTopPanel_Coroutine(bool shouldBeShown)
     //{

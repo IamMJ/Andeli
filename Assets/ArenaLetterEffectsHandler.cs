@@ -8,6 +8,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
 
     //init
     ArenaBuilder ab;
+    UIDriver uid;
 
     [SerializeField] GameObject letterFX_Shiny = null;
     [SerializeField] GameObject letterFX_Frozen = null;
@@ -15,11 +16,14 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
     private void Start()
     {
         ab = GetComponent<ArenaBuilder>();
+        uid = FindObjectOfType<UIDriver>();
     }
 
     public void ApplyLetterEffectOnPickup(LetterTile activatedLetter, GameObject callingWMM, int letterIndex)
     {
-        TailPiece activatedTailPiece = callingWMM.GetComponent<TailPieceManager>().GetTailPieceAt(letterIndex);
+        GameObject activatedLetterInWordBar = uid.GetGameObjectAt(letterIndex);
+        GameObject FX;
+
         switch (activatedLetter.Ability)
         {
             case TrueLetter.Ability.Nothing:
@@ -29,11 +33,13 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
             case TrueLetter.Ability.Shiny:
                 int power = activatedLetter.Power;
                 callingWMM.GetComponent<WordBuilder>().IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
-                Instantiate(letterFX_Shiny, activatedTailPiece.transform);
+                FX = Instantiate(letterFX_Shiny, activatedLetterInWordBar.transform);
+                FX.layer = 5;
                 break;
 
             case TrueLetter.Ability.Frozen:
-                Instantiate(letterFX_Frozen, activatedTailPiece.transform);
+                FX = Instantiate(letterFX_Frozen, activatedLetterInWordBar.transform);
+                FX.layer = 5;
                 break;
 
             case TrueLetter.Ability.Fiery:

@@ -9,8 +9,6 @@ public class TailPieceManager : MonoBehaviour
     List<TailPiece> tailPieces = new List<TailPiece>();
     WordMakerMovement wmm;
 
-    [SerializeField] GameObject letterFX_Shiny = null;
-
     void Start()
     {
         wmm = GetComponent<WordMakerMovement>();

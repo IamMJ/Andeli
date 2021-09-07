@@ -19,6 +19,9 @@ public class WordBuilder : MonoBehaviour
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
 
+    //param
+    int maxWordLength = 10;
+
     //state
 
     List<LetterTile> lettersCollected = new List<LetterTile>();
@@ -41,17 +44,21 @@ public class WordBuilder : MonoBehaviour
 
     public void AddLetter(LetterTile newLetter)
     {
+        if (currentWordLength >= maxWordLength) { return; }
         if (!tpm)
         {
             pi = FindObjectOfType<PlayerInput>();
             tpm = pi.GetComponent<TailPieceManager>();
         }
+
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
         currentWordLength = currentWord.Length;
         IncreasePower(newLetter.Power);
         HasLetters = true;
-        tpm.AddNewTailPiece(newLetter.Letter);
+        //tpm.AddNewTailPiece(newLetter.Letter);
+        Sprite newSprite = newLetter.GetComponent<SpriteRenderer>().sprite;
+        uid.AddLetterToWordBar(newSprite, newLetter.Letter, currentWordLength - 1);
         TestAllLetterLatentAbilities();
     }
 
@@ -89,13 +96,19 @@ public class WordBuilder : MonoBehaviour
     {
         return currentWord;
     }
+    public int GetCurrentWordLength()
+    {
+        return currentWordLength;
+    }
+
     public void ClearCurrentWord()
     {
         currentWord = "";
         HasLetters = false;
         currentWordLength = 0;
         lettersCollected.Clear();
-        tpm.DestroyEntireTail();
+        uid.ClearWordBar();
+        //tpm.DestroyEntireTail();
     }
 
     public void FireCurrentWord()
@@ -120,11 +133,6 @@ public class WordBuilder : MonoBehaviour
     {
         CurrentPower = 0;
         uid.ModifyPowerMeterTMP(CurrentPower);
-    }
-
-    public int GetCurrentWordLength()
-    {
-        return currentWordLength;
     }
 
 
