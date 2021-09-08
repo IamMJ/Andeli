@@ -119,6 +119,11 @@ public class WordBuilder : MonoBehaviour
         {
             foreach (var letter in lettersCollected)
             {
+                if (!aleh)
+                {
+                    ab = FindObjectOfType<ArenaBuilder>();
+                    aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
+                }
                 aleh.ApplyLetterEffectOnFiring(letter, gameObject);
             }
         }

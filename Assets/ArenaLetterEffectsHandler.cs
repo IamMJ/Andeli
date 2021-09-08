@@ -74,7 +74,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                     GameObject[] enemies = ab.GetEnemiesInArena();
                     foreach (var enemy in enemies)
                     {
-                        enemy.GetComponent<SpeedKeeper>().FreezeWordMaker(freezePower);
+                        enemy.GetComponent<SpeedKeeper>()?.FreezeWordMaker(freezePower);
                     }
                 }
                 break;
