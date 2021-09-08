@@ -49,7 +49,6 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 6646722358577865907, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
   letterTileDropperPrefab: {fileID: 7061575934574750077, guid: 2ff7dc08238502c418b5341965d53746, type: 3}
-  Aleh: {fileID: 0}
   arenaStarter: {fileID: 0}
 --- !u!114 &5086475317652339047
 MonoBehaviour:
@@ -65,3 +64,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letterFX_Shiny: {fileID: 6907797058491934293, guid: 9a6677f4fe83229458446c364cf60294, type: 3}
   letterFX_Frozen: {fileID: 6907797058491934293, guid: e62e68b1baed0bb44b9749264c347d58, type: 3}
+  letterFX_Lucky: {fileID: 6907797058491934293, guid: 4eb0e43ad8d481a4884a7c28eed94c1e, type: 3}

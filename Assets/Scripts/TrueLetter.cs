@@ -11,7 +11,7 @@ public class TrueLetter : ScriptableObject
     [SerializeField] int Power;
     [SerializeField] Ability ability = Ability.Nothing;
 
-    public enum Ability { Nothing, Shiny, Frozen, Fiery };
+    public enum Ability { Nothing, Shiny, Frozen, Lucky };
 
 
 

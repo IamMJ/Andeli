@@ -12,6 +12,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
 
     [SerializeField] GameObject letterFX_Shiny = null;
     [SerializeField] GameObject letterFX_Frozen = null;
+    [SerializeField] GameObject letterFX_Lucky = null;
 
     private void Start()
     {
@@ -42,8 +43,13 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 FX.layer = 5;
                 break;
 
-            case TrueLetter.Ability.Fiery:
-                //
+            case TrueLetter.Ability.Lucky:
+                FX = Instantiate(letterFX_Lucky, activatedLetterInWordBar.transform);
+                int amount = Mathf.RoundToInt(activatedLetter.Power / 2f);
+                ParticleSystem.EmissionModule em = FX.GetComponent<ParticleSystem>().emission;
+                em.rateOverTime = amount;
+                callingWMM.GetComponent<WordBuilder>().IncreaseWordLengthBonus(amount);
+                FX.layer = 5;
                 break;
 
         }
@@ -73,7 +79,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 }
                 break;
 
-            case TrueLetter.Ability.Fiery:
+            case TrueLetter.Ability.Lucky:
                 //
                 break;
 

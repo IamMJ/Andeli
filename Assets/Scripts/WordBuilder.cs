@@ -28,6 +28,7 @@ public class WordBuilder : MonoBehaviour
     public bool HasLetters { get; private set; } = false;
     string currentWord;
     int currentWordLength;
+    int wordLengthBonus = 0;
     public int CurrentPower { get; private set; } = 0;
 
 
@@ -76,7 +77,7 @@ public class WordBuilder : MonoBehaviour
     private void TestLetterLatentAbility(LetterTile newLetter, int index)
     {
         int roll = 21 - UnityEngine.Random.Range(1, 21);
-        if (currentWordLength < roll)
+        if (currentWordLength + wordLengthBonus < roll)
         {
             return;
         }
@@ -106,6 +107,7 @@ public class WordBuilder : MonoBehaviour
         currentWord = "";
         HasLetters = false;
         currentWordLength = 0;
+        ResetWordLengthBonus();
         lettersCollected.Clear();
         uid.ClearWordBar();
         //tpm.DestroyEntireTail();
@@ -135,7 +137,16 @@ public class WordBuilder : MonoBehaviour
         uid.ModifyPowerMeterTMP(CurrentPower);
     }
 
+    public void IncreaseWordLengthBonus(int bonusAmount)
+    {
+        wordLengthBonus += bonusAmount;
+        Debug.Log($"word length bonus increased by {bonusAmount}. now at {wordLengthBonus}");
+    }
 
+    private void ResetWordLengthBonus()
+    {
+        wordLengthBonus = 0;
+    }
 
 
 }
