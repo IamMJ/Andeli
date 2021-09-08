@@ -11,6 +11,7 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject letterTileDropperPrefab = null;
     GameController gc;
     VictoryMeter vm;
+    GameObject player;
     UIDriver uid;
     public GameObject arenaStarter;
     List<GameObject> arenaWallObjects = new List<GameObject>();
@@ -36,10 +37,12 @@ public class ArenaBuilder : MonoBehaviour
         minY += Mathf.RoundToInt(transform.position.y);
         maxY += Mathf.RoundToInt(transform.position.y);
 
+
         uid = FindObjectOfType<UIDriver>();
         uid.EnterArena();
         gc = FindObjectOfType<GameController>();
         gc.isInArena = true;
+        player = gc.GetPlayer();
         vm = gc.GetVictoryMeter();
         vm.ResetArena();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
@@ -181,7 +184,11 @@ public class ArenaBuilder : MonoBehaviour
             Destroy(element);
         }
         Destroy(arenaStarter); // For now, destroy the statue, but later replace with a broken statue, perhaps?
-        gc.GetPlayer().GetComponent<WordBuilder>().ClearCurrentWord();
+        player.GetComponent<WordBuilder>().ClearCurrentWord();
+        player.GetComponent<SpellMaker>().RemoveAllSpellsInFlight();
+        
+        //Remove spells in flight from any non-player wordmakers
+
         Destroy(gameObject);
     }
 

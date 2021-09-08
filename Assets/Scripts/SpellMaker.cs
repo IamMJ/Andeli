@@ -5,6 +5,10 @@ using UnityEngine;
 public class SpellMaker : MonoBehaviour
 {
     [SerializeField] GameObject puffPrefab = null;
+    [SerializeField] GameObject normalSpellPrefab = null;
+    [SerializeField] GameObject freezeSpellPrefab = null;
+    List<GameObject> spellsInFlight = new List<GameObject>();
+
     WordBuilder wbd;
     DebugHelper dh;
     WordValidater wv;
@@ -13,7 +17,12 @@ public class SpellMaker : MonoBehaviour
     PlayerMemory playmem;
     string testWord;
 
-    // Start is called before the first frame update
+    public enum SpellType { Normal, Freeze };
+
+    //param
+    float spellInitialSpeed = 6.0f;
+
+
     void Start()
     {
         playmem = GetComponent<PlayerMemory>();
@@ -46,6 +55,39 @@ public class SpellMaker : MonoBehaviour
 
             return false;
         }
+    }
+
+    public void CreateSpell(Transform source, Transform target, SpellType spellType)
+    {
+        float amount = UnityEngine.Random.Range(-180f, 179f);
+        Quaternion randRot = Quaternion.Euler(0, 0, amount);
+        GameObject spell;
+
+        switch (spellType)
+        {
+            case SpellType.Normal:
+                spell = Instantiate(normalSpellPrefab, source.position, randRot);
+                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellInitialSpeed;
+                spell.GetComponent<SpellSeeker>().SetTarget(target);
+                spellsInFlight.Add(spell);
+                return;
+
+            case SpellType.Freeze:
+                spell = Instantiate(freezeSpellPrefab, source.position, randRot);
+                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellInitialSpeed;
+                spell.GetComponent<SpellSeeker>().SetTarget(target);
+                spellsInFlight.Add(spell);
+                return;
+        }
+    }
+
+    public void RemoveAllSpellsInFlight()
+    {
+        for (int i = 0; i < spellsInFlight.Count; i++)
+        {
+            Destroy(spellsInFlight[i]);            
+        }
+        spellsInFlight.Clear();
     }
 
 

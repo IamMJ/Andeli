@@ -117,8 +117,20 @@ public class WordBuilder : MonoBehaviour
     {
         if (sm.FireCurrentWordIfValid())
         {
+            //Create the standard spell 
+            if (!ab)
+            {
+                ab = FindObjectOfType<ArenaBuilder>();
+            }
+            GameObject enemy = ab.GetEnemiesInArena()[0];
+            sm.CreateSpell(transform, enemy.transform, SpellMaker.SpellType.Normal);
+
             foreach (var letter in lettersCollected)
             {
+                if (letter.GetLatentAbilityStatus() == false)
+                {
+                    continue;
+                }
                 if (!aleh)
                 {
                     ab = FindObjectOfType<ArenaBuilder>();
@@ -126,6 +138,7 @@ public class WordBuilder : MonoBehaviour
                 }
                 aleh.ApplyLetterEffectOnFiring(letter, gameObject);
             }
+
         }
 
     }
@@ -145,7 +158,6 @@ public class WordBuilder : MonoBehaviour
     public void IncreaseWordLengthBonus(int bonusAmount)
     {
         wordLengthBonus += bonusAmount;
-        Debug.Log($"word length bonus increased by {bonusAmount}. now at {wordLengthBonus}");
     }
 
     private void ResetWordLengthBonus()

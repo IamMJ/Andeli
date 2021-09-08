@@ -64,6 +64,12 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 break;
 
             case TrueLetter.Ability.Shiny:
+                if (callingWMM.GetComponent<PlayerInput>())  // This 'if' should find something unique to a player
+                {
+                    GameObject[] enemies = ab.GetEnemiesInArena();
+                    callingWMM.GetComponent<SpellMaker>().CreateSpell(
+                        callingWMM.transform, enemies[0].transform, SpellMaker.SpellType.Normal); 
+                }
                 break;
 
             case TrueLetter.Ability.Frozen:
@@ -72,6 +78,8 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 if (callingWMM.GetComponent<PlayerInput>())  // This 'if' should find something unique to a player
                 {
                     GameObject[] enemies = ab.GetEnemiesInArena();
+                    callingWMM.GetComponent<SpellMaker>().CreateSpell(
+                        callingWMM.transform, enemies[0].transform, SpellMaker.SpellType.Freeze);
                     foreach (var enemy in enemies)
                     {
                         enemy.GetComponent<SpeedKeeper>()?.FreezeWordMaker(freezePower);
