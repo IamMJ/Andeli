@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5838d227861d5c34e97b267f33da6cb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  letterTilePrefab: {fileID: 2098827157649805612, guid: 971618b64e8d81b49987f65df88568d5, type: 3}
   trueLetters:
   - {fileID: 11400000, guid: 94a4b0e5877c29746938dd599cb31729, type: 2}
   - {fileID: 11400000, guid: 734a7db1854c48842896ae20aa367e90, type: 2}
@@ -71,8 +70,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dbd28575e835c3b488a27d9186e5990c, type: 2}
   - {fileID: 11400000, guid: 7323ef7c20aa66343ae7c3317f6e426b, type: 2}
   - {fileID: 11400000, guid: 33308c3530a258440aee129ad88dd0b3, type: 2}
-  nextTileDropPosition: {x: 0, y: 0}
-  previousTileDropPosition: {x: 0, y: 0}
-  randomPosition: {x: 0, y: 0}
-  isRandomPositionBeingGenerated: 0
-  isNextTileReadyToBeDropped: 0
+  letterTilePrefab: {fileID: 2098827157649805612, guid: 971618b64e8d81b49987f65df88568d5, type: 3}
+  droppedLetterPrefab: {fileID: 5576165444292234362, guid: 558452e520241194493978860eaa050e, type: 3}
+  consonants: []
+  vowels: []
+  letterTilesOnBoard: []

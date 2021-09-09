@@ -14,23 +14,56 @@ public class LetterTile : MonoBehaviour
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;
+    LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
+
+    //param
+    float fallSpeed = 4.0f;
 
     //state
     public float LifetimeRemaining { get; private set; }
     float factor;
     bool isLatentAbilityActivated = false;
+    float remainingFallDistance;
+    bool isFalling = true;
 
 
     private void Start()
     {
+        fallSpeed += UnityEngine.Random.Range(-1f, 1f);
         LifetimeRemaining = StartingLifetime;
+        gameObject.layer = 0;
+        sr.sortingLayerName = "Actors";
+        sr.sortingOrder = 9;
+        tmp.sortingLayerID = sr.sortingLayerID;
+        tmp.sortingOrder = sr.sortingOrder + 1;
     }
 
     private void Update()
     {
+        if (isFalling)
+        {
+            float amount = fallSpeed * Time.deltaTime;
+            transform.position -= Vector3.up * amount;
+            remainingFallDistance -= amount;
+            if (remainingFallDistance <= 0)
+            {
+                isFalling = false;
+                gameObject.layer = 9;
+                sr.sortingLayerName = "Letters";
+                sr.sortingOrder = 0;
+                tmp.sortingLayerID = sr.sortingLayerID;
+                tmp.sortingOrder = sr.sortingOrder + 1;
+                if (assignedShadow)
+                {
+                    assignedShadow.RemoveShadow();
+                }
+            }
+            return;
+        }
+
         LifetimeRemaining -= Time.deltaTime;
-        
+
         if (LifetimeRemaining <= 0.5f * StartingLifetime)
         {
             factor = LifetimeRemaining / (0.5f * StartingLifetime);
@@ -42,6 +75,7 @@ public class LetterTile : MonoBehaviour
             ReknitGridGraph();
             Destroy(gameObject);
         }
+               
     }
 
     public void ReknitGridGraph()
@@ -91,4 +125,15 @@ public class LetterTile : MonoBehaviour
     {
         isLatentAbilityActivated = newStatus;
     }
+
+    public void SetFallDistance(float amount)
+    {
+        remainingFallDistance = amount;
+    }
+
+    public void AssignShadow(LetterTileDropShadow shadow)
+    {
+        assignedShadow = shadow;
+    }
+
 }

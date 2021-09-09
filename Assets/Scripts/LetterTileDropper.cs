@@ -7,55 +7,53 @@ using System.Threading.Tasks;
 
 public class LetterTileDropper : MonoBehaviour
 {
-    [SerializeField] GameObject letterTilePrefab = null;
+
     [SerializeField] TrueLetter[] trueLetters = null;
+    [SerializeField] GameObject letterTilePrefab = null;
+    [SerializeField] GameObject droppedLetterPrefab = null;
 
     public List<TrueLetter> consonants = new List<TrueLetter>();
     public List<TrueLetter> vowels = new List<TrueLetter>();
     WordValidater wv;
-    GameObject[] wordMakers;
     ArenaBuilder ab;
-    SpeedKeeper sk;
     int layerMask_Impassable = 1 << 13;
     public List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
+    List<Vector2> dropLocations = new List<Vector2>();
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
-    float timeBetweenDrops = 1f;
-    float universalMinDistanceToWordMaker = 4f;
-    float minDistanceBetweenLetters = 2f;
-    int layerMask_Letter = 1 << 9;
-    public int consonantsBetweenVowels = 2;
+    int numberOfLettersToDropPerWave = 10;
+    float minDistanceBetweenLetters = 1.5f;
+    int consonantsBetweenVowels = 1;
+    float averageLifetimeOfLettersInWave = 20f;
+    Vector2 fallVector = new Vector2(0, 10f);
 
     //state
-    public int dropsSinceLastVowel = 0;
-    float timeForNextDrop;
-    public int currentProbabilityCount_Consonants = 0;
-    public int currentProbabilityCount_Vowels = 0;
+    int dropsSinceLastVowel = 0;
+    int currentProbabilityCount_Consonants = 0;
+    int currentProbabilityCount_Vowels = 0;
+    float timeForNextWave;
+
     public bool doesBoardHaveLettersAvailable { get; private set; } = true;
-    [SerializeField] Vector2 nextTileDropPosition = Vector2.zero;
-    [SerializeField] Vector2 previousTileDropPosition = Vector2.zero;
-    [SerializeField] Vector2 randomPosition = Vector2.zero;
-    [SerializeField] bool isRandomPositionBeingGenerated = false;
-    [SerializeField] bool isNextTileReadyToBeDropped = false;
 
-    bool isRandomPositionTooNearWordMakers = false;
-    bool isRandomPositionTooNearOtherLetters = false;
+    Vector2 randomPosition = Vector2.zero;
 
+    #region Startup
     private void Start()
     {
         // Rather than starting will all 26 True Letters, probably should pull this from the player every time an Arena is built
         // trueLetters = GetPlayersTrueLetters();
+
         wv = FindObjectOfType<WordValidater>();
-        sk = FindObjectOfType<SpeedKeeper>();
         ab = FindObjectOfType<ArenaBuilder>();
-        wordMakers = GameObject.FindGameObjectsWithTag("Wordmaker");
-        timeForNextDrop = Time.time + timeBetweenDrops;
+
         SeparateVowelsFromConsonants();
         GenerateProbabilityStarts();
+        CreateLetterDropLocations();
+        DropLettersAtDropLocations();
     }
-
+ 
     private void SeparateVowelsFromConsonants()
     {
         foreach(var tl in trueLetters)
@@ -87,27 +85,107 @@ public class LetterTileDropper : MonoBehaviour
         }
     }
 
+    #endregion
+
     private void Update()
     {
-        if (!wv.GetPreppedStatus()) { return; }
-        if (!isRandomPositionBeingGenerated && (nextTileDropPosition - previousTileDropPosition).magnitude < 0.1f)
+        if (!wv.GetPreppedStatus()) { return; }        
+       
+        if (Time.time >= timeForNextWave)
         {
-            StartCoroutine(UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine());
-            isRandomPositionBeingGenerated = true;
+            CreateLetterDropLocations();
+            DropLettersAtDropLocations();
         }
-        if (isNextTileReadyToBeDropped && Time.time >= timeForNextDrop)
-        {
-            DropLetterTile();
-            timeForNextDrop = Time.time + timeBetweenDrops;
-            isNextTileReadyToBeDropped = false;
-            previousTileDropPosition = nextTileDropPosition;
-        }
-
     }
 
-    private void DropLetterTile()
+    private void CreateLetterDropLocations()
     {
-        GameObject newTile = Instantiate(letterTilePrefab, nextTileDropPosition, Quaternion.identity) as GameObject;
+        for (int i = 0; i < numberOfLettersToDropPerWave; i++)
+        {
+            dropLocations.Add(GetRandomPositionInsideArenaButAwayFromOtherDropLocations(i));
+        }
+    }
+
+    private void DropLettersAtDropLocations()
+    {
+        timeForNextWave = Time.time + averageLifetimeOfLettersInWave;
+        foreach (var dropLocation in dropLocations)
+        {
+            DropLetterTile(dropLocation);
+        }
+        dropLocations.Clear();      
+        
+    }
+
+    #region Tiledrop Helpers
+    private Vector2 GetRandomPositionInsideArenaButAwayFromOtherDropLocations(int currentDropLocationIndex)
+    {
+        int attempts = 0;
+        bool isTooNearOtherLetter = false;
+        bool isAnImpassablePosition = false;
+        if (!ab)
+        {
+            ab = FindObjectOfType<ArenaBuilder>();
+        }
+        do
+        {
+            randomPosition = ab.CreateRandomPointWithinArena();
+            attempts++;
+            if (attempts > 50)
+            {
+                Debug.Log("too many attempts - break");
+                break;
+            }
+
+            isTooNearOtherLetter = CheckRandomPositionAgainstOtherDropLocations(currentDropLocationIndex, randomPosition);
+            isAnImpassablePosition = CheckRandomPositionAgainstImpassableTerrain(randomPosition);
+        }
+        while (isTooNearOtherLetter || isAnImpassablePosition);
+        return randomPosition;
+    }
+
+    /// <summary>
+    /// This returns 'true' if the testPosition is inside of the MinDistanceBetweenLetters from a single drop
+    /// location before it in the array. Returns 'false' if outside the MinDistanceBetweenLetters
+    /// </summary>
+    /// <param name="currentDropLocationIndex"></param>
+    /// <param name="testPos"></param>
+    /// <returns></returns>
+    private bool CheckRandomPositionAgainstOtherDropLocations(int currentDropLocationIndex, Vector2 testPos)
+    {
+        bool isOutsideOfMinDistance = false;
+
+        for (int i = 0; i < currentDropLocationIndex; i++)
+        {
+            if ((testPos - dropLocations[i]).magnitude <= minDistanceBetweenLetters)
+            {
+                isOutsideOfMinDistance = true;
+                break;
+            }
+            else
+            {
+                continue;
+            }
+        }
+        return isOutsideOfMinDistance;
+    }
+    private bool CheckRandomPositionAgainstImpassableTerrain(Vector2 randomPos)
+    {
+        var coll = Physics2D.OverlapCircle(randomPos, 0.05f, layerMask_Impassable);
+        if (coll)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    private void DropLetterTile(Vector2 dropPosition)
+    {
+        GameObject dropShadow = Instantiate(droppedLetterPrefab, dropPosition, Quaternion.identity);
+
+        GameObject newTile = Instantiate(letterTilePrefab, dropPosition + fallVector, Quaternion.identity) as GameObject;
         TrueLetter randomLetter;
         if (dropsSinceLastVowel >= consonantsBetweenVowels)
         {
@@ -124,110 +202,139 @@ public class LetterTileDropper : MonoBehaviour
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
         letterTile.Ability = randomLetter.GetAbility();
-        letterTile.StartingLifetime = 10f + UnityEngine.Random.Range(-2f, 2f);
+        letterTile.StartingLifetime = averageLifetimeOfLettersInWave + UnityEngine.Random.Range(-2f, 2f);
+        letterTile.SetFallDistance(fallVector.magnitude);
         letterTile.SetLetterTileDropper(this);
+        letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
         AddLetterToSpawnedLetterList(letterTile);
 
     }
 
-    private Vector2 GetRandomPositionOutsideOfMinRangeAndInsideArena()
+    #endregion
+
+    //private Vector2 GetRandomPositionOutsideOfMinRangeAndInsideArena()
+    //{
+    //    if (!ab)
+    //    {
+    //        ab = FindObjectOfType<ArenaBuilder>();
+    //    }
+    //    Vector2 randomPos;
+    //    int attempts = 0;
+    //    do
+    //    {
+    //        randomPos = ab.CreateRandomPointWithinArena();
+    //        attempts++;
+    //        if (attempts > 50)
+    //        {
+    //            break;
+    //        }
+    //    }
+    //    while (!VerifyPositionIsNotNearWordMakers(randomPos) || !VerifyPositionIsNotNearLetters(randomPos));
+    //    randomPos = GridHelper.SnapToGrid(randomPos, 1);
+    //    return randomPos;
+    //}
+
+    //IEnumerator UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine()
+    //{
+
+    //    if (!ab)
+    //    {
+    //        ab = FindObjectOfType<ArenaBuilder>();
+    //    }
+    //    int attempts = 0;
+    //    do
+    //    {
+    //        isRandomPositionTooNearOtherLetters = true;
+    //        isRandomPositionTooNearWordMakers = true;
+    //        randomPosition = ab.CreateRandomPointWithinArena();
+
+    //        attempts++;
+    //        if (attempts > 50)
+    //        {
+    //            break;
+    //        }
+    //        isRandomPositionTooNearOtherLetters = !VerifyPositionIsNotNearLetters(randomPosition);
+    //        isRandomPositionTooNearWordMakers = !VerifyPositionIsNotNearWordMakers(randomPosition);
+
+    //        yield return new WaitForEndOfFrame();
+    //    }
+    //    while (VerifyPositionIsNotNearWordMakers(randomPosition) || VerifyPositionIsNotNearLetters(randomPosition) || VerifyPositionIsReachable(randomPosition));
+    //    randomPosition = GridHelper.SnapToGrid(randomPosition, 1);
+    //    nextTileDropPosition = randomPosition;
+    //    isRandomPositionBeingGenerated = false;
+    //    isNextTileReadyToBeDropped = true;
+    //}
+
+    //private bool VerifyPositionIsNotNearWordMakers(Vector2 randomPos)
+    //{
+    //    if (!sk)
+    //    {
+    //        sk = FindObjectOfType<SpeedKeeper>();
+    //    }
+    //    float currentMinDistance = Mathf.RoundToInt(sk.CurrentSpeed);
+    //    currentMinDistance = Mathf.Clamp(currentMinDistance, universalMinDistanceToWordMaker, 10f);
+    //    bool isOutsideMinRange = false;
+    //    foreach (var wordmaker in wordMakers)
+    //    {
+    //        if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < currentMinDistance)
+    //        {
+    //            isOutsideMinRange = true;
+    //            break;
+    //        }
+    //    }
+    //    return isOutsideMinRange;
+    //}
+    //private bool VerifyPositionIsNotNearLetters(Vector2 randomPos)
+    //{
+    //    var coll = Physics2D.OverlapCircle(randomPos, minDistanceBetweenLetters, layerMask_Letter);
+    //    if (coll)
+    //    {
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
+
+    #region Public Methods
+    public void RemoveLetterFromSpawnedLetterList(LetterTile letterTileToRemove)
     {
-        if (!ab)
+        OnLetterListModified?.Invoke(letterTileToRemove, false);
+        letterTilesOnBoard.Remove(letterTileToRemove);
+        if (letterTilesOnBoard.Count == 0)
         {
-            ab = FindObjectOfType<ArenaBuilder>();
+            doesBoardHaveLettersAvailable = false;
         }
-        Vector2 randomPos;
-        int attempts = 0;
-        do
+    }
+
+    public void DestroyAllLetters()
+    {
+        for (int i = 0; i < letterTilesOnBoard.Count; i++)
         {
-            randomPos = ab.CreateRandomPointWithinArena();
-            attempts++;
-            if (attempts > 50)
+            Destroy(letterTilesOnBoard[i].gameObject);
+        }
+        letterTilesOnBoard.Clear();
+    }
+
+    public List<LetterTile> FindAllReachableLetterTiles(Vector2 originPosition, float speed)
+    {
+        List<LetterTile> letterTilesInRange = new List<LetterTile>();
+
+        foreach (var letterTile in letterTilesOnBoard)
+        {
+            float dist = (letterTile.transform.position - (Vector3)originPosition).magnitude;
+            float timeRequiredToReach = dist * 1.5f / speed;
+            if (timeRequiredToReach <= letterTile.LifetimeRemaining)
             {
-                break;
+                letterTilesInRange.Add(letterTile);
             }
         }
-        while (!VerifyPositionIsNotNearWordMakers(randomPos) || !VerifyPositionIsNotNearLetters(randomPos));
-        randomPos = GridHelper.SnapToGrid(randomPos, 1);
-        return randomPos;
+        return letterTilesInRange;
     }
 
-    IEnumerator UpdateRandomPositionOutsideOfMinRangeAndInsideArena_Coroutine()
-    {
-
-        if (!ab)
-        {
-            ab = FindObjectOfType<ArenaBuilder>();
-        }
-        int attempts = 0;
-        do
-        {
-            isRandomPositionTooNearOtherLetters = true;
-            isRandomPositionTooNearWordMakers = true;
-            randomPosition = ab.CreateRandomPointWithinArena();
-
-            attempts++;
-            if (attempts > 50)
-            {
-                break;
-            }
-            isRandomPositionTooNearOtherLetters = !VerifyPositionIsNotNearLetters(randomPosition);
-            isRandomPositionTooNearWordMakers = !VerifyPositionIsNotNearWordMakers(randomPosition);
-            
-            yield return new WaitForEndOfFrame();
-        }
-        while (VerifyPositionIsNotNearWordMakers(randomPosition) || VerifyPositionIsNotNearLetters(randomPosition) || VerifyPositionIsReachable(randomPosition));
-        randomPosition = GridHelper.SnapToGrid(randomPosition, 1);
-        nextTileDropPosition = randomPosition;
-        isRandomPositionBeingGenerated = false;
-        isNextTileReadyToBeDropped = true;
-    }
-
-    private bool VerifyPositionIsNotNearWordMakers(Vector2 randomPos)
-    {
-        if (!sk)
-        {
-            sk = FindObjectOfType<SpeedKeeper>();
-        }
-        float currentMinDistance = Mathf.RoundToInt(sk.CurrentSpeed);
-        currentMinDistance = Mathf.Clamp(currentMinDistance, universalMinDistanceToWordMaker, 10f);
-        bool isOutsideMinRange = false;
-        foreach (var wordmaker in wordMakers)
-        {
-            if ((wordmaker.transform.position - (Vector3)randomPos).magnitude < currentMinDistance)
-            {
-                isOutsideMinRange = true;
-                break;
-            }
-        }
-        return isOutsideMinRange;
-    }
-    private bool VerifyPositionIsNotNearLetters(Vector2 randomPos)
-    {
-        var coll = Physics2D.OverlapCircle(randomPos, minDistanceBetweenLetters, layerMask_Letter);
-        if (coll)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    private bool VerifyPositionIsReachable(Vector2 randomPos)
-    {
-        var coll = Physics2D.OverlapCircle(randomPos, 0.05f, layerMask_Impassable);
-        if (coll)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
+    #endregion
     private TrueLetter ReturnWeightedRandomTrueLetter(bool shouldBeConsonant)
     {
         if (shouldBeConsonant)
@@ -264,40 +371,8 @@ public class LetterTileDropper : MonoBehaviour
         doesBoardHaveLettersAvailable = true;
     }
 
-    public void RemoveLetterFromSpawnedLetterList(LetterTile letterTileToRemove)
-    {
-        OnLetterListModified?.Invoke(letterTileToRemove, false);
-        letterTilesOnBoard.Remove(letterTileToRemove);
-        if (letterTilesOnBoard.Count == 0)
-        {
-            doesBoardHaveLettersAvailable = false;
-        }
-    }
 
-    public void DestroyAllLetters()
-    {
-        for (int i = 0; i < letterTilesOnBoard.Count; i++)
-        {
-            Destroy(letterTilesOnBoard[i].gameObject);
-        }
-        letterTilesOnBoard.Clear();
-    }
 
-    public List<LetterTile> FindAllReachableLetterTiles(Vector2 originPosition, float speed)
-    {
-        List<LetterTile> letterTilesInRange = new List<LetterTile>();
-
-        foreach (var letterTile in letterTilesOnBoard)
-        {
-            float dist = (letterTile.transform.position - (Vector3)originPosition).magnitude;
-            float timeRequiredToReach = dist * 1.5f / speed;
-            if (timeRequiredToReach <= letterTile.LifetimeRemaining)
-            {
-                letterTilesInRange.Add(letterTile);
-            }
-        }
-        return letterTilesInRange;
-    }
 
     private void OnDestroy()
     {
