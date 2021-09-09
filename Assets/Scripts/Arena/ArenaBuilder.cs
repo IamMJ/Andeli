@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class ArenaBuilder : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject wallPrefab = null;
     [SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
+    CinemachineVirtualCamera cvc;
     GameController gc;
     VictoryMeter vm;
     GameObject player;
@@ -19,10 +21,10 @@ public class ArenaBuilder : MonoBehaviour
     int layerMask_Passable = 1 << 14;
 
     //parameters
-    int minX = -9;
+    int minX = -7;
     int minY = -7;
-    int maxX = 9;
-    int maxY = 10;
+    int maxX = 7;
+    int maxY = 7;
     float checkRadius = 0.01f;
 
     //state
@@ -120,11 +122,13 @@ public class ArenaBuilder : MonoBehaviour
     {
         letterTileDropper = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity) as GameObject;
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
-        camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
-        CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
-       
-        cameraMouse1.SetAnchor(arenaStarter);
-        cameraMouse1.SetPlayer(gc.GetPlayer());
+        //camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
+        //CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
+
+        //cameraMouse1.SetAnchor(arenaStarter);
+        //cameraMouse1.SetPlayer(gc.GetPlayer());
+        cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
+        cvc.Follow = arenaStarter.transform;
 
         for (int i = 0; i < enemyPrefabs.Length; i++)
         {
@@ -173,6 +177,7 @@ public class ArenaBuilder : MonoBehaviour
         gc.isInArena = false;
         uid.EnterOverworld();
         Destroy(camMouse);
+        cvc.Follow = player.transform;
         for (int i = 0; i < enemies.Length; i++)
         {
             Destroy(enemies[i]);
