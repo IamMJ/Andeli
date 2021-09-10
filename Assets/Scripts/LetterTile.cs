@@ -16,6 +16,7 @@ public class LetterTile : MonoBehaviour
     [SerializeField] TextMeshPro tmp = null;
     LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
+    GraphUpdateScene gus;
 
     //param
     float fallSpeed = 4.0f;
@@ -30,6 +31,7 @@ public class LetterTile : MonoBehaviour
 
     private void Start()
     {
+        gus = GetComponent<GraphUpdateScene>();
         fallSpeed += UnityEngine.Random.Range(-1f, 1f);
         LifetimeRemaining = StartingLifetime;
         gameObject.layer = 0;
@@ -37,6 +39,7 @@ public class LetterTile : MonoBehaviour
         sr.sortingOrder = 9;
         tmp.sortingLayerID = sr.sortingLayerID;
         tmp.sortingOrder = sr.sortingOrder + 1;
+        
     }
 
     private void Update()
@@ -54,6 +57,7 @@ public class LetterTile : MonoBehaviour
                 sr.sortingOrder = 0;
                 tmp.sortingLayerID = sr.sortingLayerID;
                 tmp.sortingOrder = sr.sortingOrder + 1;
+                UnknitGridGraph();
                 if (assignedShadow)
                 {
                     assignedShadow.RemoveShadow();
@@ -78,9 +82,14 @@ public class LetterTile : MonoBehaviour
                
     }
 
+    public void UnknitGridGraph()
+    {
+        gus.setWalkability = false;
+        gus.Apply();
+    }
+
     public void ReknitGridGraph()
     {
-        GraphUpdateScene gus = GetComponent<GraphUpdateScene>();
         gus.setWalkability = true;
         gus.Apply();
     }
@@ -114,6 +123,7 @@ public class LetterTile : MonoBehaviour
     private void OnDestroy()
     {
         letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
+        //ReknitGridGraph();
     }
 
     public bool GetLatentAbilityStatus()

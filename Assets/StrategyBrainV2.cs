@@ -15,7 +15,7 @@ public class StrategyBrainV2 : MonoBehaviour
     //init
     AILerp ail;
     Seeker seeker;
-    MoveBrain_NPC mb;
+    WordMakerMovement wmm;
     WordBrain_NPC wb;
     ArenaBuilder ab;
 
@@ -40,7 +40,7 @@ public class StrategyBrainV2 : MonoBehaviour
     {
         ail = GetComponent<AILerp>();
         seeker = GetComponent<Seeker>();
-        mb = GetComponent<MoveBrain_NPC>();
+        wmm = GetComponent<WordMakerMovement>();
         wb = GetComponent<WordBrain_NPC>();
         wb.OnNewTargetLetterTile += SetNewTargetLetterTileAsStrategicDestination;
         ab = FindObjectOfType<ArenaBuilder>();
@@ -127,9 +127,9 @@ public class StrategyBrainV2 : MonoBehaviour
             }
         }
 
-        mb.TacticalDestination = path.vectorPath[currentWaypoint];
+        wmm.TacticalDestination = path.vectorPath[currentWaypoint];
 
-        Debug.DrawLine(transform.position, mb.TacticalDestination, Color.red);
+        Debug.DrawLine(transform.position, wmm.TacticalDestination, Color.red);
 
     }
     private void HandleCompletedPath(Path p)

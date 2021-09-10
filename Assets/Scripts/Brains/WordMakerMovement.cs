@@ -2,15 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Pathfinding;
 [RequireComponent(typeof(SpeedKeeper))]
-public abstract class WordMakerMovement : MonoBehaviour, IFollowable
+public class WordMakerMovement : MonoBehaviour, IFollowable
 {
+    /// <summary>
+    /// This class receives Tactical Destination updates from somewhere else, then moves the WordMaker to get there.
+    /// It handles the associated animations. It also prevents the WordMaker
+    /// from entering invalid terrain.
+    /// </summary>
+
+    WordBrain_NPC wb;
+    Animator anim;
     public Action OnLeaderMoved;
     protected SpeedKeeper sk;
     [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
     [SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
     [SerializeField] protected GameObject dustcloudPrefab = null;
+    public Vector2 TacticalDestination;
+    GraphUpdateScene gus;
 
     protected int layerMask_Impassable = 1 << 13;
     protected int layerMask_Passable = 1 << 14;
@@ -28,16 +39,84 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
     protected virtual void Start()
     {
         sk = GetComponent<SpeedKeeper>();
+        gus = GetComponent<GraphUpdateScene>();
         gc = FindObjectOfType<GameController>();
         GameObject reknitterGO = Instantiate(reknitterPrefab);
         reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
+        wb = GetComponent<WordBrain_NPC>();
+        truePosition = transform.position;
+        anim = GetComponentInChildren<Animator>();
     }
+
+    // Update is called once per frame
+
+    #region Handle Input + Animation
+    void Update()
+    {
+        UpdateRawDesMove();
+        ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid();
+        //CardinalizeDesiredMovement();
+        HandleAnimation();
+    }
+
+    private void UpdateRawDesMove()
+    {
+        rawDesMove = ((Vector3)TacticalDestination - transform.position);
+    }
+
+    private void ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid()
+    {
+        if (Mathf.Abs(transform.position.x % 1) > 0.1f || Mathf.Abs(transform.position.y % 1) > 0.1f)
+        {
+            previousMove = validDesMove;
+        }
+        else
+        {
+            validDesMove = CardinalizeDesiredMovement(rawDesMove);
+            //GetAlternativeValidDesMoveIfReversing();
+            Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
+            //rawDesMove = validDesMove;
+        }
+    }
+
+    private void HandleAnimation()
+    {
+        anim.SetFloat("Horizontal", validDesMove.x);
+        anim.SetFloat("Vertical", validDesMove.y);
+    }
+
+    #endregion
+
+    #region Handle Movement
+    private void FixedUpdate()
+    {
+        UpdateTruePosition();
+        SnapDepictedPositionToTruePositionViaGrid();
+    }
+
+    private void UpdateTruePosition()
+    {
+        truePosition += validDesMove * sk.CurrentSpeed * Time.deltaTime;
+    }
+
+    private void SnapDepictedPositionToTruePositionViaGrid()
+    {
+        Vector2 oldPosition = transform.position;
+        transform.position = GridHelper.SnapToGrid(truePosition, 8);
+        float moveAmount = (oldPosition - (Vector2)transform.position).magnitude;
+        if (moveAmount > 0.1f)
+        {
+            PushWordMakerMovement();
+            DropBreadcrumb();
+        }
+
+    }
+    #endregion
 
     protected virtual void PushWordMakerMovement()
     {
         OnLeaderMoved?.Invoke();
     }
-
     
     protected void CardinalizeDesiredMovement()
     {
@@ -108,34 +187,6 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
 
     }
 
-    protected bool CheckThatDesiredMoveIsntReversal(Vector2 desiredMove, Vector2 previousMove)
-    {
-        if ((desiredMove - previousMove).magnitude <= Mathf.Epsilon)
-        {
-            return false;
-        }
-        else return true;
-    }
-
-    protected Vector2 ApplyGraceToDesiredMovement(Vector2 desiredMove, Vector2 currentMove, Vector2 currentPosition, float grace)
-    {
-        if ((desiredMove - currentMove).magnitude <= Mathf.Epsilon) { return Vector3.zero; } // no grace if not changing direction
-        Vector2 positionAdjustment;
-        Vector2 remDist = GetDistFromPreviousGridSnap();
-        if (remDist.magnitude <= grace)
-        {
-            positionAdjustment = desiredMove * Mathf.Abs(remDist.x + remDist.y) - remDist;
-            Debug.Log($"Grace extended. was at {currentPosition.x}/{currentPosition.y} heading {currentMove}. remDist is {remDist}. adjusting by {positionAdjustment.x}/{positionAdjustment.y} to head {desiredMove}");
-            return positionAdjustment;
-        }
-        else
-        {
-            Debug.Log("no grace");
-            return Vector2.zero;
-        }
-
-    }
-
     protected Vector2 SnapToAxis(Vector2 inputPos, bool trueIfXAxis)
     {
         Vector2 output = inputPos;
@@ -156,38 +207,38 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         return output;
     }
 
-    protected void GetAlternativeValidDesMoveIfReversing()
-    {
-        // compare ValidDesMove to previous Move. 
-        //If perfectly opposite, then modify ValidDesMove either left or right randomly.
-        int layerMask_ImpassableTile = layerMask_Impassable | layerMask_Tile;
-        if ((validDesMove + previousMove).magnitude <= Mathf.Epsilon)
-        {
-            //Moves are inverts of each to equal zero.
-            int rand = (UnityEngine.Random.Range(0, 2) * 2 - 1);
-            Vector2 oldMove = validDesMove;
-            validDesMove = new Vector2(validDesMove.y, validDesMove.x) * rand;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.position + (Vector3)validDesMove, 1.0f, layerMask_ImpassableTile);
-            if (hit)
-            {
-                validDesMove = validDesMove * rand; // multiply by the same rand to reverse the "turn"
-            }
-            //Debug.Log($"reversed: old {oldMove} into new: {validDesMove}");
-        }
+    //protected void GetAlternativeValidDesMoveIfReversing()
+    //{
+    //    // compare ValidDesMove to previous Move. 
+    //    //If perfectly opposite, then modify ValidDesMove either left or right randomly.
+    //    int layerMask_ImpassableTile = layerMask_Impassable | layerMask_Tile;
+    //    if ((validDesMove + previousMove).magnitude <= Mathf.Epsilon)
+    //    {
+    //        //Moves are inverts of each to equal zero.
+    //        int rand = (UnityEngine.Random.Range(0, 2) * 2 - 1);
+    //        Vector2 oldMove = validDesMove;
+    //        validDesMove = new Vector2(validDesMove.y, validDesMove.x) * rand;
+    //        RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.position + (Vector3)validDesMove, 1.0f, layerMask_ImpassableTile);
+    //        if (hit)
+    //        {
+    //            validDesMove = validDesMove * rand; // multiply by the same rand to reverse the "turn"
+    //        }
+    //        //Debug.Log($"reversed: old {oldMove} into new: {validDesMove}");
+    //    }
 
-    }
+    //}
 
-    protected void GetAlternativeValidDesMoveIfEnteringImpassable()
-    {
-        int layerMask_ImpassableTile = layerMask_Impassable | layerMask_Tile;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, 
-            transform.position + (Vector3)validDesMove, 1.0f, layerMask_ImpassableTile);
-        if (hit)
-        {
-            int rand = (UnityEngine.Random.Range(0, 2) * 2 - 1);
-            validDesMove = validDesMove * rand; // multiply by the same rand to reverse the "turn"
-        }
-    }
+    //protected void GetAlternativeValidDesMoveIfEnteringImpassable()
+    //{
+    //    int layerMask_ImpassableTile = layerMask_Impassable | layerMask_Tile;
+    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, 
+    //        transform.position + (Vector3)validDesMove, 1.0f, layerMask_ImpassableTile);
+    //    if (hit)
+    //    {
+    //        int rand = (UnityEngine.Random.Range(0, 2) * 2 - 1);
+    //        validDesMove = validDesMove * rand; // multiply by the same rand to reverse the "turn"
+    //    }
+    //}
     protected Vector2 GetDistToNextGridSnap(Vector2 desiredMove, Vector2 currentPosition)
     {
         float value = 0;
@@ -291,31 +342,8 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         }
         return direction;
     }
-    public void DropBreadcrumb()
-    {
-        breadcrumbs.Add(GridHelper.SnapToGrid(transform.position, 8));
-        if (breadcrumbs.Count > 8)
-        {
-            breadcrumbs.RemoveAt(0);
-        }
-    }
 
-    public Vector2 GetOldestBreadcrumb()
-    {
-        return breadcrumbs[0];
-    }
 
-    public void RemoveInvalidBreadcrumbs(int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-            if (i >= breadcrumbs.Count)
-            {
-                return;
-            }
-            breadcrumbs.RemoveAt(i);
-        }
-    }
 
     protected void OnCollisionEnter2D(Collision2D collision)
     {
@@ -353,5 +381,48 @@ public abstract class WordMakerMovement : MonoBehaviour, IFollowable
         }
     }
 
+    #region Breadcrumbs
+    public void DropBreadcrumb()
+    {
+        breadcrumbs.Add(GridHelper.SnapToGrid(transform.position, 8));
+        if (breadcrumbs.Count > 8)
+        {
+            breadcrumbs.RemoveAt(0);
+        }
+    }
+
+    public Vector2 GetOldestBreadcrumb()
+    {
+        if (breadcrumbs.Count == 0)
+        {
+            return transform.position;
+        }
+        else
+        {
+            return breadcrumbs[0];
+        }
+
+    }
+    public void RemoveInvalidBreadcrumbs(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (i >= breadcrumbs.Count)
+            {
+                return;
+            }
+            breadcrumbs.RemoveAt(i);
+        }
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public Vector2 GetValidDesMove()
+    {
+        return validDesMove;
+    }
+    #endregion
 
 }

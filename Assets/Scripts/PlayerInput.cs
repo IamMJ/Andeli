@@ -4,274 +4,195 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Pathfinding;
-
-public class PlayerInput : WordMakerMovement
+[RequireComponent (typeof(WordMakerMovement), typeof(Seeker))]
+public class PlayerInput : MonoBehaviour
 {
     //init
     [SerializeField] GameObject moveArrowPrefab = null;
+    [SerializeField] GameObject strategicDestinationPrefab = null;
     DebugHelper dh;
-    Animator anim;
     GraphUpdateScene gus;
+    WordMakerMovement wmm;
+    Seeker seeker;
+    Path currentPath;
+    Touch currentTouch;
+    GameObject moveArrow;
+    Camera mc;
+    GameObject currentStrategicDestinationIcon;
+    int layerMask_Letter = 1 << 9;
+    LetterTile currentTargetedLetter;
+
+    //param
+    float nextWaypointDistance = 1;
 
     //state
     bool isMobile = false;
     bool isSnapped = false;
 
-    Touch currentTouch;
-    Vector2 startingTouchPosition;
+    bool reachedEndOfPath;
+    int currentWaypoint = 0;
+
+    Vector2 strategicDestination = Vector2.zero;
+
+
     bool isValidStartPosition = false;
-    GameObject moveArrow;
 
-    Vector2 possibleMove;
 
-    protected override void Start()
+     void Start()
     {
-        base.Start();
-        anim = GetComponent<Animator>();
+        wmm = GetComponent<WordMakerMovement>();
+        seeker = GetComponent<Seeker>();
         dh = FindObjectOfType<DebugHelper>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
-        startingTouchPosition = Vector2.zero;
-        gus = GetComponent<GraphUpdateScene>();
+        mc = Camera.main;
+
     }
 
     void Update()
     {
-        DetectIfSnapped();
         HandleTouchInput();
-        if (isMobile)
-        {
-            //HandleTouchInput();
-        }
-        else
-        {
-            HandleKeyboardInput();
-        }
-
-        validDesMove = CardinalizeDesiredMovement(rawDesMove);
-
-        UpdateAnimation();
+        HandleMouseInput();
+        PassTacticalDestinationToMoveBrain();
     }
 
-
-    #region Touch Input
     private void HandleTouchInput()
     { 
-        if (Input.touchCount == 0)
-        {
-            return;
-        }
-        if (Input.touchCount > 0)
+        if (Input.touchCount == 1)
         {
             currentTouch = Input.GetTouch(0);
             if (currentTouch.phase == TouchPhase.Began && !GridHelper.CheckIsTouchingWordSection(currentTouch.position))
             {
-                isValidStartPosition = true;
-                possibleMove = Vector2.zero;
-                startingTouchPosition = currentTouch.position;
-                ClearMoveArrows();
-                gc.SlowGameSpeed();
+                strategicDestination = GridHelper.SnapToGrid(currentTouch.position, 1);
+                // Should I check that the destination is valid/reachable?
+                MoveStrategicDestinationIcon();
+                seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath);
             }
-            //reset everything
+        }
+    }
 
-            if (currentTouch.phase == TouchPhase.Moved && isValidStartPosition == true)
+    private void HandleMouseInput()
+    {
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
+            strategicDestination = GridHelper.SnapToGrid(mousePos, 1);
+            // Should I check that the destination is valid/reachable?
+            MoveStrategicDestinationIcon();
+            ReknitLetterAtStrategicDestination();
+            Debug.DrawLine(transform.position, strategicDestination, Color.red, 1f);
+            seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath);
+        }
+    }
+
+    private void ReknitLetterAtStrategicDestination()
+    {
+        Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 0.4f, layerMask_Letter);
+        if (coll)
+        {
+            if (currentTargetedLetter)
             {
-                possibleMove = (currentTouch.position - startingTouchPosition);
+                currentTargetedLetter.UnknitGridGraph();
+            }
+            currentTargetedLetter = coll.GetComponent<LetterTile>();
+            currentTargetedLetter.ReknitGridGraph();
 
-                if (possibleMove.magnitude > UIParameters.MinTouchSensitivity)
+        }
+    }
+
+    private void MoveStrategicDestinationIcon()
+    {
+        if (currentStrategicDestinationIcon)
+        {
+            currentStrategicDestinationIcon.transform.position = strategicDestination;
+        }
+        else
+        {
+            currentStrategicDestinationIcon =
+                Instantiate(strategicDestinationPrefab, strategicDestination, Quaternion.identity);
+        }
+    }
+    private void HandleCompletedPath(Path newPath)
+    {
+        if (newPath.error)
+        {
+            Debug.Log($"Error: {newPath.errorLog}");
+        }
+        else
+        {
+            currentPath = newPath;
+            currentWaypoint = 0;
+            //Show footsteps from current pos along path to destination.
+        }
+
+    }
+
+    private void PassTacticalDestinationToMoveBrain()
+    {
+        if (currentPath == null) { return; }
+        // Check in a loop if we are close enough to the current waypoint to switch to the next one.
+        // We do this in a loop because many waypoints might be close to each other and we may reach
+        // several of them in the same frame.
+        reachedEndOfPath = false;
+        // The distance to the next waypoint in the path
+        float distanceToWaypoint;
+        while (true)
+        {
+            // If you want maximum performance you can check the squared distance instead to get rid of a
+            // square root calculation. But that is outside the scope of this tutorial.
+            distanceToWaypoint = Vector3.Distance(transform.position, currentPath.vectorPath[currentWaypoint]);
+            if (distanceToWaypoint < nextWaypointDistance)
+            {
+                // Check if there is another waypoint or if we have reached the end of the path
+                if (currentWaypoint + 1 < currentPath.vectorPath.Count)
                 {
-                    possibleMove = CardinalizeDesiredMovement(possibleMove);
-                    if (VerifyTouchMove(possibleMove))
-                    {
-                        ClearMoveArrows();
-                        DisplayPlannedMoveArrows();
-                        rawDesMove = possibleMove;
-                        if (Mathf.Abs(rawDesMove.x) > 0)
-                        {
-                            truePosition = SnapToAxis(truePosition, false);
-                        }
-                        if (Mathf.Abs(rawDesMove.y) > 0)
-                        {
-                            truePosition = SnapToAxis(truePosition, true);
-                        }
-                    }
-                    else
-                    {
-                        //Invalid due to something impassable.
-                    }
-
-
+                    currentWaypoint++;
+                }
+                else
+                {
+                    // Set a status variable to indicate that the agent has reached the end of the path.
+                    // You can use this to trigger some special code if your game requires that.
+                    reachedEndOfPath = true;
+                    break;
                 }
             }
-
-            if (currentTouch.phase == TouchPhase.Ended)
+            else
             {
-                gc.ResumeGameSpeed();
-                isValidStartPosition = false;
+                break;
             }
         }
-    }
 
-    /// <summary>
-    /// This will return 'true' if there is a clear path in desired move direction.
-    /// </summary>
-    /// <param name="desiredMove"></param>
-    /// <returns></returns>
-    private bool VerifyTouchMove(Vector2 desiredMove)
-    {
-        RaycastHit2D hit = Physics2D.Linecast(truePosition, truePosition + desiredMove, layerMask_Impassable);
-        if (hit)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+        wmm.TacticalDestination = currentPath.vectorPath[currentWaypoint];
 
-    #endregion
-
-    #region Computer Input
-    private void HandleKeyboardInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            gc.ResumeGameSpeed();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            ClearMoveArrows();
-            rawDesMove = new Vector2(0, 1);
-            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
-            //Debug.Log($"Now at {truePosition}");
-            truePosition = SnapToAxis(truePosition, true);
-            //DisplayPlannedMoveArrows();
-            //gc.PauseGame();
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            ClearMoveArrows();
-            rawDesMove = new Vector2(0, -1);
-            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
-            //Debug.Log($"Now at {truePosition}");
-            truePosition = SnapToAxis(truePosition, true);
-            //DisplayPlannedMoveArrows();
-            //gc.PauseGame();
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ClearMoveArrows();
-            rawDesMove = new Vector2(-1, 0);
-            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
-            //Debug.Log($"Now at {truePosition}");
-            truePosition = SnapToAxis(truePosition, false);
-            //DisplayPlannedMoveArrows();
-            //gc.PauseGame();
-            return;
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            ClearMoveArrows();
-            rawDesMove = new Vector2(1, 0);
-            //truePosition += ApplyGraceToDesiredMovement(rawDesMove, validDesMove, transform.position, 0.5f);
-            //Debug.Log($"Now at {truePosition}");
-            truePosition = SnapToAxis(truePosition, false);
-            //DisplayPlannedMoveArrows();
-            //gc.PauseGame();
-            return;
-        }
-
+        Debug.DrawLine(transform.position, wmm.TacticalDestination, Color.red);
 
     }
 
-    #endregion
-
-    private void DisplayPlannedMoveArrows()
-    {              
-        Vector2 arrowPos;
+    //private void DisplayPlannedMoveArrows()
+    //{              
+    //    Vector2 arrowPos;
                 
-        if (GridHelper.CheckIfSnappedToGrid(transform.position))
-        {
-            arrowPos = (Vector2)transform.position + rawDesMove;                    
-        }
-        else
-        {
-            Vector2 distRemaining = GetDistToNextGridSnap(validDesMove, transform.position);
-            arrowPos = (Vector2)transform.position + rawDesMove + distRemaining;
-            // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
+    //    if (GridHelper.CheckIfSnappedToGrid(transform.position))
+    //    {
+    //        arrowPos = (Vector2)transform.position + rawDesMove;                    
+    //    }
+    //    else
+    //    {
+    //        Vector2 distRemaining = GetDistToNextGridSnap(validDesMove, transform.position);
+    //        arrowPos = (Vector2)transform.position + rawDesMove + distRemaining;
+    //        // the validDesMove/2 in above line should really be a more complex calculation to get distance from player to middle of next tile.
 
-        }
+    //    }
 
-        arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
-        moveArrow = Instantiate(moveArrowPrefab, arrowPos, Quaternion.identity) as GameObject;
-        moveArrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(rawDesMove);          
+    //    arrowPos = GridHelper.SnapToGrid(arrowPos, 1);
+    //    moveArrow = Instantiate(moveArrowPrefab, arrowPos, Quaternion.identity) as GameObject;
+    //    moveArrow.GetComponent<MoveArrow>().Direction = QuantifyMoveDirection(rawDesMove);          
         
-    }
+    //}
 
     private void ClearMoveArrows()
     {
         Destroy(moveArrow);
-    }
-
-    #region Handle Movement
-    private void FixedUpdate()
-    {
-        UpdateTruePosition();
-        SnapDepictedPositionToTruePositionViaGrid();
-    }
-    private void DetectIfSnapped()
-    {
-        bool snapStatus = GridHelper.CheckIfSnappedToGrid(transform.position);
-        if (snapStatus && !isSnapped)
-        {
-            isSnapped = true;
-            validDesMove = rawDesMove;
-
-            HandleEntryExitIntoNewTilesForGridGraph();
-            Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
-            previousSnappedPosition = transform.position;
-            if (Input.touchCount == 0)  // Don't display move arrows while inputting touch movements.
-            {
-                DisplayPlannedMoveArrows();
-            }
-        }
-        if (!snapStatus)
-        {
-            isSnapped = false;
-        }
-
-    }
-    private void HandleEntryExitIntoNewTilesForGridGraph()
-    {
-        gus.Apply();
-    }
-
-    private void UpdateTruePosition()
-    {
-        truePosition += validDesMove * sk.CurrentSpeed * Time.deltaTime;
-    }
-
-    private void SnapDepictedPositionToTruePositionViaGrid()
-    {
-        Vector3 oldPosition = transform.position;
-        transform.position = GridHelper.SnapToGrid(truePosition, 8);
-        float moveAmount = (oldPosition - transform.position).magnitude;
-        if (moveAmount > Mathf.Epsilon)
-        {
-            PushWordMakerMovement();
-            DropBreadcrumb();
-        }
-    }
-
-    #endregion
-    private void UpdateAnimation()
-    {
-        anim.SetFloat("Horizontal", validDesMove.x);
-        anim.SetFloat("Vertical", validDesMove.y);
-    }
-    
+    } 
 
 }
