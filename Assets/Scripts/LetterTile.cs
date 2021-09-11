@@ -18,6 +18,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
     LetterTileDropper letterTileDropper;
     GraphUpdateScene gus;
     List<GameObject> claimants = new List<GameObject>();
+    Bounds bounds;
 
     //param
     float fallSpeed = 4.0f;
@@ -63,7 +64,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
                 {
                     assignedShadow.RemoveShadow();
                 }
-                UnknitGridGraph();
+                UnknitAllGridGraphs();
 
             }
             return;
@@ -84,19 +85,43 @@ public class LetterTile : MonoBehaviour, IGridModifier
                
     }
 
-    public void UnknitGridGraph() //int graphToUnknit)
+    public void UnknitAllGridGraphs() //int graphToUnknit)
     {
-        //guo.nnConstraint.graphMask = 1 << graphToUnknit;
         gus.modifyWalkability = true;
         gus.setWalkability = false;
         gus.Apply();
     }
-
-    public void ReknitGridGraph() //int graphToUnknit)
+    public void ReknitAllGridGraphs()
     {
         gus.modifyWalkability = true;
         gus.setWalkability = true;
         gus.Apply();
+    }
+    public void UnknitSpecificGridGraph(int graphIndexToUnknit)
+    {
+        UpdateBounds();
+        var guo = new GraphUpdateObject(bounds);
+        guo.modifyWalkability = true;
+        guo.setWalkability = false;
+        gus.modifyWalkability = true;
+        gus.setWalkability = false;
+        guo.nnConstraint.graphMask = 1 << graphIndexToUnknit;
+        AstarPath.active.UpdateGraphs(guo);
+        Debug.Log("Unknit specific");
+    }
+
+
+    public void ReknitSpecificGridGraph(int graphIndexToReknit)
+    {
+        UpdateBounds();
+        var guo = new GraphUpdateObject(bounds);
+        guo.modifyWalkability = true;
+        guo.setWalkability = true;
+        gus.modifyWalkability = true;
+        gus.setWalkability = true;
+        guo.nnConstraint.graphMask = 1 << graphIndexToReknit;
+        AstarPath.active.UpdateGraphs(guo);
+        Debug.Log("Reknit specific");
     }
 
     private void ToggleRenderers(bool shouldBeVisible)
@@ -137,7 +162,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
         {
             assignedShadow.RemoveShadow();
         }
-        ReknitGridGraph();
+        ReknitAllGridGraphs();
         Destroy(gameObject);
     }
 
@@ -161,6 +186,10 @@ public class LetterTile : MonoBehaviour, IGridModifier
         assignedShadow = shadow;
     }
     
-
+    private void UpdateBounds()
+    {
+        bounds.center = transform.position;
+        bounds.extents = new Vector3(.5f, .5f, 1);
+    }
 
 }

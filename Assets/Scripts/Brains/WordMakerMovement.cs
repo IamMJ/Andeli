@@ -22,6 +22,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     [SerializeField] protected GameObject dustcloudPrefab = null;
     public Vector2 TacticalDestination;
     GraphUpdateScene gus;
+    Bounds bounds;
 
     protected int layerMask_Impassable = 1 << 13;
     protected int layerMask_Passable = 1 << 14;
@@ -87,6 +88,33 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
             //rawDesMove = validDesMove;
         }
     }
+    //public void UnknitSpecificGridGraph(int graphIndexToUnknit)
+    //{
+    //    UpdateBounds();
+    //    var guo = new GraphUpdateObject(bounds);
+    //    guo.modifyWalkability = true;
+    //    guo.setWalkability = false;
+    //    //gus.modifyWalkability = true;
+    //    //gus.setWalkability = false;
+    //    guo.nnConstraint.graphMask = 1 << graphIndexToUnknit;
+    //    AstarPath.active.UpdateGraphs(guo);
+    //}
+    //public void ReknitSpecificGridGraph(int graphIndexToReknit)
+    //{
+    //    UpdateBounds();
+    //    var guo = new GraphUpdateObject(bounds);
+    //    guo.modifyWalkability = true;
+    //    guo.setWalkability = true;
+    //    gus.modifyWalkability = true;
+    //    gus.setWalkability = true;
+    //    guo.nnConstraint.graphMask = 1 << graphIndexToReknit;
+    //    AstarPath.active.UpdateGraphs(guo);
+    //}
+    //private void UpdateBounds()
+    //{
+    //    bounds.center = transform.position;
+    //    bounds.extents = new Vector3(.5f, .5f, 1);
+    //}
 
 
     private void HandleAnimation()
@@ -127,44 +155,6 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     {
         OnLeaderMoved?.Invoke();
     }
-    
-    //protected void CardinalizeDesiredMovement()
-    //{
-    //    if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
-    //    {
-    //        validDesMove.y = 0;
-    //        if (validDesMove.x < 0)
-    //        {
-    //            validDesMove.x = -1;
-    //            return;
-    //        }
-    //        else
-    //        {
-    //            validDesMove.x = 1;
-    //            return;
-    //        }
-    //    }
-    //    if (Mathf.Abs(validDesMove.x) <= Mathf.Abs(validDesMove.y))
-    //    {
-    //        validDesMove.x = 0;
-    //        if (validDesMove.y < 0)
-    //        {
-    //            validDesMove.y = -1;
-    //            return;
-    //        }
-    //        else
-    //        {
-    //            validDesMove.y = 1;
-    //            return;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        //Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
-
-    //    }
-    //    Debug.Log($"vdm: {validDesMove}");
-    //}
 
     public static Vector2 CardinalizeDesiredMovement(Vector2 inputDir)
     {
@@ -360,8 +350,6 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
         }
         return direction;
     }
-
-
 
     protected void OnCollisionEnter2D(Collision2D collision)
     {

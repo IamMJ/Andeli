@@ -13,6 +13,7 @@ public class WordBuilder_NPC : WordBuilder
     TailPieceManager tpm;
     LetterTileDropper ltd;
     SpellingStrategy ss;
+    StrategyBrainV2 sb;
 
     public Action OnNewTargetLetterTile;
 
@@ -23,7 +24,7 @@ public class WordBuilder_NPC : WordBuilder
     void Start()
     {
         ss = GetComponent<SpellingStrategy>();
-
+        sb = GetComponent<StrategyBrainV2>();
         ltd = FindObjectOfType<LetterTileDropper>();
         ltd.OnLetterListModified += DetermineBestTargetLetter;
         tpm = GetComponent<TailPieceManager>();
@@ -42,7 +43,6 @@ public class WordBuilder_NPC : WordBuilder
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        Debug.Log("NPC picked up a letter");
         if (collision.gameObject.GetComponent<LetterTile>())
         {
             ss.EvaluateWordAfterGainingALetter();
@@ -77,6 +77,11 @@ public class WordBuilder_NPC : WordBuilder
 
     private void DetermineBestTargetLetter(LetterTile changedLetterTile, bool wasLetterAdded)
     {
+        if (TargetLetterTile)
+        {
+            
+        }
+
         if (ltd.doesBoardHaveLettersAvailable == false)
         {
             TargetLetterTile = null;
@@ -88,7 +93,8 @@ public class WordBuilder_NPC : WordBuilder
             TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
             if (TargetLetterTile != oldLTT)
             {
-                Debug.Log("new target letter");
+                oldLTT.UnknitSpecificGridGraph(sb.GetGraphIndex());
+                TargetLetterTile.ReknitSpecificGridGraph(sb.GetGraphIndex());
                 OnNewTargetLetterTile?.Invoke();
             }
 

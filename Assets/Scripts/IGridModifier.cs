@@ -4,8 +4,8 @@ using UnityEngine;
 
 public interface IGridModifier
 {
-    void ReknitGridGraph();
+    void ReknitAllGridGraphs();
 
-    void UnknitGridGraph();
+    void UnknitAllGridGraphs();
 
 }

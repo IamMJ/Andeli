@@ -20,7 +20,7 @@ public class ArenaStarter : MonoBehaviour, IGridModifier
         gc = FindObjectOfType<GameController>();
         player = gc.GetPlayer();
         gus = GetComponent<GraphUpdateScene>();
-        UnknitGridGraph();
+        UnknitAllGridGraphs();
     }
 
     private void Update()
@@ -35,13 +35,13 @@ public class ArenaStarter : MonoBehaviour, IGridModifier
         }
     }
 
-    public void ReknitGridGraph()
+    public void ReknitAllGridGraphs()
     {
         gus.setWalkability = true;
         gus.Apply();
     }
 
-    public void UnknitGridGraph()
+    public void UnknitAllGridGraphs()
     {
         gus.setWalkability = false;
         gus.Apply();
@@ -49,7 +49,7 @@ public class ArenaStarter : MonoBehaviour, IGridModifier
 
     public void RemoveArenaStarter()
     {
-        ReknitGridGraph();
+        ReknitAllGridGraphs();
         Destroy(gameObject);
     }
 

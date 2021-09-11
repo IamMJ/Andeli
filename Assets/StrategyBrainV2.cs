@@ -18,7 +18,8 @@ public class StrategyBrainV2 : MonoBehaviour
     WordMakerMovement wmm;
     WordBuilder_NPC wb;
     ArenaBuilder ab;
-
+    GraphMask graphMask;
+    int graphIndex = 1;
     public Vector2 strategicDestination;
 
     Path path;
@@ -27,14 +28,13 @@ public class StrategyBrainV2 : MonoBehaviour
     float closeEnough = 1.0f;
     float nextWaypointDistance = 1;
 
+
     //state
     bool hasValidPath = false;
     public NavMeshPathStatus status;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
     Vector2 previousDirection = Vector2.zero;
-
-
 
     void Start()
     {
@@ -44,12 +44,15 @@ public class StrategyBrainV2 : MonoBehaviour
         wb = GetComponent<WordBuilder_NPC>();
         wb.OnNewTargetLetterTile += SetNewTargetLetterTileAsStrategicDestination;
         ab = FindObjectOfType<ArenaBuilder>();
+        graphMask = 1 << graphIndex;
 
 
         strategicDestination = ab.CreatePassableRandomPointWithinArena();
-        seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath);
+        seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
         
     }
+
+ 
 
     // Update is called once per frame
     void Update()
@@ -88,7 +91,7 @@ public class StrategyBrainV2 : MonoBehaviour
     {
         if (seeker.IsDone() == true)
         {
-            seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath);
+            seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
         }
     }
 
@@ -144,7 +147,15 @@ public class StrategyBrainV2 : MonoBehaviour
         //strategicDestination = wb.TargetLetterTile.transform.position;
     }
 
+    public void SetGraphMask(GraphMask newGraphMask)
+    {
+        graphMask = newGraphMask;
+    }
 
+    public int GetGraphIndex()
+    {
+        return graphIndex;
+    }
 
     private void OnDestroy()
     {

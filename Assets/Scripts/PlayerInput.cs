@@ -21,7 +21,7 @@ public class PlayerInput : MonoBehaviour
     Camera mc;
     GameObject currentStrategicDestinationIcon;
     int layerMask_Letter = 1 << 9;
-    LetterTile currentTargetedLetter;
+    public LetterTile currentTargetedLetter;
 
     //param
     float nextWaypointDistance = 1;
@@ -29,7 +29,7 @@ public class PlayerInput : MonoBehaviour
     //state
     bool isMobile = false;
     bool isSnapped = false;
-
+    GraphMask graphMask = 1 << 0;
     bool reachedEndOfPath;
     int currentWaypoint = 0;
 
@@ -71,7 +71,7 @@ public class PlayerInput : MonoBehaviour
                 strategicDestination = GridHelper.SnapToGrid(currentTouch.position, 1);
                 // Should I check that the destination is valid/reachable?
                 MoveStrategicDestinationIcon();
-                seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath);
+                seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
             }
         }
     }
@@ -90,7 +90,7 @@ public class PlayerInput : MonoBehaviour
             MoveStrategicDestinationIcon();
             ReknitLetterAtStrategicDestination();
             Debug.DrawLine(transform.position, strategicDestination, Color.red, 1f);
-            seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath);
+            seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
         }
     }
 
@@ -98,14 +98,15 @@ public class PlayerInput : MonoBehaviour
     {
         if (currentTargetedLetter)
         {
-            currentTargetedLetter.UnknitGridGraph();
+            currentTargetedLetter.UnknitSpecificGridGraph(0);
         }
+        currentTargetedLetter = null;
         Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 0.4f, layerMask_Letter);
         if (coll)
         {
 
             currentTargetedLetter = coll.GetComponent<LetterTile>();
-            currentTargetedLetter.ReknitGridGraph();
+            currentTargetedLetter.ReknitSpecificGridGraph(0);
 
         }
     }
