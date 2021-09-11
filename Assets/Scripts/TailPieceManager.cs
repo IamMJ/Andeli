@@ -6,7 +6,7 @@ public class TailPieceManager : MonoBehaviour
 {
     //init
     [SerializeField] GameObject tailPiecePrefab = null;
-    List<TailPiece> tailPieces = new List<TailPiece>();
+    public List<TailPiece> tailPieces = new List<TailPiece>();
     WordMakerMovement wmm;
 
     void Start()

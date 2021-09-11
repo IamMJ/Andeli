@@ -4,8 +4,9 @@ using UnityEngine;
 
 public abstract class SpellingStrategy : MonoBehaviour
 {
-    protected WordBrain_NPC wb;
+    protected WordBuilder_NPC wb;
     protected MoveBrain_NPC mb;
+    protected WordWeaponizer wwz;
     protected SpeedKeeper sk;
     protected StrategyBrain_NPC sb;
     protected WordValidater wv;
@@ -16,13 +17,16 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected bool shouldFireOrEraseNow = false;
     public virtual void Start()
     {
-        wb = GetComponent<WordBrain_NPC>();
+        wb = GetComponent<WordBuilder_NPC>();
         mb = GetComponent<MoveBrain_NPC>();
         sb = GetComponent<StrategyBrain_NPC>();
+        sk = GetComponent<SpeedKeeper>();
+
+        wwz = GetComponent<WordWeaponizer>();
         wv = FindObjectOfType<WordValidater>();
         dh = FindObjectOfType<DebugHelper>();
         ltd = FindObjectOfType<LetterTileDropper>();
-        sk = GetComponent<SpeedKeeper>();
+
     }
     public abstract void EvaluateWordAfterGainingALetter();
 
@@ -37,7 +41,7 @@ public abstract class SpellingStrategy : MonoBehaviour
             if (shouldFireOrEraseNow || currentWordOptions < thresholdForTooUnlikely) // ...but its future is too unpromising...
             {
                 dh.DisplayDebugLog($"Firing {currentWord} with only {currentWordOptions} possible options ahead");
-                wb.FireOffWord(); // ...so fire it off now.
+                wwz.FireKnownValidWord();
                 return;
             }
         }
@@ -68,7 +72,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         if (wv.CheckWordValidity(currentWord))
         {
             dh.DisplayDebugLog("firing off " + currentWord);
-            wb.FireOffWord();
+            wwz.FireKnownValidWord();
         }
     }
 

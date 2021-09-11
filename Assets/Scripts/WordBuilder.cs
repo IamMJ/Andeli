@@ -4,15 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
-[RequireComponent (typeof (SpellMaker), typeof(TailPieceManager), typeof(LetterCollector))]
-
-
+[RequireComponent (typeof (WordWeaponizer))]
 public class WordBuilder : MonoBehaviour
 {
-    DebugHelper dh;
     PlayerInput pi;
-    TailPieceManager tpm;
-    SpellMaker sm;
+    protected WordWeaponizer wwz;
     PowerMeter pm;
     UIDriver uid;
     WordValidater wv;
@@ -23,43 +19,38 @@ public class WordBuilder : MonoBehaviour
     int maxWordLength = 10;
 
     //state
-
+    bool hasUI = false;
     List<LetterTile> lettersCollected = new List<LetterTile>();
-    public bool HasLetters { get; private set; } = false;
-    string currentWord;
-    int currentWordLength;
+    protected string currentWord = "";
     int wordLengthBonus = 0;
     public int CurrentPower { get; private set; } = 0;
 
-
     private void Start()
     {
-        dh = FindObjectOfType<DebugHelper>();
-        uid = FindObjectOfType<UIDriver>();
+        wwz = GetComponent<WordWeaponizer>();
         wv = FindObjectOfType<WordValidater>();
-        uid.SetPlayerObject(this);
         pi = GetComponent<PlayerInput>();
-        tpm = GetComponent<TailPieceManager>();
-        sm = GetComponent<SpellMaker>();
+        if (pi)
+        {
+            hasUI = true;
+            uid = FindObjectOfType<UIDriver>();
+            uid.SetPlayerObject(this, wwz);
+        }
     }
 
-    public void AddLetter(LetterTile newLetter)
+    protected virtual void AddLetter(LetterTile newLetter)
     {
-        if (currentWordLength >= maxWordLength) { return; }
-        if (!tpm)
-        {
-            pi = FindObjectOfType<PlayerInput>();
-            tpm = pi.GetComponent<TailPieceManager>();
-        }
+        if (currentWord.Length >= maxWordLength) { return; }
 
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
-        currentWordLength = currentWord.Length;
         IncreasePower(newLetter.Power);
-        HasLetters = true;
-        //tpm.AddNewTailPiece(newLetter.Letter);
-        Sprite newSprite = newLetter.GetComponent<SpriteRenderer>().sprite;
-        uid.AddLetterToWordBar(newSprite, newLetter.Letter, currentWordLength - 1);
+
+        if (hasUI)
+        {
+            Sprite newSprite = newLetter.GetComponent<SpriteRenderer>().sprite;
+            uid.AddLetterToWordBar(newSprite, newLetter.Letter, currentWord.Length - 1);
+        }
         TestAllLetterLatentAbilities();
     }
 
@@ -77,7 +68,7 @@ public class WordBuilder : MonoBehaviour
     private void TestLetterLatentAbility(LetterTile newLetter, int index)
     {
         int roll = 21 - UnityEngine.Random.Range(1, 21);
-        if (currentWordLength + wordLengthBonus < roll)
+        if (currentWord.Length + wordLengthBonus < roll)
         {
             return;
         }
@@ -89,70 +80,53 @@ public class WordBuilder : MonoBehaviour
             ab = FindObjectOfType<ArenaBuilder>();
             aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
         }
-        aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index);
+        aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
     }
 
-
+    #region Public Methods
     public string GetCurrentWord()
     {
         return currentWord;
     }
     public int GetCurrentWordLength()
     {
-        return currentWordLength;
+        return currentWord.Length;
     }
 
-    public void ClearCurrentWord()
+    public virtual void ClearCurrentWord()
     {
         currentWord = "";
-        HasLetters = false;
-        currentWordLength = 0;
         ResetWordLengthBonus();
         lettersCollected.Clear();
-        uid.ClearWordBar();
+        if (hasUI)
+        {
+            uid.ClearWordBar();
+        }
         //tpm.DestroyEntireTail();
     }
 
-    public void FireCurrentWord()
+    public List<LetterTile> GetLettersCollected()
     {
-        if (sm.FireCurrentWordIfValid())
-        {
-            //Create the standard spell 
-            if (!ab)
-            {
-                ab = FindObjectOfType<ArenaBuilder>();
-            }
-            GameObject enemy = ab.GetEnemiesInArena()[0];
-            sm.CreateSpell(transform, enemy.transform, SpellMaker.SpellType.Normal);
-
-            foreach (var letter in lettersCollected)
-            {
-                if (letter.GetLatentAbilityStatus() == false)
-                {
-                    continue;
-                }
-                if (!aleh)
-                {
-                    ab = FindObjectOfType<ArenaBuilder>();
-                    aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
-                }
-                aleh.ApplyLetterEffectOnFiring(letter, gameObject);
-            }
-
-        }
-
+        return lettersCollected;
     }
-
     public void IncreasePower(int amount)
     {
         CurrentPower += amount;
-        uid.ModifyPowerMeterTMP(CurrentPower);
+        if (hasUI)
+        {
+            uid.ModifyPowerMeterTMP(CurrentPower);
+        }
+
     }
 
     public void ClearPowerLevel()
     {
         CurrentPower = 0;
-        uid.ModifyPowerMeterTMP(CurrentPower);
+        if (hasUI)
+        {
+            uid.ModifyPowerMeterTMP(CurrentPower);
+        }
+
     }
 
     public void IncreaseWordLengthBonus(int bonusAmount)
@@ -160,10 +134,21 @@ public class WordBuilder : MonoBehaviour
         wordLengthBonus += bonusAmount;
     }
 
+    #endregion
     private void ResetWordLengthBonus()
     {
         wordLengthBonus = 0;
     }
 
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    {
+        LetterTile letterTile;
+        if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
+        {
+            AddLetter(letterTile);
+            letterTile.PickupLetterTile();
+
+        }
+    }
 
 }

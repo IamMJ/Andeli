@@ -3,39 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-[RequireComponent(typeof(SpellingStrategy))]
-public class WordBrain_NPC : MonoBehaviour
+[RequireComponent(typeof(SpellingStrategy), typeof(TailPieceManager))]
+public class WordBuilder_NPC : WordBuilder
 {
     // This class is supposed to constantly maintain a Target Letter Tile. 
     // The LTT is updated anytime a letter tile is added or removed from the board
 
     //init
-    MoveBrain_NPC mb;
-    [SerializeField] GameObject wordPuffPrefab = null;
     TailPieceManager tpm;
-    public LetterTile TargetLetterTile; //{ get; private set; }
-    WordValidater wv;
     LetterTileDropper ltd;
-    DebugHelper dh;
     SpellingStrategy ss;
-    VictoryMeter vm;
 
     public Action OnNewTargetLetterTile;
-    
+
     //state
-    [SerializeField] string currentWord = "";
+    public LetterTile TargetLetterTile; //{ get; private set; }
     [SerializeField] char currentTargetChar;
-    int currentPower = 0;
 
     void Start()
     {
         ss = GetComponent<SpellingStrategy>();
-        dh = FindObjectOfType<DebugHelper>();
-        wv = FindObjectOfType<WordValidater>();
-        mb = GetComponent<MoveBrain_NPC>();
+
         ltd = FindObjectOfType<LetterTileDropper>();
         ltd.OnLetterListModified += DetermineBestTargetLetter;
-        vm = FindObjectOfType<VictoryMeter>();
         tpm = GetComponent<TailPieceManager>();
         
     }
@@ -49,26 +39,15 @@ public class WordBrain_NPC : MonoBehaviour
         else { currentTargetChar = '?'; }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        LetterTile letterTile;
-        if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
+        base.OnTriggerEnter2D(collision);
+        Debug.Log("NPC picked up a letter");
+        if (collision.gameObject.GetComponent<LetterTile>())
         {
-            AddLetter(letterTile.Letter);
-            IncreasePower(letterTile.Power);
-            letterTile.PickupLetterTile();
             ss.EvaluateWordAfterGainingALetter();
         }
 
-    }
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer == 13)
-        {
-            Debug.Log("hit an impassable thing");
-            EraseWord();
-            return;
-        }
     }
 
     #region Simple Private Tasks
@@ -76,53 +55,24 @@ public class WordBrain_NPC : MonoBehaviour
     {
         ltd.OnLetterListModified -= DetermineBestTargetLetter;
     }
-    private void AddLetter(char newLetter)
+    protected override void AddLetter(LetterTile newLetter)
     {
-        currentWord += newLetter;
-        tpm.AddNewTailPiece(newLetter);
+        base.AddLetter(newLetter);
+        tpm.AddNewTailPiece(newLetter.Letter);
     }
-    private void ClearCurrentWord()
+    public override void ClearCurrentWord()
     {
-        currentWord = "";
+        base.ClearCurrentWord();
         tpm.DestroyEntireTail();
     }
-    private void IncreasePower(int amount)
-    {
-        currentPower += amount;
-        
-    }
-    private void ClearPower()
-    {
-        currentPower = 0;
-    }
-
     #endregion
 
     #region Hooks For Spelling Strategy
-
-    public void FireOffWord()
-    {
-        vm.ModifyBalance(-currentPower);
-
-        GameObject puff = Instantiate(wordPuffPrefab, transform.position, Quaternion.identity) as GameObject;
-        WordPuff wordpuff = puff.GetComponent<WordPuff>();
-        wordpuff.SetColorByPower(currentPower);
-        wordpuff.SetText(currentWord);
-        EraseWord();
-    }
-
     public void EraseWord()
-    {
-        
+    {        
         ClearCurrentWord();
-        ClearPower();
+        ClearPowerLevel();
     }
-
-    public string GetCurrentWord()
-    {
-        return currentWord;
-    }
-
     #endregion
 
     private void DetermineBestTargetLetter(LetterTile changedLetterTile, bool wasLetterAdded)
@@ -168,7 +118,6 @@ public class WordBrain_NPC : MonoBehaviour
 
                 if (TargetLetterTile != oldLTT)
                 {
-                    Debug.Log("new target letter");
                     OnNewTargetLetterTile?.Invoke();
                 }
             }

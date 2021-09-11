@@ -6,7 +6,7 @@ using UnityEngine;
 public class StrategyBrain_NPC : MonoBehaviour
 {
     //init
-    WordBrain_NPC wb;
+    WordBuilder_NPC wb;
     MoveBrain_NPC mb;
     ArenaBuilder ab;
 
@@ -22,7 +22,7 @@ public class StrategyBrain_NPC : MonoBehaviour
     void Start()
     {
         ab = FindObjectOfType<ArenaBuilder>();
-        wb = GetComponent<WordBrain_NPC>();
+        wb = GetComponent<WordBuilder_NPC>();
         mb = GetComponent<MoveBrain_NPC>();
     }
 

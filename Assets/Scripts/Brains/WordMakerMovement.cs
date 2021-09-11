@@ -12,7 +12,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     /// from entering invalid terrain.
     /// </summary>
 
-    WordBrain_NPC wb;
+    WordBuilder_NPC wb;
     Animator anim;
     public Action OnLeaderMoved;
     protected SpeedKeeper sk;
@@ -43,7 +43,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
         gc = FindObjectOfType<GameController>();
         GameObject reknitterGO = Instantiate(reknitterPrefab);
         reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
-        wb = GetComponent<WordBrain_NPC>();
+        wb = GetComponent<WordBuilder_NPC>();
         truePosition = transform.position;
         anim = GetComponentInChildren<Animator>();
     }

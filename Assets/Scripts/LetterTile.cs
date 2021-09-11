@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using Pathfinding;
 
-public class LetterTile : MonoBehaviour
+public class LetterTile : MonoBehaviour, IGridModifier
 {
     //init
     public char Letter;
@@ -58,10 +58,13 @@ public class LetterTile : MonoBehaviour
                 sr.sortingOrder = 0;
                 tmp.sortingLayerID = sr.sortingLayerID;
                 tmp.sortingOrder = sr.sortingOrder + 1;
+                transform.position = GridHelper.SnapToGrid(transform.position, 1);
                 if (assignedShadow)
                 {
                     assignedShadow.RemoveShadow();
                 }
+                UnknitGridGraph();
+
             }
             return;
         }
@@ -76,15 +79,13 @@ public class LetterTile : MonoBehaviour
 
         if (LifetimeRemaining <= 0f)
         {
-            ReknitGridGraph();
-            Destroy(gameObject);
+            PickupLetterTile();
         }
                
     }
 
     public void UnknitGridGraph() //int graphToUnknit)
     {
-
         //guo.nnConstraint.graphMask = 1 << graphToUnknit;
         gus.modifyWalkability = true;
         gus.setWalkability = false;
@@ -127,10 +128,10 @@ public class LetterTile : MonoBehaviour
     public void PickupLetterTile()
     {
         letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
-        DestroyLetterTile();
+        DestroyThisLetterTile();
     }
 
-    public void DestroyLetterTile()
+    public void DestroyThisLetterTile()
     {
         if (assignedShadow)
         {

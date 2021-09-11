@@ -23,6 +23,7 @@ public class UIDriver : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
     WordBuilder playerWB;
+    WordWeaponizer playerWWZ;
     GameController gc;
     SceneLoader sl;
     GameObject pauseMenu;
@@ -53,15 +54,17 @@ public class UIDriver : MonoBehaviour
         }
     }
 
-    public void SetPlayerObject(WordBuilder newPlayerWB)
+    public void SetPlayerObject(WordBuilder newPlayerWB, WordWeaponizer newPlayerWWZ)
     {
         playerWB = newPlayerWB;
+        playerWWZ = newPlayerWWZ;
     }
 
     #region Initial Button Press Handlers
     public void OnPressDownFireWord()
     {
-        if (!playerWB.HasLetters) { return; }
+        if (playerWB.GetCurrentWordLength() == 0) { return; }
+
 
         if (isEraseWeaponButtonPressed == false)
         {
@@ -77,7 +80,7 @@ public class UIDriver : MonoBehaviour
 
     public void OnPressDownEraseWord()
     {
-        if (!playerWB.HasLetters) { return; }
+        if (playerWB.GetCurrentWordLength() == 0) { return; }
 
         if (isFireWeaponButtonPressed == false)
         {
@@ -115,7 +118,7 @@ public class UIDriver : MonoBehaviour
             FillWordFiringSlider(timeButtonDepressed / UIParameters.LongPressTime);
             if (timeButtonDepressed >= UIParameters.LongPressTime)
             {
-                playerWB.FireCurrentWord();
+                playerWWZ.AttemptToFireWord();
                 CompleteLongPress_WordBoxActions();
             }
         }

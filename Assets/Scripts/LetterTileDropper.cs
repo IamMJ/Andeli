@@ -311,10 +311,11 @@ public class LetterTileDropper : MonoBehaviour
 
     public void DestroyAllLetters()
     {
+        Debug.Log("LTD asked to destroy all letters");
         int count = letterTilesOnBoard.Count;
         for (int i = 0; i < count; i++)
         {
-            letterTilesOnBoard[i]?.DestroyLetterTile();
+            letterTilesOnBoard[i]?.DestroyThisLetterTile();
         }
         letterTilesOnBoard.Clear();
     }

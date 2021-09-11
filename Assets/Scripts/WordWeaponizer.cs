@@ -2,25 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpellMaker : MonoBehaviour
+public class WordWeaponizer : MonoBehaviour
 {
     [SerializeField] GameObject puffPrefab = null;
     [SerializeField] GameObject normalSpellPrefab = null;
     [SerializeField] GameObject freezeSpellPrefab = null;
     List<GameObject> spellsInFlight = new List<GameObject>();
 
+    GameController gc;
     WordBuilder wbd;
     DebugHelper dh;
     WordValidater wv;
     PowerMeter pm;
     VictoryMeter vm;
     PlayerMemory playmem;
+    ArenaBuilder ab;
+    ArenaLetterEffectsHandler aleh;
     string testWord;
 
     public enum SpellType { Normal, Freeze };
 
     //param
     float spellInitialSpeed = 6.0f;
+    public GameObject currentEnemy;
 
 
     void Start()
@@ -28,23 +32,33 @@ public class SpellMaker : MonoBehaviour
         playmem = GetComponent<PlayerMemory>();
         wbd = GetComponent<WordBuilder>();
 
+        gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
-        
+        ab = FindObjectOfType<ArenaBuilder>();
     }
-    public bool FireCurrentWordIfValid()
+    public bool AttemptToFireWord()
     {
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
         {
+            playmem.IncrementWordCount();
             GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
             WordPuff wordPuff = puff.GetComponent<WordPuff>();
             wordPuff.SetText(testWord);
             wordPuff.SetColorByPower(wbd.CurrentPower);
-            playmem.IncrementWordCount();
-            vm.ModifyBalance(wbd.CurrentPower);
-            return true;
+            if (vm.ModifyBalanceAndCheckForArenaEnd(wbd.CurrentPower))
+            {
+                //Technically a valid word, but the arena is over now and shouldn't count this word
+                return false;
+            }
+            else
+            {
+                FireKnownValidWord();
+                return true;
+            }
+
         }
         else
         {
@@ -56,6 +70,28 @@ public class SpellMaker : MonoBehaviour
             return false;
         }
     }
+
+    public void FireKnownValidWord()
+    {
+        TargetBestEnemy();
+        CreateSpell(transform, currentEnemy.transform, WordWeaponizer.SpellType.Normal);
+
+        foreach (var letter in wbd.GetLettersCollected())
+        {
+            if (letter.GetLatentAbilityStatus() == false)
+            {
+                continue;
+            }
+            if (!aleh)
+            {
+                ab = FindObjectOfType<ArenaBuilder>();
+                aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
+            }
+            aleh.ApplyLetterEffectOnFiring(letter, gameObject, currentEnemy);
+        }
+        
+    }
+
 
     public void CreateSpell(Transform source, Transform target, SpellType spellType)
     {
@@ -90,5 +126,20 @@ public class SpellMaker : MonoBehaviour
         spellsInFlight.Clear();
     }
 
+    private void TargetBestEnemy()
+    {
+        if (GetComponent<PlayerInput>())
+        {
+            if (!ab)
+            {
+                ab = FindObjectOfType<ArenaBuilder>();
+            }
+            currentEnemy = ab.GetEnemiesInArena()[0];
+        }
+        else
+        {
+            currentEnemy = gc.GetPlayer();
+        }
+    }
 
 }

@@ -16,7 +16,7 @@ public class StrategyBrainV2 : MonoBehaviour
     AILerp ail;
     Seeker seeker;
     WordMakerMovement wmm;
-    WordBrain_NPC wb;
+    WordBuilder_NPC wb;
     ArenaBuilder ab;
 
     public Vector2 strategicDestination;
@@ -41,7 +41,7 @@ public class StrategyBrainV2 : MonoBehaviour
         ail = GetComponent<AILerp>();
         seeker = GetComponent<Seeker>();
         wmm = GetComponent<WordMakerMovement>();
-        wb = GetComponent<WordBrain_NPC>();
+        wb = GetComponent<WordBuilder_NPC>();
         wb.OnNewTargetLetterTile += SetNewTargetLetterTileAsStrategicDestination;
         ab = FindObjectOfType<ArenaBuilder>();
 

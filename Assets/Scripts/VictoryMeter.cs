@@ -39,7 +39,7 @@ public class VictoryMeter : MonoBehaviour
         if (!gc.isInArena) { return; }
         HandleDecay();
         UpdateSliderUI();
-        DetectWinLoss();
+
     }
 
     public void ResetArena()
@@ -47,10 +47,20 @@ public class VictoryMeter : MonoBehaviour
         SetBalance(startingBalance);
         SetDecayAmount(0);
     }
-    public void ModifyBalance(float amountToAdd)
+    public bool ModifyBalanceAndCheckForArenaEnd(float amountToAdd)
     {
         currentBalance += amountToAdd;
-        UpdateSliderUI();
+
+        bool isOver = DetectWinLoss();
+        if (!isOver)
+        {
+            UpdateSliderUI();
+            return false; ;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public void SetBalance(float newBalance)
@@ -59,12 +69,13 @@ public class VictoryMeter : MonoBehaviour
         UpdateSliderUI();
     }
 
-    private void DetectWinLoss()
+    private bool DetectWinLoss()
     {
         if (currentBalance >= victoryAmount)
         {
             //handle victory;
             OnArenaVictory_TrueForPlayerWin?.Invoke(true);
+            return true;
             //sl.LoadEndingScene();
         }
 
@@ -72,8 +83,10 @@ public class VictoryMeter : MonoBehaviour
         {
             //handle defeat;
             OnArenaVictory_TrueForPlayerWin?.Invoke(false);
+            return true;
             //sl.LoadEndingScene();
         }
+        return false;
     }
 
     private void HandleDecay()
