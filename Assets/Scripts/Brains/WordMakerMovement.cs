@@ -29,7 +29,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     protected int layerMask_TileImpassable = 1 << 13 | 1 << 15;
 
     //state
-    protected Vector2 rawDesMove = new Vector2(1, 0);
+    public Vector2 rawDesMove = new Vector2(1, 0);
     protected Vector2 validDesMove = Vector2.zero;
     protected Vector2 previousMove = Vector2.zero;
     protected Vector2 truePosition = Vector2.zero;
@@ -53,6 +53,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     #region Handle Input + Animation
     void Update()
     {
+        if (gc.isPaused) { return; }
         UpdateRawDesMove();
         ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid();
         //CardinalizeDesiredMovement();
@@ -62,6 +63,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     private void UpdateRawDesMove()
     {
         rawDesMove = ((Vector3)TacticalDestination - transform.position);
+
     }
 
     private void ConvertRawDesMoveIntoValidDesMoveWhenSnappedToGrid()
@@ -73,11 +75,19 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
         else
         {
             validDesMove = CardinalizeDesiredMovement(rawDesMove);
+            NullifyValidDesMoveIfAtTacticalDestination();
             //GetAlternativeValidDesMoveIfReversing();
-            Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
+
+            if ((transform.position - previousSnappedPosition).magnitude > Mathf.Epsilon)
+            {
+                Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
+            }
+            previousSnappedPosition = transform.position;
+
             //rawDesMove = validDesMove;
         }
     }
+
 
     private void HandleAnimation()
     {
@@ -118,43 +128,43 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
         OnLeaderMoved?.Invoke();
     }
     
-    protected void CardinalizeDesiredMovement()
-    {
-        if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
-        {
-            validDesMove.y = 0;
-            if (validDesMove.x < 0)
-            {
-                validDesMove.x = -1;
-                return;
-            }
-            else
-            {
-                validDesMove.x = 1;
-                return;
-            }
-        }
-        if (Mathf.Abs(validDesMove.x) <= Mathf.Abs(validDesMove.y))
-        {
-            validDesMove.x = 0;
-            if (validDesMove.y < 0)
-            {
-                validDesMove.y = -1;
-                return;
-            }
-            else
-            {
-                validDesMove.y = 1;
-                return;
-            }
-        }
-        else
-        {
-            //Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
+    //protected void CardinalizeDesiredMovement()
+    //{
+    //    if (Mathf.Abs(validDesMove.x) > Mathf.Abs(validDesMove.y))
+    //    {
+    //        validDesMove.y = 0;
+    //        if (validDesMove.x < 0)
+    //        {
+    //            validDesMove.x = -1;
+    //            return;
+    //        }
+    //        else
+    //        {
+    //            validDesMove.x = 1;
+    //            return;
+    //        }
+    //    }
+    //    if (Mathf.Abs(validDesMove.x) <= Mathf.Abs(validDesMove.y))
+    //    {
+    //        validDesMove.x = 0;
+    //        if (validDesMove.y < 0)
+    //        {
+    //            validDesMove.y = -1;
+    //            return;
+    //        }
+    //        else
+    //        {
+    //            validDesMove.y = 1;
+    //            return;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        //Debug.Log($"else statement on cardinalize movement. X/Y: {validDesMove.x}/{validDesMove.y}");
 
-        }
-        Debug.Log($"vdm: {validDesMove}");
-    }
+    //    }
+    //    Debug.Log($"vdm: {validDesMove}");
+    //}
 
     public static Vector2 CardinalizeDesiredMovement(Vector2 inputDir)
     {
@@ -186,6 +196,14 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
         return moveDir;
 
     }
+    private void NullifyValidDesMoveIfAtTacticalDestination()
+    {
+        if (((Vector2)transform.position - TacticalDestination).magnitude <= 0.5f)
+        {
+            validDesMove = Vector2.zero;
+        }
+    }
+
 
     protected Vector2 SnapToAxis(Vector2 inputPos, bool trueIfXAxis)
     {

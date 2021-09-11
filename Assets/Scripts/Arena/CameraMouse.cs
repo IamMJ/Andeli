@@ -28,7 +28,7 @@ public class CameraMouse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 dir = (player.transform.position - anchorObject.transform.position) * (2f/3f);
+        Vector3 dir = (player.transform.position - anchorObject.transform.position) * 0.2f;
         transform.position = anchorObject.transform.position + dir;
     }
 

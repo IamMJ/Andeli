@@ -17,6 +17,7 @@ public class LetterTile : MonoBehaviour
     LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
     GraphUpdateScene gus;
+    List<GameObject> claimants = new List<GameObject>();
 
     //param
     float fallSpeed = 4.0f;
@@ -39,7 +40,7 @@ public class LetterTile : MonoBehaviour
         sr.sortingOrder = 9;
         tmp.sortingLayerID = sr.sortingLayerID;
         tmp.sortingOrder = sr.sortingOrder + 1;
-        
+
     }
 
     private void Update()
@@ -57,7 +58,6 @@ public class LetterTile : MonoBehaviour
                 sr.sortingOrder = 0;
                 tmp.sortingLayerID = sr.sortingLayerID;
                 tmp.sortingOrder = sr.sortingOrder + 1;
-                UnknitGridGraph();
                 if (assignedShadow)
                 {
                     assignedShadow.RemoveShadow();
@@ -82,14 +82,18 @@ public class LetterTile : MonoBehaviour
                
     }
 
-    public void UnknitGridGraph()
+    public void UnknitGridGraph() //int graphToUnknit)
     {
+
+        //guo.nnConstraint.graphMask = 1 << graphToUnknit;
+        gus.modifyWalkability = true;
         gus.setWalkability = false;
         gus.Apply();
     }
 
-    public void ReknitGridGraph()
+    public void ReknitGridGraph() //int graphToUnknit)
     {
+        gus.modifyWalkability = true;
         gus.setWalkability = true;
         gus.Apply();
     }
@@ -145,5 +149,7 @@ public class LetterTile : MonoBehaviour
     {
         assignedShadow = shadow;
     }
+    
+
 
 }

@@ -10,6 +10,7 @@ public class PlayerInput : MonoBehaviour
     //init
     [SerializeField] GameObject moveArrowPrefab = null;
     [SerializeField] GameObject strategicDestinationPrefab = null;
+    GameController gc;
     DebugHelper dh;
     GraphUpdateScene gus;
     WordMakerMovement wmm;
@@ -43,6 +44,7 @@ public class PlayerInput : MonoBehaviour
         wmm = GetComponent<WordMakerMovement>();
         seeker = GetComponent<Seeker>();
         dh = FindObjectOfType<DebugHelper>();
+        gc = FindObjectOfType<GameController>();
         isMobile = Application.isMobilePlatform;
         dh.DisplayDebugLog($"isMobile: {isMobile}");
         mc = Camera.main;
@@ -54,7 +56,10 @@ public class PlayerInput : MonoBehaviour
         HandleTouchInput();
         HandleMouseInput();
         PassTacticalDestinationToMoveBrain();
+
+        //PauseWhenAtStrategicDestination();
     }
+
 
     private void HandleTouchInput()
     { 
@@ -76,6 +81,10 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
+            if (GridHelper.CheckIsTouchingWordSection(Input.mousePosition))
+            {
+                return;
+            }
             strategicDestination = GridHelper.SnapToGrid(mousePos, 1);
             // Should I check that the destination is valid/reachable?
             MoveStrategicDestinationIcon();
@@ -87,19 +96,33 @@ public class PlayerInput : MonoBehaviour
 
     private void ReknitLetterAtStrategicDestination()
     {
+        if (currentTargetedLetter)
+        {
+            currentTargetedLetter.UnknitGridGraph();
+        }
         Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 0.4f, layerMask_Letter);
         if (coll)
         {
-            if (currentTargetedLetter)
-            {
-                currentTargetedLetter.UnknitGridGraph();
-            }
+
             currentTargetedLetter = coll.GetComponent<LetterTile>();
             currentTargetedLetter.ReknitGridGraph();
 
         }
     }
 
+    private void PauseWhenAtStrategicDestination()
+    {
+        if (((Vector2)transform.position - strategicDestination).magnitude <= Mathf.Epsilon)
+        {
+            gc.PauseGame();
+        }
+        else
+        {
+            gc.ResumeGameSpeed();
+        }
+    }
+
+    #region Helpers
     private void MoveStrategicDestinationIcon()
     {
         if (currentStrategicDestinationIcon)
@@ -193,6 +216,7 @@ public class PlayerInput : MonoBehaviour
     private void ClearMoveArrows()
     {
         Destroy(moveArrow);
-    } 
+    }
 
+    #endregion
 }

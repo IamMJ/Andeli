@@ -342,14 +342,14 @@ MonoBehaviour:
   convex: 1
   minBoundsHeight: 1
   penaltyDelta: 0
-  modifyWalkability: 1
+  modifyWalkability: 0
   setWalkability: 0
   applyOnStart: 1
   applyOnScan: 1
   updatePhysics: 0
   resetPenaltyOnPhysics: 1
   updateErosion: 0
-  modifyTag: 0
+  modifyTag: 1
   setTag: 0
   legacyMode: 0
   serializedVersion: 1

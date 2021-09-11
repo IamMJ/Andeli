@@ -21,10 +21,10 @@ public class ArenaBuilder : MonoBehaviour
     int layerMask_Passable = 1 << 14;
 
     //parameters
-    int minX = -7;
-    int minY = -7;
-    int maxX = 7;
-    int maxY = 7;
+    int minX = -6;
+    int minY = -6;
+    int maxX = 6;
+    int maxY = 6;
     float checkRadius = 0.01f;
 
     //state
@@ -122,13 +122,13 @@ public class ArenaBuilder : MonoBehaviour
     {
         letterTileDropper = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity) as GameObject;
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
-        //camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
-        //CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
+        camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
+        CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
 
-        //cameraMouse1.SetAnchor(arenaStarter);
-        //cameraMouse1.SetPlayer(gc.GetPlayer());
+        cameraMouse1.SetAnchor(arenaStarter);
+        cameraMouse1.SetPlayer(gc.GetPlayer());
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
-        cvc.Follow = arenaStarter.transform;
+        cvc.Follow = camMouse.transform; //arenaStarter.transform;
 
         for (int i = 0; i < enemyPrefabs.Length; i++)
         {
