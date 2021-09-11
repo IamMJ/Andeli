@@ -24,8 +24,8 @@ public class LetterCollector : MonoBehaviour
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
             wbd.AddLetter(letterTile);
-            letterTile.ReknitGridGraph();
-            Destroy(collision.gameObject);
+            letterTile.PickupLetterTile();
+            
         }
     }
 

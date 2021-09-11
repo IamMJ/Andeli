@@ -55,9 +55,8 @@ public class WordBrain_NPC : MonoBehaviour
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
             AddLetter(letterTile.Letter);
-            letterTile.ReknitGridGraph();
             IncreasePower(letterTile.Power);
-            Destroy(collision.gameObject);
+            letterTile.PickupLetterTile();
             ss.EvaluateWordAfterGainingALetter();
         }
 

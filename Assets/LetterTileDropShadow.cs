@@ -30,10 +30,19 @@ public class LetterTileDropShadow : MonoBehaviour
     {
         gus.setWalkability = false;
         gus.Apply();
+        
     }
+
+    private void ReknitGridGraph()
+    {
+        gus.setWalkability = true;
+        gus.Apply();
+    }  
+    
 
     public void RemoveShadow()
     {
+        ReknitGridGraph();
         Destroy(gameObject);
     }
 

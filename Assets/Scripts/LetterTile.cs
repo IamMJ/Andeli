@@ -124,10 +124,20 @@ public class LetterTile : MonoBehaviour
         letterTileDropper = ltd;
     }
 
-    private void OnDestroy()
+    public void PickupLetterTile()
     {
         letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
-        //ReknitGridGraph();
+        DestroyLetterTile();
+    }
+
+    public void DestroyLetterTile()
+    {
+        if (assignedShadow)
+        {
+            assignedShadow.RemoveShadow();
+        }
+        ReknitGridGraph();
+        Destroy(gameObject);
     }
 
     public bool GetLatentAbilityStatus()

@@ -311,9 +311,10 @@ public class LetterTileDropper : MonoBehaviour
 
     public void DestroyAllLetters()
     {
-        for (int i = 0; i < letterTilesOnBoard.Count; i++)
+        int count = letterTilesOnBoard.Count;
+        for (int i = 0; i < count; i++)
         {
-            Destroy(letterTilesOnBoard[i].gameObject);
+            letterTilesOnBoard[i]?.DestroyLetterTile();
         }
         letterTilesOnBoard.Clear();
     }

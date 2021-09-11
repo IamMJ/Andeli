@@ -15,8 +15,8 @@ public class ArenaBuilder : MonoBehaviour
     VictoryMeter vm;
     GameObject player;
     UIDriver uid;
-    public GameObject arenaStarter;
-    List<GameObject> arenaWallObjects = new List<GameObject>();
+    ArenaStarter arenaStarter;
+    List<ArenaWall> arenaWallObjects = new List<ArenaWall>();
     int layerMask_Impassable = 1 << 13;
     int layerMask_Passable = 1 << 14;
 
@@ -29,7 +29,7 @@ public class ArenaBuilder : MonoBehaviour
 
     //state
     GameObject[] enemies;
-    GameObject letterTileDropper;
+    LetterTileDropper ltd;
     GameObject camMouse;
 
     public void SetupArena(Vector2 centroid)
@@ -66,7 +66,7 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
                 arenaWallObjects.Add(wallPiece);
             }
 
@@ -82,7 +82,7 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
                 arenaWallObjects.Add(wallPiece);
             }
         }
@@ -97,7 +97,7 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
                 arenaWallObjects.Add(wallPiece);
             }
         }
@@ -112,7 +112,7 @@ public class ArenaBuilder : MonoBehaviour
             }
             else
             {
-                GameObject wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity);
+                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
                 arenaWallObjects.Add(wallPiece);
             }
         }
@@ -120,12 +120,12 @@ public class ArenaBuilder : MonoBehaviour
 
     private void SetupStatueCameraMouseCat(Vector2 centroid)
     {
-        letterTileDropper = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity) as GameObject;
+        ltd = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity).GetComponent<LetterTileDropper>();
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
         camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
         CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
 
-        cameraMouse1.SetAnchor(arenaStarter);
+        cameraMouse1.SetAnchor(arenaStarter.gameObject);
         cameraMouse1.SetPlayer(gc.GetPlayer());
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         cvc.Follow = camMouse.transform; //arenaStarter.transform;
@@ -159,15 +159,16 @@ public class ArenaBuilder : MonoBehaviour
         return randPos;
     }
 
-    public void SetArenaStarter(GameObject go)
+    public void SetArenaStarter(ArenaStarter newAS)
     {
-        arenaStarter = go;
+        arenaStarter = newAS;
     }
 
     
     private void HandleArenaCompletion(bool didPlayerWin)
     {
         // if (didplayerwin) leads to different outcomes, such as awarding a True Letter, or some currency
+        Debug.Log("received arena ended message. Player won? " + didPlayerWin);
         CloseDownArena();
         vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
     }
@@ -182,13 +183,14 @@ public class ArenaBuilder : MonoBehaviour
         {
             Destroy(enemies[i]);
         }
-
-        Destroy(letterTileDropper);
+        ltd.DestroyAllLetters();
+        Destroy(ltd.gameObject);
         foreach(var element in arenaWallObjects)
         {
-            Destroy(element);
+            element.RemoveArenaWall();
         }
-        Destroy(arenaStarter); // For now, destroy the statue, but later replace with a broken statue, perhaps?
+        arenaStarter.RemoveArenaStarter();
+        // For now, destroy the statue, but later replace with a broken statue, perhaps?
         player.GetComponent<WordBuilder>().ClearCurrentWord();
         player.GetComponent<SpellMaker>().RemoveAllSpellsInFlight();
         
