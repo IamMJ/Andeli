@@ -17,16 +17,18 @@ public class LetterTileDropper : MonoBehaviour
     WordValidater wv;
     ArenaBuilder ab;
     int layerMask_Impassable = 1 << 13;
+    int layerMask_Letter = 1 << 9;
     public List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
     List<Vector2> dropLocations = new List<Vector2>();
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     //param
-    int numberOfLettersToDropPerWave = 10;
+    int numberOfLettersToDropPerWave = 3;
     float minDistanceBetweenLetters = 1.5f;
     int consonantsBetweenVowels = 1;
     float averageLifetimeOfLettersInWave = 20f;
+    float averageTimeBetweenWaves = 5f;
     Vector2 fallVector = new Vector2(0, 10f);
 
     //state
@@ -108,7 +110,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void DropLettersAtDropLocations()
     {
-        timeForNextWave = Time.time + averageLifetimeOfLettersInWave;
+        timeForNextWave = Time.time + averageTimeBetweenWaves + UnityEngine.Random.Range(-1f, +1f);
         foreach (var dropLocation in dropLocations)
         {
             DropLetterTile(dropLocation);
@@ -121,8 +123,9 @@ public class LetterTileDropper : MonoBehaviour
     private Vector2 GetRandomPositionInsideArenaButAwayFromOtherDropLocations(int currentDropLocationIndex)
     {
         int attempts = 0;
-        bool isTooNearOtherLetter = false;
+        bool isTooNearOtherDropLocation = false;
         bool isAnImpassablePosition = false;
+        bool isTooNearAnExistingLetter = false;
         if (!ab)
         {
             ab = FindObjectOfType<ArenaBuilder>();
@@ -137,13 +140,15 @@ public class LetterTileDropper : MonoBehaviour
                 break;
             }
 
-            isTooNearOtherLetter = CheckRandomPositionAgainstOtherDropLocations(currentDropLocationIndex, randomPosition);
+            isTooNearOtherDropLocation = CheckRandomPositionAgainstOtherDropLocations(currentDropLocationIndex, randomPosition);
             isAnImpassablePosition = CheckRandomPositionAgainstImpassableTerrain(randomPosition);
+            isTooNearAnExistingLetter = CheckRandomPositionAgainstExistingLettersOnBoard(randomPosition);
         }
-        while (isTooNearOtherLetter || isAnImpassablePosition);
+        while (isTooNearOtherDropLocation || isAnImpassablePosition || isTooNearAnExistingLetter);
         return randomPosition;
     }
 
+    #region Helpers
     /// <summary>
     /// This returns 'true' if the testPosition is inside of the MinDistanceBetweenLetters from a single drop
     /// location before it in the array. Returns 'false' if outside the MinDistanceBetweenLetters
@@ -181,6 +186,19 @@ public class LetterTileDropper : MonoBehaviour
             return false;
         }
     }
+
+    private bool CheckRandomPositionAgainstExistingLettersOnBoard(Vector2 testPos)
+    {
+        var coll = Physics2D.OverlapCircle(testPos, 0.05f, layerMask_Letter);
+        if (coll)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     private void DropLetterTile(Vector2 dropPosition)
     {
         GameObject dropShadow = Instantiate(droppedLetterPrefab, dropPosition, Quaternion.identity);
@@ -207,9 +225,11 @@ public class LetterTileDropper : MonoBehaviour
         letterTile.SetLetterTileDropper(this);
         letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
-        AddLetterToSpawnedLetterList(letterTile);
+        //AddLetterToSpawnedLetterList(letterTile);  //Have the letter call this once it has landed for AI's sake
 
     }
+
+    #endregion
 
     #endregion
 
@@ -309,6 +329,13 @@ public class LetterTileDropper : MonoBehaviour
         }
     }
 
+    public void AddLetterToSpawnedLetterList(LetterTile newLetterTile)
+    {
+        OnLetterListModified?.Invoke(newLetterTile, true);
+        letterTilesOnBoard.Add(newLetterTile);
+        doesBoardHaveLettersAvailable = true;
+    }
+
     public void DestroyAllLetters()
     {
         Debug.Log("LTD asked to destroy all letters");
@@ -366,12 +393,6 @@ public class LetterTileDropper : MonoBehaviour
         return null;
     }
 
-    private void AddLetterToSpawnedLetterList(LetterTile newLetterTile)
-    {
-        OnLetterListModified?.Invoke(newLetterTile, true);
-        letterTilesOnBoard.Add(newLetterTile);
-        doesBoardHaveLettersAvailable = true;
-    }
 
 
 

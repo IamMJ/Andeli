@@ -65,6 +65,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
                     assignedShadow.RemoveShadow();
                 }
                 UnknitAllGridGraphs();
+                letterTileDropper.AddLetterToSpawnedLetterList(this);
 
             }
             return;
