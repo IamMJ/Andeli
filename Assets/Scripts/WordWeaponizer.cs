@@ -18,6 +18,7 @@ public class WordWeaponizer : MonoBehaviour
     PlayerMemory playmem;
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
+    UIDriver uid;
     string testWord;
 
     public enum SpellType { Normal, Freeze };
@@ -25,21 +26,55 @@ public class WordWeaponizer : MonoBehaviour
     //param
     float spellInitialSpeed = 6.0f;
     public GameObject currentEnemy;
+    float spellFiringCost = 25;
 
+
+    //state
+    bool isPlayer = false;
+    float maxEnergy = 100f;
+    float energyRegenRate_Target = 2f; // units per second;
+    float energyRegenRate_Current;
+    float energyRegenDriftRate = 0.2f; //how fast the current energy regen rate drifts back to its target. 
+    float currentEnergyLevel;
 
     void Start()
     {
         playmem = GetComponent<PlayerMemory>();
         wbd = GetComponent<WordBuilder>();
+        
+        if (GetComponent<PlayerInput>()) //Must be a player
+        {
+            isPlayer = true;
+            uid = FindObjectOfType<UIDriver>();
+            uid.SetSpellEnergySliderMaxValue(maxEnergy);
+        }
 
         gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
-        ab = FindObjectOfType<ArenaBuilder>();
+        currentEnergyLevel = maxEnergy;
+    }
+
+    void Update()
+    {
+        energyRegenRate_Current = Mathf.MoveTowards(
+            energyRegenRate_Current, energyRegenRate_Target, energyRegenDriftRate * Time.deltaTime);
+        currentEnergyLevel += energyRegenRate_Current * Time.deltaTime;
+        currentEnergyLevel = Mathf.Clamp(currentEnergyLevel, 0, maxEnergy);
+        if (uid)
+        {
+            uid.UpdateSpellEnergySlider(currentEnergyLevel);
+        }
     }
     public bool AttemptToFireWord()
     {
+        //Check for sufficient Spell Energy...
+        if (spellFiringCost > currentEnergyLevel)
+        {
+            Debug.Log("insufficient energy to fire at this moment");
+            return false;
+        }
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
         {
@@ -56,6 +91,11 @@ public class WordWeaponizer : MonoBehaviour
             else
             {
                 FireKnownValidWord();
+                currentEnergyLevel -= spellFiringCost;
+                if (isPlayer)
+                {
+                    uid.UpdateSpellEnergySlider(currentEnergyLevel);
+                }
                 return true;
             }
 
@@ -128,7 +168,7 @@ public class WordWeaponizer : MonoBehaviour
 
     private void TargetBestEnemy()
     {
-        if (GetComponent<PlayerInput>())
+        if (isPlayer)
         {
             if (!ab)
             {

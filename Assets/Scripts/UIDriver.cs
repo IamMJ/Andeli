@@ -22,6 +22,8 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Image[] wordboxImages = null;
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
+    [SerializeField] Slider spellEnergySlider = null;
+
     WordBuilder playerWB;
     WordWeaponizer playerWWZ;
     GameController gc;
@@ -118,8 +120,10 @@ public class UIDriver : MonoBehaviour
             FillWordFiringSlider(timeButtonDepressed / UIParameters.LongPressTime);
             if (timeButtonDepressed >= UIParameters.LongPressTime)
             {
-                playerWWZ.AttemptToFireWord();
-                CompleteLongPress_WordBoxActions();
+                if (playerWWZ.AttemptToFireWord())
+                {
+                    CompleteLongPress_WordBoxActions();
+                }                
             }
         }
     }
@@ -242,6 +246,16 @@ public class UIDriver : MonoBehaviour
     public GameObject GetGameObjectAt(int index)
     {
         return wordboxImages[index].gameObject;
+    }
+
+    public void UpdateSpellEnergySlider( float currentEnergy)
+    {
+        spellEnergySlider.value = currentEnergy;
+    }
+
+    public void SetSpellEnergySliderMaxValue(float maxEnergy)
+    {
+        spellEnergySlider.maxValue = maxEnergy;
     }
 
     //IEnumerator ShowHideTopPanel_Coroutine(bool shouldBeShown)

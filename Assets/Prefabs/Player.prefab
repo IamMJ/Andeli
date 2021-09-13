@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 5293917446488848811}
   - component: {fileID: -7819186653885371754}
   - component: {fileID: -5630972937777679914}
-  - component: {fileID: 2514741202502210731}
   - component: {fileID: 5745040115539129987}
   - component: {fileID: -3077055182206633393}
   - component: {fileID: 5006189010876863907}
@@ -144,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
   strategicDestinationPrefab: {fileID: 7910314228762140595, guid: 36498f27111132e4cadd7de16ca5efda, type: 3}
+  currentTargetedLetter: {fileID: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +159,7 @@ MonoBehaviour:
   puffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
   normalSpellPrefab: {fileID: 7941282901840960525, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
   freezeSpellPrefab: {fileID: 6886851091308245794, guid: c5bafa82922014b4d9a8b3634cc06e3f, type: 3}
+  currentEnemy: {fileID: 0}
 --- !u!95 &5293917446488848811
 Animator:
   serializedVersion: 3
@@ -202,18 +203,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0779bd952808024449fbf46c6c046b21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2514741202502210731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5608652954252347955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d2d549f77163624d9ccfd0b24ca0759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5745040115539129987
