@@ -23,6 +23,7 @@ public class UIDriver : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
     [SerializeField] Slider spellEnergySlider = null;
+    [SerializeField] Image spellEnergyFillImage = null;
 
     WordBuilder playerWB;
     WordWeaponizer playerWWZ;
@@ -40,6 +41,12 @@ public class UIDriver : MonoBehaviour
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
     public float timeSpentLongPressing { get; private set; }
+
+    Color noCast = Color.red;
+    Color oneCast = new Color(1f, 0.64f, 0);
+    Color twoCast = Color.yellow;
+    Color threeCast = new Color(0.443f, 1f, 0);
+    Color fourCast = Color.green;
 
     private void Start()
     {
@@ -251,6 +258,33 @@ public class UIDriver : MonoBehaviour
     public void UpdateSpellEnergySlider( float currentEnergy)
     {
         spellEnergySlider.value = currentEnergy;
+        float factor = currentEnergy / spellEnergySlider.maxValue;
+        if (factor >= 1f)
+        {
+            spellEnergyFillImage.color = fourCast;
+            return;
+        }
+        if (factor >= 0.75f)
+        {
+            spellEnergyFillImage.color = threeCast;
+            return;
+        }
+        if (factor >= 0.5f)
+        {
+            spellEnergyFillImage.color = twoCast;
+            return;
+        }
+        if (factor >= 0.25f)
+        {
+            spellEnergyFillImage.color = oneCast;
+            return;
+        }
+        if (factor < 0.25f)
+        {
+            spellEnergyFillImage.color = noCast;
+            return;
+        }
+
     }
 
     public void SetSpellEnergySliderMaxValue(float maxEnergy)

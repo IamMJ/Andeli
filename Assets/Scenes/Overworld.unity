@@ -1373,7 +1373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.99498594, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.44343448, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -101498,6 +101498,7 @@ MonoBehaviour:
   - {fileID: 505156940}
   - {fileID: 1662566556}
   spellEnergySlider: {fileID: 905927272}
+  spellEnergyFillImage: {fileID: 425663857}
 --- !u!4 &1605398459
 Transform:
   m_ObjectHideFlags: 0

@@ -29,6 +29,7 @@ public class WordWeaponizer : MonoBehaviour
     float spellFiringCost = 25;
 
 
+
     //state
     bool isPlayer = false;
     float maxEnergy = 100f;
@@ -53,7 +54,7 @@ public class WordWeaponizer : MonoBehaviour
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
-        currentEnergyLevel = maxEnergy;
+        currentEnergyLevel = 0f; //maxEnergy;
     }
 
     void Update()
@@ -180,6 +181,11 @@ public class WordWeaponizer : MonoBehaviour
         {
             currentEnemy = gc.GetPlayer();
         }
+    }
+
+    public void ModifyEnergyRegent(float amount)
+    {
+        energyRegenRate_Current += amount;
     }
 
 }
