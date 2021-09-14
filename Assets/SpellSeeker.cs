@@ -38,12 +38,17 @@ public class SpellSeeker : MonoBehaviour
 
     private void Update()
     {
+        if (!target)
+        {
+            Destroy(gameObject);
+        }
         MoveForward();
         TargetProximityCheck();
     }
 
     private void MoveForward()
     {
+
         dir = target.position - transform.position;
         dist = dir.magnitude;
 

@@ -192,9 +192,6 @@ public class ArenaBuilder : MonoBehaviour
         arenaStarter.RemoveArenaStarter();
         // For now, destroy the statue, but later replace with a broken statue, perhaps?
         player.GetComponent<WordBuilder>().ClearCurrentWord();
-        player.GetComponent<WordWeaponizer>().RemoveAllSpellsInFlight();
-        
-        //Remove spells in flight from any non-player wordmakers
 
         Destroy(gameObject);
     }

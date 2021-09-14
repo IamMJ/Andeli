@@ -7,7 +7,6 @@ public class WordWeaponizer : MonoBehaviour
     [SerializeField] GameObject puffPrefab = null;
     [SerializeField] GameObject normalSpellPrefab = null;
     [SerializeField] GameObject freezeSpellPrefab = null;
-    List<GameObject> spellsInFlight = new List<GameObject>();
 
     GameController gc;
     WordBuilder wbd;
@@ -29,10 +28,12 @@ public class WordWeaponizer : MonoBehaviour
 
     //state
     bool isPlayer = false;
+    int powerSign = -1;
     float energyRegenRate_Target = 2f; // units per second;
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.2f; //how fast the current energy regen rate drifts back to its target. 
     float currentEnergyLevel;
+
 
     void Start()
     {
@@ -42,6 +43,7 @@ public class WordWeaponizer : MonoBehaviour
         if (GetComponent<PlayerInput>()) //Must be a player
         {
             isPlayer = true;
+            powerSign = 1;
             uid = FindObjectOfType<UIDriver>();
         }
 
@@ -71,6 +73,7 @@ public class WordWeaponizer : MonoBehaviour
             Debug.Log("insufficient energy to fire at this moment");
             return false;
         }
+
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
         {
@@ -79,29 +82,19 @@ public class WordWeaponizer : MonoBehaviour
             WordPuff wordPuff = puff.GetComponent<WordPuff>();
             wordPuff.SetText(testWord);
             wordPuff.SetColorByPower(wbd.CurrentPower);
-            if (vm.ModifyBalanceAndCheckForArenaEnd(wbd.CurrentPower))
+            FireKnownValidWord();
+            currentEnergyLevel -= spellFiringCost;
+            if (isPlayer)
             {
-                //Technically a valid word, but the arena is over now and shouldn't count this word
-                return false;
+                uid.UpdateSpellEnergySlider(currentEnergyLevel);
             }
-            else
-            {
-                FireKnownValidWord();
-                currentEnergyLevel -= spellFiringCost;
-                if (isPlayer)
-                {
-                    uid.UpdateSpellEnergySlider(currentEnergyLevel);
-                }
-                return true;
-            }
-
+            return true;
         }
         else
         {
-            playmem.ResetConsecutiveWordCount();
             Debug.Log("stun the player.");
 
-            // stun the player
+            // stun the player?
 
             return false;
         }
@@ -110,7 +103,7 @@ public class WordWeaponizer : MonoBehaviour
     public void FireKnownValidWord()
     {
         TargetBestEnemy();
-        CreateSpell(currentEnemy.transform, wbd.CurrentPower, TrueLetter.Ability.Normal); ;
+        CreateSpell(currentEnemy.transform, wbd.CurrentPower * powerSign, TrueLetter.Ability.Normal); ;
 
         foreach (var letter in wbd.GetLettersCollected())
         {
@@ -123,7 +116,7 @@ public class WordWeaponizer : MonoBehaviour
         
     }
 
-    public void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
+    private void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
     {
         switch (activatedLetter.Ability)
         {
@@ -146,34 +139,24 @@ public class WordWeaponizer : MonoBehaviour
 
     private void CreateSpell(Transform target, float power, TrueLetter.Ability spellType)
     {
-        float amount = UnityEngine.Random.Range(-180f, 179f);
+        float amount = Random.Range(-180f, 179f);
         Quaternion randRot = Quaternion.Euler(0, 0, amount);
-        GameObject spell;
+        SpellSeeker spell;        
 
         switch (spellType)
         {
             case TrueLetter.Ability.Normal:
-                spell = Instantiate(normalSpellPrefab, transform.position, randRot);
-                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellSpeed;
-                spell.GetComponent<SpellSeeker>().SetupSpell(target, vm, power, TrueLetter.Ability.Normal);
-                spellsInFlight.Add(spell);
+                spell = Instantiate(normalSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
+                spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
+                spell.SetupSpell(target, vm, power, TrueLetter.Ability.Normal);
                 return;
 
             case TrueLetter.Ability.Frozen:
-                spell = Instantiate(freezeSpellPrefab, transform.position, randRot);
-                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellSpeed;
-                spell.GetComponent<SpellSeeker>().SetupSpell(target, vm, power, TrueLetter.Ability.Frozen);
-                spellsInFlight.Add(spell);
+                spell = Instantiate(freezeSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
+                spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
+                spell.SetupSpell(target, vm, power, TrueLetter.Ability.Frozen);
                 return;
         }
-    }
-    public void RemoveAllSpellsInFlight()
-    {
-        for (int i = 0; i < spellsInFlight.Count; i++)
-        {
-            Destroy(spellsInFlight[i]);            
-        }
-        spellsInFlight.Clear();
     }
 
     private void TargetBestEnemy()
