@@ -41,7 +41,7 @@ public abstract class SpellingStrategy : MonoBehaviour
             if (shouldFireOrEraseNow || currentWordOptions < thresholdForTooUnlikely) // ...but its future is too unpromising...
             {
                 dh.DisplayDebugLog($"Firing {currentWord} with only {currentWordOptions} possible options ahead");
-                wwz.FireKnownValidWord();
+                wwz.AttemptToFireWordAsNPC();
                 return;
             }
         }
@@ -72,7 +72,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         if (wv.CheckWordValidity(currentWord))
         {
             dh.DisplayDebugLog("firing off " + currentWord);
-            wwz.FireKnownValidWord();
+            wwz.AttemptToFireWordAsNPC();
         }
     }
 

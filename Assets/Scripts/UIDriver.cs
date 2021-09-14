@@ -129,7 +129,7 @@ public class UIDriver : MonoBehaviour
             FillWordFiringSlider(timeButtonDepressed / UIParameters.LongPressTime);
             if (timeButtonDepressed >= UIParameters.LongPressTime)
             {
-                if (playerWWZ.AttemptToFireWord())
+                if (playerWWZ.AttemptToFireWordAsPlayer())
                 {
                     CompleteLongPress_WordBoxActions();
                 }                

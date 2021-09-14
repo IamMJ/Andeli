@@ -65,7 +65,7 @@ public class WordWeaponizer : MonoBehaviour
             uid.UpdateSpellEnergySlider(currentEnergyLevel);
         }
     }
-    public bool AttemptToFireWord()
+    public bool AttemptToFireWordAsPlayer()
     {
         //Check for sufficient Spell Energy...
         if (spellFiringCost > currentEnergyLevel)
@@ -98,6 +98,34 @@ public class WordWeaponizer : MonoBehaviour
 
             return false;
         }
+    }
+
+    /// <summary>
+    /// This is the same as 'AttemptToFireWordAsPlayer' except it does not check for word validity first. The NPC
+    /// should be checking word validity earlier as part of its strategy.
+    /// </summary>
+    /// <returns></returns>
+    public bool AttemptToFireWordAsNPC()
+    {
+        //Check for sufficient Spell Energy...
+        if (spellFiringCost > currentEnergyLevel)
+        {
+            Debug.Log("insufficient energy to fire at this moment");
+            return false;
+        }
+        else
+        {
+            //playmem.IncrementWordCount(); // implement a memory for the enemy IF combat requires tracking played words
+            GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
+            WordPuff wordPuff = puff.GetComponent<WordPuff>();
+            wordPuff.SetText(testWord);
+            wordPuff.SetColorByPower(wbd.CurrentPower);
+            FireKnownValidWord();
+            wbd.ClearCurrentWord();
+            currentEnergyLevel -= spellFiringCost;
+            return true;
+        }
+
     }
 
     public void FireKnownValidWord()
