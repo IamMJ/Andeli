@@ -17,7 +17,7 @@ public class PlayerInput : MonoBehaviour
     Seeker seeker;
     Path currentPath;
     Touch currentTouch;
-    GameObject moveArrow;
+    List<GameObject> moveArrows = new List<GameObject>();
     Camera mc;
     GameObject currentStrategicDestinationIcon;
     int layerMask_Letter = 1 << 9;
@@ -146,9 +146,33 @@ public class PlayerInput : MonoBehaviour
         {
             currentPath = newPath;
             currentWaypoint = 0;
-            //Show footsteps from current pos along path to destination.
+            DepictNewPathWithFootsteps();
         }
 
+    }
+
+    private void DepictNewPathWithFootsteps()
+    {
+        ClearMoveArrows();
+        List<Vector3> vecPath = currentPath.vectorPath;
+        Vector2 stepDir;
+        for (int i = 0; i < vecPath.Count; i++)
+        {
+            if (i == 0)
+            {
+                stepDir = vecPath[i] - transform.position;
+                GameObject stepArrow = Instantiate(moveArrowPrefab, vecPath[i], Quaternion.identity);
+                stepArrow.GetComponent<MoveArrow>().Direction = WordMakerMovement.QuantifyMoveDirection(stepDir);
+                moveArrows.Add(stepArrow);
+            }
+            else
+            {
+                stepDir = vecPath[i] - vecPath[i-1];
+                GameObject stepArrow = Instantiate(moveArrowPrefab, vecPath[i], Quaternion.identity);
+                stepArrow.GetComponent<MoveArrow>().Direction = WordMakerMovement.QuantifyMoveDirection(stepDir);
+                moveArrows.Add(stepArrow);
+            }
+        }
     }
 
     private void PassTacticalDestinationToMoveBrain()
@@ -216,7 +240,11 @@ public class PlayerInput : MonoBehaviour
 
     private void ClearMoveArrows()
     {
-        Destroy(moveArrow);
+        for (int i = moveArrows.Count-1; i >= 0; i--)
+        {
+            Destroy(moveArrows[i]);
+        }
+        moveArrows.Clear();
     }
 
     #endregion

@@ -119,8 +119,12 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
 
     private void HandleAnimation()
     {
-        anim.SetFloat("Horizontal", validDesMove.x);
-        anim.SetFloat("Vertical", validDesMove.y);
+        if (validDesMove.magnitude > Mathf.Epsilon)
+        {
+            anim.SetFloat("Horizontal", validDesMove.x);
+            anim.SetFloat("Vertical", validDesMove.y);
+        }
+
     }
 
     #endregion
