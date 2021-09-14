@@ -10,7 +10,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
     public char Letter;
     public int Power;
     public float StartingLifetime;
-    public TrueLetter.Ability Ability = TrueLetter.Ability.Nothing;
+    public TrueLetter.Ability Ability = TrueLetter.Ability.Normal;
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;

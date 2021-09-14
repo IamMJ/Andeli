@@ -9,7 +9,6 @@ public class WordBuilder : MonoBehaviour
 {
     PlayerInput pi;
     protected WordWeaponizer wwz;
-    PowerMeter pm;
     UIDriver uid;
     WordValidater wv;
     ArenaBuilder ab;

@@ -27,7 +27,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
 
         switch (activatedLetter.Ability)
         {
-            case TrueLetter.Ability.Nothing:
+            case TrueLetter.Ability.Normal:
                 //
                 break;
 
@@ -64,32 +64,5 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
         }
     }
 
-    public void ApplyLetterEffectOnFiring(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
-    {
-        switch (activatedLetter.Ability)
-        {
-            case TrueLetter.Ability.Nothing:
-                //
-                break;
-
-            case TrueLetter.Ability.Shiny:
-                //
-                break;
-
-            case TrueLetter.Ability.Frozen:
-                // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
-                float freezePower = activatedLetter.Power / 10f * targetWMM.GetComponent<WordBuilder>().CurrentPower;
-                targetWMM.GetComponent<WordWeaponizer>().CreateSpell(
-                    sourceWMM.transform, targetWMM.transform, WordWeaponizer.SpellType.Freeze);
-
-                targetWMM.GetComponent<SpeedKeeper>()?.FreezeWordMaker(freezePower);               
-                
-                break;
-
-            case TrueLetter.Ability.Lucky:
-                //
-                break;
-
-        }
-    }
+    
 }

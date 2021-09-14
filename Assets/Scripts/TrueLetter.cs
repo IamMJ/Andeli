@@ -9,9 +9,9 @@ public class TrueLetter : ScriptableObject
     [SerializeField] char Letter;
     [SerializeField] int weight;
     [SerializeField] int Power;
-    [SerializeField] Ability ability = Ability.Nothing;
+    [SerializeField] Ability ability = Ability.Normal;
 
-    public enum Ability { Nothing, Shiny, Frozen, Lucky };
+    public enum Ability { Normal, Shiny, Frozen, Lucky };
 
 
 

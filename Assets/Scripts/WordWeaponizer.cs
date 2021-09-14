@@ -13,7 +13,6 @@ public class WordWeaponizer : MonoBehaviour
     WordBuilder wbd;
     DebugHelper dh;
     WordValidater wv;
-    PowerMeter pm;
     VictoryMeter vm;
     PlayerMemory playmem;
     ArenaBuilder ab;
@@ -21,15 +20,12 @@ public class WordWeaponizer : MonoBehaviour
     UIDriver uid;
     string testWord;
 
-    public enum SpellType { Normal, Freeze };
 
     //param
-    float spellInitialSpeed = 6.0f;
+    float spellSpeed = 6.0f;
     public GameObject currentEnemy;
     float spellFiringCost = 25;
     float maxEnergy = 100f;
-
-
 
     //state
     bool isPlayer = false;
@@ -114,7 +110,7 @@ public class WordWeaponizer : MonoBehaviour
     public void FireKnownValidWord()
     {
         TargetBestEnemy();
-        CreateSpell(transform, currentEnemy.transform, WordWeaponizer.SpellType.Normal);
+        CreateSpell(currentEnemy.transform, wbd.CurrentPower, TrueLetter.Ability.Normal); ;
 
         foreach (var letter in wbd.GetLettersCollected())
         {
@@ -122,18 +118,33 @@ public class WordWeaponizer : MonoBehaviour
             {
                 continue;
             }
-            if (!aleh)
-            {
-                ab = FindObjectOfType<ArenaBuilder>();
-                aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
-            }
-            aleh.ApplyLetterEffectOnFiring(letter, gameObject, currentEnemy);
+            TriggerActiveLetterEffects(letter, gameObject, currentEnemy);
         }
         
     }
 
+    public void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
+    {
+        switch (activatedLetter.Ability)
+        {
 
-    public void CreateSpell(Transform source, Transform target, SpellType spellType)
+            case TrueLetter.Ability.Shiny:
+                //
+                break;
+
+            case TrueLetter.Ability.Frozen:
+                // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
+                float freezePower = activatedLetter.Power / 10f * targetWMM.GetComponent<WordBuilder>().CurrentPower;
+                CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
+                break;
+
+            case TrueLetter.Ability.Lucky:
+                //
+                break;
+        }
+    }
+
+    private void CreateSpell(Transform target, float power, TrueLetter.Ability spellType)
     {
         float amount = UnityEngine.Random.Range(-180f, 179f);
         Quaternion randRot = Quaternion.Euler(0, 0, amount);
@@ -141,22 +152,21 @@ public class WordWeaponizer : MonoBehaviour
 
         switch (spellType)
         {
-            case SpellType.Normal:
-                spell = Instantiate(normalSpellPrefab, source.position, randRot);
-                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellInitialSpeed;
-                spell.GetComponent<SpellSeeker>().SetTarget(target);
+            case TrueLetter.Ability.Normal:
+                spell = Instantiate(normalSpellPrefab, transform.position, randRot);
+                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellSpeed;
+                spell.GetComponent<SpellSeeker>().SetupSpell(target, vm, power, TrueLetter.Ability.Normal);
                 spellsInFlight.Add(spell);
                 return;
 
-            case SpellType.Freeze:
-                spell = Instantiate(freezeSpellPrefab, source.position, randRot);
-                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellInitialSpeed;
-                spell.GetComponent<SpellSeeker>().SetTarget(target);
+            case TrueLetter.Ability.Frozen:
+                spell = Instantiate(freezeSpellPrefab, transform.position, randRot);
+                spell.GetComponent<Rigidbody2D>().velocity = spell.transform.up * spellSpeed;
+                spell.GetComponent<SpellSeeker>().SetupSpell(target, vm, power, TrueLetter.Ability.Frozen);
                 spellsInFlight.Add(spell);
                 return;
         }
     }
-
     public void RemoveAllSpellsInFlight()
     {
         for (int i = 0; i < spellsInFlight.Count; i++)
