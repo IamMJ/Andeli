@@ -22,8 +22,16 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Image[] wordboxImages = null;
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
-    [SerializeField] Slider spellEnergySlider = null;
-    [SerializeField] Image spellEnergyFillImage = null;
+    [SerializeField] Slider spellEnergySlider_0 = null;
+    [SerializeField] Slider spellEnergySlider_1 = null;
+    [SerializeField] Slider spellEnergySlider_2 = null;
+    [SerializeField] Slider spellEnergySlider_3 = null;
+
+    [SerializeField] Image energySliderFill_0 = null;
+    [SerializeField] Image energySliderFill_1 = null;
+    [SerializeField] Image energySliderFill_2 = null;
+    [SerializeField] Image energySliderFill_3 = null;
+
 
     WordBuilder playerWB;
     WordWeaponizer playerWWZ;
@@ -41,12 +49,6 @@ public class UIDriver : MonoBehaviour
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
     public float timeSpentLongPressing { get; private set; }
-
-    Color noCast = Color.red;
-    Color oneCast = new Color(1f, 0.64f, 0);
-    Color twoCast = Color.yellow;
-    Color threeCast = new Color(0.443f, 1f, 0);
-    Color fourCast = Color.green;
 
     private void Start()
     {
@@ -257,39 +259,62 @@ public class UIDriver : MonoBehaviour
 
     public void UpdateSpellEnergySlider( float currentEnergy)
     {
-        spellEnergySlider.value = currentEnergy;
-        float factor = currentEnergy / spellEnergySlider.maxValue;
+        float factor = currentEnergy / 100f;
         if (factor >= 1f)
         {
-            spellEnergyFillImage.color = fourCast;
+            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+            energySliderFill_0.color = Color.green;
+            spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
+            energySliderFill_1.color = Color.green;
+            spellEnergySlider_2.value = spellEnergySlider_2.maxValue;
+            energySliderFill_2.color = Color.green;
+            spellEnergySlider_3.value = spellEnergySlider_3.maxValue;
+            energySliderFill_3.color = Color.green;
             return;
         }
         if (factor >= 0.75f)
         {
-            spellEnergyFillImage.color = threeCast;
+            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+            energySliderFill_0.color = Color.green;
+            spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
+            energySliderFill_1.color = Color.green;
+            spellEnergySlider_2.value = spellEnergySlider_2.maxValue;
+            energySliderFill_2.color = Color.green;
+            spellEnergySlider_3.value = factor - .75f;
+            energySliderFill_3.color = Color.yellow;
             return;
         }
         if (factor >= 0.5f)
         {
-            spellEnergyFillImage.color = twoCast;
+            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+            energySliderFill_0.color = Color.green;
+            spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
+            energySliderFill_1.color = Color.green;
+            spellEnergySlider_2.value = factor - .5f;
+            energySliderFill_2.color = Color.yellow;
+            spellEnergySlider_3.value = 0;
             return;
         }
         if (factor >= 0.25f)
         {
-            spellEnergyFillImage.color = oneCast;
+            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+            energySliderFill_0.color = Color.green;
+            spellEnergySlider_1.value = factor - .25f;
+            energySliderFill_1.color = Color.yellow;
+            spellEnergySlider_2.value = 0;
+            spellEnergySlider_3.value = 0;
             return;
         }
         if (factor < 0.25f)
         {
-            spellEnergyFillImage.color = noCast;
+            spellEnergySlider_0.value = factor;
+            energySliderFill_0.color = Color.yellow;
+            spellEnergySlider_1.value = 0;
+            spellEnergySlider_2.value = 0;
+            spellEnergySlider_3.value = 0;
             return;
         }
 
-    }
-
-    public void SetSpellEnergySliderMaxValue(float maxEnergy)
-    {
-        spellEnergySlider.maxValue = maxEnergy;
     }
 
     //IEnumerator ShowHideTopPanel_Coroutine(bool shouldBeShown)

@@ -27,12 +27,12 @@ public class WordWeaponizer : MonoBehaviour
     float spellInitialSpeed = 6.0f;
     public GameObject currentEnemy;
     float spellFiringCost = 25;
+    float maxEnergy = 100f;
 
 
 
     //state
     bool isPlayer = false;
-    float maxEnergy = 100f;
     float energyRegenRate_Target = 2f; // units per second;
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.2f; //how fast the current energy regen rate drifts back to its target. 
@@ -47,14 +47,13 @@ public class WordWeaponizer : MonoBehaviour
         {
             isPlayer = true;
             uid = FindObjectOfType<UIDriver>();
-            uid.SetSpellEnergySliderMaxValue(maxEnergy);
         }
 
         gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
-        currentEnergyLevel = 0f; //maxEnergy;
+        currentEnergyLevel = 45f; //maxEnergy;
     }
 
     void Update()
