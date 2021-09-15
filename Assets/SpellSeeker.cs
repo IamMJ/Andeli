@@ -14,7 +14,7 @@ public class SpellSeeker : MonoBehaviour
     float closeEnough = 0.5f;
 
     //state
-    Transform target;
+    public Transform target;
     Vector3 trueRotation = Vector3.zero;
     Vector2 dir;
     float dist;
@@ -42,13 +42,16 @@ public class SpellSeeker : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        MoveForward();
+
         TargetProximityCheck();
     }
 
+    private void FixedUpdate()
+    {
+        MoveForward();
+    }
     private void MoveForward()
     {
-
         dir = target.position - transform.position;
         dist = dir.magnitude;
 
