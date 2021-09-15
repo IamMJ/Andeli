@@ -104,11 +104,10 @@ public class LetterTile : MonoBehaviour, IGridModifier
         var guo = new GraphUpdateObject(bounds);
         guo.modifyWalkability = true;
         guo.setWalkability = false;
-        gus.modifyWalkability = true;
-        gus.setWalkability = false;
+        //gus.modifyWalkability = true;
+        //gus.setWalkability = false;
         guo.nnConstraint.graphMask = 1 << graphIndexToUnknit;
         AstarPath.active.UpdateGraphs(guo);
-        Debug.Log("Unknit specific");
     }
 
 
@@ -118,11 +117,10 @@ public class LetterTile : MonoBehaviour, IGridModifier
         var guo = new GraphUpdateObject(bounds);
         guo.modifyWalkability = true;
         guo.setWalkability = true;
-        gus.modifyWalkability = true;
-        gus.setWalkability = true;
+        //gus.modifyWalkability = true;
+        //gus.setWalkability = true;
         guo.nnConstraint.graphMask = 1 << graphIndexToReknit;
         AstarPath.active.UpdateGraphs(guo);
-        Debug.Log("Reknit specific");
     }
 
     private void ToggleRenderers(bool shouldBeVisible)

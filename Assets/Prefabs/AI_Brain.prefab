@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strategicDestination: {x: 0, y: 0}
+  GraphIndex: 1
   status: 0
 --- !u!58 &5268930924742682721
 CircleCollider2D:

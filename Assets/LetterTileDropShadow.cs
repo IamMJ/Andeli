@@ -8,12 +8,8 @@ public class LetterTileDropShadow : MonoBehaviour
     GraphUpdateScene gus;
     Vector3 scaleFactor = new Vector3(1, 1, 0);
 
-    float lifetime;
     float shrinkRate = 0.1f;
 
-    //state
-    float life = 0;
-    float factor;
 
     private void Start()
     {
@@ -28,6 +24,7 @@ public class LetterTileDropShadow : MonoBehaviour
     }
     private void UnknitGridGraph()
     {
+        gus.modifyWalkability = true;
         gus.setWalkability = false;
         gus.Apply();
         
@@ -35,16 +32,16 @@ public class LetterTileDropShadow : MonoBehaviour
 
     private void ReknitGridGraph()
     {
+        gus.modifyWalkability = true;
         gus.setWalkability = true;
         gus.Apply();
     }  
-    
 
     public void RemoveShadow()
     {
-        ReknitGridGraph();
         Destroy(gameObject);
     }
+
 
 
 }

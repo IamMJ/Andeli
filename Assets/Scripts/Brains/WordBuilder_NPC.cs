@@ -106,20 +106,17 @@ public class WordBuilder_NPC : WordBuilder
             if (currentWord.Length == 0 && !TargetLetterTile)
             {
                 TargetLetterTile = changedLetterTile;
-                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().setWalkability = true;
-                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().Apply();
+                TargetLetterTile.ReknitSpecificGridGraph(sb.GetGraphIndex());
                 return;
             }
             if (TargetLetterTile)
             {
                 LetterTile oldLTT = TargetLetterTile;
-                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().setWalkability = false;
-                TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().Apply();
+                TargetLetterTile.UnknitSpecificGridGraph(sb.GetGraphIndex());
                 TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
                 if (TargetLetterTile)
                 {
-                    TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().setWalkability = true;
-                    TargetLetterTile.gameObject.GetComponent<GraphUpdateScene>().Apply();
+                    TargetLetterTile.ReknitSpecificGridGraph(sb.GetGraphIndex());
                 }
 
                 if (TargetLetterTile != oldLTT)

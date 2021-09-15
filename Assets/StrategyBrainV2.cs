@@ -19,7 +19,7 @@ public class StrategyBrainV2 : MonoBehaviour
     WordBuilder_NPC wb;
     ArenaBuilder ab;
     GraphMask graphMask;
-    int graphIndex = 1;
+
     public Vector2 strategicDestination;
 
     Path path;
@@ -30,6 +30,7 @@ public class StrategyBrainV2 : MonoBehaviour
 
 
     //state
+    public int GraphIndex = 1;  //public so this can be set by an arena builder in the even of many enemies
     bool hasValidPath = false;
     public NavMeshPathStatus status;
     private int currentWaypoint = 0;
@@ -44,15 +45,11 @@ public class StrategyBrainV2 : MonoBehaviour
         wb = GetComponent<WordBuilder_NPC>();
         wb.OnNewTargetLetterTile += SetNewTargetLetterTileAsStrategicDestination;
         ab = FindObjectOfType<ArenaBuilder>();
-        graphMask = 1 << graphIndex;
-
+        graphMask = 1 << GraphIndex;
 
         strategicDestination = ab.CreatePassableRandomPointWithinArena();
-        seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
-        
-    }
-
- 
+        seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);        
+    } 
 
     // Update is called once per frame
     void Update()
@@ -147,14 +144,9 @@ public class StrategyBrainV2 : MonoBehaviour
         //strategicDestination = wb.TargetLetterTile.transform.position;
     }
 
-    public void SetGraphMask(GraphMask newGraphMask)
-    {
-        graphMask = newGraphMask;
-    }
-
     public int GetGraphIndex()
     {
-        return graphIndex;
+        return GraphIndex;
     }
 
     private void OnDestroy()
