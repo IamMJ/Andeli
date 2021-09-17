@@ -17,7 +17,6 @@ public class LetterTile : MonoBehaviour, IGridModifier
     LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
     GraphUpdateScene gus;
-    List<GameObject> claimants = new List<GameObject>();
     Bounds bounds;
 
     //param
@@ -29,6 +28,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
     bool isLatentAbilityActivated = false;
     float remainingFallDistance;
     bool isFalling = true;
+    bool isInactivated = false;
 
 
     private void Start()
@@ -79,9 +79,9 @@ public class LetterTile : MonoBehaviour, IGridModifier
             FadeRenderers(factor);
         }
 
-        if (LifetimeRemaining <= 0f)
+        if (!isInactivated && LifetimeRemaining <= 0f)
         {
-            PickupLetterTile();
+            DestroyLetterTile();
         }
                
     }
@@ -149,19 +149,27 @@ public class LetterTile : MonoBehaviour, IGridModifier
         letterTileDropper = ltd;
     }
 
-    public void PickupLetterTile()
+    public void InactivateLetterTile()
     {
+        isInactivated = true;
         letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
-        DestroyThisLetterTile();
-    }
 
-    public void DestroyThisLetterTile()
-    {
         if (assignedShadow)
         {
             assignedShadow.RemoveShadow();
         }
         ReknitAllGridGraphs();
+
+        sr.enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponentInChildren<TextMeshPro>().enabled = false;
+        gus.enabled = false;
+    }
+
+    public void DestroyLetterTile()
+    {
+        InactivateLetterTile();
+        letterTileDropper.RemoveLetterFromAllLettersSpawnedList(this);
         Destroy(gameObject);
     }
 

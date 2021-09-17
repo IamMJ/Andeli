@@ -385,7 +385,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.0000038146973, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &50203191
@@ -1124,6 +1124,7 @@ GameObject:
   - component: {fileID: 311825427}
   - component: {fileID: 311825429}
   - component: {fileID: 311825428}
+  - component: {fileID: 311825430}
   m_Layer: 5
   m_Name: TMP_7
   m_TagString: Untagged
@@ -1266,6 +1267,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 311825426}
   m_CullTransparentMesh: 0
+--- !u!114 &311825430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311825426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 6
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &352276157
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,7 +1894,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.27261513, y: 0.87730485}
   m_AnchorMax: {x: 0.47923028, y: 0.97800004}
-  m_AnchoredPosition: {x: 0.40000153, y: -0.55999756}
+  m_AnchoredPosition: {x: 0.3999939, y: -0.55999756}
   m_SizeDelta: {x: 3.5272522, y: -0.96588135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &446408232
@@ -2084,6 +2114,7 @@ GameObject:
   - component: {fileID: 505156939}
   - component: {fileID: 505156941}
   - component: {fileID: 505156940}
+  - component: {fileID: 505156942}
   m_Layer: 5
   m_Name: TMP_9
   m_TagString: Untagged
@@ -2226,6 +2257,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 505156938}
   m_CullTransparentMesh: 0
+--- !u!114 &505156942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505156938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 8
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2377,6 +2437,7 @@ GameObject:
   - component: {fileID: 533004584}
   - component: {fileID: 533004586}
   - component: {fileID: 533004585}
+  - component: {fileID: 533004587}
   m_Layer: 5
   m_Name: TMP_2
   m_TagString: Untagged
@@ -2519,6 +2580,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 533004583}
   m_CullTransparentMesh: 0
+--- !u!114 &533004587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533004583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &534909599
 GameObject:
   m_ObjectHideFlags: 0
@@ -4040,7 +4130,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.27000046, y: 0}
+  m_AnchoredPosition: {x: 0.27000427, y: 0}
   m_SizeDelta: {x: -3.2146683, y: 4.798176}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &758662298
@@ -33063,6 +33153,7 @@ GameObject:
   - component: {fileID: 920474344}
   - component: {fileID: 920474346}
   - component: {fileID: 920474345}
+  - component: {fileID: 920474347}
   m_Layer: 5
   m_Name: TMP_1
   m_TagString: Untagged
@@ -33205,6 +33296,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 920474343}
   m_CullTransparentMesh: 0
+--- !u!114 &920474347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920474343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &953135097
 GameObject:
   m_ObjectHideFlags: 0
@@ -33564,6 +33684,7 @@ GameObject:
   - component: {fileID: 1179176889}
   - component: {fileID: 1179176891}
   - component: {fileID: 1179176890}
+  - component: {fileID: 1179176892}
   m_Layer: 5
   m_Name: TMP_5
   m_TagString: Untagged
@@ -33706,6 +33827,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1179176888}
   m_CullTransparentMesh: 0
+--- !u!114 &1179176892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179176888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1194563412
 GameObject:
   m_ObjectHideFlags: 0
@@ -34180,6 +34330,7 @@ GameObject:
   - component: {fileID: 1316558242}
   - component: {fileID: 1316558244}
   - component: {fileID: 1316558243}
+  - component: {fileID: 1316558245}
   m_Layer: 5
   m_Name: TMP_8
   m_TagString: Untagged
@@ -34322,6 +34473,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1316558241}
   m_CullTransparentMesh: 0
+--- !u!114 &1316558245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316558241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 7
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1333647277
 GameObject:
   m_ObjectHideFlags: 0
@@ -34522,6 +34702,7 @@ GameObject:
   - component: {fileID: 1365091828}
   - component: {fileID: 1365091830}
   - component: {fileID: 1365091829}
+  - component: {fileID: 1365091831}
   m_Layer: 5
   m_Name: TMP_3
   m_TagString: Untagged
@@ -34664,6 +34845,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365091827}
   m_CullTransparentMesh: 0
+--- !u!114 &1365091831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365091827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1378829968
 GameObject:
   m_ObjectHideFlags: 0
@@ -35136,6 +35346,7 @@ GameObject:
   - component: {fileID: 1446905683}
   - component: {fileID: 1446905685}
   - component: {fileID: 1446905684}
+  - component: {fileID: 1446905686}
   m_Layer: 5
   m_Name: TMP_4
   m_TagString: Untagged
@@ -35278,6 +35489,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1446905682}
   m_CullTransparentMesh: 0
+--- !u!114 &1446905686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446905682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1463569560
 GameObject:
   m_ObjectHideFlags: 0
@@ -102701,6 +102941,7 @@ GameObject:
   - component: {fileID: 1662566555}
   - component: {fileID: 1662566557}
   - component: {fileID: 1662566556}
+  - component: {fileID: 1662566558}
   m_Layer: 5
   m_Name: TMP_10
   m_TagString: Untagged
@@ -102843,6 +103084,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1662566554}
   m_CullTransparentMesh: 0
+--- !u!114 &1662566558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662566554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 9
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1691894669
 GameObject:
   m_ObjectHideFlags: 0
@@ -103333,6 +103603,7 @@ GameObject:
   - component: {fileID: 2144190081}
   - component: {fileID: 2144190083}
   - component: {fileID: 2144190082}
+  - component: {fileID: 2144190084}
   m_Layer: 5
   m_Name: TMP_6
   m_TagString: Untagged
@@ -103475,3 +103746,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144190080}
   m_CullTransparentMesh: 0
+--- !u!114 &2144190084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144190080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1605398458}
+          m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
+          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 5
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

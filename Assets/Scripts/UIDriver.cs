@@ -157,6 +157,32 @@ public class UIDriver : MonoBehaviour
         wordFiringSliderBG.value = 0;
     }
 
+    public void ClearOutSpecificLetterFromWordStub(int index)
+    {
+
+        for (int i = index; i < playerWB.GetCurrentWordLength()-1; i++)
+        {
+            wordboxTMPs[index].text = wordboxTMPs[index + 1].text;
+            wordboxImages[index].sprite = wordboxImages[index + 1].sprite;
+            if (wordboxImages[index + 1].gameObject.transform.childCount > 0)
+            {
+                GameObject particleGO = wordboxImages[index + 1].gameObject.transform.GetChild(0).gameObject;
+                particleGO.transform.parent = wordboxTMPs[index].gameObject.transform;
+            }
+        }
+
+        int lastIndex = playerWB.GetCurrentWordLength() - 1;
+        wordboxTMPs[lastIndex].text = "";
+        wordboxImages[lastIndex].sprite = blankTileDefault;
+        if (wordboxImages[lastIndex].gameObject.transform.childCount > 0)
+        {
+            Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
+        }
+
+        playerWB.RemoveSpecificLetterFromCurrentWord(index);
+        playerWB.RebuildCurrentWordForUI();
+    }
+
 
     private void CompleteLongPress_WordBoxActions()
     {
@@ -229,13 +255,16 @@ public class UIDriver : MonoBehaviour
 
     }
 
-
     public void AddLetterToWordBar(Sprite letterTileSprite, char letter, int indexInWord)
     {
         wordboxImages[indexInWord].sprite = letterTileSprite;
         wordboxTMPs[indexInWord].text = letter.ToString();
     }
 
+    /// <summary>
+    /// This resets the entire wordbar, erasing all chars and particle effects, and resets the 
+    /// coin image back to the default.
+    /// </summary>
     public void ClearWordBar()
     {
         foreach(var image in wordboxImages)

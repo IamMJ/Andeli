@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
-[RequireComponent (typeof (WordWeaponizer))]
+[RequireComponent(typeof(WordWeaponizer))]
 public class WordBuilder : MonoBehaviour
 {
     PlayerInput pi;
@@ -19,8 +19,8 @@ public class WordBuilder : MonoBehaviour
 
     //state
     bool hasUI = false;
-    List<LetterTile> lettersCollected = new List<LetterTile>();
-    protected string currentWord = "";
+    [SerializeField] List<LetterTile> lettersCollected = new List<LetterTile>();
+    [SerializeField] protected string currentWord = "";
     int wordLengthBonus = 0;
     public int CurrentPower { get; private set; } = 0;
 
@@ -40,7 +40,6 @@ public class WordBuilder : MonoBehaviour
     protected virtual void AddLetter(LetterTile newLetter)
     {
         if (currentWord.Length >= maxWordLength) { return; }
-
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
         IncreasePower(newLetter.Power);
@@ -83,6 +82,36 @@ public class WordBuilder : MonoBehaviour
     }
 
     #region Public Methods
+
+
+    public void RemoveSpecificLetterFromCurrentWord(int indexWithinWord)
+    {
+        LetterTile letterToRemove = lettersCollected[indexWithinWord];
+        Debug.Log($"Asked to remove {letterToRemove.Letter} at index {indexWithinWord}");
+        // Remove letter from current word
+        lettersCollected.Remove(letterToRemove);
+        currentWord = currentWord.Remove(indexWithinWord, 1);
+
+        // Subtract the base word power from current power
+        CurrentPower -= letterToRemove.Power;
+
+        // Reverse any activated latent power
+
+    }
+
+    public void RebuildCurrentWordForUI()
+    {
+        if (!hasUI) { return; }
+        int index = 0;
+        foreach (var letter in lettersCollected)
+        {
+            Sprite newSprite = letter.GetComponent<SpriteRenderer>().sprite;
+            uid.AddLetterToWordBar(newSprite, letter.Letter, index);
+            index++;
+        }
+    }
+
+
     public string GetCurrentWord()
     {
         return currentWord;
@@ -145,7 +174,7 @@ public class WordBuilder : MonoBehaviour
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
             AddLetter(letterTile);
-            letterTile.PickupLetterTile();
+            letterTile.InactivateLetterTile();
 
         }
     }

@@ -19,6 +19,7 @@ public class LetterTileDropper : MonoBehaviour
     int layerMask_Impassable = 1 << 13;
     int layerMask_Letter = 1 << 9;
     public List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
+    private List<LetterTile> allLettersDropped = new List<LetterTile>();
     List<Vector2> dropLocations = new List<Vector2>();
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
@@ -225,8 +226,7 @@ public class LetterTileDropper : MonoBehaviour
         letterTile.SetLetterTileDropper(this);
         letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
-        //AddLetterToSpawnedLetterList(letterTile);  //Have the letter call this once it has landed for AI's sake
-
+        allLettersDropped.Add(letterTile);
     }
 
     #endregion
@@ -336,14 +336,19 @@ public class LetterTileDropper : MonoBehaviour
         doesBoardHaveLettersAvailable = true;
     }
 
+    public void RemoveLetterFromAllLettersSpawnedList(LetterTile letterTile)
+    {
+        allLettersDropped.Remove(letterTile);
+    }
+
     public void DestroyAllLetters()
     {
-        int count = letterTilesOnBoard.Count;
-        for (int i = 0; i < count; i++)
+        for (int i = allLettersDropped.Count -1; i >= 0; i--)
         {
-            letterTilesOnBoard[i]?.DestroyThisLetterTile();
+            allLettersDropped[i].DestroyLetterTile();
         }
         letterTilesOnBoard.Clear();
+        allLettersDropped.Clear();
     }
 
     public List<LetterTile> FindAllReachableLetterTiles(Vector2 originPosition, float speed)
