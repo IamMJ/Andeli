@@ -86,6 +86,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
                
     }
 
+    #region Pathfinding
     public void UnknitAllGridGraphs() //int graphToUnknit)
     {
         gus.modifyWalkability = true;
@@ -123,6 +124,9 @@ public class LetterTile : MonoBehaviour, IGridModifier
         AstarPath.active.UpdateGraphs(guo);
     }
 
+    #endregion
+
+    #region Appearance
     private void ToggleRenderers(bool shouldBeVisible)
     {
         if (shouldBeVisible)
@@ -149,6 +153,9 @@ public class LetterTile : MonoBehaviour, IGridModifier
         letterTileDropper = ltd;
     }
 
+    #endregion
+
+    #region Public Methods
     public void InactivateLetterTile()
     {
         isInactivated = true;
@@ -178,9 +185,9 @@ public class LetterTile : MonoBehaviour, IGridModifier
         return isLatentAbilityActivated;
     }
 
-    public void SetLatentAbilityStatus(bool newStatus)
+    public void SetLatentAbilityStatus(bool shouldBeActivated)
     {
-        isLatentAbilityActivated = newStatus;
+        isLatentAbilityActivated = shouldBeActivated;
     }
 
     public void SetFallDistance(float amount)
@@ -192,7 +199,8 @@ public class LetterTile : MonoBehaviour, IGridModifier
     {
         assignedShadow = shadow;
     }
-    
+
+    #endregion
     private void UpdateBounds()
     {
         bounds.center = transform.position;

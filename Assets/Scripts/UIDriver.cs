@@ -159,6 +159,7 @@ public class UIDriver : MonoBehaviour
 
     public void ClearOutSpecificLetterFromWordStub(int index)
     {
+        RemoveParticleEffectsAtLetter(index);
 
         for (int i = index; i < playerWB.GetCurrentWordLength()-1; i++)
         {
@@ -183,7 +184,6 @@ public class UIDriver : MonoBehaviour
         playerWB.RebuildCurrentWordForUI();
     }
 
-
     private void CompleteLongPress_WordBoxActions()
     {
         playerWB.ClearCurrentWord();
@@ -199,6 +199,15 @@ public class UIDriver : MonoBehaviour
         isFireWeaponButtonPressed = false;
         isEraseWeaponButtonPressed = false;
 
+    }
+
+    public void RemoveParticleEffectsAtLetter(int index)
+    {
+        GameObject go = GetGameObjectAt(index);
+        if (go.transform.childCount > 0)
+        {
+            Destroy(go.gameObject.transform.GetChild(0).gameObject);
+        }
     }
 
     public void ModifyPowerMeterTMP(int valueToShow)

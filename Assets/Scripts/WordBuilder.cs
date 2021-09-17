@@ -81,23 +81,49 @@ public class WordBuilder : MonoBehaviour
         aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
     }
 
+    private void InactivateLatentAbility(int indexInWord)
+    {
+        LetterTile letterTile = lettersCollected[indexInWord];
+        letterTile.SetLatentAbilityStatus(false);
+        aleh.RemoveLetterEffect(indexInWord, hasUI);
+
+    }
+    private void UndoRandomActivatedAbilityAsPenalty()
+    {
+        List<LetterTile> activatedLetters = new List<LetterTile>();
+        foreach (var letter in lettersCollected)
+        {
+            if (letter.GetLatentAbilityStatus() == true)
+            {
+                activatedLetters.Add(letter);
+            }
+        }
+        int rand = UnityEngine.Random.Range(0, activatedLetters.Count);
+        
+    }
+
     #region Public Methods
-
-
     public void RemoveSpecificLetterFromCurrentWord(int indexWithinWord)
     {
         LetterTile letterToRemove = lettersCollected[indexWithinWord];
-        Debug.Log($"Asked to remove {letterToRemove.Letter} at index {indexWithinWord}");
-        // Remove letter from current word
-        lettersCollected.Remove(letterToRemove);
-        currentWord = currentWord.Remove(indexWithinWord, 1);
 
         // Subtract the base word power from current power
         CurrentPower -= letterToRemove.Power;
 
         // Reverse any activated latent power
+        if (letterToRemove.Ability == TrueLetter.Ability.Lucky)
+        {
+            UndoRandomActivatedAbilityAsPenalty();
+        }
 
+        // Remove letter from current word
+        lettersCollected.Remove(letterToRemove);
+        currentWord = currentWord.Remove(indexWithinWord, 1);
+        wordLengthBonus--;
+
+        letterToRemove.DestroyLetterTile();
     }
+
 
     public void RebuildCurrentWordForUI()
     {
