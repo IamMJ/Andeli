@@ -25,13 +25,13 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Slider spellEnergySlider_0 = null;
     [SerializeField] Slider spellEnergySlider_1 = null;
     [SerializeField] Slider spellEnergySlider_2 = null;
-    [SerializeField] Slider spellEnergySlider_3 = null;
 
     [SerializeField] Image energySliderFill_0 = null;
     [SerializeField] Image energySliderFill_1 = null;
     [SerializeField] Image energySliderFill_2 = null;
-    [SerializeField] Image energySliderFill_3 = null;
 
+    Color fullBar = new Color(1, 1, 0);
+    Color partialBar = new Color(.7169f, .7169f, .3551f);
 
     WordBuilder playerWB;
     WordWeaponizer playerWWZ;
@@ -301,55 +301,38 @@ public class UIDriver : MonoBehaviour
         if (factor >= 1f)
         {
             spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = Color.green;
+            energySliderFill_0.color = fullBar;
             spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
-            energySliderFill_1.color = Color.green;
+            energySliderFill_1.color = fullBar;
             spellEnergySlider_2.value = spellEnergySlider_2.maxValue;
-            energySliderFill_2.color = Color.green;
-            spellEnergySlider_3.value = spellEnergySlider_3.maxValue;
-            energySliderFill_3.color = Color.green;
+            energySliderFill_2.color = fullBar;
             return;
         }
-        if (factor >= 0.75f)
+        if (factor >= 0.66f)
         {
             spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = Color.green;
+            energySliderFill_0.color = fullBar;
             spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
-            energySliderFill_1.color = Color.green;
-            spellEnergySlider_2.value = spellEnergySlider_2.maxValue;
-            energySliderFill_2.color = Color.green;
-            spellEnergySlider_3.value = factor - .75f;
-            energySliderFill_3.color = Color.yellow;
+            energySliderFill_1.color = fullBar;
+            spellEnergySlider_2.value = factor - .66f;
+            energySliderFill_2.color = partialBar;
             return;
         }
-        if (factor >= 0.5f)
+        if (factor >= 0.33f)
         {
             spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = Color.green;
-            spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
-            energySliderFill_1.color = Color.green;
-            spellEnergySlider_2.value = factor - .5f;
-            energySliderFill_2.color = Color.yellow;
-            spellEnergySlider_3.value = 0;
-            return;
-        }
-        if (factor >= 0.25f)
-        {
-            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = Color.green;
-            spellEnergySlider_1.value = factor - .25f;
-            energySliderFill_1.color = Color.yellow;
+            energySliderFill_0.color = fullBar;
+            spellEnergySlider_1.value = factor - .33f;
+            energySliderFill_1.color = partialBar;
             spellEnergySlider_2.value = 0;
-            spellEnergySlider_3.value = 0;
             return;
         }
-        if (factor < 0.25f)
+        if (factor < 0.33f)
         {
             spellEnergySlider_0.value = factor;
-            energySliderFill_0.color = Color.yellow;
+            energySliderFill_0.color = partialBar;
             spellEnergySlider_1.value = 0;
             spellEnergySlider_2.value = 0;
-            spellEnergySlider_3.value = 0;
             return;
         }
 

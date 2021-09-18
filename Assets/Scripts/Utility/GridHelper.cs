@@ -7,7 +7,12 @@ public static class GridHelper : object
     //int horizUnits = 20;
     //int vertUnits = 40;
     static float gridUnit = 1f;
-    static float highestYValueForWordSection = 0.21f;
+    static float lowestYValueForMoveInput_BottomPanel = 0.3f;
+    static float highestYValueForMoveInput_TopPanel = .86f;
+
+    static float lowestYValueForMoveInput_PermButtons = .2f;
+    static float lowestXValueForMoveInput_PermButton_Left = .21f;
+    static float highestXValueForMoveInput_PermButton_Right = .79f;
 
     public static Vector2 SnapToGrid(Vector2 inputPos, int subStepAmt)
     {
@@ -32,18 +37,41 @@ public static class GridHelper : object
     }
 
 
-    public static bool CheckIsTouchingWordSection(Vector2 touchPos)
+    public static bool CheckIsTouchingWordSection(Vector2 touchPos, bool isInArena)
     {
-        if (touchPos.y < highestYValueForWordSection * Screen.height)
+        if (isInArena)
         {
-            //Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection*Screen.height}. true");
-            return true;
+            if (touchPos.y < lowestYValueForMoveInput_BottomPanel * Screen.height || touchPos.y > highestYValueForMoveInput_TopPanel * Screen.height)
+            {
+                //Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection*Screen.height}. true");
+                return true;
+            }
+            else
+            {
+                //Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection * Screen.height}. false");
+                return false;
+            }
         }
         else
         {
-            //Debug.Log($"touched at {touchPos}. word section top is {highestYValueForWordSection * Screen.height}. false");
-            return false;
+            if (touchPos.y < lowestYValueForMoveInput_PermButtons * Screen.height)
+            {
+                if (touchPos.x < lowestXValueForMoveInput_PermButton_Left * Screen.width ||
+                    touchPos.x > highestXValueForMoveInput_PermButton_Right * Screen.width)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
+
     }
 
 }
