@@ -10,12 +10,11 @@ public class SpellSeeker : MonoBehaviour
     VictoryMeter vm;
 
     //param
-    float thrust = 0.3f;
+    float thrust = 3f;
     float closeEnough = 0.5f;
 
     //state
-    public Transform target;
-    Vector3 trueRotation = Vector3.zero;
+    Transform target;
     Vector2 dir;
     float dist;
     float speed;

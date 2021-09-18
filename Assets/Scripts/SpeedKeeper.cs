@@ -10,7 +10,6 @@ public class SpeedKeeper : MonoBehaviour
     float maxSpeed = 6.0f;
     float speedRecoveryRate = 0.1f; // speed recovered every second
 
-
     //state
     float stunTimeRemaining = 0;
     public float targetCurrentSpeed;
