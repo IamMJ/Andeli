@@ -46,7 +46,7 @@ public class PlayerInput : MonoBehaviour
         dh = FindObjectOfType<DebugHelper>();
         gc = FindObjectOfType<GameController>();
         isMobile = Application.isMobilePlatform;
-        dh.DisplayDebugLog($"isMobile: {isMobile}");
+        //dh.DisplayDebugLog($"isMobile: {isMobile}");
         mc = Camera.main;
 
     }

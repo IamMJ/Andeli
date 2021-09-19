@@ -23,7 +23,7 @@ public class WordWeaponizer : MonoBehaviour
     //param
     float spellSpeed = 6.0f;
     public GameObject currentEnemy;
-    float spellFiringCost = 25;
+    float spellFiringCost = 33;
     float maxEnergy = 100f;
 
     //state
