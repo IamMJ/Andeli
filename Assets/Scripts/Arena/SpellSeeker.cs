@@ -10,13 +10,13 @@ public class SpellSeeker : MonoBehaviour
     VictoryMeter vm;
 
     //param
-    float thrust = 3f;
-    float closeEnough = 0.5f;
+    float thrust = 30f;
+    float closeEnough = 0.1f;
 
     //state
     Transform target;
-    Vector2 dir;
-    float dist;
+    Vector3 dir;
+    float dist = 999;
     float speed;
     float powerPayload;
     TrueLetter.Ability spellType;
@@ -39,6 +39,7 @@ public class SpellSeeker : MonoBehaviour
     {
         if (!target)
         {
+            Debug.Log("destroying due to no target");
             Destroy(gameObject);
         }
 
@@ -54,13 +55,14 @@ public class SpellSeeker : MonoBehaviour
         dir = target.position - transform.position;
         dist = dir.magnitude;
 
-        rb.velocity = Vector2.MoveTowards(rb.velocity, dir.normalized * speed, thrust);
+        rb.velocity = Vector2.MoveTowards(rb.velocity, dir.normalized * speed, thrust*Time.fixedDeltaTime);
     }
 
     private void TargetProximityCheck()
     {
         if (dist <= closeEnough)
         {
+            Debug.Log($"destroying because dist between target {target.position} and here {transform.position} is {dist}.");
             HandleImpact();
             Destroy(gameObject);
         }

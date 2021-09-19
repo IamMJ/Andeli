@@ -204,9 +204,10 @@ public class UIDriver : MonoBehaviour
     public void RemoveParticleEffectsAtLetter(int index)
     {
         GameObject go = GetGameObjectAt(index);
-        if (go.transform.childCount > 0)
+        int children = go.transform.childCount;
+        for (int i = 0; i < children; i++)
         {
-            Destroy(go.gameObject.transform.GetChild(0).gameObject);
+            Destroy(go.gameObject.transform.GetChild(i).gameObject);
         }
     }
 

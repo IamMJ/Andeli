@@ -99,7 +99,7 @@ public class WordBuilder : MonoBehaviour
             }
         }
         int rand = UnityEngine.Random.Range(0, activatedLetters.Count);
-        
+        InactivateLatentAbility(rand);
     }
 
     #region Public Methods
@@ -111,14 +111,27 @@ public class WordBuilder : MonoBehaviour
         CurrentPower -= letterToRemove.Power;
 
         // Reverse any activated latent power
-        if (letterToRemove.Ability == TrueLetter.Ability.Lucky)
-        {
-            UndoRandomActivatedAbilityAsPenalty();
+        if (letterToRemove.GetLatentAbilityStatus() == true)
+        { 
+
+            if (letterToRemove.Ability == TrueLetter.Ability.Lucky)
+            {
+                UndoRandomActivatedAbilityAsPenalty();
+            }
+            if (letterToRemove.Ability == TrueLetter.Ability.Shiny)
+            {
+                CurrentPower -= letterToRemove.Power;
+            }
+        
         }
 
         // Remove letter from current word
         lettersCollected.Remove(letterToRemove);
         currentWord = currentWord.Remove(indexWithinWord, 1);
+        if (hasUI)
+        {
+            uid.ModifyPowerMeterTMP(CurrentPower);
+        }
         wordLengthBonus--;
 
         letterToRemove.DestroyLetterTile();
