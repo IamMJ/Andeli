@@ -39,7 +39,6 @@ public class SpellSeeker : MonoBehaviour
     {
         if (!target)
         {
-            Debug.Log("destroying due to no target");
             Destroy(gameObject);
         }
 
@@ -62,7 +61,6 @@ public class SpellSeeker : MonoBehaviour
     {
         if (dist <= closeEnough)
         {
-            Debug.Log($"destroying because dist between target {target.position} and here {transform.position} is {dist}.");
             HandleImpact();
             Destroy(gameObject);
         }

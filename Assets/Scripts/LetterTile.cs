@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using Pathfinding;
 
-public class LetterTile : MonoBehaviour, IGridModifier
+public class LetterTile : MonoBehaviour
 {
     //init
     public char Letter;
@@ -16,7 +16,6 @@ public class LetterTile : MonoBehaviour, IGridModifier
     [SerializeField] TextMeshPro tmp = null;
     LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
-    GraphUpdateScene gus;
     Bounds bounds;
 
     //param
@@ -33,7 +32,6 @@ public class LetterTile : MonoBehaviour, IGridModifier
 
     private void Start()
     {
-        gus = GetComponent<GraphUpdateScene>();
         fallSpeed += UnityEngine.Random.Range(-1f, 1f);
         LifetimeRemaining = StartingLifetime;
         gameObject.layer = 0;
@@ -64,7 +62,7 @@ public class LetterTile : MonoBehaviour, IGridModifier
                 {
                     assignedShadow.RemoveShadow();
                 }
-                UnknitAllGridGraphs();
+                GridModifier.UnknitAllGridGraphs(transform);
                 letterTileDropper.AddLetterToSpawnedLetterList(this);
 
             }
@@ -86,45 +84,6 @@ public class LetterTile : MonoBehaviour, IGridModifier
                
     }
 
-    #region Pathfinding
-    public void UnknitAllGridGraphs() //int graphToUnknit)
-    {
-        gus.modifyWalkability = true;
-        gus.setWalkability = false;
-        gus.Apply();
-    }
-    public void ReknitAllGridGraphs()
-    {
-        gus.modifyWalkability = true;
-        gus.setWalkability = true;
-        gus.Apply();
-    }
-    public void UnknitSpecificGridGraph(int graphIndexToUnknit)
-    {
-        UpdateBounds();
-        var guo = new GraphUpdateObject(bounds);
-        guo.modifyWalkability = true;
-        guo.setWalkability = false;
-        //gus.modifyWalkability = true;
-        //gus.setWalkability = false;
-        guo.nnConstraint.graphMask = 1 << graphIndexToUnknit;
-        AstarPath.active.UpdateGraphs(guo);
-    }
-
-
-    public void ReknitSpecificGridGraph(int graphIndexToReknit)
-    {
-        UpdateBounds();
-        var guo = new GraphUpdateObject(bounds);
-        guo.modifyWalkability = true;
-        guo.setWalkability = true;
-        //gus.modifyWalkability = true;
-        //gus.setWalkability = true;
-        guo.nnConstraint.graphMask = 1 << graphIndexToReknit;
-        AstarPath.active.UpdateGraphs(guo);
-    }
-
-    #endregion
 
     #region Appearance
     private void ToggleRenderers(bool shouldBeVisible)
@@ -165,12 +124,11 @@ public class LetterTile : MonoBehaviour, IGridModifier
         {
             assignedShadow.RemoveShadow();
         }
-        ReknitAllGridGraphs();
+        GridModifier.ReknitAllGridGraphs(transform);
 
         sr.enabled = false;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<TextMeshPro>().enabled = false;
-        gus.enabled = false;
     }
 
     public void DestroyLetterTile()
@@ -201,10 +159,5 @@ public class LetterTile : MonoBehaviour, IGridModifier
     }
 
     #endregion
-    private void UpdateBounds()
-    {
-        bounds.center = transform.position;
-        bounds.extents = new Vector3(.5f, .5f, 1);
-    }
 
 }

@@ -21,7 +21,7 @@ public class PlayerInput : MonoBehaviour
     Camera mc;
     GameObject currentStrategicDestinationIcon;
     int layerMask_Letter = 1 << 9;
-    public LetterTile currentTargetedLetter;
+    public GameObject currentTargetGO;
 
     //param
     float nextWaypointDistance = 1;
@@ -97,18 +97,16 @@ public class PlayerInput : MonoBehaviour
 
     private void ReknitLetterAtStrategicDestination()
     {
-        if (currentTargetedLetter)
+        if (currentTargetGO != null)
         {
-            currentTargetedLetter.UnknitSpecificGridGraph(0);
+            GridModifier.UnknitSpecificGridGraph(currentTargetGO.transform, 0);
         }
-        currentTargetedLetter = null;
+        currentTargetGO = null;
         Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 0.4f, layerMask_Letter);
         if (coll)
         {
-
-            currentTargetedLetter = coll.GetComponent<LetterTile>();
-            currentTargetedLetter.ReknitSpecificGridGraph(0);
-
+            currentTargetGO = coll.gameObject;
+            GridModifier.ReknitSpecificGridGraph(currentTargetGO.transform, 0);
         }
     }
 

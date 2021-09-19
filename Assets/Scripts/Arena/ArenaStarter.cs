@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
-public class ArenaStarter : MonoBehaviour, IGridModifier
+public class ArenaStarter : MonoBehaviour
 {
     [SerializeField] GameObject arenaBuilderPrefab;
     GameObject ab;
     GameController gc;
     GameObject player;
-    GraphUpdateScene gus;
 
     //param
     [SerializeField] float arenaTriggerRange;
@@ -19,8 +18,8 @@ public class ArenaStarter : MonoBehaviour, IGridModifier
     {
         gc = FindObjectOfType<GameController>();
         player = gc.GetPlayer();
-        gus = GetComponent<GraphUpdateScene>();
-        UnknitAllGridGraphs();
+
+        GridModifier.UnknitAllGridGraphs(transform);
     }
 
     private void Update()
@@ -35,21 +34,9 @@ public class ArenaStarter : MonoBehaviour, IGridModifier
         }
     }
 
-    public void ReknitAllGridGraphs()
-    {
-        gus.setWalkability = true;
-        gus.Apply();
-    }
-
-    public void UnknitAllGridGraphs()
-    {
-        gus.setWalkability = false;
-        gus.Apply();
-    }
-
     public void RemoveArenaStarter()
     {
-        ReknitAllGridGraphs();
+        GridModifier.ReknitAllGridGraphs(transform);
         Destroy(gameObject);
     }
 

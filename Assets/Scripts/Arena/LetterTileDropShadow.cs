@@ -5,16 +5,15 @@ using Pathfinding;
 
 public class LetterTileDropShadow : MonoBehaviour
 {
-    GraphUpdateScene gus;
     Vector3 scaleFactor = new Vector3(1, 1, 0);
+    Bounds bounds;
 
     float shrinkRate = 0.1f;
 
 
     private void Start()
     {
-        gus = GetComponent<GraphUpdateScene>();
-        UnknitGridGraph();
+        GridModifier.UnknitAllGridGraphs(transform);
     }
 
     // Update is called once per frame
@@ -22,26 +21,10 @@ public class LetterTileDropShadow : MonoBehaviour
     {
         transform.localScale -= scaleFactor * shrinkRate * Time.deltaTime;
     }
-    private void UnknitGridGraph()
-    {
-        gus.modifyWalkability = true;
-        gus.setWalkability = false;
-        gus.Apply();
-        
-    }
-
-    private void ReknitGridGraph()
-    {
-        gus.modifyWalkability = true;
-        gus.setWalkability = true;
-        gus.Apply();
-    }  
 
     public void RemoveShadow()
     {
         Destroy(gameObject);
     }
-
-
 
 }

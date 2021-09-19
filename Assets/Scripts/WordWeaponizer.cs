@@ -132,7 +132,6 @@ public class WordWeaponizer : MonoBehaviour
     {
         TargetBestEnemy();
         CreateSpell(currentEnemy.transform, wbd.CurrentPower * powerSign, TrueLetter.Ability.Normal); ;
-        Debug.Log($"fired a default spell from {transform} aimed at {currentEnemy}");
         foreach (var letter in wbd.GetLettersCollected())
         {
             if (letter.GetLatentAbilityStatus() == false)

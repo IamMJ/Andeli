@@ -15,7 +15,7 @@ public class WordBuilder : MonoBehaviour
     ArenaLetterEffectsHandler aleh;
 
     //param
-    int maxWordLength = 10;
+    int maxWordLength = 7; 
 
     //state
     bool hasUI = false;
@@ -112,8 +112,7 @@ public class WordBuilder : MonoBehaviour
 
         // Reverse any activated latent power
         if (letterToRemove.GetLatentAbilityStatus() == true)
-        { 
-
+        {
             if (letterToRemove.Ability == TrueLetter.Ability.Lucky)
             {
                 UndoRandomActivatedAbilityAsPenalty();
@@ -122,7 +121,7 @@ public class WordBuilder : MonoBehaviour
             {
                 CurrentPower -= letterToRemove.Power;
             }
-        
+            aleh.RemoveLetterEffect(indexWithinWord, hasUI);
         }
 
         // Remove letter from current word

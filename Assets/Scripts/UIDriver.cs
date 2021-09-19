@@ -168,7 +168,8 @@ public class UIDriver : MonoBehaviour
             if (wordboxImages[index + 1].gameObject.transform.childCount > 0)
             {
                 GameObject particleGO = wordboxImages[index + 1].gameObject.transform.GetChild(0).gameObject;
-                particleGO.transform.parent = wordboxTMPs[index].gameObject.transform;
+                particleGO.transform.parent = wordboxImages[index].gameObject.transform;
+                particleGO.transform.localPosition = Vector3.zero;
             }
         }
 

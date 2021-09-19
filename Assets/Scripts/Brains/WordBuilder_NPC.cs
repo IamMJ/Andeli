@@ -93,8 +93,8 @@ public class WordBuilder_NPC : WordBuilder
             TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
             if (TargetLetterTile != oldLTT)
             {
-                oldLTT.UnknitSpecificGridGraph(sb.GetGraphIndex());
-                TargetLetterTile.ReknitSpecificGridGraph(sb.GetGraphIndex());
+                GridModifier.UnknitSpecificGridGraph(oldLTT.transform, sb.GetGraphIndex());
+                GridModifier.ReknitSpecificGridGraph(TargetLetterTile.transform, sb.GetGraphIndex());
                 OnNewTargetLetterTile?.Invoke();
             }
 
@@ -106,17 +106,17 @@ public class WordBuilder_NPC : WordBuilder
             if (currentWord.Length == 0 && !TargetLetterTile)
             {
                 TargetLetterTile = changedLetterTile;
-                TargetLetterTile.ReknitSpecificGridGraph(sb.GetGraphIndex());
+                GridModifier.ReknitSpecificGridGraph(TargetLetterTile.transform, sb.GetGraphIndex());
                 return;
             }
             if (TargetLetterTile)
             {
                 LetterTile oldLTT = TargetLetterTile;
-                TargetLetterTile.UnknitSpecificGridGraph(sb.GetGraphIndex());
+                GridModifier.UnknitSpecificGridGraph(TargetLetterTile.transform, sb.GetGraphIndex());
                 TargetLetterTile = ss.FindBestLetterFromAllOnBoard();
                 if (TargetLetterTile)
                 {
-                    TargetLetterTile.ReknitSpecificGridGraph(sb.GetGraphIndex());
+                    GridModifier.ReknitSpecificGridGraph(TargetLetterTile.transform, sb.GetGraphIndex());
                 }
 
                 if (TargetLetterTile != oldLTT)
