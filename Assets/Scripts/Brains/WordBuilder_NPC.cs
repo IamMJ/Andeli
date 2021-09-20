@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-[RequireComponent(typeof(SpellingStrategy), typeof(TailPieceManager))]
+[RequireComponent(typeof(SpellingStrategy))]
 public class WordBuilder_NPC : WordBuilder
 {
     // This class is supposed to constantly maintain a Target Letter Tile. 
     // The LTT is updated anytime a letter tile is added or removed from the board
 
     //init
-    TailPieceManager tpm;
+    //TailPieceManager tpm;
     LetterTileDropper ltd;
     SpellingStrategy ss;
     StrategyBrainV2 sb;
@@ -27,7 +27,7 @@ public class WordBuilder_NPC : WordBuilder
         sb = GetComponent<StrategyBrainV2>();
         ltd = FindObjectOfType<LetterTileDropper>();
         ltd.OnLetterListModified += DetermineBestTargetLetter;
-        tpm = GetComponent<TailPieceManager>();
+        //tpm = GetComponent<TailPieceManager>();
         
     }
 
@@ -58,12 +58,12 @@ public class WordBuilder_NPC : WordBuilder
     protected override void AddLetter(LetterTile newLetter)
     {
         base.AddLetter(newLetter);
-        tpm.AddNewTailPiece(newLetter.Letter);
+        //tpm.AddNewTailPiece(newLetter.Letter);
     }
     public override void ClearCurrentWord()
     {
         base.ClearCurrentWord();
-        tpm.DestroyEntireTail();
+        //tpm.DestroyEntireTail();
     }
     #endregion
 

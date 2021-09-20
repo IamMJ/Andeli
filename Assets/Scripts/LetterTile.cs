@@ -118,6 +118,10 @@ public class LetterTile : MonoBehaviour
     public void InactivateLetterTile()
     {
         isInactivated = true;
+        GetComponent<Collider2D>().enabled = false;
+        sr.enabled = false;
+        GetComponentInChildren<TextMeshPro>().enabled = false;
+
         letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
 
         if (assignedShadow)
@@ -126,9 +130,6 @@ public class LetterTile : MonoBehaviour
         }
         GridModifier.ReknitAllGridGraphs(transform);
 
-        sr.enabled = false;
-        GetComponent<Collider2D>().enabled = false;
-        GetComponentInChildren<TextMeshPro>().enabled = false;
     }
 
     public void DestroyLetterTile()
