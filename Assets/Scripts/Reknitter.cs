@@ -26,7 +26,7 @@ public class Reknitter : MonoBehaviour
     public void SetOwners(WordMakerMovement owner, TailPieceManager newTPM)
     {
         wmm = owner;
-        wmm.OnLeaderMoved += ReknitGridGraph;
+        //wmm.OnLeaderMoved += ReknitGridGraph;
         tpm = newTPM;
     }
 
@@ -37,6 +37,6 @@ public class Reknitter : MonoBehaviour
 
     private void OnDestroy()
     {
-        wmm.OnLeaderMoved -= ReknitGridGraph;
+        //wmm.OnLeaderMoved -= ReknitGridGraph;
     }
 }

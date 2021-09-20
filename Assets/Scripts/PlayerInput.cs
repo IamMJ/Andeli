@@ -97,7 +97,7 @@ public class PlayerInput : MonoBehaviour
 
     private void ReknitLetterAtStrategicDestination()
     {
-        if (currentTargetGO != null)
+        if (currentTargetGO != null && currentTargetGO.GetComponent<LetterTile>().IsInactivated == false)
         {
             GridModifier.UnknitSpecificGridGraph(currentTargetGO.transform, 0);
         }

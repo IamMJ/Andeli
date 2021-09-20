@@ -27,7 +27,7 @@ public class LetterTile : MonoBehaviour
     bool isLatentAbilityActivated = false;
     float remainingFallDistance;
     bool isFalling = true;
-    bool isInactivated = false;
+    public bool IsInactivated { get; private set; } = false;
 
 
     private void Start()
@@ -77,7 +77,7 @@ public class LetterTile : MonoBehaviour
             FadeRenderers(factor);
         }
 
-        if (!isInactivated && LifetimeRemaining <= 0f)
+        if (!IsInactivated && LifetimeRemaining <= 0f)
         {
             DestroyLetterTile();
         }
@@ -117,7 +117,7 @@ public class LetterTile : MonoBehaviour
     #region Public Methods
     public void InactivateLetterTile()
     {
-        isInactivated = true;
+        IsInactivated = true;
         GetComponent<Collider2D>().enabled = false;
         sr.enabled = false;
         GetComponentInChildren<TextMeshPro>().enabled = false;

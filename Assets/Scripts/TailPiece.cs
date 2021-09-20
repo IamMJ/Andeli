@@ -24,7 +24,7 @@ public class TailPiece : MonoBehaviour, IFollowable
     {
         lastSnappedPos = transform.position;
         wmm = parentWMM;
-        wmm.OnLeaderMoved += HandleTailPieceMovement;
+        //wmm.OnLeaderMoved += HandleTailPieceMovement;
         leaderToFollow = newLeaderToFollow;
         tmp.text = letterToDisplay.ToString();
         gus = GetComponent<GraphUpdateScene>();
@@ -44,7 +44,7 @@ public class TailPiece : MonoBehaviour, IFollowable
 
     public void DetachTailPiece()
     {
-        wmm.OnLeaderMoved -= HandleTailPieceMovement;
+        //wmm.OnLeaderMoved -= HandleTailPieceMovement;
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponentInChildren<TextMeshPro>().enabled = false;
         GetComponent<Collider2D>().enabled = false;

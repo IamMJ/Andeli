@@ -212,6 +212,7 @@ public class WordBuilder : MonoBehaviour
         if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
         {
             AddLetter(letterTile);
+            
             letterTile.InactivateLetterTile();
 
         }

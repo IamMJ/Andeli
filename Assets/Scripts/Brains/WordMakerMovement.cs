@@ -14,15 +14,15 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
 
     WordBuilder_NPC wb;
     Animator anim;
-    public Action OnLeaderMoved;
+    //public Action OnLeaderMoved;
     protected SpeedKeeper sk;
-    [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
-    [SerializeField] GameObject reknitterPrefab = null;
+    //[SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
+    //[SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
     [SerializeField] protected GameObject dustcloudPrefab = null;
     public Vector2 TacticalDestination;
-    GraphUpdateScene gus;
-    Bounds bounds;
+    //GraphUpdateScene gus;
+    //Bounds bounds;
 
     protected int layerMask_Impassable = 1 << 13;
     protected int layerMask_Passable = 1 << 14;
@@ -40,10 +40,10 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     protected virtual void Start()
     {
         sk = GetComponent<SpeedKeeper>();
-        gus = GetComponent<GraphUpdateScene>();
+        //gus = GetComponent<GraphUpdateScene>();
         gc = FindObjectOfType<GameController>();
-        GameObject reknitterGO = Instantiate(reknitterPrefab);
-        reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
+        //GameObject reknitterGO = Instantiate(reknitterPrefab);
+        //reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
         wb = GetComponent<WordBuilder_NPC>();
         truePosition = transform.position;
         anim = GetComponentInChildren<Animator>();
@@ -157,7 +157,7 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
 
     protected virtual void PushWordMakerMovement()
     {
-        OnLeaderMoved?.Invoke();
+        //OnLeaderMoved?.Invoke();
     }
 
     public static Vector2 CardinalizeDesiredMovement(Vector2 inputDir)
@@ -394,35 +394,35 @@ public class WordMakerMovement : MonoBehaviour, IFollowable
     #region Breadcrumbs
     public void DropBreadcrumb()
     {
-        breadcrumbs.Add(GridHelper.SnapToGrid(transform.position, 8));
-        if (breadcrumbs.Count > 8)
-        {
-            breadcrumbs.RemoveAt(0);
-        }
+        //breadcrumbs.Add(GridHelper.SnapToGrid(transform.position, 8));
+        //if (breadcrumbs.Count > 8)
+        //{
+        //    breadcrumbs.RemoveAt(0);
+        //}
     }
 
     public Vector2 GetOldestBreadcrumb()
     {
-        if (breadcrumbs.Count == 0)
-        {
-            return transform.position;
-        }
-        else
-        {
-            return breadcrumbs[0];
-        }
-
+        //if (breadcrumbs.Count == 0)
+        //{
+        //    return transform.position;
+        //}
+        //else
+        //{
+        //    return breadcrumbs[0];
+        //}
+        return Vector2.zero;
     }
     public void RemoveInvalidBreadcrumbs(int count)
     {
-        for (int i = 0; i < count; i++)
-        {
-            if (i >= breadcrumbs.Count)
-            {
-                return;
-            }
-            breadcrumbs.RemoveAt(i);
-        }
+        //for (int i = 0; i < count; i++)
+        //{
+        //    if (i >= breadcrumbs.Count)
+        //    {
+        //        return;
+        //    }
+        //    breadcrumbs.RemoveAt(i);
+        //}
     }
 
     #endregion
