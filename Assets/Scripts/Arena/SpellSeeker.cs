@@ -8,6 +8,7 @@ public class SpellSeeker : MonoBehaviour
     //init
     Rigidbody2D rb;
     VictoryMeter vm;
+    GameController gc;
 
     //param
     float thrust = 30f;
@@ -27,12 +28,13 @@ public class SpellSeeker : MonoBehaviour
         speed = rb.velocity.magnitude;
     }
 
-    public void SetupSpell(Transform targetTransform, VictoryMeter vmRef, float payload, TrueLetter.Ability spellTypeIn)
+    public void SetupSpell(Transform targetTransform, VictoryMeter vmRef, GameController gcRef, float payload, TrueLetter.Ability spellTypeIn)
     {
         target = targetTransform;
         vm = vmRef;
         powerPayload = payload;
         spellType = spellTypeIn;
+        gc = gcRef;
     }
 
     private void Update()
@@ -40,6 +42,12 @@ public class SpellSeeker : MonoBehaviour
         if (!target)
         {
             Destroy(gameObject);
+            return;
+        }
+        if (gc.isInArena == false)
+        {
+            Destroy(gameObject);
+            return;
         }
 
         TargetProximityCheck();
@@ -47,6 +55,11 @@ public class SpellSeeker : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (gc.isInArena == false)
+        {
+            Destroy(gameObject);
+            return;
+        }
         MoveForward();
     }
     private void MoveForward()

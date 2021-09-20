@@ -175,13 +175,13 @@ public class WordWeaponizer : MonoBehaviour
             case TrueLetter.Ability.Normal:
                 spell = Instantiate(normalSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
                 spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
-                spell.SetupSpell(target, vm, power, TrueLetter.Ability.Normal);
+                spell.SetupSpell(target, vm, gc, power, TrueLetter.Ability.Normal);
                 return;
 
             case TrueLetter.Ability.Frozen:
                 spell = Instantiate(freezeSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
                 spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
-                spell.SetupSpell(target, vm, power, TrueLetter.Ability.Frozen);
+                spell.SetupSpell(target, vm, gc, power, TrueLetter.Ability.Frozen);
                 return;
         }
     }

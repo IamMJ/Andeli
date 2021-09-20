@@ -27,8 +27,8 @@ public class WordBuilder : MonoBehaviour
     private void Start()
     {
         wwz = GetComponent<WordWeaponizer>();
-        wv = FindObjectOfType<WordValidater>();
         pi = GetComponent<PlayerInput>();
+        wv = FindObjectOfType<WordValidater>();
         if (pi)
         {
             hasUI = true;
@@ -136,7 +136,6 @@ public class WordBuilder : MonoBehaviour
         letterToRemove.DestroyLetterTile();
     }
 
-
     public void RebuildCurrentWordForUI()
     {
         if (!hasUI) { return; }
@@ -163,11 +162,17 @@ public class WordBuilder : MonoBehaviour
     {
         currentWord = "";
         ResetWordLengthBonus();
+        foreach (var letter in lettersCollected)
+        {
+            letter.DestroyLetterTile();
+        }
+
         lettersCollected.Clear();
         if (hasUI)
         {
             uid.ClearWordBar();
         }
+
         //tpm.DestroyEntireTail();
     }
 
