@@ -9,6 +9,7 @@ public class UIDriver : MonoBehaviour
 {
     //init
     [SerializeField] GameObject pauseMenuPrefab = null;
+    [SerializeField] GameObject letterPowersMenuPrefab = null;
 
     [SerializeField] Slider victoryBarSlider = null;
     [SerializeField] GameObject topBarPanel = null;
@@ -38,6 +39,7 @@ public class UIDriver : MonoBehaviour
     GameController gc;
     SceneLoader sl;
     GameObject pauseMenu;
+    GameObject letterPowersMenu;
 
     //param
     float panelDeployRate = 100f; // pixels per second
@@ -49,6 +51,7 @@ public class UIDriver : MonoBehaviour
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
     public float timeSpentLongPressing { get; private set; }
+
 
     private void Start()
     {
@@ -264,7 +267,23 @@ public class UIDriver : MonoBehaviour
         {
             pauseMenu.SetActive(true);
         }
+    }
 
+    public void ShowLetterPowersMenu()
+    {
+        if (!gc)
+        {
+            gc = FindObjectOfType<GameController>();
+        }
+        gc.PauseGame();
+        if (!letterPowersMenu)
+        {
+            letterPowersMenu = Instantiate(letterPowersMenuPrefab);
+        }
+        if (letterPowersMenu)
+        {
+            letterPowersMenu.SetActive(true);
+        }
     }
 
     public void AddLetterToWordBar(LetterTile letterTile, char letter, int indexInWord)
@@ -273,6 +292,15 @@ public class UIDriver : MonoBehaviour
         wordboxImages[indexInWord].sprite = sr.sprite;
         wordboxImages[indexInWord].color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
         wordboxTMPs[indexInWord].text = letter.ToString();
+        //if (indexInWord > wordboxImages.Length)
+        //{
+        //    ScrollLettersLeft();
+        //}
+    }
+
+    private void ScrollLettersLeft()
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>

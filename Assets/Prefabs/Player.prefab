@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 5745040115539129987}
   - component: {fileID: -3077055182206633393}
   - component: {fileID: 5006189010876863907}
+  - component: {fileID: 4683094222974374877}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -143,7 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
   strategicDestinationPrefab: {fileID: 7910314228762140595, guid: 36498f27111132e4cadd7de16ca5efda, type: 3}
-  currentTargetedLetter: {fileID: 0}
+  currentTargetGO: {fileID: 0}
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d4274fef04f0a4f8c3ad4d6ce33906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lettersCollected: []
+  currentWord: 
 --- !u!114 &-3077055182206633393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,8 +232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1c426fc29caef74c957dfabc4c1ec05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breadcrumbs: []
-  reknitterPrefab: {fileID: 356949180654384117, guid: 7fd628fe7075db94cb9dd7ec1a53a38c, type: 3}
   dustcloudPrefab: {fileID: 8717110635550957212, guid: ed73c7c44d7a05e40ab9bac161c7ff04, type: 3}
   TacticalDestination: {x: 0, y: 0}
   rawDesMove: {x: 1, y: 0}
@@ -262,3 +263,42 @@ MonoBehaviour:
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: 1
+--- !u!114 &4683094222974374877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0608383a977cc094b8c96949e5afe902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lettersModifiers:
+  - {fileID: 11400000, guid: 7d33c6b9b1e23034cbb532ae1ae00298, type: 2}
+  - {fileID: 11400000, guid: bc0b1edd2ec6d864084a446652c53c10, type: 2}
+  - {fileID: 11400000, guid: 16a0838ea29001e4ba0b9dfe79778c90, type: 2}
+  - {fileID: 11400000, guid: 9e9128945c13d2a4495d7c534cee284f, type: 2}
+  - {fileID: 11400000, guid: 21ecc7df451369b4198dd5ee91f1a639, type: 2}
+  - {fileID: 11400000, guid: dc35c6d033c0e5b4688949cc1c33f27f, type: 2}
+  - {fileID: 11400000, guid: b626ca432206c474598f36c2a610841a, type: 2}
+  - {fileID: 11400000, guid: 914cf3c8d4060b94ba9a33d169cf2578, type: 2}
+  - {fileID: 11400000, guid: 148b8c0b7355c4a4aabfc2d161014c42, type: 2}
+  - {fileID: 11400000, guid: 2c808ac982e41664aa9aa4e6a12f4c52, type: 2}
+  - {fileID: 11400000, guid: 909a8616c78250c41a51564e6b8d09be, type: 2}
+  - {fileID: 11400000, guid: 75d55e75f30c6944fa801130c89ecf19, type: 2}
+  - {fileID: 11400000, guid: 44933012dd7d0bb44ba1257962dfa6a2, type: 2}
+  - {fileID: 11400000, guid: 95c7bae1e4e4508478e5152194d5ddfa, type: 2}
+  - {fileID: 11400000, guid: 2b7ece6af4155f74eb3aa23d6009fef4, type: 2}
+  - {fileID: 11400000, guid: 32d1e6886fd250e4091963166cd674f7, type: 2}
+  - {fileID: 11400000, guid: 9bdc0603deb1dd54bad9ea87c657f4ba, type: 2}
+  - {fileID: 11400000, guid: fda980481d3ee8e44a7c8eb3955f575a, type: 2}
+  - {fileID: 11400000, guid: 77a1a0d7ea8874a44bf233b1aa33a37a, type: 2}
+  - {fileID: 11400000, guid: 7486bccd13daecf4498e68e7f6df86e5, type: 2}
+  - {fileID: 11400000, guid: b44b6fc98cc661340add1c94e79f2b11, type: 2}
+  - {fileID: 11400000, guid: a034f8ab94e6ee34b892a456ab7c20e6, type: 2}
+  - {fileID: 11400000, guid: 6ff611dd25ed77a4ba74e620e578a5b1, type: 2}
+  - {fileID: 11400000, guid: 4e1dd8d039d018b4c89f003154fc2f7f, type: 2}
+  - {fileID: 11400000, guid: e42957e679620724a8bc0601803a7620, type: 2}
+  - {fileID: 11400000, guid: 634732ddd64d3e24b9aff184b8a60419, type: 2}

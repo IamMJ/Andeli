@@ -65,6 +65,7 @@ public class PlayerInput : MonoBehaviour
     { 
         if (Input.touchCount == 1)
         {
+            if (gc.isPaused) { return; }
             currentTouch = Input.GetTouch(0);
             if (currentTouch.phase == TouchPhase.Began &&
                 !GridHelper.CheckIsTouchingWordSection(currentTouch.position, gc.isInArena))
@@ -79,6 +80,7 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleMouseInput()
     {
+        if (gc.isPaused) { return; }
         if (Input.GetMouseButtonUp(0))
         {
             Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
