@@ -46,8 +46,8 @@ public class WordBuilder : MonoBehaviour
 
         if (hasUI)
         {
-            Sprite newSprite = newLetter.GetComponent<SpriteRenderer>().sprite;
-            uid.AddLetterToWordBar(newSprite, newLetter.Letter, currentWord.Length - 1);
+            
+            uid.AddLetterToWordBar(newLetter, newLetter.Letter, currentWord.Length - 1);
         }
         TestAllLetterLatentAbilities();
     }
@@ -143,7 +143,7 @@ public class WordBuilder : MonoBehaviour
         foreach (var letter in lettersCollected)
         {
             Sprite newSprite = letter.GetComponent<SpriteRenderer>().sprite;
-            uid.AddLetterToWordBar(newSprite, letter.Letter, index);
+            uid.AddLetterToWordBar(letter, letter.Letter, index);
             index++;
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Pathfinding;
+using System;
 
 public class LetterTile : MonoBehaviour
 {
@@ -16,7 +17,15 @@ public class LetterTile : MonoBehaviour
     [SerializeField] TextMeshPro tmp = null;
     LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
-    Bounds bounds;
+
+    [SerializeField] Sprite NormalTileSprite = null;
+    [SerializeField] Sprite LuckyTileSprite = null;
+    [SerializeField] Sprite FrozenTileSprite = null;
+    [SerializeField] Sprite ShinyTileSprite = null;
+
+    Color fadeColor_sr;
+    Color fadeColor_mr;
+
 
     //param
     float fallSpeed = 4.0f;
@@ -39,7 +48,37 @@ public class LetterTile : MonoBehaviour
         sr.sortingOrder = 9;
         tmp.sortingLayerID = sr.sortingLayerID;
         tmp.sortingOrder = sr.sortingOrder + 1;
+        AssignStartingSprite();
+        fadeColor_sr = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
+        fadeColor_mr = new Color(tmp.color.r, tmp.color.g, tmp.color.b, 1);
 
+    }
+
+    private void AssignStartingSprite()
+    {
+        switch (Ability)
+        {
+            case TrueLetter.Ability.Normal:
+                sr.sprite = NormalTileSprite;
+                sr.color = Color.white;
+                return;
+
+            case TrueLetter.Ability.Lucky:
+                sr.sprite = LuckyTileSprite;
+                sr.color = Color.green;
+                return;
+
+            case TrueLetter.Ability.Frozen:
+                sr.sprite = FrozenTileSprite;
+                sr.color = Color.white;
+                return;
+
+            case TrueLetter.Ability.Shiny:
+                sr.sprite = ShinyTileSprite;
+                sr.color = Color.white;
+                return;
+
+        }
     }
 
     private void Update()
@@ -102,9 +141,10 @@ public class LetterTile : MonoBehaviour
 
     private void FadeRenderers(float alpha)
     {
-        Color fadeColor = new Color(1, 1, 1, alpha);
-        sr.color = fadeColor;
-        tmp.color = fadeColor;
+        fadeColor_sr.a = alpha;
+        fadeColor_mr.a = alpha;
+        sr.color = fadeColor_sr;
+        tmp.color = fadeColor_mr;
     }
 
     public void SetLetterTileDropper(LetterTileDropper ltd)

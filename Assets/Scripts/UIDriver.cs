@@ -176,6 +176,7 @@ public class UIDriver : MonoBehaviour
         int lastIndex = playerWB.GetCurrentWordLength() - 1;
         wordboxTMPs[lastIndex].text = "";
         wordboxImages[lastIndex].sprite = blankTileDefault;
+        wordboxImages[lastIndex].color = Color.white;
         if (wordboxImages[lastIndex].gameObject.transform.childCount > 0)
         {
             Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
@@ -266,9 +267,11 @@ public class UIDriver : MonoBehaviour
 
     }
 
-    public void AddLetterToWordBar(Sprite letterTileSprite, char letter, int indexInWord)
+    public void AddLetterToWordBar(LetterTile letterTile, char letter, int indexInWord)
     {
-        wordboxImages[indexInWord].sprite = letterTileSprite;
+        SpriteRenderer sr = letterTile.GetComponent<SpriteRenderer>();
+        wordboxImages[indexInWord].sprite = sr.sprite;
+        wordboxImages[indexInWord].color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
         wordboxTMPs[indexInWord].text = letter.ToString();
     }
 
@@ -281,6 +284,7 @@ public class UIDriver : MonoBehaviour
         foreach(var image in wordboxImages)
         {
             image.sprite = blankTileDefault;
+            image.color = Color.white;
             if (image.gameObject.transform.childCount > 0)
             {
                 Destroy(image.gameObject.transform.GetChild(0).gameObject);

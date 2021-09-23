@@ -128,8 +128,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 7.5
-  m_fontSizeBase: 7.5
+  m_fontSize: 8
+  m_fontSizeBase: 8
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -197,7 +197,6 @@ GameObject:
   - component: {fileID: 4572942306684605304}
   - component: {fileID: 3580959457978190092}
   - component: {fileID: 4630384003596904042}
-  - component: {fileID: 8246121710724419684}
   - component: {fileID: 6612352758663582041}
   m_Layer: 9
   m_Name: LetterTile
@@ -261,7 +260,7 @@ SpriteRenderer:
   m_SortingLayerID: 2006724999
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: d99350a24e4514241bb7a5ea68c1da91, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e266453fcd28d59428c2449dec463fd1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -288,22 +287,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.25
---- !u!58 &8246121710724419684
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098827157649805612}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 7b0a3b15282ce7740a7c703e2f1404c4, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.25
 --- !u!114 &6612352758663582041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,3 +306,7 @@ MonoBehaviour:
   sr: {fileID: 3580959457978190092}
   mr: {fileID: 601876841}
   tmp: {fileID: 601876840}
+  NormalTileSprite: {fileID: 21300000, guid: d99350a24e4514241bb7a5ea68c1da91, type: 3}
+  LuckyTileSprite: {fileID: 21300000, guid: e266453fcd28d59428c2449dec463fd1, type: 3}
+  FrozenTileSprite: {fileID: 21300000, guid: d99350a24e4514241bb7a5ea68c1da91, type: 3}
+  ShinyTileSprite: {fileID: 21300000, guid: d99350a24e4514241bb7a5ea68c1da91, type: 3}
