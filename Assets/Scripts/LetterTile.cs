@@ -19,13 +19,28 @@ public class LetterTile : MonoBehaviour
     LetterTileDropper letterTileDropper;
 
     [SerializeField] Sprite NormalTileSprite = null;
+    [SerializeField] Color NormalTileColor = Color.white;
     [SerializeField] Sprite LuckyTileSprite = null;
+    [SerializeField] Color LuckyTileColor = Color.green;
     [SerializeField] Sprite FrozenTileSprite = null;
+    [SerializeField] Color FrozenTileColor = Color.white;
     [SerializeField] Sprite ShinyTileSprite = null;
+    [SerializeField] Color ShinyTileColor = Color.white;
 
     Color fadeColor_sr;
     Color fadeColor_mr;
 
+    public struct SpriteColor
+    {
+        public Sprite Sprite;
+        public Color Color;
+        public SpriteColor(Sprite sprite, Color color)
+        {
+            Sprite = sprite;
+            Color = color;
+        }
+
+    }
 
     //param
     float fallSpeed = 4.0f;
@@ -56,29 +71,10 @@ public class LetterTile : MonoBehaviour
 
     private void AssignStartingSprite()
     {
-        switch (Ability)
-        {
-            case TrueLetter.Ability.Normal:
-                sr.sprite = NormalTileSprite;
-                sr.color = Color.white;
-                return;
+        SpriteColor sc = GetSpriteColorFromAbility(Ability);
+        sr.sprite = sc.Sprite;
+        sr.color = sc.Color;
 
-            case TrueLetter.Ability.Lucky:
-                sr.sprite = LuckyTileSprite;
-                sr.color = Color.green;
-                return;
-
-            case TrueLetter.Ability.Frozen:
-                sr.sprite = FrozenTileSprite;
-                sr.color = Color.white;
-                return;
-
-            case TrueLetter.Ability.Shiny:
-                sr.sprite = ShinyTileSprite;
-                sr.color = Color.white;
-                return;
-
-        }
     }
 
     private void Update()
@@ -197,6 +193,32 @@ public class LetterTile : MonoBehaviour
     public void AssignShadow(LetterTileDropShadow shadow)
     {
         assignedShadow = shadow;
+    }
+
+    public SpriteColor GetSpriteColorFromAbility(TrueLetter.Ability ability)
+    {
+        switch (ability)
+        {
+            case TrueLetter.Ability.Normal:
+                SpriteColor sc_Normal = new SpriteColor(NormalTileSprite, NormalTileColor);
+                return sc_Normal;
+
+            case TrueLetter.Ability.Lucky:
+                SpriteColor sc_Lucky = new SpriteColor(LuckyTileSprite, LuckyTileColor);
+                return sc_Lucky;
+
+            case TrueLetter.Ability.Frozen:
+                SpriteColor sc_Frozen = new SpriteColor(FrozenTileSprite, FrozenTileColor);
+                return sc_Frozen;
+
+            case TrueLetter.Ability.Shiny:
+                SpriteColor sc_Shiny = new SpriteColor(ShinyTileSprite, ShinyTileColor);
+                return sc_Shiny;
+
+            default:
+                SpriteColor sc_Default = new SpriteColor(NormalTileSprite, NormalTileColor);
+                return sc_Default;
+        }
     }
 
     #endregion

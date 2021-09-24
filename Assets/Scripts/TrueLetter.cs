@@ -10,12 +10,12 @@ public class TrueLetter : ScriptableObject
     [SerializeField] int weight;
     [SerializeField] int Power;
     [SerializeField] Ability ability = Ability.Normal;
+    [SerializeField] string letterBlurb;
 
     public enum Ability { Normal, Shiny, Frozen, Lucky };
-
-
-
     public int ProbabilityTop;
+
+
 
     public int GetWeight()
     {
@@ -36,5 +36,14 @@ public class TrueLetter : ScriptableObject
     {
         return ability;
     }
+
+    public string GetBlurb()
+    {
+        return letterBlurb;
+    }
     
+    public float GetRarity()
+    {
+        return weight / 100f;
+    }
 }

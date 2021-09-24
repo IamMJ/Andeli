@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6057a4f384930046af12b3273958619, type: 3}
   m_Name: H
   m_EditorClassIdentifier: 
-  Letter: 72
+  associatedTrueLetter: {fileID: 11400000, guid: fa439644de581f349be5e9a992c03ac0, type: 2}
