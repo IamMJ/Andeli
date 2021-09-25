@@ -51,6 +51,7 @@ public class UIDriver : MonoBehaviour
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
     public float timeSpentLongPressing { get; private set; }
+    [SerializeField] int wordbarScroll = 0;
 
 
     private void Start()
@@ -160,23 +161,32 @@ public class UIDriver : MonoBehaviour
         wordFiringSliderBG.value = 0;
     }
 
-    public void ClearOutSpecificLetterFromWordStub(int index)
+    public void HandlePressOnLetterInWordBar(int index)
     {
-        RemoveParticleEffectsAtLetter(index);
+        // if the index is first or last tile spot, check if the word is longer than tiles.
+        // if longer than tiles, then the word must be overflowing, and should scroll left or right.
+        
 
-        for (int i = index; i < playerWB.GetCurrentWordLength()-1; i++)
+        ClearOutLetterFromSpecificTile(index);
+    }
+
+    private void ClearOutLetterFromSpecificTile(int indexInTiles)
+    {
+        RemoveParticleEffectsAtIndexInWord(indexInTiles + wordbarScroll);
+
+        for (int i = indexInTiles; i < playerWB.GetCurrentWordLength()-1; i++)
         {
-            wordboxTMPs[index].text = wordboxTMPs[index + 1].text;
-            wordboxImages[index].sprite = wordboxImages[index + 1].sprite;
-            if (wordboxImages[index + 1].gameObject.transform.childCount > 0)
+            wordboxTMPs[indexInTiles].text = wordboxTMPs[indexInTiles + 1].text;
+            wordboxImages[indexInTiles].sprite = wordboxImages[indexInTiles + 1].sprite;
+            if (wordboxImages[indexInTiles + 1].gameObject.transform.childCount > 0)
             {
-                GameObject particleGO = wordboxImages[index + 1].gameObject.transform.GetChild(0).gameObject;
-                particleGO.transform.parent = wordboxImages[index].gameObject.transform;
+                GameObject particleGO = wordboxImages[indexInTiles + 1].gameObject.transform.GetChild(0).gameObject;
+                particleGO.transform.parent = wordboxImages[indexInTiles].gameObject.transform;
                 particleGO.transform.localPosition = Vector3.zero;
             }
         }
 
-        int lastIndex = playerWB.GetCurrentWordLength() - 1;
+        int lastIndex = playerWB.GetCurrentWordLength() - 1 - wordbarScroll;
         wordboxTMPs[lastIndex].text = "";
         wordboxImages[lastIndex].sprite = blankTileDefault;
         wordboxImages[lastIndex].color = Color.white;
@@ -185,7 +195,11 @@ public class UIDriver : MonoBehaviour
             Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
         }
 
-        playerWB.RemoveSpecificLetterFromCurrentWord(index);
+        playerWB.RemoveSpecificLetterFromCurrentWord(indexInTiles + wordbarScroll);
+        if (wordbarScroll > 0)
+        {
+            wordbarScroll--;
+        }
         playerWB.RebuildCurrentWordForUI();
     }
 
@@ -206,9 +220,9 @@ public class UIDriver : MonoBehaviour
 
     }
 
-    public void RemoveParticleEffectsAtLetter(int index)
+    public void RemoveParticleEffectsAtIndexInWord(int indexInWord)
     {
-        GameObject go = GetGameObjectAt(index);
+        GameObject go = wordboxImages[indexInWord - wordbarScroll].gameObject;
         int children = go.transform.childCount;
         for (int i = 0; i < children; i++)
         {
@@ -288,19 +302,38 @@ public class UIDriver : MonoBehaviour
 
     public void AddLetterToWordBar(LetterTile letterTile, char letter, int indexInWord)
     {
+        if (indexInWord >= wordboxImages.Length)
+        {
+            ScrollLettersLeft();
+        }
         SpriteRenderer sr = letterTile.GetComponent<SpriteRenderer>();
-        wordboxImages[indexInWord].sprite = sr.sprite;
-        wordboxImages[indexInWord].color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
-        wordboxTMPs[indexInWord].text = letter.ToString();
-        //if (indexInWord > wordboxImages.Length)
-        //{
-        //    ScrollLettersLeft();
-        //}
+        wordboxImages[indexInWord - wordbarScroll].sprite = sr.sprite;
+        wordboxImages[indexInWord - wordbarScroll].color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
+        wordboxTMPs[indexInWord - wordbarScroll].text = letter.ToString();
     }
 
     private void ScrollLettersLeft()
     {
-        throw new NotImplementedException();
+        wordbarScroll++;
+        wordboxTMPs[0].text = "...";
+        wordboxImages[0].sprite = blankTileDefault;
+        wordboxImages[0].color = Color.white;
+        RemoveParticleEffectsAtIndexInWord(0 + wordbarScroll);
+
+        for (int i = 1; i < wordboxImages.Length-1; i++)
+        {
+            wordboxTMPs[i].text = wordboxTMPs[i+1].text;
+            wordboxImages[i].sprite = wordboxImages[i+1].sprite;
+            wordboxImages[i].color = wordboxImages[i+1].color;
+            if (wordboxImages[i + 1].gameObject.transform.childCount > 0)
+            {
+                GameObject particleGO = wordboxImages[i + 1].gameObject.transform.GetChild(0).gameObject;
+                particleGO.transform.parent = wordboxImages[i].gameObject.transform;
+                particleGO.transform.localPosition = Vector3.zero;
+            }
+
+        }
+
     }
 
     /// <summary>
@@ -322,11 +355,12 @@ public class UIDriver : MonoBehaviour
         {
             TMP.text = "";
         }
+        wordbarScroll = 0;
     }
 
-    public GameObject GetGameObjectAt(int index)
+    public GameObject GetTileForLetterBasedOnIndexInWord(int indexInWord)
     {
-        return wordboxImages[index].gameObject;
+        return wordboxImages[indexInWord - wordbarScroll].gameObject;
     }
 
     public void UpdateSpellEnergySlider( float currentEnergy)

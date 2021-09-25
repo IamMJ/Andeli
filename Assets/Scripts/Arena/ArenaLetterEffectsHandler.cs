@@ -20,9 +20,9 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
         uid = FindObjectOfType<UIDriver>();
     }
 
-    public void ApplyLetterEffectOnPickup(LetterTile activatedLetter, GameObject callingWMM, int letterIndex, bool hasUI)
+    public void ApplyLetterEffectOnPickup(LetterTile activatedLetter, GameObject callingWMM, int indexInWord, bool hasUI)
     {
-        GameObject activatedLetterInWordBar = uid.GetGameObjectAt(letterIndex);
+        GameObject activatedTileInWordBar = uid.GetTileForLetterBasedOnIndexInWord(indexInWord);
         GameObject FX;
 
         switch (activatedLetter.Ability)
@@ -36,7 +36,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 if (hasUI)
                 {
                     callingWMM.GetComponent<WordBuilder>().IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
-                    FX = Instantiate(letterFX_Shiny, activatedLetterInWordBar.transform);
+                    FX = Instantiate(letterFX_Shiny, activatedTileInWordBar.transform);
                     FX.layer = 5;
                 }
                 break;
@@ -44,7 +44,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
             case TrueLetter.Ability.Frozen:
                 if (hasUI)
                 {
-                    FX = Instantiate(letterFX_Frozen, activatedLetterInWordBar.transform);
+                    FX = Instantiate(letterFX_Frozen, activatedTileInWordBar.transform);
                     FX.layer = 5;
                 }
                 break;
@@ -54,7 +54,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 callingWMM.GetComponent<WordBuilder>().IncreaseWordLengthBonus(amount);
                 if (hasUI)
                 {
-                    FX = Instantiate(letterFX_Lucky, activatedLetterInWordBar.transform);
+                    FX = Instantiate(letterFX_Lucky, activatedTileInWordBar.transform);
                     ParticleSystem.EmissionModule em = FX.GetComponent<ParticleSystem>().emission;
                     em.rateOverTime = amount;
                     FX.layer = 5;
@@ -64,11 +64,11 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
         }
     }
 
-    public void RemoveLetterEffect(int index, bool hasUI)
+    public void RemoveLetterEffect(int indexInWord, bool hasUI)
     {
         if (hasUI)
         {
-            uid.RemoveParticleEffectsAtLetter(index);
+            uid.RemoveParticleEffectsAtIndexInWord(indexInWord);
         }
     }
 }

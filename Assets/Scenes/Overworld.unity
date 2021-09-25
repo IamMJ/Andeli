@@ -1580,7 +1580,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -35247,7 +35247,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -35277,7 +35277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: E
+  m_text: O
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4ca6727458259154497052a73e5ac43f, type: 2}
   m_sharedMaterial: {fileID: -7767065226060168043, guid: 4ca6727458259154497052a73e5ac43f, type: 2}
@@ -35430,7 +35430,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -35971,7 +35971,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: T
+  m_text: <
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4ca6727458259154497052a73e5ac43f, type: 2}
   m_sharedMaterial: {fileID: -7767065226060168043, guid: 4ca6727458259154497052a73e5ac43f, type: 2}
@@ -36086,7 +36086,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -37504,7 +37504,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!156049354 &1437996133
 Grid:
   m_ObjectHideFlags: 0
@@ -37896,7 +37896,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -107151,7 +107151,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -107422,7 +107422,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1605398458}
           m_TargetAssemblyTypeName: UIDriver, Assembly-CSharp
-          m_MethodName: ClearOutSpecificLetterFromWordStub
+          m_MethodName: HandlePressOnLetterInWordBar
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -107452,7 +107452,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: H
+  m_text: '>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4ca6727458259154497052a73e5ac43f, type: 2}
   m_sharedMaterial: {fileID: -7767065226060168043, guid: 4ca6727458259154497052a73e5ac43f, type: 2}
