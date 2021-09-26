@@ -10,6 +10,7 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject wallPrefab = null;
     [SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
+    [SerializeField] GameObject arenaDebriefMenuPrefab = null;
     CinemachineVirtualCamera cvc;
     GameController gc;
     VictoryMeter vm;
@@ -31,9 +32,11 @@ public class ArenaBuilder : MonoBehaviour
     GameObject[] enemies;
     LetterTileDropper ltd;
     GameObject camMouse;
+    float startTime;
 
     public void SetupArena(Vector2 centroid)
     {
+        startTime = Time.time;
         minX += Mathf.RoundToInt(transform.position.x);
         maxX += Mathf.RoundToInt(transform.position.x);
         minY += Mathf.RoundToInt(transform.position.y);
@@ -168,9 +171,17 @@ public class ArenaBuilder : MonoBehaviour
     private void HandleArenaCompletion(bool didPlayerWin)
     {
         // if (didplayerwin) leads to different outcomes, such as awarding a True Letter, or some currency
-        Debug.Log("received arena ended message. Player won? " + didPlayerWin);
+        CreateArenaDebriefMenu(didPlayerWin);
         CloseDownArena();
         vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
+    }
+
+    private void CreateArenaDebriefMenu(bool didPlayerWin)
+    {
+        float timeElapsed = Mathf.Round( Time.time - startTime);
+        GameObject debriefMenu = Instantiate(arenaDebriefMenuPrefab);
+        debriefMenu.GetComponent<ArenaDebriefMenuDriver>().SetupDebriefMenu(gc, 
+            didPlayerWin, gc.GetPlayer(), enemies[0], timeElapsed);
     }
 
     public void CloseDownArena()

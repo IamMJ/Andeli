@@ -11,18 +11,50 @@ public class PlayerMemory : MonoBehaviour
     public Action OnIncrementWordCount;
     public Action OnResetConsecutiveWordCount;
 
-    public void IncrementWordCount()
+    public struct ArenaData
     {
-        consecutiveCompletedWords++;
-        totalCompletedWords++;
-        OnIncrementWordCount?.Invoke();
+        public int powerDealtByPlayer;
+        public int wordsSpelledByPlayer;
+        public string bestWordSpelledByPlayer;
+        public int currentBestSinglePowerGain;
+
+        public ArenaData(int power, int wordCount, string longestWord)
+        {
+            powerDealtByPlayer = power;
+            wordsSpelledByPlayer = wordCount;
+            bestWordSpelledByPlayer = longestWord;
+            currentBestSinglePowerGain = 0;
+        }
     }
 
-    public void ResetConsecutiveWordCount()
+    //state
+
+    Dictionary<string, int> wordsAndCountsThisArena = new Dictionary<string, int>();
+    ArenaData currentArenaData = new ArenaData();
+
+    public void UpdateCurrentArenaData(int powerDealtIncrease, string word)
     {
-        consecutiveCompletedWords = 0;
-        OnResetConsecutiveWordCount?.Invoke();
+        currentArenaData.powerDealtByPlayer += powerDealtIncrease;
+        currentArenaData.wordsSpelledByPlayer ++;
+        if (powerDealtIncrease > currentArenaData.currentBestSinglePowerGain)
+        {
+            currentArenaData.bestWordSpelledByPlayer = word;
+            currentArenaData.currentBestSinglePowerGain = powerDealtIncrease;
+        }
+
     }
 
+    public ArenaData GetCurrentArenaData()
+    {
+        return currentArenaData;
+    }
 
+    public void ResetCurrentArenaData()
+    {
+        currentArenaData.powerDealtByPlayer = 0;
+        currentArenaData.wordsSpelledByPlayer = 0;
+        currentArenaData.bestWordSpelledByPlayer = "";
+        currentArenaData.currentBestSinglePowerGain = 0;
+        wordsAndCountsThisArena.Clear();
+    }
 }

@@ -77,7 +77,7 @@ public class WordWeaponizer : MonoBehaviour
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
         {
-            playmem.IncrementWordCount();
+            playmem.UpdateCurrentArenaData(wbd.CurrentPower, testWord);
             GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
             WordPuff wordPuff = puff.GetComponent<WordPuff>();
             wordPuff.SetText(testWord);
