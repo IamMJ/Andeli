@@ -5,7 +5,8 @@ using UnityEngine;
 public class MainMenuDriver : MonoBehaviour
 {
     SceneLoader sl;
-    public void StartGameSelected()
+    GameController gc;
+    public void StartGameSelected_SkirmishMode()
     {
         if (!sl)
         {
@@ -13,4 +14,16 @@ public class MainMenuDriver : MonoBehaviour
         }
         sl.GoToMainGameScene();
     }
+    public void StartGameSelected_TutorialMode()
+    {
+        gc = FindObjectOfType<GameController>();
+        gc.isInTutorialMode = true;
+        if (!sl)
+        {
+            sl = FindObjectOfType<SceneLoader>();
+        }
+        sl.GoToMainGameScene();
+    }
+
+
 }

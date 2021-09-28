@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     //init
     [SerializeField] GameObject playerPrefab = null;
     [SerializeField] GameObject wordValidaterPrefab = null;
+    [SerializeField] GameObject tutorPrefab = null;
     GameObject player;
     CinemachineVirtualCamera cvc;
     SceneLoader sl;
@@ -16,10 +17,15 @@ public class GameController : MonoBehaviour
     VictoryMeter vm;
     UIDriver uid;
 
+    //param
+    Vector2 regularStartLocation = new Vector2(0, 0);
+    Vector2 tutorialStartLocation = new Vector2(95, 79);
+
     //state
     public bool isPaused { get; set; } = false;
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
+    public bool isInTutorialMode { get; set; } = false;
 
     void Awake()
     {
@@ -61,9 +67,15 @@ public class GameController : MonoBehaviour
         uid.EnterOverworld();
         vm = FindObjectOfType<VictoryMeter>();
         ResumeGameSpeed();
+
         SpawnPlayer();
+        if (isInTutorialMode)
+        {
+            SetupTutorialMode();
+        }
         SpawnWordUtilities();
         SetCameraToFollowPlayer();
+
         
     }
 
@@ -71,7 +83,7 @@ public class GameController : MonoBehaviour
     {
         if (!player)
         {
-            player = Instantiate(playerPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+            player = Instantiate(playerPrefab, regularStartLocation, Quaternion.identity) as GameObject;
         }
     }
     private void SpawnWordUtilities()
@@ -96,6 +108,12 @@ public class GameController : MonoBehaviour
         cvc.Follow = player.transform;
     }
 
+    private void SetupTutorialMode()
+    {
+        //Spawn tutorial thing
+        Instantiate(tutorPrefab);
+        player.transform.position = tutorialStartLocation;
+    }
     #endregion
 
     #region End Game Methods

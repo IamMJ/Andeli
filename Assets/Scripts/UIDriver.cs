@@ -31,6 +31,8 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Image energySliderFill_1 = null;
     [SerializeField] Image energySliderFill_2 = null;
 
+    [SerializeField] TextMeshProUGUI tutorialTMP = null;
+
     Color fullBar = new Color(1, 1, 0);
     Color partialBar = new Color(.7169f, .7169f, .3551f);
 
@@ -40,6 +42,7 @@ public class UIDriver : MonoBehaviour
     SceneLoader sl;
     GameObject pauseMenu;
     GameObject letterPowersMenu;
+    Tutor tutor;
 
     //param
     float panelDeployRate = 100f; // pixels per second
@@ -106,6 +109,11 @@ public class UIDriver : MonoBehaviour
     public void OnReleaseEraseWord()
     {
         IncompleteLongPress_WordBoxActions();
+    }
+
+    public void PressTutorialOkayButton()
+    {
+        tutor.AdvanceToNextStep();
     }
     #endregion
 
@@ -298,6 +306,16 @@ public class UIDriver : MonoBehaviour
         {
             letterPowersMenu.SetActive(true);
         }
+    }
+
+    public TextMeshProUGUI GetTutorialTMP()
+    {
+        return tutorialTMP;
+    }
+
+    public void SetTutorRef(Tutor tutorRef)
+    {
+        tutor = tutorRef;
     }
 
     public void AddLetterToWordBar(LetterTile letterTile, char letter, int indexInWord)

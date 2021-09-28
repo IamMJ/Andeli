@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7492295879039131860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7492295879039131862}
+  - component: {fileID: 7492295879039131861}
+  m_Layer: 0
+  m_Name: Tutor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7492295879039131862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492295879039131860}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7492295879039131861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7492295879039131860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31cd93266ca04bc4cb57ef8936d6002f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialSteps:
+  - {fileID: 11400000, guid: 134cdaf13fb56694bb5a906f1c860e10, type: 2}
+  - {fileID: 11400000, guid: 58591751c523419439c7b28cbe9628d8, type: 2}
+  - {fileID: 11400000, guid: 632b832f431776848b3f5a191de43569, type: 2}
+  - {fileID: 11400000, guid: d1226a4119566ff468509739ee571714, type: 2}
+  - {fileID: 11400000, guid: 2bc707933db82884cabed8f970039640, type: 2}
+  - {fileID: 11400000, guid: 736d2d2800e47434b9fa9888a3b629e7, type: 2}
+  - {fileID: 11400000, guid: 8499d6d06ff294c4d92c64385a8f21a0, type: 2}
+  - {fileID: 11400000, guid: 3a72db89952f56a4aa3338fe3f8e2f6b, type: 2}
+  - {fileID: 11400000, guid: 776d89f189813cc4981b5e8beeb9e8ec, type: 2}
+  - {fileID: 11400000, guid: 01aa1f365a0fcb94895159073510cd97, type: 2}
+  - {fileID: 11400000, guid: 5bf12c9ae74f5cb449ebefb9d7a531aa, type: 2}
+  - {fileID: 11400000, guid: bed5bf9fddc3db74a98232985db7b8c5, type: 2}
+  - {fileID: 11400000, guid: 8be14a59f1facec4b8d01f47138c3f64, type: 2}
+  - {fileID: 11400000, guid: 91a4b4ed08413c14fa46f5513c205eb2, type: 2}
+  - {fileID: 11400000, guid: 0f63c0672e57f1d4eafd02603774db7d, type: 2}
+  - {fileID: 11400000, guid: 153d330ee133f194b836e8e2332dc23a, type: 2}
+  - {fileID: 11400000, guid: 4cd66972e29c92149bd8560e75577bcc, type: 2}
+  - {fileID: 11400000, guid: e0c60fbbb88f07f42ac5616bfa069249, type: 2}
+  - {fileID: 11400000, guid: 1183abde3a3922447b20f811b36bbad4, type: 2}
+  arrowPrefab_UI: {fileID: 9136899798469366532, guid: f4834109b7f76514cbd8cbe3bbd09330, type: 3}
+  arrowPrefab_Worldspace: {fileID: 262344331325496391, guid: 4d3f41f465701504892544ce9395a256, type: 3}
