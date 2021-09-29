@@ -32,6 +32,7 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Image energySliderFill_2 = null;
 
     [SerializeField] TextMeshProUGUI tutorialTMP = null;
+    [SerializeField] GameObject tutorialPanel = null;
 
     Color fullBar = new Color(1, 1, 0);
     Color partialBar = new Color(.7169f, .7169f, .3551f);
@@ -311,6 +312,11 @@ public class UIDriver : MonoBehaviour
     public TextMeshProUGUI GetTutorialTMP()
     {
         return tutorialTMP;
+    }
+
+    public void ToggleTutorialUIPanel(bool isTutorialSupposedToBeVisible)
+    {
+        tutorialPanel.SetActive(isTutorialSupposedToBeVisible);
     }
 
     public void SetTutorRef(Tutor tutorRef)

@@ -53,7 +53,7 @@ public class ArenaBuilder : MonoBehaviour
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         enemies = new GameObject[enemyPrefabs.Length];
         SetupStatueCameraMouseCat(centroid);
-        SetupArenaBoundaries(centroid);
+        //SetupArenaBoundaries(centroid);
 
     }
     private void SetupArenaBoundaries(Vector2 centroid)
@@ -178,6 +178,7 @@ public class ArenaBuilder : MonoBehaviour
 
     private void CreateArenaDebriefMenu(bool didPlayerWin)
     {
+        gc.PauseGame();
         float timeElapsed = Mathf.Round( Time.time - startTime);
         GameObject debriefMenu = Instantiate(arenaDebriefMenuPrefab);
         debriefMenu.GetComponent<ArenaDebriefMenuDriver>().SetupDebriefMenu(gc, 
@@ -186,6 +187,7 @@ public class ArenaBuilder : MonoBehaviour
 
     public void CloseDownArena()
     {
+        gc.ResumeGameSpeed();
         gc.isInArena = false;
         uid.EnterOverworld();
         Destroy(camMouse);

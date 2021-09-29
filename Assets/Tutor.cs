@@ -9,6 +9,7 @@ public class Tutor : MonoBehaviour
     [SerializeField] TutorialStep[] tutorialSteps = null;
     [SerializeField] GameObject arrowPrefab_UI = null;
     [SerializeField] GameObject arrowPrefab_Worldspace = null;
+    UIDriver uid;
 
     RectTransform arrow_UI;
     Transform arrow_worldSpace;
@@ -20,9 +21,10 @@ public class Tutor : MonoBehaviour
     private void Start()
     {
         currentTutorialStep = tutorialSteps[0];
-        UIDriver uid = FindObjectOfType<UIDriver>();
+        uid = FindObjectOfType<UIDriver>();
         uid.SetTutorRef(this);
         tutorialTMP = uid.GetTutorialTMP();
+        uid.ToggleTutorialUIPanel(true);
         tutorialTMP.text = currentTutorialStep.instruction;
         arrow_UI = Instantiate(arrowPrefab_UI, tutorialTMP.transform).GetComponent<RectTransform>();
         arrow_worldSpace = Instantiate(arrowPrefab_Worldspace).transform;
@@ -35,7 +37,9 @@ public class Tutor : MonoBehaviour
         currentStep++;
         if (currentStep >= tutorialSteps.Length)
         {
-            tutorialTMP.transform.parent.gameObject.SetActive(false);
+            uid.ToggleTutorialUIPanel(false);
+            arrow_UI.gameObject.SetActive(false);
+            arrow_worldSpace.gameObject.SetActive(false);
         }
         currentTutorialStep = tutorialSteps[currentStep];
         tutorialTMP.text = currentTutorialStep.instruction;

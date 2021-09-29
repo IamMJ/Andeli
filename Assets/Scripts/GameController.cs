@@ -17,11 +17,13 @@ public class GameController : MonoBehaviour
     VictoryMeter vm;
     UIDriver uid;
 
+
     //param
     Vector2 regularStartLocation = new Vector2(0, 0);
     Vector2 tutorialStartLocation = new Vector2(95, 79);
 
     //state
+    int pauseRequests = 0;
     public bool isPaused { get; set; } = false;
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
@@ -142,6 +144,7 @@ public class GameController : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0;
+        pauseRequests++;
     }
 
     public void SlowGameSpeed()
@@ -151,8 +154,14 @@ public class GameController : MonoBehaviour
 
     public void ResumeGameSpeed()
     {
-        isPaused = false;
-        Time.timeScale = 1;
+        pauseRequests--;
+        if(pauseRequests <= 0)
+        {
+            isPaused = false;
+            Time.timeScale = 1;
+            pauseRequests = 0;
+        }
+
     }
 
 

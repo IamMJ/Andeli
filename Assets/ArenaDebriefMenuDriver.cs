@@ -35,7 +35,6 @@ public class ArenaDebriefMenuDriver : MonoBehaviour
     public void SetupDebriefMenu(GameController gcRef, bool didPlayerWin, GameObject player, GameObject enemy, float timeInArena)
     {
         gc = gcRef;
-        //gc.PauseGame();
         pm = player.GetComponent<PlayerMemory>();
         if (didPlayerWin)
         {
@@ -78,7 +77,6 @@ public class ArenaDebriefMenuDriver : MonoBehaviour
 
     public void CloseArenaMenu()
     {
-        gc.ResumeGameSpeed();
         Destroy(gameObject);
     }
 }

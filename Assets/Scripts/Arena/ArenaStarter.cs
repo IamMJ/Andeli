@@ -5,13 +5,19 @@ using Pathfinding;
 
 public class ArenaStarter : MonoBehaviour
 {
-    [SerializeField] GameObject arenaBuilderPrefab;
+    [SerializeField] GameObject arenaBuilderPrefab = null;
+    [SerializeField] GameObject arenaBriefMenuPrefab = null;
     GameObject ab;
     GameController gc;
     GameObject player;
+    GameObject arenaBrief;
 
     //param
     [SerializeField] float arenaTriggerRange;
+    float timeBetweenPlayerResponses = 10f;
+
+    //state
+    float timeToBecomeResponsiveToPlayer = 0;
 
 
     private void Start()
@@ -25,13 +31,34 @@ public class ArenaStarter : MonoBehaviour
     private void Update()
     {
         if (gc.isInArena) { return; } // Don't let the player be in more than one arena
+        if (Time.time < timeToBecomeResponsiveToPlayer) { return; }
         if ((player.transform.position - transform.position).magnitude <= arenaTriggerRange)
         {
-            ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
-            ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
-            arenaBuilder.SetArenaStarter(this);
-            arenaBuilder.SetupArena(transform.position);
+            if (!arenaBrief)
+            {
+                arenaBrief = Instantiate(arenaBriefMenuPrefab);
+                arenaBrief.GetComponent<ArenaBriefMenuDriver>().SetArenaStarterReference(this);
+            }
+            arenaBrief.SetActive(true);
+            gc.PauseGame();
+            timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
         }
+    }
+
+    public void RetreatFromArena()
+    {
+        arenaBrief.SetActive(false);
+        gc.ResumeGameSpeed();
+    }
+
+    public void StartArena()
+    {
+        arenaBrief.SetActive(false);
+        ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
+        ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
+        arenaBuilder.SetArenaStarter(this);
+        arenaBuilder.SetupArena(transform.position);
+        gc.ResumeGameSpeed();
     }
 
     public void RemoveArenaStarter()
