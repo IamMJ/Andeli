@@ -128,11 +128,11 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 8
+  m_fontSize: 7
   m_fontSizeBase: 8
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 7
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -260,8 +260,8 @@ SpriteRenderer:
   m_SortingLayerID: 2006724999
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: e266453fcd28d59428c2449dec463fd1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 979d416e7e04a3a488865caa78afef41, type: 3}
+  m_Color: {r: 1, g: 0.95744234, b: 0.8632076, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -310,7 +310,7 @@ MonoBehaviour:
   NormalTileColor: {r: 1, g: 1, b: 1, a: 1}
   LuckyTileSprite: {fileID: 21300000, guid: e266453fcd28d59428c2449dec463fd1, type: 3}
   LuckyTileColor: {r: 0, g: 1, b: 0, a: 1}
-  FrozenTileSprite: {fileID: 21300000, guid: fe15b738b3422354f9ee6baaa7525dfc, type: 3}
-  FrozenTileColor: {r: 0.4292453, g: 1, b: 0.95495254, a: 1}
-  ShinyTileSprite: {fileID: 21300000, guid: 0799c137c30b61649bbd21adf53d87f1, type: 3}
-  ShinyTileColor: {r: 0.9433962, g: 0.9433962, b: 0.9433962, a: 1}
+  FrozenTileSprite: {fileID: 21300000, guid: c25dd675a14cd744099cbf45f24d68fd, type: 3}
+  FrozenTileColor: {r: 0.33333334, g: 0.7921569, b: 1, a: 0.9019608}
+  ShinyTileSprite: {fileID: 21300000, guid: 979d416e7e04a3a488865caa78afef41, type: 3}
+  ShinyTileColor: {r: 1, g: 0.9607843, b: 0.8666667, a: 1}

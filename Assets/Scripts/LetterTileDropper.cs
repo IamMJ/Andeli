@@ -20,6 +20,7 @@ public class LetterTileDropper : MonoBehaviour
     int layerMask_Letter = 1 << 9;
     public List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
     private List<LetterTile> allLettersDropped = new List<LetterTile>();
+    [SerializeField] string lettersOnBoard = "";
     List<Vector2> dropLocations = new List<Vector2>();
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
@@ -227,6 +228,7 @@ public class LetterTileDropper : MonoBehaviour
         letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
         newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
         allLettersDropped.Add(letterTile);
+        lettersOnBoard += letterTile.Letter;
     }
 
     #endregion
@@ -327,6 +329,13 @@ public class LetterTileDropper : MonoBehaviour
         {
             doesBoardHaveLettersAvailable = false;
         }
+        int letterToRemove = lettersOnBoard.IndexOf(letterTileToRemove.Letter);
+        if (letterToRemove >= 0)
+        {
+            //Debug.Log($"should remove a {letterTileToRemove.Letter} at index {letterToRemove}");
+            lettersOnBoard = lettersOnBoard.Remove(letterToRemove, 1);
+        }
+
     }
 
     public void AddLetterToSpawnedLetterList(LetterTile newLetterTile)
@@ -370,31 +379,48 @@ public class LetterTileDropper : MonoBehaviour
     #endregion
     private TrueLetter ReturnWeightedRandomTrueLetter(bool shouldBeConsonant)
     {
-        if (shouldBeConsonant)
+        TrueLetter chosenLetter = null;
+        int attempts = 0;
+        do
         {
-            int rand = UnityEngine.Random.Range(0, currentProbabilityCount_Consonants);
-            foreach (var tl in consonants)
+            attempts++;
+            if (attempts > 3)
             {
-                if (rand <= tl.ProbabilityTop)
+                break;
+            }
+
+            if (shouldBeConsonant)
+            {
+                int rand = UnityEngine.Random.Range(0, currentProbabilityCount_Consonants);
+                foreach (var tl in consonants)
                 {
-                    //Debug.Log($"saw {rand}, choosing {tl.Letter} with top of {tl.ProbabilityTop}");
-                    return tl;
+                    if (rand <= tl.ProbabilityTop)
+                    {
+                        //Debug.Log($"saw {rand}, choosing {tl.GetLetter()} with top of {tl.ProbabilityTop}");
+                        chosenLetter = tl;
+                        break;
+                    }
                 }
             }
-        }
-        else
-        {
-            int rand = UnityEngine.Random.Range(0, currentProbabilityCount_Vowels);
-            foreach (var tl in vowels)
+
+            else
             {
-                if (rand <= tl.ProbabilityTop)
+                int rand = UnityEngine.Random.Range(0, currentProbabilityCount_Vowels);
+                foreach (var tl in vowels)
                 {
-                    //Debug.Log($"saw {rand}, choosing {tl.Letter} with top of {tl.ProbabilityTop}");
-                    return tl;
+                    if (rand <= tl.ProbabilityTop)
+                    {
+                        //Debug.Log($"saw {rand}, choosing {tl.GetLetter()} with top of {tl.ProbabilityTop}");
+                        chosenLetter = tl;
+                        break;
+                    }
                 }
             }
+
         }
-        return null;
+        while (lettersOnBoard.Contains(chosenLetter.GetLetter().ToString()));
+
+        return chosenLetter;
     }
 
 
