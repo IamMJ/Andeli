@@ -64,7 +64,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
         }
     }
 
-    public void RemoveLetterEffect(int indexInWord, bool hasUI)
+    public void RemoveLetterParticleEffect(int indexInWord, bool hasUI)
     {
         if (hasUI)
         {

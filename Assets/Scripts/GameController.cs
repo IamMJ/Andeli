@@ -17,12 +17,16 @@ public class GameController : MonoBehaviour
     VictoryMeter vm;
     UIDriver uid;
 
+    public enum StartMode { Story, Skirmish, Tutorial};
 
     //param
-    Vector2 regularStartLocation = new Vector2(0, 0);
+    Vector2 storyStartLocation = new Vector2(0, 0);
     Vector2 tutorialStartLocation = new Vector2(95, 79);
+    Vector2 skirmishStartLocation = new Vector2(93, -72);
 
     //state
+    public StartMode startMode = StartMode.Story;
+
     int pauseRequests = 0;
     public bool isPaused { get; set; } = false;
     public bool isInArena { get; set; } = false;
@@ -71,12 +75,10 @@ public class GameController : MonoBehaviour
         ResumeGameSpeed();
 
         SpawnPlayer();
-        if (isInTutorialMode)
-        {
-            SetupTutorialMode();
-        }
         SpawnWordUtilities();
         SetCameraToFollowPlayer();
+
+        AdjustGameForStartMode();
 
         
     }
@@ -85,7 +87,7 @@ public class GameController : MonoBehaviour
     {
         if (!player)
         {
-            player = Instantiate(playerPrefab, regularStartLocation, Quaternion.identity) as GameObject;
+            player = Instantiate(playerPrefab, storyStartLocation, Quaternion.identity) as GameObject;
         }
     }
     private void SpawnWordUtilities()
@@ -110,12 +112,28 @@ public class GameController : MonoBehaviour
         cvc.Follow = player.transform;
     }
 
-    private void SetupTutorialMode()
+
+    private void AdjustGameForStartMode()
     {
-        //Spawn tutorial thing
-        Instantiate(tutorPrefab);
-        player.transform.position = tutorialStartLocation;
+        isInTutorialMode = false;
+        switch (startMode)
+        {
+            case StartMode.Story:
+                player.transform.position = storyStartLocation;
+                return;
+
+            case StartMode.Tutorial:
+                Instantiate(tutorPrefab);
+                player.transform.position = tutorialStartLocation;
+                isInTutorialMode = true;
+                return;
+
+            case StartMode.Skirmish:
+                player.transform.position = skirmishStartLocation;
+                return;
+        }
     }
+
     #endregion
 
     #region End Game Methods

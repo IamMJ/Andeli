@@ -85,7 +85,7 @@ public class WordBuilder : MonoBehaviour
     {
         LetterTile letterTile = lettersCollected[indexInWord];
         letterTile.SetLatentAbilityStatus(false);
-        aleh.RemoveLetterEffect(indexInWord, hasUI);
+        aleh.RemoveLetterParticleEffect(indexInWord, hasUI);
 
     }
     private void UndoRandomActivatedAbilityAsPenalty()
@@ -121,7 +121,7 @@ public class WordBuilder : MonoBehaviour
             {
                 CurrentPower -= letterToRemove.Power;
             }
-            aleh.RemoveLetterEffect(indexWithinWord, hasUI);
+            aleh.RemoveLetterParticleEffect(indexWithinWord, hasUI);
         }
 
         // Remove letter from current word

@@ -174,13 +174,21 @@ public class UIDriver : MonoBehaviour
     {
         // if the index is first or last tile spot, check if the word is longer than tiles.
         // if longer than tiles, then the word must be overflowing, and should scroll left or right.
-        
+        if (playerWWZ.CheckSpendForLetterErasure())
+        {
+            ClearOutLetterFromSpecificTile(index);
+        }
+        else
+        {
+            Debug.Log("not enough energy to remove a letter");
+        }
 
-        ClearOutLetterFromSpecificTile(index);
+
     }
 
     private void ClearOutLetterFromSpecificTile(int indexInTiles)
     {
+
         RemoveParticleEffectsAtIndexInWord(indexInTiles + wordbarScroll);
 
         for (int i = indexInTiles; i < playerWB.GetCurrentWordLength()-1; i++)

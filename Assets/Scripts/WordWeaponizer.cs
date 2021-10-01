@@ -24,6 +24,7 @@ public class WordWeaponizer : MonoBehaviour
     float spellSpeed = 6.0f;
     public GameObject currentEnemy;
     float spellFiringCost = 33;
+    float letterErasureCost = 10f;
     float maxEnergy = 100f;
 
     //state
@@ -63,6 +64,24 @@ public class WordWeaponizer : MonoBehaviour
         if (uid)
         {
             uid.UpdateSpellEnergySlider(currentEnergyLevel);
+        }
+    }
+
+    /// <summary>
+    /// Checks the current energy supply. Returns 'true' if sufficient energy to erase a letter
+    /// and deducts that amount. Returns 'false' if insufficient energy, but doesn't change energy supply.
+    /// </summary>
+    public bool CheckSpendForLetterErasure()
+    {
+        if (wbd.GetCurrentWordLength() == 0) { return false; }
+        if (letterErasureCost <= currentEnergyLevel)
+        {
+            currentEnergyLevel -= letterErasureCost;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
     public bool AttemptToFireWordAsPlayer()
