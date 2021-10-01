@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour
     //init
     [SerializeField] GameObject playerPrefab = null;
     [SerializeField] GameObject wordValidaterPrefab = null;
-    [SerializeField] GameObject tutorPrefab = null;
+
     GameObject player;
     CinemachineVirtualCamera cvc;
     SceneLoader sl;
@@ -123,7 +123,7 @@ public class GameController : MonoBehaviour
                 return;
 
             case StartMode.Tutorial:
-                Instantiate(tutorPrefab);
+                FindObjectOfType<Tutor>().gc = this;
                 player.transform.position = tutorialStartLocation;
                 isInTutorialMode = true;
                 return;

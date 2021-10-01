@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e8e558911fe1c49b3052e845b6b9f9, type: 3}
   m_Name: Step_1
   m_EditorClassIdentifier: 
+  targetTutorialTag: 9
   instruction: This is you, the hero. Dashing.
-  position: {x: 46, y: -295}
-  positionAnchor: 0
+  worldSpacePosition: {x: 0, y: -1}
   arrowRotation: 0

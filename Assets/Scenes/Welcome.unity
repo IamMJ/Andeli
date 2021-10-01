@@ -2893,7 +2893,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 4959554787345939825, guid: 31d4c84240ae5fb4282c44005879b406, type: 3}
   wordValidaterPrefab: {fileID: 8212747933968569170, guid: ce726ed50fb4e544f8d3a1549810b0be, type: 3}
-  tutorPrefab: {fileID: 7492295879039131860, guid: 9834a95c9214aa5459627586f3304cb9, type: 3}
   startMode: 0
 --- !u!4 &1489696815
 Transform:

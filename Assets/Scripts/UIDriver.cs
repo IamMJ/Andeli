@@ -114,7 +114,7 @@ public class UIDriver : MonoBehaviour
 
     public void PressTutorialOkayButton()
     {
-        tutor.AdvanceToNextStep();
+        tutor.AdvanceToNextStepViaClick();
     }
     #endregion
 

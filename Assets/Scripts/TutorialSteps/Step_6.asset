@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e8e558911fe1c49b3052e845b6b9f9, type: 3}
   m_Name: Step_6
   m_EditorClassIdentifier: 
-  instruction: Once you have a valid spell, cast it pressing here.
-  position: {x: -64, y: -490}
-  positionAnchor: 0
-  arrowRotation: 240
+  targetTutorialTag: 5
+  instruction: Once you have a word, cast it by pressing here.
+  worldSpacePosition: {x: 0, y: 0}
+  arrowRotation: 0

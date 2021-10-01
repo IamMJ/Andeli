@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e8e558911fe1c49b3052e845b6b9f9, type: 3}
   m_Name: Step_11
   m_EditorClassIdentifier: 
+  targetTutorialTag: 3
   instruction: You need energy to cast spells. It recharges slowly.
-  position: {x: 142, y: -492}
-  positionAnchor: 0
+  worldSpacePosition: {x: 0, y: 0}
   arrowRotation: 45

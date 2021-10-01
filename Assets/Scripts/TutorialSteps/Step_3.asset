@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e8e558911fe1c49b3052e845b6b9f9, type: 3}
   m_Name: Step_3
   m_EditorClassIdentifier: 
+  targetTutorialTag: 4
   instruction: This shows your letters' powers (and also pauses).
-  position: {x: -97, y: -452}
-  positionAnchor: 0
-  arrowRotation: 180
+  worldSpacePosition: {x: 0, y: 0}
+  arrowRotation: 0

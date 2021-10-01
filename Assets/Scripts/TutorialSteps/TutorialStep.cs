@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class TutorialStep : ScriptableObject
 {
-    public enum PositionAnchor { relativeToTMP, worldSpace};
 
+    public TutorialTag.TagName targetTutorialTag = TutorialTag.TagName.Nothing;
+    public enum completeStepCondition { HitOkay, MoveToLocation, EnterCombat}
+
+    completeStepCondition completionCriteria = completeStepCondition.HitOkay;
     public string instruction = null;
-    public Vector2 position;
-    public PositionAnchor positionAnchor;
+    public Vector2 worldSpacePosition;
     public float arrowRotation;
+
+
 }

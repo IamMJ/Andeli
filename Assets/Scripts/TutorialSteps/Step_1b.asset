@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e8e558911fe1c49b3052e845b6b9f9, type: 3}
   m_Name: Step_1b
   m_EditorClassIdentifier: 
+  targetTutorialTag: 8
   instruction: Tap somewhere to Move.
-  position: {x: 99, y: 74}
-  positionAnchor: 1
+  worldSpacePosition: {x: 99, y: 76}
   arrowRotation: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31e8e558911fe1c49b3052e845b6b9f9, type: 3}
   m_Name: Step_12
   m_EditorClassIdentifier: 
+  targetTutorialTag: 7
   instruction: Sometimes your letters here will emit particles...
-  position: {x: -56, y: -399}
-  positionAnchor: 0
+  worldSpacePosition: {x: 0, y: 0}
   arrowRotation: 180
