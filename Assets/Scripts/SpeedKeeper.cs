@@ -19,7 +19,7 @@ public class SpeedKeeper : MonoBehaviour
 
     private void Start()
     {
-        PlayerMemory pm = GetComponent<PlayerMemory>();
+        WordMakerMemory pm = GetComponent<WordMakerMemory>();
         if (pm)
         {
             pm.OnResetConsecutiveWordCount += ResetToStartingSpeedOnInvalidWord;
@@ -53,7 +53,7 @@ public class SpeedKeeper : MonoBehaviour
 
     private void OnDestroy()
     {
-        PlayerMemory pm = GetComponent<PlayerMemory>();
+        WordMakerMemory pm = GetComponent<WordMakerMemory>();
         if (pm)
         {
             pm.OnResetConsecutiveWordCount -= ResetToStartingSpeedOnInvalidWord;

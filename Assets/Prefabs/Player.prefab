@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dustcloudPrefab: {fileID: 8717110635550957212, guid: ed73c7c44d7a05e40ab9bac161c7ff04, type: 3}
   TacticalDestination: {x: 0, y: 0}
-  rawDesMove: {x: 1, y: 0}
+  rawDesMove: {x: 0, y: 0}
 --- !u!114 &5006189010876863907
 MonoBehaviour:
   m_ObjectHideFlags: 0

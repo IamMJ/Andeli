@@ -13,7 +13,7 @@ public class WordWeaponizer : MonoBehaviour
     DebugHelper dh;
     WordValidater wv;
     VictoryMeter vm;
-    PlayerMemory playmem;
+    [SerializeField] WordMakerMemory memory;
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
     UIDriver uid;
@@ -38,7 +38,7 @@ public class WordWeaponizer : MonoBehaviour
 
     void Start()
     {
-        playmem = GetComponent<PlayerMemory>();
+        memory = GetComponent<WordMakerMemory>();
         wbd = GetComponent<WordBuilder>();
         
         if (GetComponent<PlayerInput>()) //Must be a player
@@ -96,7 +96,7 @@ public class WordWeaponizer : MonoBehaviour
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
         {
-            playmem.UpdateCurrentArenaData(wbd.CurrentPower, testWord);
+            memory.UpdateCurrentArenaData(wbd.CurrentPower, testWord);
             GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
             WordPuff wordPuff = puff.GetComponent<WordPuff>();
             wordPuff.SetText(testWord);
@@ -150,7 +150,9 @@ public class WordWeaponizer : MonoBehaviour
     public void FireKnownValidWord()
     {
         TargetBestEnemy();
-        CreateSpell(currentEnemy.transform, wbd.CurrentPower * powerSign, TrueLetter.Ability.Normal); ;
+        float spellpower = (wbd.CurrentPower + memory.GetCurrentArenaData().wordsSpelledByPlayer 
+            * ab.GetArenaSettingsHolder().arenaSetting_Specific.powerModifierForWordCountThisArena);
+        CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
         foreach (var letter in wbd.GetLettersCollected())
         {
             if (letter.GetLatentAbilityStatus() == false)
@@ -207,12 +209,13 @@ public class WordWeaponizer : MonoBehaviour
 
     private void TargetBestEnemy()
     {
+        if (!ab)
+        {
+            ab = FindObjectOfType<ArenaBuilder>();
+        }
         if (isPlayer)
         {
-            if (!ab)
-            {
-                ab = FindObjectOfType<ArenaBuilder>();
-            }
+
             currentEnemy = ab.GetEnemiesInArena()[0];
         }
         else

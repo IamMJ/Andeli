@@ -7,7 +7,7 @@ using AllIn1SpriteShader;
 
 public class ArenaDebriefMenuDriver : MonoBehaviour
 {
-    PlayerMemory pm;
+    WordMakerMemory pm;
     GameController gc;
 
     string outcomeText_Win = "VICTORY!";
@@ -35,7 +35,7 @@ public class ArenaDebriefMenuDriver : MonoBehaviour
     public void SetupDebriefMenu(GameController gcRef, bool didPlayerWin, GameObject player, GameObject enemy, float timeInArena)
     {
         gc = gcRef;
-        pm = player.GetComponent<PlayerMemory>();
+        pm = player.GetComponent<WordMakerMemory>();
         if (didPlayerWin)
         {
             outcomeTMP.text = outcomeText_Win;
@@ -51,7 +51,7 @@ public class ArenaDebriefMenuDriver : MonoBehaviour
             loserSilhouetteImage.sprite = player.GetComponent<SpriteRenderer>().sprite;
         }
 
-        PlayerMemory.ArenaData ad = pm.GetCurrentArenaData();
+        WordMakerMemory.ArenaData ad = pm.GetCurrentArenaData();
         timeTMP.text = "Time: " + timeInArena.ToString();
         powerDealtTMP.text = "Power Dealt: " + ad.powerDealtByPlayer.ToString();
         wordsSpelledTMP.text = "Words Spelled: " + ad.wordsSpelledByPlayer.ToString();

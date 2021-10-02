@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTutorialTag: 8
   instruction: Tap somewhere to Move.
-  worldSpacePosition: {x: 99, y: 76}
-  arrowRotation: 0
+  worldSpacePosition: {x: 0, y: 18}
+  arrowRotation: -90

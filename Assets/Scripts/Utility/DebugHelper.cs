@@ -35,24 +35,24 @@ public class DebugHelper : MonoBehaviour
 
     private void HandleDebugLogVisibility()
     {
-        if (Time.time >= timeToHideDebugLog)
-        {
-            debugLogPanel.gameObject.SetActive(false);
-            textline_0.gameObject.SetActive(false);
-            textline_1.gameObject.SetActive(false);
-            textline_2.gameObject.SetActive(false);
-        }
+        //if (Time.time >= timeToHideDebugLog)
+        //{
+        //    debugLogPanel.gameObject.SetActive(false);
+        //    textline_0.gameObject.SetActive(false);
+        //    textline_1.gameObject.SetActive(false);
+        //    textline_2.gameObject.SetActive(false);
+        //}
     }
 
     public void DisplayDebugLog(string newText)
     {
-        debugLogPanel.gameObject.SetActive(true);
-        textline_0.gameObject.SetActive(true);
-        textline_1.gameObject.SetActive(true);
-        textline_2.gameObject.SetActive(true);
-        timeToHideDebugLog = Time.time + timeToDisplayDebugLog;
-        PushUpOldTexts();
-        textline_0.text = newText;
+        //debugLogPanel.gameObject.SetActive(true);
+        //textline_0.gameObject.SetActive(true);
+        //textline_1.gameObject.SetActive(true);
+        //textline_2.gameObject.SetActive(true);
+        //timeToHideDebugLog = Time.time + timeToDisplayDebugLog;
+        //PushUpOldTexts();
+        //textline_0.text = newText;
     }
 
     private void PushUpOldTexts()

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-
+[RequireComponent (typeof(ArenaSettingHolder))]
 public class ArenaStarter : MonoBehaviour
 {
     [SerializeField] GameObject arenaBuilderPrefab = null;
     [SerializeField] GameObject arenaBriefMenuPrefab = null;
+
+    ArenaSettingHolder ash;
     GameObject ab;
     GameController gc;
     GameObject player;
@@ -24,7 +26,7 @@ public class ArenaStarter : MonoBehaviour
     {
         gc = FindObjectOfType<GameController>();
         player = gc.GetPlayer();
-
+        ash = GetComponent<ArenaSettingHolder>();
         GridModifier.UnknitAllGridGraphs(transform);
     }
 
@@ -37,7 +39,8 @@ public class ArenaStarter : MonoBehaviour
             if (!arenaBrief)
             {
                 arenaBrief = Instantiate(arenaBriefMenuPrefab);
-                arenaBrief.GetComponent<ArenaBriefMenuDriver>().SetArenaStarterReference(this);
+                arenaBrief.GetComponent<ArenaBriefMenuDriver>().SetupArenaBriefMenu(
+                    this, ash.arenaSetting_Specific.briefScreenIcon, ash.arenaSetting_Specific.briefScreenText);
             }
             arenaBrief.SetActive(true);
             gc.PauseGame();
@@ -56,7 +59,7 @@ public class ArenaStarter : MonoBehaviour
         arenaBrief.SetActive(false);
         ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
-        arenaBuilder.SetArenaStarter(this);
+        arenaBuilder.SetArenaStarter(this, ash);
         arenaBuilder.SetupArena(transform.position);
         gc.ResumeGameSpeed();
     }

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: -1054305028273398252}
   - component: {fileID: -5731959307713958461}
   - component: {fileID: 9175583922732671321}
+  - component: {fileID: -4259656899091234111}
   m_Layer: 10
   m_Name: AI_Brain
   m_TagString: Wordmaker
@@ -262,8 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1c426fc29caef74c957dfabc4c1ec05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breadcrumbs: []
-  reknitterPrefab: {fileID: 356949180654384117, guid: 7fd628fe7075db94cb9dd7ec1a53a38c, type: 3}
   dustcloudPrefab: {fileID: 8717110635550957212, guid: ed73c7c44d7a05e40ab9bac161c7ff04, type: 3}
   TacticalDestination: {x: 0, y: 0}
   rawDesMove: {x: 1, y: 0}
@@ -283,3 +282,15 @@ MonoBehaviour:
   normalSpellPrefab: {fileID: 7941282901840960525, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
   freezeSpellPrefab: {fileID: 6886851091308245794, guid: c5bafa82922014b4d9a8b3634cc06e3f, type: 3}
   currentEnemy: {fileID: 0}
+--- !u!114 &-4259656899091234111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6646722358577865907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0779bd952808024449fbf46c6c046b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

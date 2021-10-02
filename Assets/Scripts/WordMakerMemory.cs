@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerMemory : MonoBehaviour
+public class WordMakerMemory : MonoBehaviour
 {
     int consecutiveCompletedWords = 0;
     int totalCompletedWords = 0;

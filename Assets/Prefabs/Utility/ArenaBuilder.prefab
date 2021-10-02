@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6593999420485628271}
   - component: {fileID: 269034482388354396}
   - component: {fileID: 5086475317652339047}
+  - component: {fileID: -6963662670470965412}
   m_Layer: 0
   m_Name: ArenaBuilder
   m_TagString: Untagged
@@ -50,6 +51,7 @@ MonoBehaviour:
   - {fileID: 6646722358577865907, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
   letterTileDropperPrefab: {fileID: 7061575934574750077, guid: 2ff7dc08238502c418b5341965d53746, type: 3}
   arenaDebriefMenuPrefab: {fileID: 6017347352899268855, guid: 0c35392b59a4c8b4fa3dfb2d9805db7e, type: 3}
+  ash: {fileID: 0}
 --- !u!114 &5086475317652339047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,3 +67,17 @@ MonoBehaviour:
   letterFX_Shiny: {fileID: 6907797058491934293, guid: 9a6677f4fe83229458446c364cf60294, type: 3}
   letterFX_Frozen: {fileID: 6907797058491934293, guid: e62e68b1baed0bb44b9749264c347d58, type: 3}
   letterFX_Lucky: {fileID: 6907797058491934293, guid: 4eb0e43ad8d481a4884a7c28eed94c1e, type: 3}
+--- !u!114 &-6963662670470965412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351801026652380497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37270a17f7ccdbd4abd3908366aa66d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arenaSetting_Default: {fileID: 0}
+  arenaSetting_Specific: {fileID: 0}

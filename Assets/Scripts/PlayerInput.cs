@@ -33,7 +33,7 @@ public class PlayerInput : MonoBehaviour
     bool reachedEndOfPath;
     int currentWaypoint = 0;
 
-    Vector2 strategicDestination = Vector2.zero;
+    Vector2 strategicDestination;
 
 
     bool isValidStartPosition = false;
@@ -48,7 +48,7 @@ public class PlayerInput : MonoBehaviour
         isMobile = Application.isMobilePlatform;
         //dh.DisplayDebugLog($"isMobile: {isMobile}");
         mc = Camera.main;
-
+        strategicDestination = transform.position;
     }
 
     void Update()
@@ -178,7 +178,11 @@ public class PlayerInput : MonoBehaviour
 
     private void PassTacticalDestinationToMoveBrain()
     {
-        if (currentPath == null) { return; }
+        if (currentPath == null)
+        {
+            wmm.TacticalDestination = transform.position;
+            return;
+        }
         // Check in a loop if we are close enough to the current waypoint to switch to the next one.
         // We do this in a loop because many waypoints might be close to each other and we may reach
         // several of them in the same frame.

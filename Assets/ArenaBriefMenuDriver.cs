@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class ArenaBriefMenuDriver : MonoBehaviour
 {
     ArenaStarter arenaStarter;
+    [SerializeField] TextMeshProUGUI settingDescriptionTMP = null;
+    [SerializeField] Image settingImage = null;
     void Start()
     {
         
@@ -27,8 +31,11 @@ public class ArenaBriefMenuDriver : MonoBehaviour
 
     }
 
-    public void SetArenaStarterReference(ArenaStarter arst)
+    public void SetupArenaBriefMenu(ArenaStarter arst, Sprite settingSprite, string settingDesc)
     {
         arenaStarter = arst;
+        settingImage.sprite = settingSprite;
+        settingDescriptionTMP.text = settingDesc;
+
     }
 }

@@ -25,13 +25,17 @@ public class LetterTileDropper : MonoBehaviour
 
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
-    //param
-    int numberOfLettersToDropPerWave = 3;
+    // fixed param
     float minDistanceBetweenLetters = 1.5f;
-    int consonantsBetweenVowels = 1;
+    Vector2 fallVector = new Vector2(0, 10f);
+
+    // changeable params
     float averageLifetimeOfLettersInWave = 20f;
     float averageTimeBetweenWaves = 5f;
-    Vector2 fallVector = new Vector2(0, 10f);
+    int consonantsBetweenVowels = 1;
+    int numberOfLettersToDropPerWave = 3;
+    string letterstoIgnore = "";
+    float percentageOfLettersToDropAsMisty = 0;
 
     //state
     int dropsSinceLastVowel = 0;
@@ -376,7 +380,38 @@ public class LetterTileDropper : MonoBehaviour
         return letterTilesInRange;
     }
 
+
+
     #endregion
+
+    #region Public Arena Parameter Setting
+    //float averageLifetimeOfLettersInWave = 20f;
+    //float averageTimeBetweenWaves = 5f;
+    //int consonantsBetweenVowels = 1;
+    //int numberOfLettersToDropPerWave = 3;
+    public void SetupArenaParameters_Lifetime(float letterLifetime)
+    {
+        averageLifetimeOfLettersInWave = letterLifetime;
+    }
+
+    public void SetupArenaParameters_LettersInWave(int lettersInWave)
+    {
+        numberOfLettersToDropPerWave = lettersInWave;
+    }
+    public void SetupArenaParameters_LettersToIgnore(string lettersToIgnore)
+    {
+        this.letterstoIgnore = lettersToIgnore;
+    }
+    public void SetupArenaParameters_LettersAsMisty(float percentageAsMisty)
+    {
+        percentageOfLettersToDropAsMisty = percentageAsMisty;
+    }
+
+
+    #endregion
+
+
+    #region Internal Methods
     private TrueLetter ReturnWeightedRandomTrueLetter(bool shouldBeConsonant)
     {
         TrueLetter chosenLetter = null;
@@ -423,12 +458,10 @@ public class LetterTileDropper : MonoBehaviour
         return chosenLetter;
     }
 
-
-
-
-
     private void OnDestroy()
     {
         DestroyAllLetters();
     }
+
+    #endregion
 }

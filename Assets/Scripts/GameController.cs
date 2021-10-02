@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
 
     //param
     Vector2 storyStartLocation = new Vector2(0, 0);
-    Vector2 tutorialStartLocation = new Vector2(95, 79);
+    Vector2 tutorialStartLocation = new Vector2(-4, 17);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
 
     //state

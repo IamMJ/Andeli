@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTutorialTag: 8
   instruction: Move to the statue to enter combat.
-  worldSpacePosition: {x: 103, y: 78}
-  arrowRotation: 0
+  worldSpacePosition: {x: 4, y: 21}
+  arrowRotation: -90

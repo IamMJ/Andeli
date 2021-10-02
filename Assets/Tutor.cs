@@ -33,7 +33,7 @@ public class Tutor : MonoBehaviour
         uid = FindObjectOfType<UIDriver>();
         uid.SetTutorRef(this);
         tutorialTMP = uid.GetTutorialTMP();
-        
+        gc = FindObjectOfType<GameController>();
         if (gc.isInTutorialMode == false)
         {
             uid.ToggleTutorialUIPanel(false);
@@ -60,6 +60,7 @@ public class Tutor : MonoBehaviour
             uid.ToggleTutorialUIPanel(false);
             arrow_UI.gameObject.SetActive(false);
             arrow_worldSpace.gameObject.SetActive(false);
+            return;
         }
         currentTutorialStep = tutorialSteps[currentStep];
         tutorialTMP.text = currentTutorialStep.instruction;
@@ -137,7 +138,7 @@ public class Tutor : MonoBehaviour
                 arrow_UI.transform.parent = null;
                 arrow_worldSpace.transform.parent = null;
                 arrow_worldSpace.position = currentTutorialStep.worldSpacePosition;
-                arrow_UI.rotation = Quaternion.Euler(0, 0, currentTutorialStep.arrowRotation);
+                arrow_worldSpace.rotation = Quaternion.Euler(0, 0, currentTutorialStep.arrowRotation);
                 return;
 
             case TutorialTag.TagName.PlayerInWS:

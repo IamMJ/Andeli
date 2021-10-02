@@ -11,6 +11,8 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
     [SerializeField] GameObject arenaDebriefMenuPrefab = null;
+
+    ArenaSettingHolder ash;
     CinemachineVirtualCamera cvc;
     GameController gc;
     VictoryMeter vm;
@@ -42,7 +44,6 @@ public class ArenaBuilder : MonoBehaviour
         minY += Mathf.RoundToInt(transform.position.y);
         maxY += Mathf.RoundToInt(transform.position.y);
 
-
         uid = FindObjectOfType<UIDriver>();
         uid.EnterArena();
         gc = FindObjectOfType<GameController>();
@@ -53,6 +54,10 @@ public class ArenaBuilder : MonoBehaviour
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         enemies = new GameObject[enemyPrefabs.Length];
         SetupStatueCameraMouseCat(centroid);
+        ash.SetupArena(ltd, player.GetComponent<WordMakerMemory>(), enemies[0].GetComponent<WordMakerMemory>(),
+            player.GetComponent<WordWeaponizer>(), enemies[0].GetComponent<WordWeaponizer>(), 
+            player.GetComponent<WordBuilder>(), enemies[0].GetComponent<WordBuilder_NPC>(), uid);
+
         //SetupArenaBoundaries(centroid);
 
     }
@@ -162,9 +167,10 @@ public class ArenaBuilder : MonoBehaviour
         return randPos;
     }
 
-    public void SetArenaStarter(ArenaStarter newAS)
+    public void SetArenaStarter(ArenaStarter newAS, ArenaSettingHolder newASH)
     {
         arenaStarter = newAS;
+        ash = newASH;
     }
 
     
@@ -212,5 +218,10 @@ public class ArenaBuilder : MonoBehaviour
     public GameObject[] GetEnemiesInArena()
     {
         return enemies;
+    }
+
+    public ArenaSettingHolder GetArenaSettingsHolder()
+    {
+        return ash;
     }
 }
