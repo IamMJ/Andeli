@@ -8,8 +8,11 @@ using TMPro;
 public class UIDriver : MonoBehaviour
 {
     //init
-    [SerializeField] GameObject pauseMenuPrefab = null;
-    [SerializeField] GameObject letterPowersMenuPrefab = null;
+    [SerializeField] GameObject mainMenu = null;
+    [SerializeField] GameObject optionsMenu = null;
+    [SerializeField] GameObject optionsMenuButton = null;
+    [SerializeField] GameObject letterPowersMenu = null;
+    [SerializeField] GameObject letterPowersMenuButton = null;
 
     [SerializeField] Slider victoryBarSlider = null;
     [SerializeField] GameObject topBarPanel = null;
@@ -41,8 +44,6 @@ public class UIDriver : MonoBehaviour
     WordWeaponizer playerWWZ;
     GameController gc;
     SceneLoader sl;
-    GameObject pauseMenu;
-    GameObject letterPowersMenu;
     Tutor tutor;
 
     //param
@@ -252,14 +253,42 @@ public class UIDriver : MonoBehaviour
         powerMeterTMP.text = valueToShow.ToString();
     }
 
-    public void EnterOverworld()
+    public void ShowHideMainMenu(bool shouldBeShown)
+    {
+        mainMenu.gameObject.SetActive(shouldBeShown);
+    }
+
+    public void HideAllOverworldUIElements()
+    {
+        ShowHideTutorialPanel(false);
+        ShowHideBottomPanel(false);
+        ShowHideTopPanel(false);
+        ShowHideVictoryMeter(false);
+        ShowHideLetterPowerButton(false);
+        ShowHideOptionMenuButton(false);
+        ShowHideOptionsMenu(false);
+        ShowHideLetterPowersMenu(false);
+    }
+    public void ShowOverworldUIElements()
     {
         ShowHideBottomPanel(false);
         ShowHideTopPanel(false);
         ShowHideVictoryMeter(false);
+        ShowHideLetterPowerButton(true);
+        ShowHideOptionMenuButton(true);
     }
 
-    public void EnterArena()
+    private void ShowHideLetterPowerButton(bool shouldBeShown)
+    {
+        letterPowersMenuButton.gameObject.SetActive(shouldBeShown);
+    }
+
+    private void ShowHideOptionMenuButton(bool shouldBeShown)
+    {
+        optionsMenuButton.gameObject.SetActive(shouldBeShown);
+    }
+
+    public void ShowArenaUIElements()
     {
         ResetWordTilesToMax();
         ShowHideBottomPanel(true);
@@ -295,38 +324,27 @@ public class UIDriver : MonoBehaviour
         victoryBarSlider.gameObject.SetActive(shouldBeShown);
     }
 
-    public void ShowPauseMenu()
+    public void ShowHideOptionsMenu(bool shouldBeShown)
     {
         if (!gc)
         {
             gc = FindObjectOfType<GameController>();
         }
         gc.PauseGame();
-        if (!pauseMenu)
-        {
-            pauseMenu = Instantiate(pauseMenuPrefab);
-        }
-        if (pauseMenu)
-        {
-            pauseMenu.SetActive(true);
-        }
+
+        optionsMenu.SetActive(shouldBeShown);
+
     }
 
-    public void ShowLetterPowersMenu()
+    public void ShowHideLetterPowersMenu(bool shouldBeShown)
     {
         if (!gc)
         {
             gc = FindObjectOfType<GameController>();
         }
         gc.PauseGame();
-        if (!letterPowersMenu)
-        {
-            letterPowersMenu = Instantiate(letterPowersMenuPrefab);
-        }
-        if (letterPowersMenu)
-        {
-            letterPowersMenu.SetActive(true);
-        }
+        letterPowersMenu.SetActive(shouldBeShown);
+
     }
 
     public TextMeshProUGUI GetTutorialTMP()
@@ -334,7 +352,7 @@ public class UIDriver : MonoBehaviour
         return tutorialTMP;
     }
 
-    public void ToggleTutorialUIPanel(bool isTutorialSupposedToBeVisible)
+    public void ShowHideTutorialPanel(bool isTutorialSupposedToBeVisible)
     {
         tutorialPanel.SetActive(isTutorialSupposedToBeVisible);
     }

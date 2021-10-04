@@ -3,19 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.U2D;
 
 public class GameController : MonoBehaviour
 {
     //init
     [SerializeField] GameObject playerPrefab = null;
-    [SerializeField] GameObject wordValidaterPrefab = null;
 
     GameObject player;
     CinemachineVirtualCamera cvc;
-    SceneLoader sl;
-    GameObject wv;
+    //SceneLoader sl;
+    WordValidater wv;
     VictoryMeter vm;
+
     UIDriver uid;
+    MainMenuDriver mmd;
+    LetterPowerMenuDriver lpmd;
+    OptionMenuDriver pmd;
+    Tutor tutor;
+    ArenaBuilder currentArenaBuilder;
+    PixelPerfectCamera ppc;
+
+    public Action OnGameStart;
 
     public enum StartMode { Story, Skirmish, Tutorial};
 
@@ -23,6 +32,10 @@ public class GameController : MonoBehaviour
     Vector2 storyStartLocation = new Vector2(0, 0);
     Vector2 tutorialStartLocation = new Vector2(-4, 17);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
+    int pixelPerUnit_InGame = 16;
+    int pixelPerUnit_Idle = 2;
+    int ppuZoomRate = 3;
+
 
     //state
     public StartMode startMode = StartMode.Story;
@@ -32,55 +45,77 @@ public class GameController : MonoBehaviour
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
     public bool isInTutorialMode { get; set; } = false;
+    float pixelZoomRaw;
 
 
-    void Awake()
-    {
-        int count = FindObjectsOfType<GameController>().Length;
-        if (count > 1)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-    }
+    //void Awake()
+    //{
+    //    int count = FindObjectsOfType<GameController>().Length;
+    //    if (count > 1)
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //    else
+    //    {
+    //        DontDestroyOnLoad(gameObject);
+    //    }
+    //}
 
     void Start()
     {
-        sl = FindObjectOfType<SceneLoader>();
-        sl.OnSceneChange += CheckGameStateBasedOnSceneChange;
+        //sl = FindObjectOfType<SceneLoader>();
+        //sl.OnSceneChange += CheckGameStateBasedOnSceneChange;
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
-    }  
-    private void CheckGameStateBasedOnSceneChange(int newScene)
-    {
-        if (newScene == sl.MainGameScene)
-        {
-            StartNewGame();
-        }
-        if (newScene == sl.EndingScene)
-        {
-            EndCurrentGame();
-        }
+        ppc = Camera.main.GetComponent<PixelPerfectCamera>();
+        uid = FindObjectOfType<UIDriver>();
+        uid.HideAllOverworldUIElements();
+        uid.ShowHideMainMenu(true);
+
+        vm = FindObjectOfType<VictoryMeter>();
+        wv = GetComponent<WordValidater>();
+
+        pixelZoomRaw = pixelPerUnit_Idle;
+
+        BeginIdleMode();
     }
+
+    private void BeginIdleMode()
+    {
+        SetCameraToIdleMode();
+        // Create a bird or fox to run around the map?
+ 
+    }
+
+    private void SetCameraToIdleMode()
+    {
+        cvc.Follow = null;
+        // move cvc somewhere other than location where player quit?
+    }
+
+    //private void CheckGameStateBasedOnSceneChange(int newScene)
+    //{
+    //    if (newScene == sl.MainGameScene)
+    //    {
+    //        StartNewGame();
+    //    }
+    //    if (newScene == sl.EndingScene)
+    //    {
+    //        EndCurrentGame();
+    //    }
+    //}
 
     #region Start Game Methods
     public void StartNewGame()
     {
         isInGame = true;
-        uid = FindObjectOfType<UIDriver>();
-        uid.EnterOverworld();
-        vm = FindObjectOfType<VictoryMeter>();
-        ResumeGameSpeed();
-
+        uid.ShowOverworldUIElements();
+        ResumeGameSpeed(true);
         SpawnPlayer();
-        SpawnWordUtilities();
+        uid.ShowHideMainMenu(false);
+        uid.ShowOverworldUIElements();
         SetCameraToFollowPlayer();
-
         AdjustGameForStartMode();
-
-        
+        OnGameStart.Invoke();
     }
 
     private void SpawnPlayer()
@@ -90,19 +125,6 @@ public class GameController : MonoBehaviour
             player = Instantiate(playerPrefab, storyStartLocation, Quaternion.identity) as GameObject;
         }
     }
-    private void SpawnWordUtilities()
-    {
-        if (!wv)
-        {
-            wv = FindObjectOfType<WordValidater>().gameObject;
-            if (!wv)
-            {
-                wv = Instantiate(wordValidaterPrefab, Vector2.zero, Quaternion.identity) as GameObject;
-            }
-
-        }
-    }
-
     private void SetCameraToFollowPlayer()
     {
         if (!cvc)
@@ -111,7 +133,6 @@ public class GameController : MonoBehaviour
         }
         cvc.Follow = player.transform;
     }
-
 
     private void AdjustGameForStartMode()
     {
@@ -126,6 +147,7 @@ public class GameController : MonoBehaviour
                 FindObjectOfType<Tutor>().gc = this;
                 player.transform.position = tutorialStartLocation;
                 isInTutorialMode = true;
+                uid.ShowHideTutorialPanel(true);
                 return;
 
             case StartMode.Skirmish:
@@ -143,13 +165,26 @@ public class GameController : MonoBehaviour
         isInTutorialMode = false;
         isInArena = false;
         isInGame = false;
+        if (currentArenaBuilder)
+        {
+            currentArenaBuilder.CloseDownArena();
+        }
         Destroy(player);
-
+        uid.HideAllOverworldUIElements();
+        uid.ShowHideMainMenu(true);
+        BeginIdleMode();
+        // uid.disable or hide everything
+        //
     }
 
     #endregion
 
     #region Public Methods
+
+    public void RegisterCurrentArenaBuilder(ArenaBuilder ab)
+    {
+        currentArenaBuilder = ab;
+    }
 
     public GameObject GetPlayer()
     {
@@ -168,20 +203,30 @@ public class GameController : MonoBehaviour
         pauseRequests++;
     }
 
-    public void SlowGameSpeed()
-    {
-        Time.timeScale = UIParameters.SlowGameCoefficient;
-    }
+    //public void SlowGameSpeed()
+    //{
+    //    Time.timeScale = UIParameters.SlowGameCoefficient;
+    //}
 
-    public void ResumeGameSpeed()
+    public void ResumeGameSpeed(bool hasOverride)
     {
-        pauseRequests--;
-        if(pauseRequests <= 0)
+        if (hasOverride)
         {
+            pauseRequests = 0;
             isPaused = false;
             Time.timeScale = 1;
-            pauseRequests = 0;
         }
+        else
+        {
+            pauseRequests--;
+            if (pauseRequests <= 0)
+            {
+                isPaused = false;
+                Time.timeScale = 1;
+                pauseRequests = 0;
+            }
+        }
+
 
     }
 
@@ -189,7 +234,7 @@ public class GameController : MonoBehaviour
     #endregion
     void OnDestroy()
     {
-        sl.OnSceneChange -= CheckGameStateBasedOnSceneChange;
+        //sl.OnSceneChange -= CheckGameStateBasedOnSceneChange;
     }
    
 }

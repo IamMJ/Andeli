@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class LetterPowerMenuDriver : MonoBehaviour
 {
     GameController gc;
-    SceneLoader sl;
     VictoryMeter vm;
     string topBand = "ACEGIKMOQSUWY";
     string bottomBand = "BDFHJLNPRTVXZ";
@@ -100,7 +99,7 @@ public class LetterPowerMenuDriver : MonoBehaviour
         {
             gc = FindObjectOfType<GameController>();
         }
-        gc.ResumeGameSpeed();
+        gc.ResumeGameSpeed(false);
         gameObject.SetActive(false);
     }
 

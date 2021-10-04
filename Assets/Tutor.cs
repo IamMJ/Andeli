@@ -36,12 +36,12 @@ public class Tutor : MonoBehaviour
         gc = FindObjectOfType<GameController>();
         if (gc.isInTutorialMode == false)
         {
-            uid.ToggleTutorialUIPanel(false);
+            uid.ShowHideTutorialPanel(false);
             return;
         }
         else
         {
-            uid.ToggleTutorialUIPanel(true);
+            uid.ShowHideTutorialPanel(true);
         }
 
         currentTutorialStep = tutorialSteps[0];
@@ -57,7 +57,7 @@ public class Tutor : MonoBehaviour
         currentStep++;
         if (currentStep >= tutorialSteps.Length)
         {
-            uid.ToggleTutorialUIPanel(false);
+            uid.ShowHideTutorialPanel(false);
             arrow_UI.gameObject.SetActive(false);
             arrow_worldSpace.gameObject.SetActive(false);
             return;

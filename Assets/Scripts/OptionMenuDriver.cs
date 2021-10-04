@@ -5,7 +5,6 @@ using UnityEngine;
 public class OptionMenuDriver : MonoBehaviour
 {
     GameController gc;
-    SceneLoader sl;
     VictoryMeter vm;
 
     public void HidePauseMenu()
@@ -14,21 +13,16 @@ public class OptionMenuDriver : MonoBehaviour
         {
             gc = FindObjectOfType<GameController>();
         }
-        gc.ResumeGameSpeed();
+        gc.ResumeGameSpeed(false);
         gameObject.SetActive(false);
     }
     public void ReturnToWelcomeScene()
-    {        
-        if (!sl)
-        {
-            sl = FindObjectOfType<SceneLoader>();
-        }
+    {
         if (!gc)
         {
             gc = FindObjectOfType<GameController>();
         }
         gc.EndCurrentGame();
-        sl.LoadWelcomeScene();
     }
 
     public void Debug_ArenaResetToMiddle()

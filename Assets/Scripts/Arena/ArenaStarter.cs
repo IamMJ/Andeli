@@ -25,13 +25,20 @@ public class ArenaStarter : MonoBehaviour
     private void Start()
     {
         gc = FindObjectOfType<GameController>();
+        gc.OnGameStart += HandleOnGameStart;
         player = gc.GetPlayer();
         ash = GetComponent<ArenaSettingHolder>();
         GridModifier.UnknitAllGridGraphs(transform);
     }
 
+    private void HandleOnGameStart()
+    {
+        player = gc.GetPlayer();
+    }
+
     private void Update()
     {
+        if (!gc.isInGame) { return; } // don't do anything if not in the game
         if (gc.isInArena) { return; } // Don't let the player be in more than one arena
         if (Time.time < timeToBecomeResponsiveToPlayer) { return; }
         if ((player.transform.position - transform.position).magnitude <= arenaTriggerRange)
@@ -51,7 +58,7 @@ public class ArenaStarter : MonoBehaviour
     public void RetreatFromArena()
     {
         arenaBrief.SetActive(false);
-        gc.ResumeGameSpeed();
+        gc.ResumeGameSpeed(false);
     }
 
     public void StartArena()
@@ -61,12 +68,13 @@ public class ArenaStarter : MonoBehaviour
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
         arenaBuilder.SetArenaStarter(this, ash);
         arenaBuilder.SetupArena(transform.position);
-        gc.ResumeGameSpeed();
+        gc.ResumeGameSpeed(false);
     }
 
     public void RemoveArenaStarter()
     {
         GridModifier.ReknitAllGridGraphs(transform);
+        gc.OnGameStart -= HandleOnGameStart;
         Destroy(gameObject);
     }
 

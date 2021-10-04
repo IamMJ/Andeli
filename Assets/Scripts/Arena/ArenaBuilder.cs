@@ -38,6 +38,10 @@ public class ArenaBuilder : MonoBehaviour
 
     public void SetupArena(Vector2 centroid)
     {
+        gc = FindObjectOfType<GameController>();
+        gc.isInArena = true;
+        gc.RegisterCurrentArenaBuilder(this);
+
         startTime = Time.time;
         minX += Mathf.RoundToInt(transform.position.x);
         maxX += Mathf.RoundToInt(transform.position.x);
@@ -45,9 +49,8 @@ public class ArenaBuilder : MonoBehaviour
         maxY += Mathf.RoundToInt(transform.position.y);
 
         uid = FindObjectOfType<UIDriver>();
-        uid.EnterArena();
-        gc = FindObjectOfType<GameController>();
-        gc.isInArena = true;
+        uid.ShowArenaUIElements();
+
         player = gc.GetPlayer();
         vm = gc.GetVictoryMeter();
         vm.ResetArena();
@@ -193,9 +196,9 @@ public class ArenaBuilder : MonoBehaviour
 
     public void CloseDownArena()
     {
-        gc.ResumeGameSpeed();
+        gc.ResumeGameSpeed(false);
         gc.isInArena = false;
-        uid.EnterOverworld();
+        uid.ShowOverworldUIElements();
         Destroy(camMouse);
         cvc.Follow = player.transform;
         for (int i = 0; i < enemies.Length; i++)

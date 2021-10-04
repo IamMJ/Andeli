@@ -28,12 +28,16 @@ public class CameraMouse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!player || !anchorObject)
+        {
+            Destroy(gameObject);
+        }
         Vector3 dir = (player.transform.position - anchorObject.transform.position) * 0.2f;
         transform.position = anchorObject.transform.position + dir;
     }
 
     private void OnDestroy()
     {
-        cvc.Follow = player.transform;
+        //cvc.Follow = player.transform;
     }
 }

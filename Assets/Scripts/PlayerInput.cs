@@ -120,7 +120,7 @@ public class PlayerInput : MonoBehaviour
         }
         else
         {
-            gc.ResumeGameSpeed();
+            gc.ResumeGameSpeed(false);
         }
     }
 
@@ -253,4 +253,10 @@ public class PlayerInput : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDestroy()
+    {
+        ClearMoveArrows();
+        Destroy(currentStrategicDestinationIcon);
+    }
 }
