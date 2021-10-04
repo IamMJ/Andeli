@@ -1496,6 +1496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Statue (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6243443088450445721, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
+      propertyPath: arenaSetting
+      value: 
+      objectReference: {fileID: 11400000, guid: f08e7fdb940678e40a49a6b48d0a18b5, type: 2}
     - target: {fileID: 7295456817403015966, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
       propertyPath: m_Controller
       value: 
@@ -1557,6 +1561,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Statue (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6243443088450445721, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
+      propertyPath: arenaSetting
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ebf11ca489004a459b7fa2683236f2a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
 --- !u!1 &448869708
@@ -1968,7 +1976,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AssetsPPU: 16
+  m_AssetsPPU: 8
   m_RefResolutionX: 160
   m_RefResolutionY: 160
   m_UpscaleRT: 0
@@ -121943,6 +121951,10 @@ PrefabInstance:
       propertyPath: arenaSetting_Specific
       value: 
       objectReference: {fileID: 11400000, guid: ac7ffc8e33905ce46b1c5448d2280cb3, type: 2}
+    - target: {fileID: 6243443088450445721, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
+      propertyPath: arenaSetting
+      value: 
+      objectReference: {fileID: 11400000, guid: 72ab304231c20cc48bc1fefb1ce4828f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
 --- !u!1 &1687411137
@@ -122674,31 +122686,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Statue (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6243443088450445721, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
+      propertyPath: arenaSetting
+      value: 
+      objectReference: {fileID: 11400000, guid: b3493fcdbd5f3994d816a01522166f65, type: 2}
     - target: {fileID: 7295456817403015966, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 81ad74e1a2af63e48a02d8aae2f53045, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
---- !u!1 &1845411067 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6135404392772274270, guid: f84b5aa4d5085c848bde4e2c9beec10b, type: 3}
-  m_PrefabInstance: {fileID: 1845411066}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1845411068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845411067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37270a17f7ccdbd4abd3908366aa66d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arenaSetting_Default: {fileID: 11400000, guid: ac7ffc8e33905ce46b1c5448d2280cb3, type: 2}
-  arenaSetting_Specific: {fileID: 11400000, guid: 5ebf11ca489004a459b7fa2683236f2a, type: 2}
 --- !u!1 &1895091917
 GameObject:
   m_ObjectHideFlags: 0

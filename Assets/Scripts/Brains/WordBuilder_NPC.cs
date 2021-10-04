@@ -21,8 +21,9 @@ public class WordBuilder_NPC : WordBuilder
     public LetterTile TargetLetterTile; //{ get; private set; }
     [SerializeField] char currentTargetChar;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         ss = GetComponent<SpellingStrategy>();
         sb = GetComponent<StrategyBrainV2>();
         ltd = FindObjectOfType<LetterTileDropper>();

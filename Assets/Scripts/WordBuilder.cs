@@ -4,30 +4,34 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
-[RequireComponent(typeof(WordWeaponizer))]
+[RequireComponent(typeof(WordWeaponizer), typeof(WordMakerMemory))]
 public class WordBuilder : MonoBehaviour
 {
     PlayerInput pi;
     protected WordWeaponizer wwz;
+    protected WordMakerMemory memory;
     UIDriver uid;
     WordValidater wv;
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
 
-    //param
-    int maxWordLength = 7; 
+    // modifiable param
+    int maxWordLength = 7;
+    int powerModifierForWordCount = 0;
 
     //state
     bool hasUI = false;
     [SerializeField] List<LetterTile> lettersCollected = new List<LetterTile>();
     [SerializeField] protected string currentWord = "";
     int wordLengthBonus = 0;
+    TrueLetter.Ability abilityToAutoIgnite;
     public int CurrentPower { get; private set; } = 0;
 
-    private void Start()
+    protected virtual void Start()
     {
         wwz = GetComponent<WordWeaponizer>();
         pi = GetComponent<PlayerInput>();
+        memory = GetComponent<WordMakerMemory>();
         wv = FindObjectOfType<WordValidater>();
         if (pi)
         {
@@ -43,12 +47,19 @@ public class WordBuilder : MonoBehaviour
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
         IncreasePower(newLetter.Power);
-
         if (hasUI)
         {
-            
+            if (memory.CheckIfWordHasBeenPlayedByPlayerAlready(currentWord))
+            {
+                Debug.Log("already played this word...");
+            }
+            else
+            {
+                Debug.Log("still a novel word");
+            }
             uid.AddLetterToWordBar(newLetter, newLetter.Letter, currentWord.Length - 1);
         }
+
         TestAllLetterLatentAbilities();
     }
 
@@ -63,13 +74,19 @@ public class WordBuilder : MonoBehaviour
         }
     }
 
+
+
     private void TestLetterLatentAbility(LetterTile newLetter, int index)
     {
-        int roll = 21 - UnityEngine.Random.Range(1, 21);
-        if (currentWord.Length + wordLengthBonus < roll)
+        if (newLetter.Ability != abilityToAutoIgnite)
         {
-            return;
+            int roll = 21 - UnityEngine.Random.Range(1, 21);
+            if (currentWord.Length + wordLengthBonus < roll)
+            {
+                return;
+            }
         }
+
 
         newLetter.SetLatentAbilityStatus(true);
 
@@ -182,6 +199,10 @@ public class WordBuilder : MonoBehaviour
     }
     public void IncreasePower(int amount)
     {
+        if (CurrentPower == 0)
+        {
+            CurrentPower = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
+        }
         CurrentPower += amount;
         if (hasUI)
         {
@@ -192,7 +213,8 @@ public class WordBuilder : MonoBehaviour
 
     public void ClearPowerLevel()
     {
-        CurrentPower = 0;
+        CurrentPower = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
+
         if (hasUI)
         {
             uid.ModifyPowerMeterTMP(CurrentPower);
@@ -200,16 +222,37 @@ public class WordBuilder : MonoBehaviour
 
     }
 
-    public void IncreaseWordLengthBonus(int bonusAmount)
-    {
-        wordLengthBonus += bonusAmount;
-    }
+    #endregion
 
+    #region Public Arena Parameter Setting
+
+    public void SetupArenaParameters_AbilityToAutoIgnite(TrueLetter.Ability abilityToIgnite)
+    {
+        abilityToAutoIgnite = abilityToIgnite;
+    }
+    public void SetupArenaParameters_PowerModifierForWordCount(int powerMod)
+    {
+        powerModifierForWordCount = powerMod;
+    }
+    public void SetupArenaParameters_MaxLettersInWord(int maxLetters)
+    {
+        maxWordLength = maxLetters;
+        if (hasUI)
+        {
+            uid.HideLetterTilesOverMaxLetterLimit(maxWordLength);
+        }
+    }
     #endregion
     private void ResetWordLengthBonus()
     {
         wordLengthBonus = 0;
     }
+    public void IncreaseWordLengthBonus(int amount)
+    {
+        wordLengthBonus += amount;
+    }
+
+
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {

@@ -40,7 +40,7 @@ public class ArenaStarter : MonoBehaviour
             {
                 arenaBrief = Instantiate(arenaBriefMenuPrefab);
                 arenaBrief.GetComponent<ArenaBriefMenuDriver>().SetupArenaBriefMenu(
-                    this, ash.arenaSetting_Specific.briefScreenIcon, ash.arenaSetting_Specific.briefScreenText);
+                    this, ash.arenaSetting.briefScreenIcon, ash.arenaSetting.briefScreenText);
             }
             arenaBrief.SetActive(true);
             gc.PauseGame();

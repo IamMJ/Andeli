@@ -13,17 +13,22 @@ public class ArenaSetting : ScriptableObject
     // letter dropping effects
     public float letterLifetime = 20;
     public int lettersPerWave = 3;
-    public string lettersToNotDrop = "";
+    public float timeBetweenWaves = 7f;
+    public string lettersToIgnore = "";
     public float percentageOfLettersAsMisty = 0;
+    public int maxLettersOnBoard = 12;
 
     // power effects
-    public int powerModifierForWordCountThisArena = 0;  
+    public int powerModifierForWordCount = 0;
         // Set this to 1 to grant bonus for playing lots of words
         // Set to -1 to penalize playing lots of words this arena.
+
+    public bool shouldNotCountIfRepeatingWord = false;
                                     
 
     //energy effects
     public float energyRegenRateModifier = 1;
+        // Set this to 1 for normal regen. 0.5 for half rate, and 2 for double rate.
 
     //ability effects 
     public TrueLetter.Ability abilityToAutoIgnite = TrueLetter.Ability.Normal;

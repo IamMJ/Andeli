@@ -53,9 +53,9 @@ public class ArenaDebriefMenuDriver : MonoBehaviour
 
         WordMakerMemory.ArenaData ad = pm.GetCurrentArenaData();
         timeTMP.text = "Time: " + timeInArena.ToString();
-        powerDealtTMP.text = "Power Dealt: " + ad.powerDealtByPlayer.ToString();
-        wordsSpelledTMP.text = "Words Spelled: " + ad.wordsSpelledByPlayer.ToString();
-        bestWordTMP.text = ad.bestWordSpelledByPlayer + " - " + ad.currentBestSinglePowerGain.ToString();
+        powerDealtTMP.text = "Power Dealt: " + ad.powerDealt.ToString();
+        wordsSpelledTMP.text = "Words Spelled: " + ad.wordsSpelled.ToString();
+        bestWordTMP.text = ad.bestWordSpelled + " - " + ad.currentBestSinglePowerGain.ToString();
         pm.ResetCurrentArenaData();
     }
 

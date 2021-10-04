@@ -52,7 +52,8 @@ public class WordWeaponizer : MonoBehaviour
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
-        currentEnergyLevel = 45f; //maxEnergy;
+        currentEnergyLevel = maxEnergy; //maxEnergy;
+        energyRegenRate_Current = energyRegenRate_Target;
     }
 
     void Update()
@@ -150,8 +151,8 @@ public class WordWeaponizer : MonoBehaviour
     public void FireKnownValidWord()
     {
         TargetBestEnemy();
-        float spellpower = (wbd.CurrentPower + memory.GetCurrentArenaData().wordsSpelledByPlayer 
-            * ab.GetArenaSettingsHolder().arenaSetting_Specific.powerModifierForWordCountThisArena);
+        float spellpower = (wbd.CurrentPower + memory.GetCurrentArenaData().wordsSpelled 
+            * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount);
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
         foreach (var letter in wbd.GetLettersCollected())
         {
@@ -229,4 +230,12 @@ public class WordWeaponizer : MonoBehaviour
         energyRegenRate_Current += amount;
     }
 
+    #region Public Arena Parameter Setting
+
+    public void SetupArenaParameters_EnergyRegenRate(float energyRegenModifier)
+    {
+        energyRegenRate_Target *= energyRegenModifier;
+    }
+
+    #endregion
 }

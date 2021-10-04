@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 public class LetterTileDropper : MonoBehaviour
 {
 
-    [SerializeField] TrueLetter[] trueLetters = null;
+    [SerializeField] List<TrueLetter> trueLetters = null;
     [SerializeField] GameObject letterTilePrefab = null;
     [SerializeField] GameObject droppedLetterPrefab = null;
 
     public List<TrueLetter> consonants = new List<TrueLetter>();
     public List<TrueLetter> vowels = new List<TrueLetter>();
+
     WordValidater wv;
     ArenaBuilder ab;
     int layerMask_Impassable = 1 << 13;
@@ -26,19 +27,22 @@ public class LetterTileDropper : MonoBehaviour
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     // fixed param
-    float minDistanceBetweenLetters = 1.5f;
+    float minDistanceBetweenLetters = 1.7f;
     Vector2 fallVector = new Vector2(0, 10f);
 
     // changeable params
-    float averageLifetimeOfLettersInWave = 20f;
-    float averageTimeBetweenWaves = 5f;
-    int consonantsBetweenVowels = 1;
-    int numberOfLettersToDropPerWave = 3;
+    float lifetimeOfLetter;
+    float averageTimeBetweenWaves;
+    int consonantsBetweenVowels;
+    int numberOfLettersToDropPerWave ;
     string letterstoIgnore = "";
-    float percentageOfLettersToDropAsMisty = 0;
+    float percentageOfLettersToDropAsMisty;
+    int maxLettersOnBoard;
 
     //state
+    bool shouldSeparateVowelsFromConsonants = false;
     int dropsSinceLastVowel = 0;
+    int currentProbabilityCount_AllLetters = 0;
     int currentProbabilityCount_Consonants = 0;
     int currentProbabilityCount_Vowels = 0;
     float timeForNextWave;
@@ -56,10 +60,14 @@ public class LetterTileDropper : MonoBehaviour
         wv = FindObjectOfType<WordValidater>();
         ab = FindObjectOfType<ArenaBuilder>();
 
-        SeparateVowelsFromConsonants();
+        if (shouldSeparateVowelsFromConsonants)
+        {
+            SeparateVowelsFromConsonants();
+        }
+
         GenerateProbabilityStarts();
-        CreateLetterDropLocations();
-        DropLettersAtDropLocations();
+        //CreateLetterDropLocations();
+        //DropLettersAtDropLocations();
     }
  
     private void SeparateVowelsFromConsonants()
@@ -81,16 +89,28 @@ public class LetterTileDropper : MonoBehaviour
 
     private void GenerateProbabilityStarts()
     {
-        foreach (TrueLetter tl in consonants)
+        if (shouldSeparateVowelsFromConsonants)
         {
-            currentProbabilityCount_Consonants += tl.GetWeight();
-            tl.ProbabilityTop = currentProbabilityCount_Consonants;
+            foreach (TrueLetter tl in consonants)
+            {
+                currentProbabilityCount_Consonants += tl.GetWeight();
+                tl.ProbabilityTop = currentProbabilityCount_Consonants;
+            }
+            foreach (TrueLetter tl in vowels)
+            {
+                currentProbabilityCount_Vowels += tl.GetWeight();
+                tl.ProbabilityTop = currentProbabilityCount_Vowels;
+            }
         }
-        foreach (TrueLetter tl in vowels)
+        else
         {
-            currentProbabilityCount_Vowels += tl.GetWeight();
-            tl.ProbabilityTop = currentProbabilityCount_Vowels;
+            foreach (TrueLetter tl in trueLetters)
+            {
+                currentProbabilityCount_AllLetters += tl.GetWeight();
+                tl.ProbabilityTop = currentProbabilityCount_AllLetters;
+            }
         }
+
     }
 
     #endregion
@@ -99,10 +119,12 @@ public class LetterTileDropper : MonoBehaviour
     {
         if (!wv.GetPreppedStatus()) { return; }        
        
-        if (Time.time >= timeForNextWave)
+        if (Time.time >= timeForNextWave && lettersOnBoard.Length < maxLettersOnBoard)
         {
+
             CreateLetterDropLocations();
             DropLettersAtDropLocations();
+            timeForNextWave = Time.time + averageTimeBetweenWaves; // + UnityEngine.Random.Range(-1f, +1f);
         }
     }
 
@@ -116,9 +138,12 @@ public class LetterTileDropper : MonoBehaviour
 
     private void DropLettersAtDropLocations()
     {
-        timeForNextWave = Time.time + averageTimeBetweenWaves + UnityEngine.Random.Range(-1f, +1f);
+        int limit = maxLettersOnBoard - lettersOnBoard.Length;
+
         foreach (var dropLocation in dropLocations)
         {
+            limit--;
+            if (limit <= 0) { break; }
             DropLetterTile(dropLocation);
         }
         dropLocations.Clear();      
@@ -211,22 +236,30 @@ public class LetterTileDropper : MonoBehaviour
 
         GameObject newTile = Instantiate(letterTilePrefab, dropPosition + fallVector, Quaternion.identity) as GameObject;
         TrueLetter randomLetter;
-        if (dropsSinceLastVowel >= consonantsBetweenVowels)
+        if (shouldSeparateVowelsFromConsonants)
         {
-            randomLetter = ReturnWeightedRandomTrueLetter(false);
-            dropsSinceLastVowel = 0;
+            if (dropsSinceLastVowel >= consonantsBetweenVowels)
+            {
+                randomLetter = ReturnWeightedRandomTrueLetter(false);
+                dropsSinceLastVowel = 0;
+            }
+            else
+            {
+                randomLetter = ReturnWeightedRandomTrueLetter(true);
+                dropsSinceLastVowel++;
+            }
         }
         else
         {
-            randomLetter = ReturnWeightedRandomTrueLetter(true);
-            dropsSinceLastVowel++;
+            randomLetter = ReturnWeightedRandomTrueLetter();
         }
+
         
         LetterTile letterTile = newTile.GetComponent<LetterTile>();
         letterTile.Letter = randomLetter.GetLetter();
         letterTile.Power = randomLetter.GetPower();
         letterTile.Ability = randomLetter.GetAbility();
-        letterTile.StartingLifetime = averageLifetimeOfLettersInWave + UnityEngine.Random.Range(-2f, 2f);
+        letterTile.StartingLifetime = lifetimeOfLetter + lifetimeOfLetter*UnityEngine.Random.Range(-0.3f, 0.3f);
         letterTile.SetFallDistance(fallVector.magnitude);
         letterTile.SetLetterTileDropper(this);
         letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
@@ -391,7 +424,7 @@ public class LetterTileDropper : MonoBehaviour
     //int numberOfLettersToDropPerWave = 3;
     public void SetupArenaParameters_Lifetime(float letterLifetime)
     {
-        averageLifetimeOfLettersInWave = letterLifetime;
+        lifetimeOfLetter = letterLifetime;
     }
 
     public void SetupArenaParameters_LettersInWave(int lettersInWave)
@@ -401,10 +434,19 @@ public class LetterTileDropper : MonoBehaviour
     public void SetupArenaParameters_LettersToIgnore(string lettersToIgnore)
     {
         this.letterstoIgnore = lettersToIgnore;
+        RemoveBannedLetters();
     }
     public void SetupArenaParameters_LettersAsMisty(float percentageAsMisty)
     {
         percentageOfLettersToDropAsMisty = percentageAsMisty;
+    }
+    public void SetupArenaParameters_MaxLettersOnBoard(int maxLetters)
+    {
+        maxLettersOnBoard = maxLetters;
+    }
+    public void SetupArenaParameters_TimeBetweenWaves(float timeBetweenWaves)
+    {
+        averageTimeBetweenWaves = timeBetweenWaves;
     }
 
 
@@ -412,6 +454,12 @@ public class LetterTileDropper : MonoBehaviour
 
 
     #region Internal Methods
+    /// <summary>
+    /// This returns a random TrueLetter, but either a vowel or consonant depending on the argument.
+    /// No argument provided will simply pull a random letter from all 26 letters as a group.
+    /// </summary>
+    /// <param name="shouldBeConsonant"></param>
+    /// <returns></returns>
     private TrueLetter ReturnWeightedRandomTrueLetter(bool shouldBeConsonant)
     {
         TrueLetter chosenLetter = null;
@@ -456,6 +504,52 @@ public class LetterTileDropper : MonoBehaviour
         while (lettersOnBoard.Contains(chosenLetter.GetLetter().ToString()));
 
         return chosenLetter;
+    }
+    /// <summary>
+    /// This method returns a random letter from all 26 letters. If an argument is provided, it will instead
+    /// pull from either the vowels only or the consonants only.
+    /// </summary>
+    /// <param name="shouldBeConsonant"></param>
+    /// <returns></returns>
+    private TrueLetter ReturnWeightedRandomTrueLetter()
+    {
+        TrueLetter chosenLetter = null;
+        int attempts = 0;
+        do
+        {
+            attempts++;
+            if (attempts > 3)
+            {
+                break;
+            }
+
+            int rand = UnityEngine.Random.Range(0, currentProbabilityCount_AllLetters);
+            foreach (var tl in trueLetters)
+            {
+                if (rand <= tl.ProbabilityTop)
+                {
+                    //Debug.Log($"saw {rand}, choosing {tl.GetLetter()} with top of {tl.ProbabilityTop}");
+                    chosenLetter = tl;
+                    break;
+                }
+            }            
+        }
+        while (lettersOnBoard.Contains(chosenLetter.GetLetter().ToString()));
+
+        return chosenLetter;
+    }
+
+    private void RemoveBannedLetters()
+    {
+        for (int i = trueLetters.Count - 1; i >= 0; i--)
+        {
+            string bannedLetter = trueLetters[i].GetLetter().ToString();
+            if (letterstoIgnore.Contains(bannedLetter))
+            {
+                Debug.Log($"removing {bannedLetter}");
+                trueLetters.RemoveAt(i);
+            }
+        }
     }
 
     private void OnDestroy()

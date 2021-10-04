@@ -261,11 +261,23 @@ public class UIDriver : MonoBehaviour
 
     public void EnterArena()
     {
+        ResetWordTilesToMax();
         ShowHideBottomPanel(true);
         ShowHideTopPanel(true);
         ShowHideVictoryMeter(true);
     }
 
+    private void ResetWordTilesToMax()
+    {
+        foreach (var image in wordboxImages)
+        {
+            image.gameObject.SetActive(true);
+        }
+        foreach (var tmp in wordboxTMPs)
+        {
+            tmp.gameObject.SetActive(true);
+        }
+    }
 
     private void ShowHideTopPanel(bool shouldBeShown)
     {
@@ -437,6 +449,17 @@ public class UIDriver : MonoBehaviour
         }
 
     }
+
+    public void HideLetterTilesOverMaxLetterLimit(int maxLetters)
+    {
+        maxLetters = Mathf.Clamp(maxLetters, 2, wordboxImages.Length);
+        for (int i = maxLetters; i < wordboxImages.Length; i++)
+        {
+            wordboxImages[i].gameObject.SetActive(false);
+            wordboxTMPs[i].gameObject.SetActive(false);
+        }
+    }
+
 
     //IEnumerator ShowHideTopPanel_Coroutine(bool shouldBeShown)
     //{

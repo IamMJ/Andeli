@@ -11,34 +11,38 @@ public class WordMakerMemory : MonoBehaviour
     public Action OnIncrementWordCount;
     public Action OnResetConsecutiveWordCount;
 
+    //state
+    bool shouldAllowRepeatWords = true;
+
     public struct ArenaData
     {
-        public int powerDealtByPlayer;
-        public int wordsSpelledByPlayer;
-        public string bestWordSpelledByPlayer;
+        public int powerDealt;
+        public int wordsSpelled;
+        public string bestWordSpelled;
         public int currentBestSinglePowerGain;
+        public List<string> playedWords;
 
         public ArenaData(int power, int wordCount, string longestWord)
         {
-            powerDealtByPlayer = power;
-            wordsSpelledByPlayer = wordCount;
-            bestWordSpelledByPlayer = longestWord;
+            powerDealt = power;
+            wordsSpelled = wordCount;
+            bestWordSpelled = longestWord;
             currentBestSinglePowerGain = 0;
+            playedWords = new List<string>();
         }
     }
 
     //state
-
-    Dictionary<string, int> wordsAndCountsThisArena = new Dictionary<string, int>();
-    ArenaData currentArenaData = new ArenaData();
+    ArenaData currentArenaData = new ArenaData(0,0, "");
 
     public void UpdateCurrentArenaData(int powerDealtIncrease, string word)
     {
-        currentArenaData.powerDealtByPlayer += powerDealtIncrease;
-        currentArenaData.wordsSpelledByPlayer ++;
+        currentArenaData.powerDealt += powerDealtIncrease;
+        currentArenaData.wordsSpelled ++;
+        currentArenaData.playedWords.Add(word);
         if (powerDealtIncrease > currentArenaData.currentBestSinglePowerGain)
         {
-            currentArenaData.bestWordSpelledByPlayer = word;
+            currentArenaData.bestWordSpelled = word;
             currentArenaData.currentBestSinglePowerGain = powerDealtIncrease;
         }
 
@@ -51,10 +55,31 @@ public class WordMakerMemory : MonoBehaviour
 
     public void ResetCurrentArenaData()
     {
-        currentArenaData.powerDealtByPlayer = 0;
-        currentArenaData.wordsSpelledByPlayer = 0;
-        currentArenaData.bestWordSpelledByPlayer = "";
+        currentArenaData.powerDealt = 0;
+        currentArenaData.wordsSpelled = 0;
+        currentArenaData.bestWordSpelled = "";
         currentArenaData.currentBestSinglePowerGain = 0;
-        wordsAndCountsThisArena.Clear();
+        currentArenaData.playedWords.Clear();
     }
+
+    public bool CheckIfWordHasBeenPlayedByPlayerAlready(string testWord)
+    {
+        if (currentArenaData.playedWords.Contains(testWord))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    #region Public Arena Parameter Setting
+
+    public void SetupArenaParameters_AllowRepeatWords(bool shouldAllowRepeatWords)
+    {
+        this.shouldAllowRepeatWords = shouldAllowRepeatWords;
+    }
+
+    #endregion
 }

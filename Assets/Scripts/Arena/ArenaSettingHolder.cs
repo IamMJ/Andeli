@@ -6,7 +6,7 @@ using UnityEngine;
 public class ArenaSettingHolder : MonoBehaviour
 {
     [SerializeField] ArenaSetting arenaSetting_Default = null;
-    [SerializeField] public ArenaSetting arenaSetting_Specific = null;
+    [SerializeField] public ArenaSetting arenaSetting = null;
     LetterTileDropper ltd;
     WordMakerMemory playerMemory;
     WordMakerMemory enemyMemory;
@@ -39,24 +39,47 @@ public class ArenaSettingHolder : MonoBehaviour
     private void ImplementSelectedArenaSettings()
     {
         //Implement Plain first as the default
-        ltd.SetupArenaParameters_LettersInWave(arenaSetting_Default.lettersPerWave);
         ltd.SetupArenaParameters_Lifetime(arenaSetting_Default.letterLifetime);
-        ltd.SetupArenaParameters_LettersToIgnore(arenaSetting_Default.lettersToNotDrop);
+        ltd.SetupArenaParameters_LettersInWave(arenaSetting_Default.lettersPerWave);
+        ltd.SetupArenaParameters_TimeBetweenWaves(arenaSetting_Default.timeBetweenWaves);
+        ltd.SetupArenaParameters_LettersToIgnore(arenaSetting_Default.lettersToIgnore);
         ltd.SetupArenaParameters_LettersAsMisty(arenaSetting_Default.percentageOfLettersAsMisty);
+        ltd.SetupArenaParameters_MaxLettersOnBoard(arenaSetting_Default.maxLettersOnBoard);
 
-        switch (arenaSetting_Specific.aso)
+        wbd_Enemy.SetupArenaParameters_PowerModifierForWordCount(arenaSetting_Default.powerModifierForWordCount);
+        wbd_Player.SetupArenaParameters_PowerModifierForWordCount(arenaSetting_Default.powerModifierForWordCount);
+        enemyMemory.SetupArenaParameters_AllowRepeatWords(arenaSetting_Default.shouldNotCountIfRepeatingWord);
+        playerMemory.SetupArenaParameters_AllowRepeatWords(arenaSetting_Default.shouldNotCountIfRepeatingWord);
+        wbd_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
+        wbd_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
+
+        switch (arenaSetting.aso)
         {
 
             case ArenaSettingOptions.Blizzard:
-                
+                ltd.SetupArenaParameters_LettersInWave(arenaSetting.lettersPerWave);
+                ltd.SetupArenaParameters_TimeBetweenWaves(arenaSetting.timeBetweenWaves);
+                ltd.SetupArenaParameters_MaxLettersOnBoard(arenaSetting.maxLettersOnBoard);
+                wbd_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting.abilityToAutoIgnite);
+                wbd_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting.abilityToAutoIgnite);
                 return;
 
             case ArenaSettingOptions.Graveyard:
-
+                wbd_Enemy.SetupArenaParameters_PowerModifierForWordCount(arenaSetting.powerModifierForWordCount);
+                wbd_Player.SetupArenaParameters_PowerModifierForWordCount(arenaSetting.powerModifierForWordCount);
+                enemyMemory.SetupArenaParameters_AllowRepeatWords(arenaSetting.shouldNotCountIfRepeatingWord);
+                playerMemory.SetupArenaParameters_AllowRepeatWords(arenaSetting.shouldNotCountIfRepeatingWord);
+                //wwz_Enemy.SetupArenaParameters_EnergyRegenRate(arenaSetting.energyRegenRateModifier);
+                //wwz_Player.SetupArenaParameters_EnergyRegenRate(arenaSetting.energyRegenRateModifier);
                 return;
 
             case ArenaSettingOptions.Jungle:
-
+                //wwz_Enemy.SetupArenaParameters_EnergyRegenRate(arenaSetting.energyRegenRateModifier);
+                //wwz_Player.SetupArenaParameters_EnergyRegenRate(arenaSetting.energyRegenRateModifier);
+                wbd_Enemy.SetupArenaParameters_PowerModifierForWordCount(arenaSetting.powerModifierForWordCount);
+                wbd_Player.SetupArenaParameters_PowerModifierForWordCount(arenaSetting.powerModifierForWordCount);
+                wbd_Enemy.SetupArenaParameters_MaxLettersInWord(arenaSetting.maxWordLength);
+                wbd_Player.SetupArenaParameters_MaxLettersInWord(arenaSetting.maxWordLength);
                 return;
 
             case ArenaSettingOptions.Mists:
@@ -64,8 +87,8 @@ public class ArenaSettingHolder : MonoBehaviour
                 return;
 
             case ArenaSettingOptions.Sandy:
-                ltd.SetupArenaParameters_LettersInWave(arenaSetting_Specific.lettersPerWave);
-                ltd.SetupArenaParameters_Lifetime(arenaSetting_Specific.letterLifetime);
+                ltd.SetupArenaParameters_LettersInWave(arenaSetting.lettersPerWave);
+                ltd.SetupArenaParameters_Lifetime(arenaSetting.letterLifetime);
                 return;
 
         }

@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
     public bool isInGame { get; set; } = false;
     public bool isInTutorialMode { get; set; } = false;
 
+
     void Awake()
     {
         int count = FindObjectsOfType<GameController>().Length;
@@ -63,7 +64,6 @@ public class GameController : MonoBehaviour
             EndCurrentGame();
         }
     }
-
 
     #region Start Game Methods
     public void StartNewGame()
@@ -139,6 +139,9 @@ public class GameController : MonoBehaviour
     #region End Game Methods
     public void EndCurrentGame()
     {
+        isPaused = false;
+        isInTutorialMode = false;
+        isInArena = false;
         isInGame = false;
         Destroy(player);
 

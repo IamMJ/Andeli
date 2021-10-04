@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
+  m_Name: Graveyard
+  m_EditorClassIdentifier: 
+  briefScreenIcon: {fileID: 6273885850348558317, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
+  briefScreenText: Slow regen, constant drain, word count penalty
+  aso: 5
+  letterLifetime: 20
+  lettersPerWave: 3
+  timeBetweenWaves: 7
+  lettersToNotDrop: 
+  percentageOfLettersAsMisty: 0
+  maxLettersOnBoard: 12
+  powerModifierForWordCount: -1
+  shouldNotCountIfRepeatingWord: 0
+  energyRegenRateModifier: 0.5
+  abilityToAutoIgnite: 0
+  maxWordLength: 7
