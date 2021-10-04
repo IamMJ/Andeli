@@ -9,7 +9,9 @@ public class GameController : MonoBehaviour
 {
     //init
     [SerializeField] GameObject playerPrefab = null;
+    [SerializeField] GameObject driftingThingPrefab = null;
 
+    GameObject driftingThing;
     GameObject player;
     CinemachineVirtualCamera cvc;
     //SceneLoader sl;
@@ -32,9 +34,9 @@ public class GameController : MonoBehaviour
     Vector2 storyStartLocation = new Vector2(0, 0);
     Vector2 tutorialStartLocation = new Vector2(-4, 17);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
-    int pixelPerUnit_InGame = 16;
-    int pixelPerUnit_Idle = 2;
-    int ppuZoomRate = 3;
+    int cameraSize_ZoomedIn = 10;
+    int cameraSize_ZoomedOut = 40;
+    int zoomRate = 10;
 
 
     //state
@@ -45,7 +47,7 @@ public class GameController : MonoBehaviour
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
     public bool isInTutorialMode { get; set; } = false;
-    float pixelZoomRaw;
+    [SerializeField] float currentZoom;
 
 
     //void Awake()
@@ -74,13 +76,20 @@ public class GameController : MonoBehaviour
         vm = FindObjectOfType<VictoryMeter>();
         wv = GetComponent<WordValidater>();
 
-        pixelZoomRaw = pixelPerUnit_Idle;
+        currentZoom = cameraSize_ZoomedOut;
+        ppc.enabled = false;
 
         BeginIdleMode();
     }
 
     private void BeginIdleMode()
     {
+        ResumeGameSpeed(true);
+        if (!driftingThing)
+        {
+            driftingThing = Instantiate(driftingThingPrefab, Vector2.zero, Quaternion.identity);
+        }
+
         SetCameraToIdleMode();
         // Create a bird or fox to run around the map?
  
@@ -88,8 +97,46 @@ public class GameController : MonoBehaviour
 
     private void SetCameraToIdleMode()
     {
-        cvc.Follow = null;
+        cvc.Follow = driftingThing.transform;
+        StartCoroutine(ZoomCamera(false));
         // move cvc somewhere other than location where player quit?
+    }
+
+    IEnumerator ZoomCamera(bool shouldZoomIn)
+    {
+        if (shouldZoomIn)
+        {
+            ppc.enabled = false;
+            while (currentZoom > cameraSize_ZoomedIn)
+            {
+                currentZoom -= Time.deltaTime * zoomRate;
+                cvc.m_Lens.OrthographicSize = currentZoom;
+                if (currentZoom - cameraSize_ZoomedIn <= 1)
+                {
+                    ppc.enabled = true;
+                    ppc.assetsPPU = 16;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        else
+        {
+            ppc.enabled = false;
+            while (currentZoom < cameraSize_ZoomedOut)
+            {
+
+                currentZoom += Time.deltaTime * zoomRate;
+                cvc.m_Lens.OrthographicSize = currentZoom;
+                if (cameraSize_ZoomedOut - currentZoom <= 1)
+                {
+                    ppc.enabled = true;
+                    ppc.assetsPPU = 4;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+
+        }
+
     }
 
     //private void CheckGameStateBasedOnSceneChange(int newScene)
@@ -109,7 +156,7 @@ public class GameController : MonoBehaviour
     {
         isInGame = true;
         uid.ShowOverworldUIElements();
-        ResumeGameSpeed(true);
+        //ResumeGameSpeed(true);
         SpawnPlayer();
         uid.ShowHideMainMenu(false);
         uid.ShowOverworldUIElements();
@@ -127,11 +174,16 @@ public class GameController : MonoBehaviour
     }
     private void SetCameraToFollowPlayer()
     {
+        if (driftingThing)
+        {
+            driftingThing.SetActive(false);
+        }
         if (!cvc)
         {
             cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         }
         cvc.Follow = player.transform;
+        StartCoroutine(ZoomCamera(true));
     }
 
     private void AdjustGameForStartMode()

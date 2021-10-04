@@ -576,7 +576,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 4959554787345939825, guid: 31d4c84240ae5fb4282c44005879b406, type: 3}
+  driftingThingPrefab: {fileID: 3920682680305924606, guid: a2b180e6275bc7e4c949ef1b7138dfbb, type: 3}
   startMode: 0
+  currentZoom: 0
 --- !u!4 &74729852
 Transform:
   m_ObjectHideFlags: 0
@@ -2549,7 +2551,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AssetsPPU: 8
+  m_AssetsPPU: 16
   m_RefResolutionX: 160
   m_RefResolutionY: 160
   m_UpscaleRT: 0
@@ -2584,7 +2586,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 18.4
+  orthographic size: 10.9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -47229,7 +47231,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 18.4
+    OrthographicSize: 10.9
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
