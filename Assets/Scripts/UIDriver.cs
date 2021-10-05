@@ -369,9 +369,11 @@ public class UIDriver : MonoBehaviour
             ScrollLettersLeft();
         }
         SpriteRenderer sr = letterTile.GetComponent<SpriteRenderer>();
-        wordboxImages[indexInWord - wordbarScroll].sprite = sr.sprite;
-        wordboxImages[indexInWord - wordbarScroll].color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
+        LetterTile.SpriteColorYMod sc = letterTile.GetSpriteColorFromAbility(letterTile.Ability);
+        wordboxImages[indexInWord - wordbarScroll].sprite = sc.Sprite;
+        wordboxImages[indexInWord - wordbarScroll].color = sc.Color;
         wordboxTMPs[indexInWord - wordbarScroll].text = letter.ToString();
+        wordboxTMPs[indexInWord - wordbarScroll].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, sc.YMod);
     }
 
     private void ScrollLettersLeft()

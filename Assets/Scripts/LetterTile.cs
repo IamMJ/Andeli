@@ -20,30 +20,55 @@ public class LetterTile : MonoBehaviour
 
     [SerializeField] Sprite NormalTileSprite = null;
     [SerializeField] Color NormalTileColor = Color.white;
+    [SerializeField] float NormalYMod = 0;
     [SerializeField] Sprite LuckyTileSprite = null;
     [SerializeField] Color LuckyTileColor = Color.green;
+    [SerializeField] float LuckyYMod = 0;
     [SerializeField] Sprite FrozenTileSprite = null;
     [SerializeField] Color FrozenTileColor = Color.white;
+    [SerializeField] float FrozenYMod = 0;
     [SerializeField] Sprite ShinyTileSprite = null;
     [SerializeField] Color ShinyTileColor = Color.white;
+    [SerializeField] float ShinyYMod = 0;
+    [SerializeField] Sprite WispyTileSprite = null;
+    [SerializeField] Color WispyTileColor = Color.white;
+    [SerializeField] float WispyYMod = 0;
+    [SerializeField] Sprite MysticTileSprite = null;
+    [SerializeField] Color MysticTileColor = Color.white;
+    [SerializeField] float MysticYMod = 0;
+    [SerializeField] Sprite HealthyTileSprite = null;
+    [SerializeField] Color HealthyTileColor = Color.white;
+    [SerializeField] float HealthyYMod = 0;
+    [SerializeField] Sprite HeavyTileSprite = null;
+    [SerializeField] Color HeavyTileColor = Color.white;
+    [SerializeField] float HeavyYMod = 0;
+    [SerializeField] Sprite ArmoredTileSprite = null;
+    [SerializeField] Color ArmoredTileColor = Color.white;
+    [SerializeField] float ArmoredYMod = 0;
+    [SerializeField] Sprite ChargedTileSprite = null;
+    [SerializeField] Color ChargedTileColor = Color.white;
+    [SerializeField] float ChargedYMod = 0;
 
     Color fadeColor_sr;
     Color fadeColor_mr;
 
-    public struct SpriteColor
+    public struct SpriteColorYMod
     {
         public Sprite Sprite;
         public Color Color;
-        public SpriteColor(Sprite sprite, Color color)
+        public float YMod;
+        public SpriteColorYMod(Sprite sprite, Color color, float yMod)
         {
             Sprite = sprite;
             Color = color;
+            YMod = yMod;
         }
 
     }
 
     //param
     float fallSpeed = 4.0f;
+    float rotationSpeed = 10f; //deg per sec
 
     //state
     public float LifetimeRemaining { get; private set; }
@@ -51,6 +76,7 @@ public class LetterTile : MonoBehaviour
     bool isLatentAbilityActivated = false;
     float remainingFallDistance;
     bool isFalling = true;
+    bool isRotating = false;
     public bool IsInactivated { get; private set; } = false;
 
 
@@ -71,9 +97,11 @@ public class LetterTile : MonoBehaviour
 
     private void AssignStartingSprite()
     {
-        SpriteColor sc = GetSpriteColorFromAbility(Ability);
+        SpriteColorYMod sc = GetSpriteColorFromAbility(Ability);
         sr.sprite = sc.Sprite;
         sr.color = sc.Color;
+        tmp.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, sc.YMod);
+
 
     }
 
@@ -105,6 +133,12 @@ public class LetterTile : MonoBehaviour
         }
 
         LifetimeRemaining -= Time.deltaTime;
+
+        if (isRotating)
+        {
+            transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            tmp.transform.Rotate(0, 0, -1 * rotationSpeed * Time.deltaTime);
+        }
 
         if (LifetimeRemaining <= 0.5f * StartingLifetime)
         {
@@ -195,29 +229,52 @@ public class LetterTile : MonoBehaviour
         assignedShadow = shadow;
     }
 
-    public SpriteColor GetSpriteColorFromAbility(TrueLetter.Ability ability)
+    public SpriteColorYMod GetSpriteColorFromAbility(TrueLetter.Ability ability)
     {
+        SpriteColorYMod sc;
         switch (ability)
         {
-            case TrueLetter.Ability.Normal:
-                SpriteColor sc_Normal = new SpriteColor(NormalTileSprite, NormalTileColor);
-                return sc_Normal;
 
             case TrueLetter.Ability.Lucky:
-                SpriteColor sc_Lucky = new SpriteColor(LuckyTileSprite, LuckyTileColor);
-                return sc_Lucky;
+                sc = new SpriteColorYMod(LuckyTileSprite, LuckyTileColor, LuckyYMod);
+                return sc;
 
             case TrueLetter.Ability.Frozen:
-                SpriteColor sc_Frozen = new SpriteColor(FrozenTileSprite, FrozenTileColor);
-                return sc_Frozen;
+                sc = new SpriteColorYMod(FrozenTileSprite, FrozenTileColor, FrozenYMod);
+                return sc;
 
             case TrueLetter.Ability.Shiny:
-                SpriteColor sc_Shiny = new SpriteColor(ShinyTileSprite, ShinyTileColor);
-                return sc_Shiny;
+                sc = new SpriteColorYMod(ShinyTileSprite, ShinyTileColor, ShinyYMod);
+                return sc;
+
+            case TrueLetter.Ability.Wispy:
+                sc = new SpriteColorYMod(WispyTileSprite, WispyTileColor, WispyYMod);
+                return sc;
+
+            case TrueLetter.Ability.Mystic:
+                sc = new SpriteColorYMod(MysticTileSprite, MysticTileColor, MysticYMod);
+                return sc;
+
+            case TrueLetter.Ability.Healthy:
+                sc = new SpriteColorYMod(HealthyTileSprite, HealthyTileColor, HealthyYMod);
+                return sc;
+
+            case TrueLetter.Ability.Heavy:
+                sc = new SpriteColorYMod(HeavyTileSprite, HeavyTileColor, HeavyYMod);
+                return sc;
+
+            case TrueLetter.Ability.Armored:
+                sc = new SpriteColorYMod(ArmoredTileSprite, ArmoredTileColor, ArmoredYMod);
+                return sc;
+
+            case TrueLetter.Ability.Charged:
+                sc = new SpriteColorYMod(ChargedTileSprite, ChargedTileColor, ChargedYMod);
+                return sc;
 
             default:
-                SpriteColor sc_Default = new SpriteColor(NormalTileSprite, NormalTileColor);
-                return sc_Default;
+                sc = new SpriteColorYMod(NormalTileSprite, NormalTileColor, NormalYMod);
+                return sc;
+
         }
     }
 

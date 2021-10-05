@@ -12,7 +12,7 @@ public class TrueLetter : ScriptableObject
     [SerializeField] Ability ability = Ability.Normal;
     [SerializeField] string letterBlurb;
 
-    public enum Ability { Normal, Shiny, Frozen, Lucky };
+    public enum Ability { Normal, Shiny, Frozen, Lucky, Wispy, Mystic, Healthy, Heavy, Armored, Charged};
     public int ProbabilityTop;
 
 

@@ -206,11 +206,11 @@ public class ArenaBuilder : MonoBehaviour
             Destroy(enemies[i]);
         }
         ltd.DestroyAllLetters();
-        Destroy(ltd.gameObject);
-        foreach(var element in arenaWallObjects)
-        {
-            element.RemoveArenaWall();
-        }
+        Destroy(ltd?.gameObject);
+        //foreach(var element in arenaWallObjects)
+        //{
+        //    element.RemoveArenaWall();
+        //}
         arenaStarter.RemoveArenaStarter();
         // For now, destroy the statue, but later replace with a broken statue, perhaps?
         player.GetComponent<WordBuilder>().ClearCurrentWord();

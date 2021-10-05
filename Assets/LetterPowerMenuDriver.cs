@@ -52,7 +52,7 @@ public class LetterPowerMenuDriver : MonoBehaviour
     {
         for (int i = 0; i < abilityPurchaseButtonsImages.Length; i++)
         {
-            LetterTile.SpriteColor sc = sourceLetterTile.GetSpriteColorFromAbility((TrueLetter.Ability)i);
+            LetterTile.SpriteColorYMod sc = sourceLetterTile.GetSpriteColorFromAbility((TrueLetter.Ability)i);
             abilityPurchaseButtonsImages[i].sprite = sc.Sprite;
             abilityPurchaseButtonsImages[i].color = sc.Color;
         }
