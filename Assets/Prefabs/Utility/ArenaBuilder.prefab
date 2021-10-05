@@ -65,3 +65,9 @@ MonoBehaviour:
   letterFX_Shiny: {fileID: 6907797058491934293, guid: 9a6677f4fe83229458446c364cf60294, type: 3}
   letterFX_Frozen: {fileID: 6907797058491934293, guid: e62e68b1baed0bb44b9749264c347d58, type: 3}
   letterFX_Lucky: {fileID: 6907797058491934293, guid: 4eb0e43ad8d481a4884a7c28eed94c1e, type: 3}
+  letterFX_Wispy: {fileID: 3899444190139616522, guid: 95ee2f03d0906d14db593f334d03678b, type: 3}
+  letterFX_Mystic: {fileID: 0}
+  letterFX_Healthy: {fileID: 0}
+  letterFX_Heavy: {fileID: 0}
+  letterFX_Armored: {fileID: 0}
+  letterFX_Charged: {fileID: 0}

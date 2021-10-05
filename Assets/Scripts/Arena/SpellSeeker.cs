@@ -88,7 +88,11 @@ public class SpellSeeker : MonoBehaviour
                 return;
 
             case TrueLetter.Ability.Frozen:
-                target.GetComponent<SpeedKeeper>()?.FreezeWordMaker(powerPayload);
+                target.GetComponent<SpeedKeeper>()?.ModifyCurrentSpeed(powerPayload);
+                return;
+
+            case TrueLetter.Ability.Wispy:
+                target.GetComponent<SpeedKeeper>()?.ModifyCurrentSpeed(-1 * powerPayload);
                 return;
         }
     }

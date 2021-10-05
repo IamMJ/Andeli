@@ -160,6 +160,8 @@ MonoBehaviour:
   puffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
   normalSpellPrefab: {fileID: 7941282901840960525, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
   freezeSpellPrefab: {fileID: 6886851091308245794, guid: c5bafa82922014b4d9a8b3634cc06e3f, type: 3}
+  wispySpellPrefab: {fileID: 6886851091308245794, guid: a35557762df88b341b3f36074fdbfd8c, type: 3}
+  memory: {fileID: 0}
   currentEnemy: {fileID: 0}
 --- !u!95 &5293917446488848811
 Animator:

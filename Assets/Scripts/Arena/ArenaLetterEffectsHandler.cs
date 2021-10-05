@@ -13,6 +13,12 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
     [SerializeField] GameObject letterFX_Shiny = null;
     [SerializeField] GameObject letterFX_Frozen = null;
     [SerializeField] GameObject letterFX_Lucky = null;
+    [SerializeField] GameObject letterFX_Wispy = null;
+    [SerializeField] GameObject letterFX_Mystic = null;
+    [SerializeField] GameObject letterFX_Healthy = null;
+    [SerializeField] GameObject letterFX_Heavy = null;
+    [SerializeField] GameObject letterFX_Armored = null;
+    [SerializeField] GameObject letterFX_Charged = null;
 
     private void Start()
     {
@@ -57,6 +63,14 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                     FX = Instantiate(letterFX_Lucky, activatedTileInWordBar.transform);
                     ParticleSystem.EmissionModule em = FX.GetComponent<ParticleSystem>().emission;
                     em.rateOverTime = amount;
+                    FX.layer = 5;
+                }
+                break;
+
+            case TrueLetter.Ability.Wispy:
+                if (hasUI)
+                {
+                    FX = Instantiate(letterFX_Wispy, activatedTileInWordBar.transform);
                     FX.layer = 5;
                 }
                 break;

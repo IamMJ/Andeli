@@ -7,6 +7,7 @@ public class WordWeaponizer : MonoBehaviour
     [SerializeField] GameObject puffPrefab = null;
     [SerializeField] GameObject normalSpellPrefab = null;
     [SerializeField] GameObject freezeSpellPrefab = null;
+    [SerializeField] GameObject wispySpellPrefab = null;
 
     GameController gc;
     WordBuilder wbd;
@@ -176,17 +177,22 @@ public class WordWeaponizer : MonoBehaviour
 
             case TrueLetter.Ability.Frozen:
                 // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
-                float freezePower = activatedLetter.Power / 10f * targetWMM.GetComponent<WordBuilder>().CurrentPower;
+                float freezePower = activatedLetter.Power / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
                 CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
                 break;
 
             case TrueLetter.Ability.Lucky:
                 //
                 break;
+
+            case TrueLetter.Ability.Wispy:
+                float speedBoost = activatedLetter.Power / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
+                break;
         }
     }
 
-    private void CreateSpell(Transform target, float power, TrueLetter.Ability spellType)
+    private void CreateSpell(Transform target, float spellPotency, TrueLetter.Ability spellType)
     {
         float amount = Random.Range(-180f, 179f);
         Quaternion randRot = Quaternion.Euler(0, 0, amount);
@@ -197,13 +203,19 @@ public class WordWeaponizer : MonoBehaviour
             case TrueLetter.Ability.Normal:
                 spell = Instantiate(normalSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
                 spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
-                spell.SetupSpell(target, vm, gc, power, TrueLetter.Ability.Normal);
+                spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Normal);
                 return;
 
             case TrueLetter.Ability.Frozen:
                 spell = Instantiate(freezeSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
                 spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
-                spell.SetupSpell(target, vm, gc, power, TrueLetter.Ability.Frozen);
+                spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Frozen);
+                return;
+
+            case TrueLetter.Ability.Wispy:
+                spell = Instantiate(wispySpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
+                spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed*3;
+                spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Wispy);
                 return;
         }
     }

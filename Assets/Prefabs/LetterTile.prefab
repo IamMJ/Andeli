@@ -314,10 +314,10 @@ MonoBehaviour:
   LuckyYMod: 0
   FrozenTileSprite: {fileID: 21300000, guid: c25dd675a14cd744099cbf45f24d68fd, type: 3}
   FrozenTileColor: {r: 1, g: 1, b: 1, a: 1}
-  FrozenYMod: 0.09
+  FrozenYMod: 0
   ShinyTileSprite: {fileID: 21300000, guid: 979d416e7e04a3a488865caa78afef41, type: 3}
   ShinyTileColor: {r: 1, g: 0.8745098, b: 0.57254905, a: 1}
-  ShinyYMod: 0.03
+  ShinyYMod: 0
   WispyTileSprite: {fileID: 21300000, guid: ae195700a5964f44ba737307b26e6ba1, type: 3}
   WispyTileColor: {r: 0.3529412, g: 0.8039216, b: 1, a: 1}
   WispyYMod: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
   HealthyYMod: 0
   HeavyTileSprite: {fileID: 21300000, guid: ced1b36e0af1d394db87eba7798e592d, type: 3}
   HeavyTileColor: {r: 0.6666667, g: 0.627451, b: 0.7647059, a: 1}
-  HeavyYMod: -0.07
+  HeavyYMod: 0
   ArmoredTileSprite: {fileID: 21300000, guid: 852585824667e6b4881a8dac3a813082, type: 3}
   ArmoredTileColor: {r: 1, g: 0.6745098, b: 0.023529412, a: 1}
   ArmoredYMod: 0.1
