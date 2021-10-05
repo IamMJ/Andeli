@@ -13,6 +13,7 @@ public class SpellSeeker : MonoBehaviour
     //param
     float thrust = 30f;
     float closeEnough = 0.1f;
+    float minTimeAlive = 1.0f;
 
     //state
     Transform target;
@@ -21,11 +22,13 @@ public class SpellSeeker : MonoBehaviour
     float speed;
     float powerPayload;
     TrueLetter.Ability spellType;
+    float proximityTurnOnTime;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         speed = rb.velocity.magnitude;
+
     }
 
     public void SetupSpell(Transform targetTransform, VictoryMeter vmRef, GameController gcRef, float payload, TrueLetter.Ability spellTypeIn)
@@ -35,6 +38,7 @@ public class SpellSeeker : MonoBehaviour
         powerPayload = payload;
         spellType = spellTypeIn;
         gc = gcRef;
+        proximityTurnOnTime = Time.time + minTimeAlive;
     }
 
     private void Update()
@@ -50,7 +54,11 @@ public class SpellSeeker : MonoBehaviour
             return;
         }
 
-        TargetProximityCheck();
+        if (Time.time > proximityTurnOnTime)
+        {
+            TargetProximityCheck();
+        }
+
     }
 
     private void FixedUpdate()
