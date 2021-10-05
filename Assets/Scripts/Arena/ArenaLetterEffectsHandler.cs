@@ -75,6 +75,14 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 }
                 break;
 
+            case TrueLetter.Ability.Mystic:
+                if (hasUI)
+                {
+                    FX = Instantiate(letterFX_Mystic, activatedTileInWordBar.transform);
+                    FX.layer = 5;
+                }
+                break;
+
         }
     }
 

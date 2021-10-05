@@ -19,6 +19,7 @@ public class LetterTileDropper : MonoBehaviour
     ArenaBuilder ab;
     int layerMask_Impassable = 1 << 13;
     int layerMask_Letter = 1 << 9;
+    int layerMask_Player = 1 << 8;
     public List<LetterTile> letterTilesOnBoard = new List<LetterTile>();
     private List<LetterTile> allLettersDropped = new List<LetterTile>();
     [SerializeField] string lettersOnBoard = "";
@@ -122,41 +123,41 @@ public class LetterTileDropper : MonoBehaviour
         if (Time.time >= timeForNextWave && lettersOnBoard.Length < maxLettersOnBoard)
         {
 
-            CreateLetterDropLocations();
-            DropLettersAtDropLocations();
+            CreateLetterDropLocations(ref dropLocations, numberOfLettersToDropPerWave);
+            DropLettersAtDropLocations(ref dropLocations, false, 0);
             timeForNextWave = Time.time + averageTimeBetweenWaves; // + UnityEngine.Random.Range(-1f, +1f);
         }
     }
 
-    private void CreateLetterDropLocations()
+    private void CreateLetterDropLocations(ref List<Vector2> listToPopulate, int numberOfLettersToDrop)
     {
-        for (int i = 0; i < numberOfLettersToDropPerWave; i++)
+        for (int i = 0; i < numberOfLettersToDrop; i++)
         {
-            dropLocations.Add(GetRandomPositionInsideArenaButAwayFromOtherDropLocations(i));
+            listToPopulate.Add(GetRandomPositionInsideArenaButAwayFromOtherDropLocations(ref listToPopulate, i));
         }
     }
 
-    private void DropLettersAtDropLocations()
+    private void DropLettersAtDropLocations(ref List<Vector2> targetDropLocations, bool isMystic, float mysticPower)
     {
         int limit = maxLettersOnBoard - lettersOnBoard.Length;
 
-        foreach (var dropLocation in dropLocations)
+        foreach (var dropLocation in targetDropLocations)
         {
             limit--;
             if (limit <= 0) { break; }
-            DropLetterTile(dropLocation);
+            DropLetterTile(dropLocation, isMystic, mysticPower);
         }
-        dropLocations.Clear();      
-        
+        dropLocations.Clear();              
     }
 
     #region Tiledrop Helpers
-    private Vector2 GetRandomPositionInsideArenaButAwayFromOtherDropLocations(int currentDropLocationIndex)
+    private Vector2 GetRandomPositionInsideArenaButAwayFromOtherDropLocations(ref List<Vector2> targetDropLocations, int currentDropLocationIndex)
     {
         int attempts = 0;
         bool isTooNearOtherDropLocation = false;
         bool isAnImpassablePosition = false;
         bool isTooNearAnExistingLetter = false;
+        bool isTooNearThePlayer = false;
         if (!ab)
         {
             ab = FindObjectOfType<ArenaBuilder>();
@@ -171,11 +172,12 @@ public class LetterTileDropper : MonoBehaviour
                 break;
             }
 
-            isTooNearOtherDropLocation = CheckRandomPositionAgainstOtherDropLocations(currentDropLocationIndex, randomPosition);
+            isTooNearOtherDropLocation = CheckRandomPositionAgainstOtherDropLocations(ref targetDropLocations, currentDropLocationIndex, randomPosition);
             isAnImpassablePosition = CheckRandomPositionAgainstImpassableTerrain(randomPosition);
             isTooNearAnExistingLetter = CheckRandomPositionAgainstExistingLettersOnBoard(randomPosition);
+            isTooNearThePlayer = CheckRandomPositionAgainstPlayerForMysticDrop(randomPosition);
         }
-        while (isTooNearOtherDropLocation || isAnImpassablePosition || isTooNearAnExistingLetter);
+        while (isTooNearOtherDropLocation || isAnImpassablePosition || isTooNearAnExistingLetter || isTooNearThePlayer);
         return randomPosition;
     }
 
@@ -187,13 +189,13 @@ public class LetterTileDropper : MonoBehaviour
     /// <param name="currentDropLocationIndex"></param>
     /// <param name="testPos"></param>
     /// <returns></returns>
-    private bool CheckRandomPositionAgainstOtherDropLocations(int currentDropLocationIndex, Vector2 testPos)
+    private bool CheckRandomPositionAgainstOtherDropLocations(ref List<Vector2> targetDropLocations, int currentDropLocationIndex, Vector2 testPos)
     {
         bool isOutsideOfMinDistance = false;
 
         for (int i = 0; i < currentDropLocationIndex; i++)
         {
-            if ((testPos - dropLocations[i]).magnitude <= minDistanceBetweenLetters)
+            if ((testPos - targetDropLocations[i]).magnitude <= minDistanceBetweenLetters)
             {
                 isOutsideOfMinDistance = true;
                 break;
@@ -230,11 +232,33 @@ public class LetterTileDropper : MonoBehaviour
             return false;
         }
     }
-    private void DropLetterTile(Vector2 dropPosition)
-    {
-        GameObject dropShadow = Instantiate(droppedLetterPrefab, dropPosition, Quaternion.identity);
 
-        GameObject newTile = Instantiate(letterTilePrefab, dropPosition + fallVector, Quaternion.identity) as GameObject;
+    private bool CheckRandomPositionAgainstPlayerForMysticDrop(Vector2 testPos)
+    {
+        var coll = Physics2D.OverlapCircle(testPos, 0.05f, layerMask_Player);
+        if (coll)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    private void DropLetterTile(Vector2 dropPosition, bool isMystic, float mysticPower)
+    {
+        GameObject dropShadow = null;
+        GameObject newTile = null;
+        if (!isMystic)
+        {
+            dropShadow = Instantiate(droppedLetterPrefab, dropPosition, Quaternion.identity);
+            newTile = Instantiate(letterTilePrefab, dropPosition + fallVector, Quaternion.identity) as GameObject;
+        }
+        else
+        {
+            newTile = Instantiate(letterTilePrefab, dropPosition, Quaternion.identity) as GameObject;
+        }
+        
         TrueLetter randomLetter;
         if (shouldSeparateVowelsFromConsonants)
         {
@@ -254,18 +278,33 @@ public class LetterTileDropper : MonoBehaviour
             randomLetter = ReturnWeightedRandomTrueLetter();
         }
 
-        
-        LetterTile letterTile = newTile.GetComponent<LetterTile>();
-        letterTile.Letter = randomLetter.GetLetter();
-        letterTile.Power = randomLetter.GetPower();
-        letterTile.Ability = randomLetter.GetAbility();
-        letterTile.StartingLifetime = lifetimeOfLetter + lifetimeOfLetter*UnityEngine.Random.Range(-0.3f, 0.3f);
-        letterTile.SetFallDistance(fallVector.magnitude);
-        letterTile.SetLetterTileDropper(this);
-        letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
-        newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
-        allLettersDropped.Add(letterTile);
-        lettersOnBoard += letterTile.Letter;
+        if (isMystic)
+        {
+            LetterTile letterTile = newTile.GetComponent<LetterTile>();
+            letterTile.IsMystic = true;
+            letterTile.Letter = randomLetter.GetLetter();
+            letterTile.Power = 0;
+            letterTile.Ability = TrueLetter.Ability.Normal;
+            letterTile.StartingLifetime = mysticPower;
+            letterTile.IsFalling = false;
+            letterTile.SetLetterTileDropper(this);
+            newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
+        }
+        else
+        {
+            LetterTile letterTile = newTile.GetComponent<LetterTile>();
+            letterTile.Letter = randomLetter.GetLetter();
+            letterTile.Power = randomLetter.GetPower();
+            letterTile.Ability = randomLetter.GetAbility();
+            letterTile.StartingLifetime = lifetimeOfLetter + lifetimeOfLetter * UnityEngine.Random.Range(-0.3f, 0.3f);
+            letterTile.SetFallDistance(fallVector.magnitude);
+            letterTile.SetLetterTileDropper(this);
+            letterTile.AssignShadow(dropShadow.GetComponent<LetterTileDropShadow>());
+            newTile.GetComponentInChildren<TextMeshPro>().text = randomLetter.GetLetter().ToString();
+            allLettersDropped.Add(letterTile);
+            lettersOnBoard += letterTile.Letter;
+        }
+
     }
 
     #endregion
@@ -358,6 +397,14 @@ public class LetterTileDropper : MonoBehaviour
     //}
 
     #region Public Methods
+
+    public void SpawnMysticLetters(int count, float mysticPower)
+    {
+        List<Vector2> mysticDropPoints = new List<Vector2>(3);
+        CreateLetterDropLocations(ref mysticDropPoints, 3);
+        DropLettersAtDropLocations(ref mysticDropPoints, true, mysticPower);
+        
+    }
     public void RemoveLetterFromSpawnedLetterList(LetterTile letterTileToRemove)
     {
         OnLetterListModified?.Invoke(letterTileToRemove, false);

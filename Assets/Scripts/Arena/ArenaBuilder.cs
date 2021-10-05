@@ -32,7 +32,7 @@ public class ArenaBuilder : MonoBehaviour
 
     //state
     GameObject[] enemies;
-    LetterTileDropper ltd;
+    public LetterTileDropper ltd;
     GameObject camMouse;
     float startTime;
 

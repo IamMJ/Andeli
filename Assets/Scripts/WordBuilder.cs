@@ -14,6 +14,7 @@ public class WordBuilder : MonoBehaviour
     WordValidater wv;
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
+    GameController gc;
 
     // modifiable param
     int maxWordLength = 7;
@@ -29,6 +30,7 @@ public class WordBuilder : MonoBehaviour
 
     protected virtual void Start()
     {
+        gc = FindObjectOfType<GameController>();
         wwz = GetComponent<WordWeaponizer>();
         pi = GetComponent<PlayerInput>();
         memory = GetComponent<WordMakerMemory>();
@@ -59,12 +61,27 @@ public class WordBuilder : MonoBehaviour
             }
             uid.AddLetterToWordBar(newLetter, newLetter.Letter, currentWord.Length - 1);
         }
+        if (gc.debug_IgniteAll)
+        {
+            newLetter.SetLatentAbilityStatus(true);
+            int index = currentWord.Length - 1;
+            if (!aleh)
+            {
+                ab = FindObjectOfType<ArenaBuilder>();
+                aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
+            }
+            aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
+        }
+        else
+        {
+            TestAllLetterLatentAbilities();
+        }
 
-        TestAllLetterLatentAbilities();
     }
 
     private void TestAllLetterLatentAbilities()
     {
+
         for (int i =0; i < lettersCollected.Count; i++)
         {
             if (lettersCollected[i].GetLatentAbilityStatus() == false)
@@ -256,13 +273,26 @@ public class WordBuilder : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        LetterTile letterTile;
-        if (collision.gameObject.TryGetComponent<LetterTile>(out letterTile))
+        if (collision.gameObject.layer == 9)
         {
-            AddLetter(letterTile);
-            
-            letterTile.InactivateLetterTile();
-
+            LetterTile letterTile = collision.gameObject.GetComponent<LetterTile>();
+            if (letterTile.IsMystic)
+            {
+                if (hasUI)
+                {
+                    AddLetter(letterTile);
+                    letterTile.InactivateLetterTile();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                AddLetter(letterTile);
+                letterTile.InactivateLetterTile();
+            }
         }
     }
 

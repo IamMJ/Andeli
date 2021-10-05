@@ -69,14 +69,16 @@ public class LetterTile : MonoBehaviour
     //param
     float fallSpeed = 4.0f;
     float rotationSpeed = 10f; //deg per sec
+    float mysticAlpha = 0.5f;
 
     //state
     public float LifetimeRemaining { get; private set; }
     float factor;
     bool isLatentAbilityActivated = false;
     float remainingFallDistance;
-    bool isFalling = true;
+    public bool IsFalling = true;
     bool isRotating = false;
+    public bool IsMystic = false;
     public bool IsInactivated { get; private set; } = false;
 
 
@@ -84,7 +86,14 @@ public class LetterTile : MonoBehaviour
     {
         fallSpeed += UnityEngine.Random.Range(-1f, 1f);
         LifetimeRemaining = StartingLifetime;
-        gameObject.layer = 0;
+        if (IsMystic)
+        {
+            gameObject.layer = 9;
+        }
+        else
+        {
+            gameObject.layer = 0;
+        }
         sr.sortingLayerName = "Actors";
         sr.sortingOrder = 9;
         tmp.sortingLayerID = sr.sortingLayerID;
@@ -99,22 +108,26 @@ public class LetterTile : MonoBehaviour
     {
         SpriteColorYMod sc = GetSpriteColorFromAbility(Ability);
         sr.sprite = sc.Sprite;
+        if (IsMystic)
+        {
+            sc.Color.a = mysticAlpha;
+            sc.Color = Color.grey; 
+        }
         sr.color = sc.Color;
         tmp.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, sc.YMod);
-
 
     }
 
     private void Update()
     {
-        if (isFalling)
+        if (IsFalling)
         {
             float amount = fallSpeed * Time.deltaTime;
             transform.position -= Vector3.up * amount;
             remainingFallDistance -= amount;
             if (remainingFallDistance <= 0)
             {
-                isFalling = false;
+                IsFalling = false;
                 gameObject.layer = 9;
                 sr.sortingLayerName = "Letters";
                 sr.sortingOrder = 0;

@@ -48,6 +48,7 @@ public class GameController : MonoBehaviour
     public bool isInGame { get; set; } = false;
     public bool isInTutorialMode { get; set; } = false;
     [SerializeField] float currentZoom;
+    public bool debug_IgniteAll = false;
 
 
     //void Awake()

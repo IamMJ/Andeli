@@ -48,7 +48,6 @@ public class WordWeaponizer : MonoBehaviour
             powerSign = 1;
             uid = FindObjectOfType<UIDriver>();
         }
-
         gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
@@ -188,6 +187,12 @@ public class WordWeaponizer : MonoBehaviour
             case TrueLetter.Ability.Wispy:
                 float speedBoost = activatedLetter.Power / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
                 CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
+                break;
+
+            case TrueLetter.Ability.Mystic:
+                float mysticPower = activatedLetter.Power + sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                int count = Mathf.RoundToInt(mysticPower / 2);
+                ab.ltd.SpawnMysticLetters(count, mysticPower);
                 break;
         }
     }
