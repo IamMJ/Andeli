@@ -10,6 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6057a4f384930046af12b3273958619, type: 3}
-  m_Name: K
+  m_Name: F
   m_EditorClassIdentifier: 
-  associatedTrueLetter: {fileID: 11400000, guid: 6948386095784e4418fa01fae047db13, type: 2}
+  AssociatedTrueLetter: {fileID: 11400000, guid: 55aaab1cda6042641a5e570a670f80c9, type: 2}
+  ability: 1

@@ -31,14 +31,14 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
         GameObject activatedTileInWordBar = uid.GetTileForLetterBasedOnIndexInWord(indexInWord);
         GameObject FX;
 
-        switch (activatedLetter.Ability)
+        switch (activatedLetter.Ability_Player)
         {
             case TrueLetter.Ability.Normal:
                 //
                 break;
 
             case TrueLetter.Ability.Shiny:
-                int power = activatedLetter.Power;
+                int power = activatedLetter.Power_Player;
                 if (hasUI)
                 {
                     callingWMM.GetComponent<WordBuilder>().IncreasePower(power); //power has already been added once with normal pickup. This effectively doubles the letter power.
@@ -56,7 +56,7 @@ public class ArenaLetterEffectsHandler : MonoBehaviour
                 break;
 
             case TrueLetter.Ability.Lucky:
-                int amount = Mathf.RoundToInt(activatedLetter.Power / 2f);
+                int amount = Mathf.RoundToInt(activatedLetter.Power_Player / 2f);
                 callingWMM.GetComponent<WordBuilder>().IncreaseWordLengthBonus(amount);
                 if (hasUI)
                 {

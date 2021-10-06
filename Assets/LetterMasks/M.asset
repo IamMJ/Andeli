@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6057a4f384930046af12b3273958619, type: 3}
   m_Name: M
   m_EditorClassIdentifier: 
-  associatedTrueLetter: {fileID: 11400000, guid: 341e3bb11407b604396df32366ea3ad7, type: 2}
+  AssociatedTrueLetter: {fileID: 11400000, guid: 341e3bb11407b604396df32366ea3ad7, type: 2}
+  ability: 2

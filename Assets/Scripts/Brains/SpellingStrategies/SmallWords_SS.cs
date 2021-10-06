@@ -42,7 +42,7 @@ public class SmallWords_SS : SpellingStrategy
     private float CalculatePowerDistanceValue(LetterTile letterTile)
     {
         float dist = (letterTile.transform.position - transform.position).magnitude * 1.5f;
-        float value = (letterTile.Power / dist);
+        float value = (letterTile.Power_Player / dist);
 
         return value;
     }

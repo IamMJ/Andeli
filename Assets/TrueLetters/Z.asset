@@ -15,5 +15,6 @@ MonoBehaviour:
   Letter: 90
   weight: 7
   Power: 10
-  ability: 1
+  ability: 0
+  letterBlurb: 
   ProbabilityTop: 9999

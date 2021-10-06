@@ -15,5 +15,6 @@ MonoBehaviour:
   Letter: 77
   weight: 261
   Power: 3
-  ability: 1
+  ability: 0
+  letterBlurb: 
   ProbabilityTop: 5360

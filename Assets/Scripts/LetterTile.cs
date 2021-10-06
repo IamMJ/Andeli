@@ -9,9 +9,11 @@ public class LetterTile : MonoBehaviour
 {
     //init
     public char Letter;
-    public int Power;
+    public int Power_Player;
+    public int Power_Enemy;
     public float StartingLifetime;
-    public TrueLetter.Ability Ability = TrueLetter.Ability.Normal;
+    public TrueLetter.Ability Ability_Player = TrueLetter.Ability.Normal;
+    public TrueLetter.Ability Ability_Enemy = TrueLetter.Ability.Normal;
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;
@@ -106,7 +108,7 @@ public class LetterTile : MonoBehaviour
 
     private void AssignStartingSprite()
     {
-        SpriteColorYMod sc = GetSpriteColorFromAbility(Ability);
+        SpriteColorYMod sc = GetSpriteColorFromAbility(Ability_Player);
         sr.sprite = sc.Sprite;
         if (IsMystic)
         {

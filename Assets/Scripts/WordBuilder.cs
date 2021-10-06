@@ -26,7 +26,7 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] protected string currentWord = "";
     int wordLengthBonus = 0;
     TrueLetter.Ability abilityToAutoIgnite;
-    public int CurrentPower { get; private set; } = 0;
+    public int CurrentPower = 0;
 
     protected virtual void Start()
     {
@@ -48,7 +48,7 @@ public class WordBuilder : MonoBehaviour
         if (currentWord.Length >= maxWordLength) { return; }
         lettersCollected.Add(newLetter);
         currentWord += newLetter.Letter;
-        IncreasePower(newLetter.Power);
+        IncreasePower(newLetter.Power_Player);
         if (hasUI)
         {
             if (memory.CheckIfWordHasBeenPlayedByPlayerAlready(currentWord))
@@ -95,7 +95,7 @@ public class WordBuilder : MonoBehaviour
 
     private void TestLetterLatentAbility(LetterTile newLetter, int index)
     {
-        if (newLetter.Ability != abilityToAutoIgnite)
+        if (newLetter.Ability_Player != abilityToAutoIgnite)
         {
             int roll = 21 - UnityEngine.Random.Range(1, 21);
             if (currentWord.Length + wordLengthBonus < roll)
@@ -142,18 +142,18 @@ public class WordBuilder : MonoBehaviour
         LetterTile letterToRemove = lettersCollected[indexWithinWord];
 
         // Subtract the base word power from current power
-        CurrentPower -= letterToRemove.Power;
+        CurrentPower -= letterToRemove.Power_Player;
 
         // Reverse any activated latent power
         if (letterToRemove.GetLatentAbilityStatus() == true)
         {
-            if (letterToRemove.Ability == TrueLetter.Ability.Lucky)
+            if (letterToRemove.Ability_Player == TrueLetter.Ability.Lucky)
             {
                 UndoRandomActivatedAbilityAsPenalty();
             }
-            if (letterToRemove.Ability == TrueLetter.Ability.Shiny)
+            if (letterToRemove.Ability_Player == TrueLetter.Ability.Shiny)
             {
-                CurrentPower -= letterToRemove.Power;
+                CurrentPower -= letterToRemove.Power_Player;
             }
             aleh.RemoveLetterParticleEffect(indexWithinWord, hasUI);
         }

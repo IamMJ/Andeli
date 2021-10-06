@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerLetterMod")]
-public class PlayerLetterMod : ScriptableObject
+public class LetterMask : ScriptableObject
 {
-    [SerializeField] TrueLetter associatedTrueLetter = null;
+    public TrueLetter AssociatedTrueLetter = null;
 
     //state
     int powerMod;
-    TrueLetter.Ability ability = TrueLetter.Ability.Normal;
+    [SerializeField] TrueLetter.Ability ability = TrueLetter.Ability.Normal;
     int experience_Current = 12;
     int experience_NextLevel = 345;
 
     public char GetLetter()
     {
-        return associatedTrueLetter.GetLetter();
+        return AssociatedTrueLetter.GetLetter();
     }
 
     public float GetRarity()
     {
-        return associatedTrueLetter.GetRarity();
+        return AssociatedTrueLetter.GetRarity();
     }
 
     public string GetBlurb()
     {
-        return associatedTrueLetter.GetBlurb();
+        return AssociatedTrueLetter.GetBlurb();
     }
 
     public TrueLetter.Ability GetAbility()
@@ -39,7 +39,7 @@ public class PlayerLetterMod : ScriptableObject
 
     public int GetPower()
     {
-        return associatedTrueLetter.GetPower() + powerMod;
+        return AssociatedTrueLetter.GetPower() + powerMod;
     }
 
     public string GetExperienceString()

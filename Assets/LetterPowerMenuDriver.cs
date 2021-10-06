@@ -11,8 +11,8 @@ public class LetterPowerMenuDriver : MonoBehaviour
     VictoryMeter vm;
     string topBand = "ACEGIKMOQSUWY";
     string bottomBand = "BDFHJLNPRTVXZ";
-    List<PlayerLetterMod> topBandLetters = new List<PlayerLetterMod>();
-    List<PlayerLetterMod> bottomBandLetters = new List<PlayerLetterMod>();
+    List<LetterMask> topBandLetters = new List<LetterMask>();
+    List<LetterMask> bottomBandLetters = new List<LetterMask>();
 
     [SerializeField] TextMeshProUGUI[] topTMPs = null;
     [SerializeField] TextMeshProUGUI[] bottomTMPs = null;
@@ -33,12 +33,12 @@ public class LetterPowerMenuDriver : MonoBehaviour
 
 
     //state
-    PlayerLetterMod selectedLetterMod = null;
+    LetterMask selectedLetterMod = null;
     int scroll_current = 0;
     int scroll_max;
     int selectedButton = 0;
-    PlayerLetterMod[] displayedLetterMod_Top = new PlayerLetterMod[5];
-    PlayerLetterMod[] displayedLetterMod_Bottom = new PlayerLetterMod[5];
+    LetterMask[] displayedLetterMod_Top = new LetterMask[5];
+    LetterMask[] displayedLetterMod_Bottom = new LetterMask[5];
     private void Start()
     {
         gc = FindObjectOfType<GameController>();
@@ -60,8 +60,8 @@ public class LetterPowerMenuDriver : MonoBehaviour
 
     private void PrepLetterMods()
     {
-        List<PlayerLetterMod> letters = new List<PlayerLetterMod>();
-        letters = gc.GetPlayer().GetComponent<LetterModHolder>().GetLetterMods();
+        List<LetterMask> letters = new List<LetterMask>();
+        letters = gc.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMods();
         foreach (var letter in letters)
         {
             if (topBand.Contains(letter.GetLetter().ToString()))

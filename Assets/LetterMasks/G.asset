@@ -10,6 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6057a4f384930046af12b3273958619, type: 3}
-  m_Name: U
+  m_Name: G
   m_EditorClassIdentifier: 
-  associatedTrueLetter: {fileID: 11400000, guid: 6ec7386effc1ef74cb9e808241459aa5, type: 2}
+  AssociatedTrueLetter: {fileID: 11400000, guid: bbc8bdd0c1e1e4d4d98e6e4614d77346, type: 2}
+  ability: 1

@@ -167,34 +167,70 @@ public class WordWeaponizer : MonoBehaviour
 
     private void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
     {
-        switch (activatedLetter.Ability)
+        if (isPlayer)
+        {
+            switch (activatedLetter.Ability_Player)
+            {
+
+                case TrueLetter.Ability.Shiny:
+                    //
+                    break;
+
+                case TrueLetter.Ability.Frozen:
+                    // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
+                    float freezePower = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
+                    break;
+
+                case TrueLetter.Ability.Lucky:
+                    //
+                    break;
+
+                case TrueLetter.Ability.Wispy:
+                    float speedBoost = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
+                    break;
+
+                case TrueLetter.Ability.Mystic:
+                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    int count = Mathf.RoundToInt(mysticPower / 2);
+                    ab.ltd.SpawnMysticLetters(count, mysticPower);
+                    break;
+            }
+        }
+        else
         {
 
-            case TrueLetter.Ability.Shiny:
-                //
-                break;
+            switch (activatedLetter.Ability_Enemy)
+            {
 
-            case TrueLetter.Ability.Frozen:
-                // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
-                float freezePower = activatedLetter.Power / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
-                CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
-                break;
+                case TrueLetter.Ability.Shiny:
+                    //
+                    break;
 
-            case TrueLetter.Ability.Lucky:
-                //
-                break;
+                case TrueLetter.Ability.Frozen:
+                    // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
+                    float freezePower = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
+                    break;
 
-            case TrueLetter.Ability.Wispy:
-                float speedBoost = activatedLetter.Power / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
-                CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
-                break;
+                case TrueLetter.Ability.Lucky:
+                    //
+                    break;
 
-            case TrueLetter.Ability.Mystic:
-                float mysticPower = activatedLetter.Power + sourceWMM.GetComponent<WordBuilder>().CurrentPower;
-                int count = Mathf.RoundToInt(mysticPower / 2);
-                ab.ltd.SpawnMysticLetters(count, mysticPower);
-                break;
+                case TrueLetter.Ability.Wispy:
+                    float speedBoost = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
+                    break;
+
+                case TrueLetter.Ability.Mystic:
+                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    int count = Mathf.RoundToInt(mysticPower / 2);
+                    ab.ltd.SpawnMysticLetters(count, mysticPower);
+                    break;
+            }
         }
+
     }
 
     private void CreateSpell(Transform target, float spellPotency, TrueLetter.Ability spellType)

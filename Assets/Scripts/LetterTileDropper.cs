@@ -15,8 +15,11 @@ public class LetterTileDropper : MonoBehaviour
     public List<TrueLetter> consonants = new List<TrueLetter>();
     public List<TrueLetter> vowels = new List<TrueLetter>();
 
+    
     WordValidater wv;
     ArenaBuilder ab;
+    LetterMaskHolder lmh_Player; // the player's letter mask holder is needed to assign correct sprite/color/power/ability to each letter Tile
+    LetterMaskHolder lmh_Enemy;
     int layerMask_Impassable = 1 << 13;
     int layerMask_Letter = 1 << 9;
     int layerMask_Player = 1 << 8;
@@ -60,6 +63,8 @@ public class LetterTileDropper : MonoBehaviour
 
         wv = FindObjectOfType<WordValidater>();
         ab = FindObjectOfType<ArenaBuilder>();
+        lmh_Enemy = ab.GetEnemiesInArena()[0].GetComponent<LetterMaskHolder>();
+        lmh_Player = FindObjectOfType<GameController>().GetPlayer().GetComponent<LetterMaskHolder>();
 
         if (shouldSeparateVowelsFromConsonants)
         {
@@ -283,8 +288,8 @@ public class LetterTileDropper : MonoBehaviour
             LetterTile letterTile = newTile.GetComponent<LetterTile>();
             letterTile.IsMystic = true;
             letterTile.Letter = randomLetter.GetLetter();
-            letterTile.Power = 0;
-            letterTile.Ability = TrueLetter.Ability.Normal;
+            letterTile.Power_Player = 0;
+            letterTile.Ability_Player = TrueLetter.Ability.Normal;
             letterTile.StartingLifetime = mysticPower;
             letterTile.IsFalling = false;
             letterTile.SetLetterTileDropper(this);
@@ -294,8 +299,24 @@ public class LetterTileDropper : MonoBehaviour
         {
             LetterTile letterTile = newTile.GetComponent<LetterTile>();
             letterTile.Letter = randomLetter.GetLetter();
-            letterTile.Power = randomLetter.GetPower();
-            letterTile.Ability = randomLetter.GetAbility();
+
+            LetterMask playerLM = lmh_Player.GetLetterMaskForTrueLetter(randomLetter);
+            letterTile.Power_Player = playerLM.GetPower();
+            letterTile.Ability_Player = playerLM.GetAbility();
+
+            if (lmh_Enemy)
+            {
+                LetterMask enemyLM = lmh_Enemy.GetLetterMaskForTrueLetter(randomLetter);
+                letterTile.Power_Enemy = enemyLM.GetPower();
+                letterTile.Ability_Enemy = enemyLM.GetAbility();
+            }
+            else
+            {
+                letterTile.Power_Enemy = randomLetter.GetPower();
+                letterTile.Ability_Enemy = randomLetter.GetAbility();
+            }
+
+
             letterTile.StartingLifetime = lifetimeOfLetter + lifetimeOfLetter * UnityEngine.Random.Range(-0.3f, 0.3f);
             letterTile.SetFallDistance(fallVector.magnitude);
             letterTile.SetLetterTileDropper(this);
@@ -498,7 +519,6 @@ public class LetterTileDropper : MonoBehaviour
 
 
     #endregion
-
 
     #region Internal Methods
     /// <summary>

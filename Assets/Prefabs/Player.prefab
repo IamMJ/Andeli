@@ -222,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lettersCollected: []
   currentWord: 
+  CurrentPower: 0
 --- !u!114 &-3077055182206633393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0608383a977cc094b8c96949e5afe902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lettersModifiers:
+  letterMasks:
   - {fileID: 11400000, guid: 7d33c6b9b1e23034cbb532ae1ae00298, type: 2}
   - {fileID: 11400000, guid: bc0b1edd2ec6d864084a446652c53c10, type: 2}
   - {fileID: 11400000, guid: 16a0838ea29001e4ba0b9dfe79778c90, type: 2}

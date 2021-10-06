@@ -15,6 +15,6 @@ MonoBehaviour:
   Letter: 65
   weight: 812
   Power: 1
-  ability: 5
+  ability: 0
   letterBlurb: An Austrian Army, awfully arrayed
   ProbabilityTop: 812
