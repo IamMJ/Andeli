@@ -22,7 +22,7 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Slider wordFiringSliderBG = null;
     [SerializeField] TextMeshProUGUI powerMeterTMP = null;
 
-    [SerializeField] Sprite blankTileDefault = null;
+    [SerializeField] SpriteRenderer blankTileDefault = null;
     [SerializeField] Image[] wordboxImages = null;
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
@@ -41,6 +41,7 @@ public class UIDriver : MonoBehaviour
     Color partialBar = new Color(.7169f, .7169f, .3551f);
 
     WordBuilder playerWB;
+    BagManager bagman;
     WordWeaponizer playerWWZ;
     GameController gc;
     SceneLoader sl;
@@ -52,11 +53,15 @@ public class UIDriver : MonoBehaviour
     float topPanelHidden_Y = 100f;
 
     //state
+    bool wasLongPress = false;
     bool isFireWeaponButtonPressed = false;
     bool isEraseWeaponButtonPressed = false;
+    bool isLetterOnSwordPressed = false;
     float timeButtonDepressed = 0;
+    
     public float timeSpentLongPressing { get; private set; }
     [SerializeField] int wordbarScroll = 0;
+
 
 
     private void Start()
@@ -74,10 +79,11 @@ public class UIDriver : MonoBehaviour
         }
     }
 
-    public void SetPlayerObject(WordBuilder newPlayerWB, WordWeaponizer newPlayerWWZ)
+    public void SetPlayerObject(WordBuilder newPlayerWB, WordWeaponizer newPlayerWWZ, BagManager newPlayerBagman)
     {
         playerWB = newPlayerWB;
         playerWWZ = newPlayerWWZ;
+        bagman = newPlayerBagman;
     }
 
     #region Initial Button Press Handlers
@@ -113,12 +119,46 @@ public class UIDriver : MonoBehaviour
         IncompleteLongPress_WordBoxActions();
     }
 
+    public void OnPressDownLetterOnSword(int index)
+    {
+        if (isLetterOnSwordPressed)
+        {
+            timeButtonDepressed += Time.unscaledDeltaTime;
+            if (timeButtonDepressed >= UIParameters.LongPressTime)
+            {
+                wasLongPress = true;
+                OnReleaseLetterOnSword(index);
+            }
+        }
+        else
+        {
+            isLetterOnSwordPressed = true;
+        }
+    }
+
+    public void OnReleaseLetterOnSword(int index)
+    {
+        if (wasLongPress)
+        {
+            NotifyWordBuilderToDestroyLetterAtIndex(index);
+        }
+        else
+        {
+            NotifyWordBuilderToPassLetterToBagAtIndex(index);
+        }
+        wasLongPress = false;
+        isLetterOnSwordPressed = false;
+        timeButtonDepressed = 0;
+    }
+
+
     public void PressTutorialOkayButton()
     {
         tutor.AdvanceToNextStepViaClick();
     }
     #endregion
 
+    #region Button Helpers
     private void HandleEraseWordButtonPressed()
     {
         if (isEraseWeaponButtonPressed)
@@ -151,74 +191,24 @@ public class UIDriver : MonoBehaviour
         }
     }
 
-    public void FillWordEraseSlider(float amount)
+    private void FillWordEraseSlider(float amount)
     {
         wordEraseSliderBG.value = amount;
     }
 
-    public void ClearWordEraseSlider()
+    private void ClearWordEraseSlider()
     {
         wordEraseSliderBG.value = 0f;
     }
 
-    public void FillWordFiringSlider(float amount)
+    private void FillWordFiringSlider(float amount)
     {
         wordFiringSliderBG.value = amount;
     }
 
-    public void ClearWordFiringSlider()
+    private void ClearWordFiringSlider()
     {
         wordFiringSliderBG.value = 0;
-    }
-
-    public void HandlePressOnLetterInWordBar(int index)
-    {
-        // if the index is first or last tile spot, check if the word is longer than tiles.
-        // if longer than tiles, then the word must be overflowing, and should scroll left or right.
-        if (playerWWZ.CheckSpendForLetterErasure())
-        {
-            ClearOutLetterFromSpecificTile(index);
-        }
-        else
-        {
-            Debug.Log("not enough energy to remove a letter");
-        }
-
-
-    }
-
-    private void ClearOutLetterFromSpecificTile(int indexInTiles)
-    {
-
-        RemoveParticleEffectsAtIndexInWord(indexInTiles + wordbarScroll);
-
-        for (int i = indexInTiles; i < playerWB.GetCurrentWordLength()-1; i++)
-        {
-            wordboxTMPs[indexInTiles].text = wordboxTMPs[indexInTiles + 1].text;
-            wordboxImages[indexInTiles].sprite = wordboxImages[indexInTiles + 1].sprite;
-            if (wordboxImages[indexInTiles + 1].gameObject.transform.childCount > 0)
-            {
-                GameObject particleGO = wordboxImages[indexInTiles + 1].gameObject.transform.GetChild(0).gameObject;
-                particleGO.transform.parent = wordboxImages[indexInTiles].gameObject.transform;
-                particleGO.transform.localPosition = Vector3.zero;
-            }
-        }
-
-        int lastIndex = playerWB.GetCurrentWordLength() - 1 - wordbarScroll;
-        wordboxTMPs[lastIndex].text = "";
-        wordboxImages[lastIndex].sprite = blankTileDefault;
-        wordboxImages[lastIndex].color = Color.white;
-        if (wordboxImages[lastIndex].gameObject.transform.childCount > 0)
-        {
-            Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
-        }
-
-        playerWB.RemoveSpecificLetterFromCurrentWord(indexInTiles + wordbarScroll);
-        if (wordbarScroll > 0)
-        {
-            wordbarScroll--;
-        }
-        playerWB.RebuildCurrentWordForUI();
     }
 
     private void CompleteLongPress_WordBoxActions()
@@ -237,6 +227,57 @@ public class UIDriver : MonoBehaviour
         isEraseWeaponButtonPressed = false;
 
     }
+    #endregion
+
+    #region Letter Tile Helpers
+
+    private void NotifyWordBuilderToPassLetterToBagAtIndex(int index)
+    {
+        playerWB.SendLetterToBag(index);
+    }
+
+    private void NotifyWordBuilderToDestroyLetterAtIndex(int index)
+    {
+        playerWB.DestroySpecificLetterFromCurrentWord(index);
+        // Get bool back from wb. if true, show a smoke animation of letter being destroyed
+    }
+
+    private void DestroyLetterFromSpecificTile(int indexInTiles)
+    {
+
+        RemoveParticleEffectsAtIndexInWord(indexInTiles + wordbarScroll);
+
+        for (int i = indexInTiles; i < playerWB.GetCurrentWordLength()-1; i++)
+        {
+            wordboxTMPs[indexInTiles].text = wordboxTMPs[indexInTiles + 1].text;
+            wordboxImages[indexInTiles].sprite = wordboxImages[indexInTiles + 1].sprite;
+            if (wordboxImages[indexInTiles + 1].gameObject.transform.childCount > 0)
+            {
+                GameObject particleGO = wordboxImages[indexInTiles + 1].gameObject.transform.GetChild(0).gameObject;
+                particleGO.transform.parent = wordboxImages[indexInTiles].gameObject.transform;
+                particleGO.transform.localPosition = Vector3.zero;
+            }
+        }
+
+        int lastIndex = playerWB.GetCurrentWordLength() - 1 - wordbarScroll;
+        wordboxTMPs[lastIndex].text = "";
+        wordboxImages[lastIndex].sprite = blankTileDefault.sprite;
+        wordboxImages[lastIndex].color = Color.white;
+        if (wordboxImages[lastIndex].gameObject.transform.childCount > 0)
+        {
+            Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
+        }
+
+        playerWB.DestroySpecificLetterFromCurrentWord(indexInTiles + wordbarScroll);
+        if (wordbarScroll > 0)
+        {
+            wordbarScroll--;
+        }
+        playerWB.RebuildCurrentWordForUI();
+    }
+
+    #endregion
+    
 
     public void RemoveParticleEffectsAtIndexInWord(int indexInWord)
     {
@@ -274,7 +315,7 @@ public class UIDriver : MonoBehaviour
         ShowHideBottomPanel(false);
         ShowHideTopPanel(false);
         ShowHideVictoryMeter(false);
-        ShowHideLetterPowerButton(true);
+        ShowHideLetterPowerButton(false);
         ShowHideOptionMenuButton(true);
     }
 
@@ -362,6 +403,26 @@ public class UIDriver : MonoBehaviour
         tutor = tutorRef;
     }
 
+    public void UpdateLettersOnSwordAndPower(WordBuilder.SwordWordPower newSwordWord)
+    {
+        powerMeterTMP.text = newSwordWord.Power.ToString();
+        for(int i = 0; i < wordboxTMPs.Length; i++)
+        {
+            if (i < newSwordWord.letterSprites.Length)
+            {
+                wordboxTMPs[i].text = newSwordWord.letterLetters[i];
+                wordboxImages[i].sprite = newSwordWord.letterSprites[i];
+                wordboxImages[i].color = newSwordWord.letterColors[i];
+            }
+            else
+            {
+                wordboxTMPs[i].text = "";
+                wordboxImages[i].sprite = blankTileDefault.sprite;
+                wordboxImages[i].color = blankTileDefault.color;
+            }
+        }
+    }
+
     public void AddLetterToWordBar(LetterTile letterTile, char letter, int indexInWord)
     {
         if (indexInWord >= wordboxImages.Length)
@@ -373,14 +434,14 @@ public class UIDriver : MonoBehaviour
         wordboxImages[indexInWord - wordbarScroll].sprite = sc.Sprite;
         wordboxImages[indexInWord - wordbarScroll].color = sc.Color;
         wordboxTMPs[indexInWord - wordbarScroll].text = letter.ToString();
-        wordboxTMPs[indexInWord - wordbarScroll].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, sc.YMod);
+        //wordboxTMPs[indexInWord - wordbarScroll].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, sc.YMod);
     }
 
     private void ScrollLettersLeft()
     {
         wordbarScroll++;
         wordboxTMPs[0].text = "...";
-        wordboxImages[0].sprite = blankTileDefault;
+        wordboxImages[0].sprite = blankTileDefault.sprite;
         wordboxImages[0].color = Color.white;
         RemoveParticleEffectsAtIndexInWord(0 + wordbarScroll);
 
@@ -408,8 +469,8 @@ public class UIDriver : MonoBehaviour
     {
         foreach(var image in wordboxImages)
         {
-            image.sprite = blankTileDefault;
-            image.color = Color.white;
+            image.sprite = blankTileDefault.sprite;
+            image.color = blankTileDefault.color;
             if (image.gameObject.transform.childCount > 0)
             {
                 Destroy(image.gameObject.transform.GetChild(0).gameObject);

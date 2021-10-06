@@ -56,9 +56,9 @@ public class WordBuilder_NPC : WordBuilder
     {
         ltd.OnLetterListModified -= DetermineBestTargetLetter;
     }
-    protected override void AddLetter(LetterTile newLetter)
+    protected override void AddLetterToSword(LetterTile newLetter)
     {
-        base.AddLetter(newLetter);
+        base.AddLetterToSword(newLetter);
         //tpm.AddNewTailPiece(newLetter.Letter);
     }
     public override void ClearCurrentWord()

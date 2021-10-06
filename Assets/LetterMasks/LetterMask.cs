@@ -7,10 +7,14 @@ public class LetterMask : ScriptableObject
     public TrueLetter AssociatedTrueLetter = null;
 
     //state
+    public Sprite ShownSprite;
+    public Color ShownColor;
     int powerMod;
     [SerializeField] TrueLetter.Ability ability = TrueLetter.Ability.Normal;
     int experience_Current = 12;
     int experience_NextLevel = 345;
+
+   
 
     public char GetLetter()
     {

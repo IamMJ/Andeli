@@ -260,7 +260,7 @@ SpriteRenderer:
   m_SortingLayerID: 2006724999
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: d99350a24e4514241bb7a5ea68c1da91, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0799c137c30b61649bbd21adf53d87f1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -299,10 +299,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0906d504d716c3e40ac81e92e0924731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Letter: 65
-  Power: 0
+  Letter: 126
+  Power_Player: 0
+  Power_Enemy: 0
   StartingLifetime: 0
-  Ability: 0
+  Ability_Player: 0
+  Ability_Enemy: 0
   sr: {fileID: 3580959457978190092}
   mr: {fileID: 601876841}
   tmp: {fileID: 601876840}
@@ -336,3 +338,5 @@ MonoBehaviour:
   ChargedTileSprite: {fileID: 21300000, guid: 719a762f51baa3f45818393080f705d9, type: 3}
   ChargedTileColor: {r: 0.9843137, g: 1, b: 0.023529412, a: 1}
   ChargedYMod: 0
+  IsFalling: 1
+  IsMystic: 0

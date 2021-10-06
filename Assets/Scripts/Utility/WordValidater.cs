@@ -146,7 +146,7 @@ public class WordValidater : MonoBehaviour
     #region Private Methods
     IEnumerator PrepTableOfContents_Coroutine()
     {
-        Debug.Log("Started prepping");
+        float startTime = Time.time;
         char[] alphabetAsChars = alphabet.ToCharArray();
         int startIndex = 0;
 
@@ -196,6 +196,7 @@ public class WordValidater : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         isPrepped = true;
+        Debug.Log($"finished prep: {Time.time - startTime} seconds");
     }
 
     private WordBand GetWordBandForStartingChar(char startingChar)
