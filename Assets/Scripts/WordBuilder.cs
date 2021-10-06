@@ -103,8 +103,6 @@ public class WordBuilder : MonoBehaviour
                 return;
             }
         }
-
-
         newLetter.SetLatentAbilityStatus(true);
 
         if (!aleh)

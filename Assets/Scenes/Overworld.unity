@@ -576,7 +576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 4959554787345939825, guid: 31d4c84240ae5fb4282c44005879b406, type: 3}
-  driftingThingPrefab: {fileID: 3920682680305924606, guid: a2b180e6275bc7e4c949ef1b7138dfbb, type: 3}
+  driftingThingPrefab: {fileID: 1629728869582127550, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
   startMode: 0
   currentZoom: 0
   debug_IgniteAll: 0
@@ -1190,10 +1190,10 @@ RectTransform:
   m_Father: {fileID: 963089186}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.53888893, y: 0.0453125}
-  m_AnchorMax: {x: 0.9361111, y: 0.26687503}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.636111, y: 0.0453125}
+  m_AnchorMax: {x: 0.9361111, y: 0.11975001}
+  m_AnchoredPosition: {x: -1.0400009, y: -0.08001709}
+  m_SizeDelta: {x: 2.0875854, y: -0.16000366}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &185718555
 MonoBehaviour:
@@ -2608,10 +2608,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AssetsPPU: 16
+  m_AssetsPPU: 4
   m_RefResolutionX: 160
   m_RefResolutionY: 160
-  m_UpscaleRT: 0
+  m_UpscaleRT: 1
   m_PixelSnapping: 0
   m_CropFrameX: 0
   m_CropFrameY: 0
@@ -2643,7 +2643,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10.9
+  orthographic size: 40
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -8131,7 +8131,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 44.1
+  m_fontSize: 23.1
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8180,7 +8180,7 @@ MonoBehaviour:
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 1
+    lineCount: 2
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -45924,8 +45924,8 @@ RectTransform:
   m_Father: {fileID: 963089186}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.05555556, y: 0.29200003}
-  m_AnchorMax: {x: 0.9361111, y: 0.4373125}
+  m_AnchorMin: {x: 0.36666667, y: 0.0453125}
+  m_AnchorMax: {x: 0.6138889, y: 0.17312501}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -47288,7 +47288,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 10.9
+    OrthographicSize: 40
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -124454,7 +124454,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   data:
-    dataString: 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
+    dataString: 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
     upgradeData: 
     file_cachedStartup: {fileID: 4900000, guid: 493463185e8312641819e6eb9580ebae, type: 3}
     data_cachedStartup: 
@@ -125811,7 +125811,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 26.9
+  m_fontSize: 20.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -126696,7 +126696,7 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.05555556, y: 0.0453125}
-  m_AnchorMax: {x: 0.46944445, y: 0.26687503}
+  m_AnchorMax: {x: 0.34722224, y: 0.11975001}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -127109,7 +127109,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 28.05
+  m_fontSize: 19.4
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

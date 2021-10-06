@@ -6,6 +6,11 @@ public static class GridHelper : object
 {
     //int horizUnits = 20;
     //int vertUnits = 40;
+    static int minX_worldmap = -50;
+    static int maxX_worldmap = 50;
+    static int minY_worldmap = -50;
+    static int maxY_worldmap = 50;
+        
     static float gridUnit = 1f;
     static float lowestYValueForMoveInput_BottomPanel = 0.3f;
     static float highestYValueForMoveInput_TopPanel = .86f;
@@ -74,4 +79,12 @@ public static class GridHelper : object
 
     }
 
+
+    public static Vector2 GetRandomPositionOnWorldMap()
+    {
+        Vector2 output = new Vector2();
+        output.x = Random.Range(minX_worldmap, maxX_worldmap);
+        output.y = Random.Range(minY_worldmap, maxY_worldmap);
+        return output;
+    }
 }

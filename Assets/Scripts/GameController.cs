@@ -78,7 +78,7 @@ public class GameController : MonoBehaviour
         wv = GetComponent<WordValidater>();
 
         currentZoom = cameraSize_ZoomedOut;
-        ppc.enabled = false;
+        ppc.enabled = true;
 
         BeginIdleMode();
     }
