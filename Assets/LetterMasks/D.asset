@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: D
   m_EditorClassIdentifier: 
   AssociatedTrueLetter: {fileID: 11400000, guid: 74453e4afcb4d9140984041b8084492c, type: 2}
-  ability: 1
+  ShownSprite: {fileID: 0}
+  ShownColor: {r: 0, g: 0, b: 0, a: 0}
+  ability: 5

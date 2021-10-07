@@ -100,6 +100,7 @@ public class GameController : MonoBehaviour
     {
         cvc.Follow = driftingThing.transform;
         driftingThing.SetActive(true);
+        StopAllCoroutines();
         StartCoroutine(ZoomCamera(false));
         // move cvc somewhere other than location where player quit?
     }
@@ -108,32 +109,38 @@ public class GameController : MonoBehaviour
     {
         if (shouldZoomIn)
         {
+            Time.timeScale = 1;
             ppc.enabled = false;
             while (currentZoom > cameraSize_ZoomedIn)
             {
+                Debug.Log("zooming in");
                 currentZoom -= Time.deltaTime * zoomRate;
-                cvc.m_Lens.OrthographicSize = currentZoom;
+
                 if (currentZoom - cameraSize_ZoomedIn <= 1)
                 {
                     ppc.enabled = true;
                     ppc.assetsPPU = 16;
                 }
+                currentZoom = Mathf.Clamp(currentZoom, cameraSize_ZoomedIn, cameraSize_ZoomedOut);
+                cvc.m_Lens.OrthographicSize = currentZoom;
                 yield return new WaitForEndOfFrame();
             }
         }
         else
         {
+            Time.timeScale = 1;
             ppc.enabled = false;
             while (currentZoom < cameraSize_ZoomedOut)
             {
-
+                Debug.Log("zooming out");
                 currentZoom += Time.deltaTime * zoomRate;
-                cvc.m_Lens.OrthographicSize = currentZoom;
                 if (cameraSize_ZoomedOut - currentZoom <= 1)
                 {
                     ppc.enabled = true;
                     ppc.assetsPPU = 4;
                 }
+                currentZoom = Mathf.Clamp(currentZoom, cameraSize_ZoomedIn, cameraSize_ZoomedOut);
+                cvc.m_Lens.OrthographicSize = currentZoom;
                 yield return new WaitForEndOfFrame();
             }
 
@@ -185,6 +192,7 @@ public class GameController : MonoBehaviour
             cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         }
         cvc.Follow = player.transform;
+        StopAllCoroutines();
         StartCoroutine(ZoomCamera(true));
     }
 
@@ -209,6 +217,7 @@ public class GameController : MonoBehaviour
                 return;
         }
     }
+
 
     #endregion
 
