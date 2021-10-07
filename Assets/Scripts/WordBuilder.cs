@@ -114,6 +114,10 @@ public class WordBuilder : MonoBehaviour
                 value += letter.Power_Player;
                 value = Mathf.Clamp(value, 0, 20);
             }
+            if (gc.debug_IgniteAll)
+            {
+                value = 20;
+            }
         }
         if (hasUI)
         {
@@ -279,7 +283,6 @@ public class WordBuilder : MonoBehaviour
     public virtual void ClearCurrentWord()
     {
         currentWord = "";
-        ResetWordLengthBonus();
         foreach (var letter in lettersOnSword)
         {
             letter.DestroyLetterTile();
@@ -340,16 +343,11 @@ public class WordBuilder : MonoBehaviour
         }
     }
     #endregion
-    private void ResetWordLengthBonus()
-    {
-        modifiedWordLength = 0;
-    }
-    public void IncreaseWordLengthBonus(int amount)
-    {
-        modifiedWordLength += amount;
-    }
 
-
+    public int GetModifiedWordLength()
+    {
+        return modifiedWordLength;
+    }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {

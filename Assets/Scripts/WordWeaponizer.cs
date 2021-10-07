@@ -165,13 +165,10 @@ public class WordWeaponizer : MonoBehaviour
         {
             if (letter.Ability_Player != abilityToAutoIgnite)
             {
-                int roll = 0;
-                if (gc.debug_IgniteAll == false)
-                {
-                    roll = Random.Range(1, 21);
-                }
+                int roll = Random.Range(1, 20);
 
-                if (wbd.GetCurrentWord().Length >= roll)
+
+                if (wbd.GetModifiedWordLength() >= roll)
                 {
                     TriggerActiveLetterEffects(letter, gameObject, currentEnemy);
                 }
