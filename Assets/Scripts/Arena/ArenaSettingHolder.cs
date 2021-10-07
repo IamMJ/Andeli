@@ -50,8 +50,8 @@ public class ArenaSettingHolder : MonoBehaviour
         wbd_Player.SetupArenaParameters_PowerModifierForWordCount(arenaSetting_Default.powerModifierForWordCount);
         enemyMemory.SetupArenaParameters_AllowRepeatWords(arenaSetting_Default.shouldNotCountIfRepeatingWord);
         playerMemory.SetupArenaParameters_AllowRepeatWords(arenaSetting_Default.shouldNotCountIfRepeatingWord);
-        wbd_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
-        wbd_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
+        wwz_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
+        wwz_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
 
         switch (arenaSetting.aso)
         {
@@ -60,8 +60,8 @@ public class ArenaSettingHolder : MonoBehaviour
                 ltd.SetupArenaParameters_LettersInWave(arenaSetting.lettersPerWave);
                 ltd.SetupArenaParameters_TimeBetweenWaves(arenaSetting.timeBetweenWaves);
                 ltd.SetupArenaParameters_MaxLettersOnBoard(arenaSetting.maxLettersOnBoard);
-                wbd_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting.abilityToAutoIgnite);
-                wbd_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting.abilityToAutoIgnite);
+                wwz_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting.abilityToAutoIgnite);
+                wwz_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting.abilityToAutoIgnite);
                 return;
 
             case ArenaSettingOptions.Graveyard:

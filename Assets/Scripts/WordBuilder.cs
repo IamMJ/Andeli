@@ -34,15 +34,14 @@ public class WordBuilder : MonoBehaviour
     }
 
     // modifiable param
-    int maxWordLength = 7;
+    int maxWordLength = 8;
     int powerModifierForWordCount = 0;
 
     //state
     bool hasUI = false;
     [SerializeField] List<LetterTile> lettersOnSword = new List<LetterTile>();
     [SerializeField] protected string currentWord = "";
-    int wordLengthBonus = 0;
-    TrueLetter.Ability abilityToAutoIgnite;
+    int modifiedWordLength = 0;
     public int CurrentPower = 0;
 
     protected virtual void Start()
@@ -58,6 +57,7 @@ public class WordBuilder : MonoBehaviour
             uid = FindObjectOfType<UIDriver>();
             uid.SetPlayerObject(this, wwz, bagman);
             bagman = FindObjectOfType<BagManager>();
+            uid.UpdateIgnitionChanceTMP(0);
         }
     }
 
@@ -65,10 +65,13 @@ public class WordBuilder : MonoBehaviour
     {
         if (currentWord.Length >= maxWordLength) { return; }
         lettersOnSword.Add(newLetter);
+
         RewriteCurrentWordFromLettersOnSword();
+        modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         //IncreasePower(newLetter.Power_Player);
         SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
         CurrentPower = swordWord.Power;
+
         if (hasUI)
         {
             //if (memory.CheckIfWordHasBeenPlayedByPlayerAlready(currentWord))
@@ -83,78 +86,90 @@ public class WordBuilder : MonoBehaviour
 
             uid.UpdateLettersOnSwordAndPower(swordWord);
         }
-        if (gc.debug_IgniteAll)
-        {
-            newLetter.SetLatentAbilityStatus(true);
-            int index = currentWord.Length - 1;
-            if (!aleh)
-            {
-                ab = FindObjectOfType<ArenaBuilder>();
-                aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
-            }
-            aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
-        }
-        else
-        {
-            TestAllLetterLatentAbilities();
-        }
+        //if (gc.debug_IgniteAll)
+        //{
+        //    newLetter.SetLatentAbilityStatus(true);
+        //    int index = currentWord.Length - 1;
+        //    if (!aleh)
+        //    {
+        //        ab = FindObjectOfType<ArenaBuilder>();
+        //        aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
+        //    }
+        //    aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
+        //}
+        //else
+        //{
+        //    TestAllLetterLatentAbilities();
+        //}
 
     }
 
-    private void TestAllLetterLatentAbilities()
+    private int CalculateWordLengthAndUpdateIgnitionChance()
     {
-
-        for (int i =0; i < lettersOnSword.Count; i++)
+        int value = currentWord.Length;
+        foreach(var letter in lettersOnSword)
         {
-            if (lettersOnSword[i].GetLatentAbilityStatus() == false)
+            if (letter.Ability_Player == TrueLetter.Ability.Lucky)
             {
-                TestLetterLatentAbility(lettersOnSword[i], i);
-            }
-        }
-    }
-
-
-
-    private void TestLetterLatentAbility(LetterTile newLetter, int index)
-    {
-        if (newLetter.Ability_Player != abilityToAutoIgnite)
-        {
-            int roll = 21 - UnityEngine.Random.Range(1, 21);
-            if (currentWord.Length + wordLengthBonus < roll)
-            {
-                return;
+                value += letter.Power_Player;
+                value = Mathf.Clamp(value, 0, 20);
             }
         }
-        newLetter.SetLatentAbilityStatus(true);
-
-        if (!aleh)
+        if (hasUI)
         {
-            ab = FindObjectOfType<ArenaBuilder>();
-            aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
+            uid.UpdateIgnitionChanceTMP(Mathf.Round(value * 5));
         }
-        aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
+
+        return value;
     }
 
-    private void InactivateLatentAbility(int indexInWord)
-    {
-        LetterTile letterTile = lettersOnSword[indexInWord];
-        letterTile.SetLatentAbilityStatus(false);
-        aleh.RemoveLetterParticleEffect(indexInWord, hasUI);
+    //private void TestAllLetterLatentAbilities()
+    //{
 
-    }
-    private void UndoRandomActivatedAbilityAsPenalty()
-    {
-        List<LetterTile> activatedLetters = new List<LetterTile>();
-        foreach (var letter in lettersOnSword)
-        {
-            if (letter.GetLatentAbilityStatus() == true)
-            {
-                activatedLetters.Add(letter);
-            }
-        }
-        int rand = UnityEngine.Random.Range(0, activatedLetters.Count);
-        InactivateLatentAbility(rand);
-    }
+    //    for (int i =0; i < lettersOnSword.Count; i++)
+    //    {
+    //        if (lettersOnSword[i].GetLatentAbilityStatus() == false)
+    //        {
+    //            TestLetterLatentAbility(lettersOnSword[i], i);
+    //        }
+    //    }
+    //}
+
+
+
+    //private void TestLetterLatentAbility(LetterTile newLetter, int index)
+    //{
+
+    //    newLetter.SetLatentAbilityStatus(true);
+
+    //    if (!aleh)
+    //    {
+    //        ab = FindObjectOfType<ArenaBuilder>();
+    //        aleh = ab.GetComponent<ArenaLetterEffectsHandler>();
+    //    }
+    //    aleh.ApplyLetterEffectOnPickup(newLetter, gameObject, index, hasUI);
+    //}
+
+    //private void InactivateLatentAbility(int indexInWord)
+    //{
+    //    LetterTile letterTile = lettersOnSword[indexInWord];
+    //    letterTile.SetLatentAbilityStatus(false);
+    //    aleh.RemoveLetterParticleEffect(indexInWord, hasUI);
+
+    //}
+    //private void UndoRandomActivatedAbilityAsPenalty()
+    //{
+    //    List<LetterTile> activatedLetters = new List<LetterTile>();
+    //    foreach (var letter in lettersOnSword)
+    //    {
+    //        if (letter.GetLatentAbilityStatus() == true)
+    //        {
+    //            activatedLetters.Add(letter);
+    //        }
+    //    }
+    //    int rand = UnityEngine.Random.Range(0, activatedLetters.Count);
+    //    InactivateLatentAbility(rand);
+    //}
 
     private void RewriteCurrentWordFromLettersOnSword()
     {
@@ -197,47 +212,46 @@ public class WordBuilder : MonoBehaviour
         }
     }
 
-    public void SendLetterToBag(int index)
+    public void RemoveLetterFromSwordAndSendToBag(int index)
     {
         if (bagman.AttemptToReceiveLetter(lettersOnSword[index]))
         {
-            lettersOnSword.Remove(lettersOnSword[index]);
+            lettersOnSword.RemoveAt(index);
             RewriteCurrentWordFromLettersOnSword();
             SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
             uid.UpdateLettersOnSwordAndPower(swordWord);
+            modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         }
     }
-    public void DestroySpecificLetterFromCurrentWord(int indexWithinWord)
+    public void RemoveLetterFromSwordAndDestroy(int index)
     {
-        LetterTile letterToRemove = lettersOnSword[indexWithinWord];
-
+        LetterTile letterToRemove = lettersOnSword[index];
+        lettersOnSword.RemoveAt(index);
+        letterToRemove.DestroyLetterTile();
+        RewriteCurrentWordFromLettersOnSword();
+        SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
+        uid.UpdateLettersOnSwordAndPower(swordWord);
+        modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         //// Subtract the base word power from current power
         //CurrentPower -= letterToRemove.Power_Player;
 
         // Reverse any activated latent power
-        if (letterToRemove.GetLatentAbilityStatus() == true)
-        {
-            if (letterToRemove.Ability_Player == TrueLetter.Ability.Lucky)
-            {
-                UndoRandomActivatedAbilityAsPenalty();
-            }
-            if (letterToRemove.Ability_Player == TrueLetter.Ability.Shiny)
-            {
-                //CurrentPower -= letterToRemove.Power_Player;
-            }
-            aleh.RemoveLetterParticleEffect(indexWithinWord, hasUI);
-        }
+        //if (letterToRemove.GetLatentAbilityStatus() == true)
+        //{
+        //    if (letterToRemove.Ability_Player == TrueLetter.Ability.Lucky)
+        //    {
+        //        UndoRandomActivatedAbilityAsPenalty();
+        //    }
+        //    if (letterToRemove.Ability_Player == TrueLetter.Ability.Shiny)
+        //    {
+        //        //CurrentPower -= letterToRemove.Power_Player;
+        //    }
+        //    //aleh.RemoveLetterParticleEffect(indexWithinWord, hasUI);
+        //}
 
         // Remove letter from current word
-        lettersOnSword.Remove(letterToRemove);
-        currentWord = currentWord.Remove(indexWithinWord, 1);
-        if (hasUI)
-        {
-            uid.ModifyPowerMeterTMP(CurrentPower);
-        }
-        wordLengthBonus--;
 
-        letterToRemove.DestroyLetterTile();
+
     }
 
     public void RebuildCurrentWordForUI()
@@ -257,10 +271,10 @@ public class WordBuilder : MonoBehaviour
     {
         return currentWord;
     }
-    public int GetCurrentWordLength()
-    {
-        return currentWord.Length;
-    }
+    //public int GetEnhancedWordLength()
+    //{
+    //    return currentWord.Length + wordLengthBonus;
+    //}
 
     public virtual void ClearCurrentWord()
     {
@@ -276,7 +290,7 @@ public class WordBuilder : MonoBehaviour
         {
             uid.ClearWordBar();
         }
-
+        modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance(); ;
         //tpm.DestroyEntireTail();
     }
 
@@ -313,10 +327,6 @@ public class WordBuilder : MonoBehaviour
 
     #region Public Arena Parameter Setting
 
-    public void SetupArenaParameters_AbilityToAutoIgnite(TrueLetter.Ability abilityToIgnite)
-    {
-        abilityToAutoIgnite = abilityToIgnite;
-    }
     public void SetupArenaParameters_PowerModifierForWordCount(int powerMod)
     {
         powerModifierForWordCount = powerMod;
@@ -332,11 +342,11 @@ public class WordBuilder : MonoBehaviour
     #endregion
     private void ResetWordLengthBonus()
     {
-        wordLengthBonus = 0;
+        modifiedWordLength = 0;
     }
     public void IncreaseWordLengthBonus(int amount)
     {
-        wordLengthBonus += amount;
+        modifiedWordLength += amount;
     }
 
 

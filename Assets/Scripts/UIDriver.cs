@@ -26,13 +26,15 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Image[] wordboxImages = null;
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
-    [SerializeField] Slider spellEnergySlider_0 = null;
-    [SerializeField] Slider spellEnergySlider_1 = null;
-    [SerializeField] Slider spellEnergySlider_2 = null;
+    [SerializeField] TextMeshProUGUI ignitionChanceTMP = null;
 
-    [SerializeField] Image energySliderFill_0 = null;
-    [SerializeField] Image energySliderFill_1 = null;
-    [SerializeField] Image energySliderFill_2 = null;
+    //[SerializeField] Slider spellEnergySlider_0 = null;
+    //[SerializeField] Slider spellEnergySlider_1 = null;
+    //[SerializeField] Slider spellEnergySlider_2 = null;
+
+    //[SerializeField] Image energySliderFill_0 = null;
+    //[SerializeField] Image energySliderFill_1 = null;
+    //[SerializeField] Image energySliderFill_2 = null;
 
     [SerializeField] TextMeshProUGUI tutorialTMP = null;
     [SerializeField] GameObject tutorialPanel = null;
@@ -53,10 +55,10 @@ public class UIDriver : MonoBehaviour
     float topPanelHidden_Y = 100f;
 
     //state
-    bool wasLongPress = false;
+    [SerializeField] bool wasLongPress = false;
+    int selectedSwordLetterIndex = -1;
     bool isFireWeaponButtonPressed = false;
     bool isEraseWeaponButtonPressed = false;
-    bool isLetterOnSwordPressed = false;
     float timeButtonDepressed = 0;
     
     public float timeSpentLongPressing { get; private set; }
@@ -76,6 +78,7 @@ public class UIDriver : MonoBehaviour
         {
             HandleFireWordButtonPressed();
             HandleEraseWordButtonPressed();
+            HandleSwordButtonBeingPressed();
         }
     }
 
@@ -89,7 +92,7 @@ public class UIDriver : MonoBehaviour
     #region Initial Button Press Handlers
     public void OnPressDownFireWord()
     {
-        if (playerWB.GetCurrentWordLength() == 0) { return; }
+        if (playerWB.GetCurrentWord().Length == 0) { return; }
 
 
         if (isEraseWeaponButtonPressed == false)
@@ -106,7 +109,7 @@ public class UIDriver : MonoBehaviour
 
     public void OnPressDownEraseWord()
     {
-        if (playerWB.GetCurrentWordLength() == 0) { return; }
+        if (playerWB.GetCurrentWord().Length == 0) { return; }
 
         if (isFireWeaponButtonPressed == false)
         {
@@ -121,23 +124,14 @@ public class UIDriver : MonoBehaviour
 
     public void OnPressDownLetterOnSword(int index)
     {
-        if (isLetterOnSwordPressed)
-        {
-            timeButtonDepressed += Time.unscaledDeltaTime;
-            if (timeButtonDepressed >= UIParameters.LongPressTime)
-            {
-                wasLongPress = true;
-                OnReleaseLetterOnSword(index);
-            }
-        }
-        else
-        {
-            isLetterOnSwordPressed = true;
-        }
+
+        selectedSwordLetterIndex = index;
+
     }
 
     public void OnReleaseLetterOnSword(int index)
     {
+        if (selectedSwordLetterIndex == -1) { return; }
         if (wasLongPress)
         {
             NotifyWordBuilderToDestroyLetterAtIndex(index);
@@ -147,7 +141,7 @@ public class UIDriver : MonoBehaviour
             NotifyWordBuilderToPassLetterToBagAtIndex(index);
         }
         wasLongPress = false;
-        isLetterOnSwordPressed = false;
+        selectedSwordLetterIndex = -1;
         timeButtonDepressed = 0;
     }
 
@@ -159,6 +153,19 @@ public class UIDriver : MonoBehaviour
     #endregion
 
     #region Button Helpers
+
+    private void HandleSwordButtonBeingPressed()
+    {
+        if (selectedSwordLetterIndex != -1)
+        {
+            timeButtonDepressed += Time.unscaledDeltaTime;
+            if (timeButtonDepressed >= UIParameters.LongPressTime)
+            {
+                wasLongPress = true;
+                OnReleaseLetterOnSword(selectedSwordLetterIndex);
+            }
+        }
+    }
     private void HandleEraseWordButtonPressed()
     {
         if (isEraseWeaponButtonPressed)
@@ -233,48 +240,52 @@ public class UIDriver : MonoBehaviour
 
     private void NotifyWordBuilderToPassLetterToBagAtIndex(int index)
     {
-        playerWB.SendLetterToBag(index);
+        playerWB.RemoveLetterFromSwordAndSendToBag(index);
     }
 
     private void NotifyWordBuilderToDestroyLetterAtIndex(int index)
     {
-        playerWB.DestroySpecificLetterFromCurrentWord(index);
+        Debug.Log("shoud be blowing up a letter");
+        ParticleSystem.MainModule newMod = wordboxImages[index].GetComponent<ParticleSystem>().main;
+        newMod.startColor = wordboxImages[index].color;
+        wordboxImages[index].GetComponent<ParticleSystem>().Play();
+        playerWB.RemoveLetterFromSwordAndDestroy(index);
         // Get bool back from wb. if true, show a smoke animation of letter being destroyed
     }
 
-    private void DestroyLetterFromSpecificTile(int indexInTiles)
-    {
+    //private void DestroyLetterFromSpecificTile(int indexInTiles)
+    //{
 
-        RemoveParticleEffectsAtIndexInWord(indexInTiles + wordbarScroll);
+    //    RemoveParticleEffectsAtIndexInWord(indexInTiles + wordbarScroll);
 
-        for (int i = indexInTiles; i < playerWB.GetCurrentWordLength()-1; i++)
-        {
-            wordboxTMPs[indexInTiles].text = wordboxTMPs[indexInTiles + 1].text;
-            wordboxImages[indexInTiles].sprite = wordboxImages[indexInTiles + 1].sprite;
-            if (wordboxImages[indexInTiles + 1].gameObject.transform.childCount > 0)
-            {
-                GameObject particleGO = wordboxImages[indexInTiles + 1].gameObject.transform.GetChild(0).gameObject;
-                particleGO.transform.parent = wordboxImages[indexInTiles].gameObject.transform;
-                particleGO.transform.localPosition = Vector3.zero;
-            }
-        }
+    //    for (int i = indexInTiles; i < playerWB.GetCurrentWordLength()-1; i++)
+    //    {
+    //        wordboxTMPs[indexInTiles].text = wordboxTMPs[indexInTiles + 1].text;
+    //        wordboxImages[indexInTiles].sprite = wordboxImages[indexInTiles + 1].sprite;
+    //        if (wordboxImages[indexInTiles + 1].gameObject.transform.childCount > 0)
+    //        {
+    //            GameObject particleGO = wordboxImages[indexInTiles + 1].gameObject.transform.GetChild(0).gameObject;
+    //            particleGO.transform.parent = wordboxImages[indexInTiles].gameObject.transform;
+    //            particleGO.transform.localPosition = Vector3.zero;
+    //        }
+    //    }
 
-        int lastIndex = playerWB.GetCurrentWordLength() - 1 - wordbarScroll;
-        wordboxTMPs[lastIndex].text = "";
-        wordboxImages[lastIndex].sprite = blankTileDefault.sprite;
-        wordboxImages[lastIndex].color = Color.white;
-        if (wordboxImages[lastIndex].gameObject.transform.childCount > 0)
-        {
-            Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
-        }
+    //    int lastIndex = playerWB.GetCurrentWordLength() - 1 - wordbarScroll;
+    //    wordboxTMPs[lastIndex].text = "";
+    //    wordboxImages[lastIndex].sprite = blankTileDefault.sprite;
+    //    wordboxImages[lastIndex].color = Color.white;
+    //    if (wordboxImages[lastIndex].gameObject.transform.childCount > 0)
+    //    {
+    //        Destroy(wordboxImages[lastIndex].gameObject.transform.GetChild(0).gameObject);
+    //    }
 
-        playerWB.DestroySpecificLetterFromCurrentWord(indexInTiles + wordbarScroll);
-        if (wordbarScroll > 0)
-        {
-            wordbarScroll--;
-        }
-        playerWB.RebuildCurrentWordForUI();
-    }
+    //    playerWB.DestroySpecificLetterFromCurrentWord(indexInTiles + wordbarScroll);
+    //    if (wordbarScroll > 0)
+    //    {
+    //        wordbarScroll--;
+    //    }
+    //    playerWB.RebuildCurrentWordForUI();
+    //}
 
     #endregion
     
@@ -483,53 +494,57 @@ public class UIDriver : MonoBehaviour
         wordbarScroll = 0;
     }
 
+    public void UpdateIgnitionChanceTMP(float value)
+    {
+        ignitionChanceTMP.text = (value).ToString() + "%";
+    }
     public GameObject GetTileForLetterBasedOnIndexInWord(int indexInWord)
     {
         return wordboxImages[indexInWord - wordbarScroll].gameObject;
     }
 
-    public void UpdateSpellEnergySlider( float currentEnergy)
-    {
-        float factor = currentEnergy / 100f;
-        if (factor >= 1f)
-        {
-            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = fullBar;
-            spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
-            energySliderFill_1.color = fullBar;
-            spellEnergySlider_2.value = spellEnergySlider_2.maxValue;
-            energySliderFill_2.color = fullBar;
-            return;
-        }
-        if (factor >= 0.66f)
-        {
-            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = fullBar;
-            spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
-            energySliderFill_1.color = fullBar;
-            spellEnergySlider_2.value = factor - .66f;
-            energySliderFill_2.color = partialBar;
-            return;
-        }
-        if (factor >= 0.33f)
-        {
-            spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
-            energySliderFill_0.color = fullBar;
-            spellEnergySlider_1.value = factor - .33f;
-            energySliderFill_1.color = partialBar;
-            spellEnergySlider_2.value = 0;
-            return;
-        }
-        if (factor < 0.33f)
-        {
-            spellEnergySlider_0.value = factor;
-            energySliderFill_0.color = partialBar;
-            spellEnergySlider_1.value = 0;
-            spellEnergySlider_2.value = 0;
-            return;
-        }
+    //public void UpdateSpellEnergySlider( float currentEnergy)
+    //{
+    //    float factor = currentEnergy / 100f;
+    //    if (factor >= 1f)
+    //    {
+    //        spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+    //        energySliderFill_0.color = fullBar;
+    //        spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
+    //        energySliderFill_1.color = fullBar;
+    //        spellEnergySlider_2.value = spellEnergySlider_2.maxValue;
+    //        energySliderFill_2.color = fullBar;
+    //        return;
+    //    }
+    //    if (factor >= 0.66f)
+    //    {
+    //        spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+    //        energySliderFill_0.color = fullBar;
+    //        spellEnergySlider_1.value = spellEnergySlider_1.maxValue;
+    //        energySliderFill_1.color = fullBar;
+    //        spellEnergySlider_2.value = factor - .66f;
+    //        energySliderFill_2.color = partialBar;
+    //        return;
+    //    }
+    //    if (factor >= 0.33f)
+    //    {
+    //        spellEnergySlider_0.value = spellEnergySlider_0.maxValue;
+    //        energySliderFill_0.color = fullBar;
+    //        spellEnergySlider_1.value = factor - .33f;
+    //        energySliderFill_1.color = partialBar;
+    //        spellEnergySlider_2.value = 0;
+    //        return;
+    //    }
+    //    if (factor < 0.33f)
+    //    {
+    //        spellEnergySlider_0.value = factor;
+    //        energySliderFill_0.color = partialBar;
+    //        spellEnergySlider_1.value = 0;
+    //        spellEnergySlider_2.value = 0;
+    //        return;
+    //    }
 
-    }
+    //}
 
     public void HideLetterTilesOverMaxLetterLimit(int maxLetters)
     {

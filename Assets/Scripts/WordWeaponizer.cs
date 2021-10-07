@@ -18,13 +18,14 @@ public class WordWeaponizer : MonoBehaviour
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
     UIDriver uid;
+    JewelManager jm;
     string testWord;
 
 
     //param
     float spellSpeed = 6.0f;
     public GameObject currentEnemy;
-    float spellFiringCost = 33;
+    float spellFiringCost = 20;
     float letterErasureCost = 10f;
     float maxEnergy = 100f;
 
@@ -35,6 +36,7 @@ public class WordWeaponizer : MonoBehaviour
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.2f; //how fast the current energy regen rate drifts back to its target. 
     float currentEnergyLevel;
+    TrueLetter.Ability abilityToAutoIgnite = TrueLetter.Ability.Normal;
 
 
     void Start()
@@ -47,6 +49,7 @@ public class WordWeaponizer : MonoBehaviour
             isPlayer = true;
             powerSign = 1;
             uid = FindObjectOfType<UIDriver>();
+            jm = FindObjectOfType<JewelManager>();
         }
         gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
@@ -64,7 +67,8 @@ public class WordWeaponizer : MonoBehaviour
         currentEnergyLevel = Mathf.Clamp(currentEnergyLevel, 0, maxEnergy);
         if (uid)
         {
-            uid.UpdateSpellEnergySlider(currentEnergyLevel);
+            //uid.UpdateSpellEnergySlider(currentEnergyLevel);
+            jm.UpdateJewelImage(currentEnergyLevel / maxEnergy * 100);
         }
     }
 
@@ -72,19 +76,19 @@ public class WordWeaponizer : MonoBehaviour
     /// Checks the current energy supply. Returns 'true' if sufficient energy to erase a letter
     /// and deducts that amount. Returns 'false' if insufficient energy, but doesn't change energy supply.
     /// </summary>
-    public bool CheckSpendForLetterErasure()
-    {
-        if (wbd.GetCurrentWordLength() == 0) { return false; }
-        if (letterErasureCost <= currentEnergyLevel)
-        {
-            currentEnergyLevel -= letterErasureCost;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //public bool CheckSpendForLetterErasure()
+    //{
+    //    if (wbd.GetCurrentWord().Length == 0) { return false; }
+    //    if (letterErasureCost <= currentEnergyLevel)
+    //    {
+    //        currentEnergyLevel -= letterErasureCost;
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
     public bool AttemptToFireWordAsPlayer()
     {
         //Check for sufficient Spell Energy...
@@ -98,26 +102,29 @@ public class WordWeaponizer : MonoBehaviour
         if (wv.CheckWordValidity(testWord))
         {
             memory.UpdateCurrentArenaData(wbd.CurrentPower, testWord);
-            GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
-            WordPuff wordPuff = puff.GetComponent<WordPuff>();
-            wordPuff.SetText(testWord);
-            wordPuff.SetColorByPower(wbd.CurrentPower);
+            CreateWordPuff();
             FireKnownValidWord();
             currentEnergyLevel -= spellFiringCost;
             if (isPlayer)
             {
-                uid.UpdateSpellEnergySlider(currentEnergyLevel);
+                //uid.UpdateSpellEnergySlider(currentEnergyLevel);
+                jm.UpdateJewelImage(currentEnergyLevel / maxEnergy * 100);
             }
             return true;
         }
         else
         {
-            Debug.Log("stun the player.");
-
             // stun the player?
-
             return false;
         }
+    }
+
+    private void CreateWordPuff()
+    {
+        GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
+        WordPuff wordPuff = puff.GetComponent<WordPuff>();
+        wordPuff.SetText(testWord);
+        wordPuff.SetColorByPower(wbd.CurrentPower);
     }
 
     /// <summary>
@@ -156,11 +163,20 @@ public class WordWeaponizer : MonoBehaviour
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
         foreach (var letter in wbd.GetLettersCollected())
         {
-            if (letter.GetLatentAbilityStatus() == false)
+            if (letter.Ability_Player != abilityToAutoIgnite)
             {
-                continue;
+                int roll = 0;
+                if (gc.debug_IgniteAll == false)
+                {
+                    roll = Random.Range(1, 21);
+                }
+
+                if (wbd.GetCurrentWord().Length >= roll)
+                {
+                    TriggerActiveLetterEffects(letter, gameObject, currentEnemy);
+                }
             }
-            TriggerActiveLetterEffects(letter, gameObject, currentEnemy);
+
         }
         
     }
@@ -285,6 +301,10 @@ public class WordWeaponizer : MonoBehaviour
 
     #region Public Arena Parameter Setting
 
+    public void SetupArenaParameters_AbilityToAutoIgnite(TrueLetter.Ability abilityToIgnite)
+    {
+        abilityToAutoIgnite = abilityToIgnite;
+    }
     public void SetupArenaParameters_EnergyRegenRate(float energyRegenModifier)
     {
         energyRegenRate_Target *= energyRegenModifier;

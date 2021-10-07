@@ -163,7 +163,10 @@ public class BagManager : MonoBehaviour
     #region Private Tile Helpers
     private void DestroySelectedLetterFromSlot(int index)
     {
-        Destroy(letterTilesInBag[index].gameObject);
+        ParticleSystem.MainModule newMod = bagImages[index].GetComponent<ParticleSystem>().main;
+        newMod.startColor = bagImages[index].color;
+        bagImages[index].GetComponent<ParticleSystem>().Play();
+        letterTilesInBag[index].DestroyLetterTile();
         letterTilesInBag[index] = null;
         UpdateUI();
         
