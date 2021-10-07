@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     //SceneLoader sl;
     WordValidater wv;
     VictoryMeter vm;
+    GameStateHolder gash;
 
     UIDriver uid;
     MainMenuDriver mmd;
@@ -74,6 +75,7 @@ public class GameController : MonoBehaviour
         uid.HideAllOverworldUIElements();
         uid.ShowHideMainMenu(true);
 
+        gash = FindObjectOfType<GameStateHolder>();
         vm = FindObjectOfType<VictoryMeter>();
         wv = GetComponent<WordValidater>();
 
@@ -164,6 +166,7 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         isInGame = true;
+        gash.RestoreAllObelisks();
         uid.ShowOverworldUIElements();
         //ResumeGameSpeed(true);
         SpawnPlayer();

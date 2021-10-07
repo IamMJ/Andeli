@@ -211,7 +211,7 @@ public class ArenaBuilder : MonoBehaviour
         //{
         //    element.RemoveArenaWall();
         //}
-        arenaStarter.RemoveArenaStarter();
+        arenaStarter.DeactivateArenaStarter();
         // For now, destroy the statue, but later replace with a broken statue, perhaps?
         player.GetComponent<WordBuilder>().ClearCurrentWord();
 

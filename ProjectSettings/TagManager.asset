@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Wordmaker
+  - Obelisk
   layers:
   - Default
   - TransparentFX
