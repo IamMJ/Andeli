@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class VictoryMeter : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class VictoryMeter : MonoBehaviour
     [SerializeField] Slider victorySlider = null;
     SceneLoader sl;
     GameController gc;
+    CinemachineImpulseSource cis;
     [SerializeField] Image sliderFillImage = null;
 
     //param
@@ -30,6 +32,7 @@ public class VictoryMeter : MonoBehaviour
         victorySlider.maxValue = victoryAmount;
         victorySlider.minValue = defeatAmount;
         currentBalance = startingBalance;
+        cis = Camera.main.GetComponentInChildren<CinemachineImpulseSource>();
         UpdateSliderUI();
     }
 
@@ -50,6 +53,10 @@ public class VictoryMeter : MonoBehaviour
     public bool ModifyBalanceAndCheckForArenaEnd(float amountToAdd)
     {
         currentBalance += amountToAdd;
+        if (amountToAdd < 0)
+        {
+            cis.GenerateImpulse(Mathf.Abs(amountToAdd));
+        }
 
         bool isOver = DetectWinLoss();
         if (!isOver)

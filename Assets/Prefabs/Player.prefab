@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d4274fef04f0a4f8c3ad4d6ce33906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lettersCollected: []
+  lettersOnSword: []
   currentWord: 
   CurrentPower: 0
 --- !u!114 &-3077055182206633393
