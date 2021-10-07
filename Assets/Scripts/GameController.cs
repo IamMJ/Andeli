@@ -99,6 +99,7 @@ public class GameController : MonoBehaviour
     private void SetCameraToIdleMode()
     {
         cvc.Follow = driftingThing.transform;
+        driftingThing.SetActive(true);
         StartCoroutine(ZoomCamera(false));
         // move cvc somewhere other than location where player quit?
     }
