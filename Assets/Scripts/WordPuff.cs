@@ -11,7 +11,7 @@ public class WordPuff : MonoBehaviour
 
 
     //param
-    float StartingLifetime = 1;
+    float StartingLifetime = 3;
 
     //state
     float lifetimeRemaining;

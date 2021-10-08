@@ -43,6 +43,7 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] protected string currentWord = "";
     int modifiedWordLength = 0;
     public int CurrentPower = 0;
+    bool shouldLettersGoToSwordFirst = true;
 
     protected virtual void Start()
     {
@@ -200,7 +201,7 @@ public class WordBuilder : MonoBehaviour
     }
     #region Public Methods
 
-    public bool AttemptToReceiveLetterFromBag(LetterTile incomingLT)
+    public bool AttemptToAddLetterToSword(LetterTile incomingLT)
     {
         if (currentWord.Length < maxWordLength)
         {
@@ -326,6 +327,12 @@ public class WordBuilder : MonoBehaviour
 
     }
 
+    public bool ToggleLetterRoutingMode()
+    {
+        shouldLettersGoToSwordFirst = !shouldLettersGoToSwordFirst;
+        return shouldLettersGoToSwordFirst;
+    }
+
     #endregion
 
     #region Public Arena Parameter Setting
@@ -356,29 +363,70 @@ public class WordBuilder : MonoBehaviour
             LetterTile letterTile = collision.gameObject.GetComponent<LetterTile>();
             if (letterTile.IsMystic)
             {
-                if (hasUI && bagman.AttemptToReceiveLetter(letterTile))
+                if (AttemptToPickUpLetterTile_Player(letterTile))
                 {
-                    Debug.Log("letter added");
-                    letterTile.InactivateLetterTile();
-                }
-                else
-                {
-                    return;
+                    //TODO play a bump sound;
                 }
             }
             else
             {
-                if (hasUI && bagman.AttemptToReceiveLetter(letterTile))
+                if (hasUI)
                 {
-                    letterTile.InactivateLetterTile();
+                    if (AttemptToPickUpLetterTile_Player(letterTile))
+                    {
+                        //TODO play a bump sound;
+                    }
                 }
                 else
                 {
-                    AddLetterToSword(letterTile);
+                    AttemptToPickUpLetterTile_NPC(letterTile);
                 }
-                letterTile.InactivateLetterTile();
+
             }
         }
     }
 
+    private bool AttemptToPickUpLetterTile_Player(LetterTile letterTile)
+    {
+        if (shouldLettersGoToSwordFirst)
+        {
+            if (AttemptToAddLetterToSword(letterTile))
+            {
+                letterTile.InactivateLetterTile();
+                return true;
+            }
+            if (bagman.AttemptToReceiveLetter(letterTile))
+            {
+                letterTile.InactivateLetterTile();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (bagman.AttemptToReceiveLetter(letterTile))
+            {
+                letterTile.InactivateLetterTile();
+                return true;
+            }
+            if (AttemptToAddLetterToSword(letterTile))
+            {
+                letterTile.InactivateLetterTile();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    }
+    private void AttemptToPickUpLetterTile_NPC(LetterTile letterTile)
+    {
+        AddLetterToSword(letterTile);
+        letterTile.InactivateLetterTile();
+    }
 }

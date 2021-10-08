@@ -174,7 +174,7 @@ public class BagManager : MonoBehaviour
 
     private bool AttemptToPassLetterToSword(int index)
     {
-        if (wb_player.AttemptToReceiveLetterFromBag(letterTilesInBag[index]))
+        if (wb_player.AttemptToAddLetterToSword(letterTilesInBag[index]))
         {
             letterTilesInBag[index] = null;
             UpdateUI();

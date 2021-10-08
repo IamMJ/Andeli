@@ -102,7 +102,7 @@ public class WordWeaponizer : MonoBehaviour
         if (wv.CheckWordValidity(testWord))
         {
             memory.UpdateCurrentArenaData(wbd.CurrentPower, testWord);
-            CreateWordPuff();
+            CreateWordPuff(testWord, wbd.CurrentPower);
             FireKnownValidWord();
             currentEnergyLevel -= spellFiringCost;
             if (isPlayer)
@@ -119,7 +119,7 @@ public class WordWeaponizer : MonoBehaviour
         }
     }
 
-    private void CreateWordPuff()
+    private void CreateWordPuff(string word, int powerForColor)
     {
         GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
         WordPuff wordPuff = puff.GetComponent<WordPuff>();
@@ -142,11 +142,9 @@ public class WordWeaponizer : MonoBehaviour
         }
         else
         {
+            testWord = wbd.GetCurrentWord();
             //playmem.IncrementWordCount(); // implement a memory for the enemy IF combat requires tracking played words
-            GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
-            WordPuff wordPuff = puff.GetComponent<WordPuff>();
-            wordPuff.SetText(testWord);
-            wordPuff.SetColorByPower(wbd.CurrentPower);
+            CreateWordPuff(testWord, wbd.CurrentPower);
             FireKnownValidWord();
             wbd.ClearCurrentWord();
             currentEnergyLevel -= spellFiringCost;

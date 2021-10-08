@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class OptionMenuDriver : MonoBehaviour
 {
     GameController gc;
     VictoryMeter vm;
+    [SerializeField] TextMeshProUGUI letterRoutingTMP = null;
 
     public void HidePauseMenu()
     {
@@ -53,6 +55,22 @@ public class OptionMenuDriver : MonoBehaviour
         }
         vm.SetBalance(47f);
         vm.SetDecayAmount(-3f);
+    }
+
+    public void ToggleLetterRoutingOption()
+    {
+        if (!gc)
+        {
+            gc = FindObjectOfType<GameController>();
+        }
+        if (gc.GetPlayer().GetComponent<WordBuilder>().ToggleLetterRoutingMode())
+        {
+            letterRoutingTMP.text = $"Letter Routing: Sword";
+        }
+        else
+        {
+            letterRoutingTMP.text = $"Letter Routing: Bag";
+        }
     }
 
 
