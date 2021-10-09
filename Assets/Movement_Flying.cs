@@ -12,6 +12,17 @@ public class Movement_Flying : Movement
 
     // Update is called once per frame
 
+    protected override void Update()
+    {
+        if (gc.isPaused) { return; }
+        if (anim)
+        {
+            UpdateRawDesMove();
+            validDesMove = rawDesMove;
+            HandleAnimation();
+        }
+    }
+
     private void FixedUpdate()
     {
         HandleFlyingMovement();

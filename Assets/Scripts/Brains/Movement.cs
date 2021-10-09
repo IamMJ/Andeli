@@ -52,7 +52,7 @@ public class Movement : MonoBehaviour, IFollowable
     // Update is called once per frame
 
     #region Handle Input + Animation
-    void Update()
+    protected virtual void Update()
     {
         if (gc.isPaused) { return; }
         UpdateRawDesMove();
@@ -64,7 +64,7 @@ public class Movement : MonoBehaviour, IFollowable
         }
     }
 
-    private void UpdateRawDesMove()
+    protected void UpdateRawDesMove()
     {
         rawDesMove = ((Vector3)TacticalDestination - transform.position);
     }
