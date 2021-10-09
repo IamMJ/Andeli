@@ -102,6 +102,8 @@ MonoBehaviour:
   moveSpeed: 5
   wanderRange: 4
   loiterTime_Average: 3
+  strategicDest: {x: 0, y: 0}
+  isAtDestination: 0
 --- !u!114 &-2041444163922881062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,8 +121,8 @@ MonoBehaviour:
   detailedGizmos: 1
   startEndModifier:
     addPoints: 0
-    exactStartPoint: 4
-    exactEndPoint: 4
+    exactStartPoint: 0
+    exactEndPoint: 0
     useRaycasting: 0
     mask:
       serializedVersion: 2
@@ -129,7 +131,7 @@ MonoBehaviour:
   traversableTags: -1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
-    value: 5
+    value: 1
 --- !u!114 &-3281640238176521745
 MonoBehaviour:
   m_ObjectHideFlags: 0

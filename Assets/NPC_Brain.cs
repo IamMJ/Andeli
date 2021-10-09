@@ -15,13 +15,15 @@ public class NPC_Brain : MonoBehaviour
     float closeEnough = 0.5f;
     float loiterTime_RandomFactor = 0.2f;
     float nextWaypointDistance = 1;
-    GraphMask graphMask = 1 << 2;
+    GraphMask graphMask = 1 << 0;
+
 
     // changeable params
     [SerializeField] bool isFlying = false;
     [SerializeField] float moveSpeed = 4f;
     [SerializeField] float wanderRange = 4f;
     [SerializeField] float loiterTime_Average = 10f;
+    [SerializeField] float pathLengthMax = 20f; //20 is a good human reference
 
     //state
     Vector2 baseLocation;
@@ -36,8 +38,7 @@ public class NPC_Brain : MonoBehaviour
         movement = GetComponent<Movement>();
         seeker = GetComponent<Seeker>();
         baseLocation = transform.position;
-        strategicDest = GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying);
-        seeker.StartPath(transform.position, strategicDest, HandleCompletedPath, graphMask);
+        UpdateStrategicDestination();
     }
 
     // Update is called once per frame
@@ -63,8 +64,10 @@ public class NPC_Brain : MonoBehaviour
     private void UpdateStrategicDestination()
     {        
         strategicDest = GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying);
-        seeker.StartPath(transform.position, strategicDest, HandleCompletedPath, graphMask);
-
+        if (!isFlying)
+        {
+            seeker.StartPath(transform.position, strategicDest, HandleCompletedPath, graphMask);
+        }
     }
 
     private void FixedUpdate()
@@ -80,9 +83,30 @@ public class NPC_Brain : MonoBehaviour
         }
         else
         {
-            currentPath = newPath;
-            currentWaypoint = 0;
 
+            if (CheckIfPathLengthIsShortEnough(pathLengthMax))
+            {
+                currentPath = newPath;
+                currentWaypoint = 0;
+            }
+            else
+            {
+                UpdateStrategicDestination();
+            }
+
+
+        }
+    }
+
+    private bool CheckIfPathLengthIsShortEnough(float pathLengthMax)
+    {
+        if (currentPath?.GetTotalLength() > pathLengthMax)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
@@ -103,6 +127,7 @@ public class NPC_Brain : MonoBehaviour
 
     private void SetTacticalDestinationToCurrentWaypoint()
     {
+        Debug.Log("sending tact dest");
         isAtDestination = false;
         float distanceToWaypoint;
         while (true)
