@@ -109,6 +109,10 @@ PrefabInstance:
       propertyPath: moveSpeed
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 1629728869582127551, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: willHaltIfRequested
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3654289401799520710, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_Enabled
       value: 0

@@ -13,7 +13,6 @@ public class NPCDialogManager : MonoBehaviour
     GameController gc;
 
     //param
-    public float RangeToBark { get; private set; } = 7f;
     float timeBetweenBarks = 4;
     float barkLifetime = 3;
     [SerializeField] public bool CanSpeak = true;
@@ -32,7 +31,7 @@ public class NPCDialogManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time > timeForNextBark && gc.isInGame)
+        if (Time.time > timeForNextBark && gc.isInGame && !gc.isInArena)
         {
             UpdateBark();
         }

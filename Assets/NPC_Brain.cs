@@ -162,28 +162,20 @@ public class NPC_Brain : MonoBehaviour
 
     private void HaltInResponseToPlayer()
     {
+        Debug.Log("requested to halt");
         diaman.ProvideReplyBarkToPlayer();
         requestedToHalt = true;
         strategicDest = GridHelper.SnapToGrid(transform.position, 1);
     }
 
     #region Public Methods
-    public bool RequestNPCToHalt(Vector3 positionOfPlayer)
+    public bool RequestNPCToHalt()
     {
 
         if (willHaltIfRequested)
-        {
-            float dist = (positionOfPlayer - transform.position).magnitude;
-            if (dist <= diaman.RangeToBark)
-            {
-                HaltInResponseToPlayer();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
+        {            
+            HaltInResponseToPlayer();
+            return true;
         }
         else
         {
