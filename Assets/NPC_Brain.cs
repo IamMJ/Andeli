@@ -127,7 +127,6 @@ public class NPC_Brain : MonoBehaviour
 
     private void SetTacticalDestinationToCurrentWaypoint()
     {
-        Debug.Log("sending tact dest");
         isAtDestination = false;
         float distanceToWaypoint;
         while (true)

@@ -45,7 +45,7 @@ public class NPCDialogManager : MonoBehaviour
         {
             currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
         }
-        currentBark.ActivateBark(bark, transform);
+        currentBark?.ActivateBark(bark, transform);
 
         timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
     }

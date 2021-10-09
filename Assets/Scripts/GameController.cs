@@ -115,7 +115,6 @@ public class GameController : MonoBehaviour
             ppc.enabled = false;
             while (currentZoom > cameraSize_ZoomedIn)
             {
-                Debug.Log("zooming in");
                 currentZoom -= Time.deltaTime * zoomRate;
 
                 if (currentZoom - cameraSize_ZoomedIn <= 1)
@@ -134,7 +133,6 @@ public class GameController : MonoBehaviour
             ppc.enabled = false;
             while (currentZoom < cameraSize_ZoomedOut)
             {
-                Debug.Log("zooming out");
                 currentZoom += Time.deltaTime * zoomRate;
                 if (cameraSize_ZoomedOut - currentZoom <= 1)
                 {

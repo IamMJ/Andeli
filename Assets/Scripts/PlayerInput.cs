@@ -215,7 +215,6 @@ public class PlayerInput : MonoBehaviour
             }
         }
 
-        Debug.Log($"passing tact dest as {currentPath.vectorPath[currentWaypoint]}");
         movement.TacticalDestination = currentPath.vectorPath[currentWaypoint];
 
         Debug.DrawLine(transform.position, movement.TacticalDestination, Color.red);
