@@ -7,12 +7,13 @@ public class NPCDialogManager : MonoBehaviour
 {
     //init
     [SerializeField] Bark[] possibleBarks = null;
+    [SerializeField] Bark[] possibleReplyBarks = null;
     [SerializeField] Conversation[] possibleConversations = null;
     [SerializeField] GameObject barkPrefab = null;
     GameController gc;
 
     //param
-    float rangeToBark = 7f;
+    public float RangeToBark { get; private set; } = 7f;
     float timeBetweenBarks = 4;
     float barkLifetime = 3;
     [SerializeField] public bool CanSpeak = true;
@@ -49,4 +50,18 @@ public class NPCDialogManager : MonoBehaviour
 
         timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
     }
+
+    public void ProvideReplyBarkToPlayer()
+    {
+        int rand = UnityEngine.Random.Range(0, possibleReplyBarks.Length);
+        Bark bark = possibleReplyBarks[rand];
+        if (!currentBark)
+        {
+            currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
+        }
+        currentBark?.ActivateBark(bark, transform);
+
+        timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
+    }
+
 }

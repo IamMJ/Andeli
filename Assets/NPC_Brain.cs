@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using System;
+[RequireComponent(typeof(Movement))]
 
 public class NPC_Brain : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class NPC_Brain : MonoBehaviour
     Seeker seeker;
     Path currentPath;
     Movement movement;
+    NPCDialogManager diaman;
+    Animation anim;
 
     //fixed param    
     float closeEnough = 0.5f;
@@ -19,22 +22,26 @@ public class NPC_Brain : MonoBehaviour
 
 
     // changeable params
+    [SerializeField] bool willHaltIfRequested = true;
     [SerializeField] bool isFlying = false;
-    [SerializeField] float moveSpeed = 4f;
     [SerializeField] float wanderRange = 4f;
     [SerializeField] float loiterTime_Average = 10f;
     [SerializeField] float pathLengthMax = 20f; //20 is a good human reference
 
+
     //state
     Vector2 baseLocation;
-    Vector2 movement_Flying;
+    bool requestedToHalt = false;
     [SerializeField] Vector2 strategicDest;
     [SerializeField] bool isAtDestination = false;
     float timeToMoveOn;
     int currentWaypoint = 0;
 
+
     void Start()
     {
+        anim = GetComponent<Animation>();
+        diaman = GetComponent<NPCDialogManager>();
         movement = GetComponent<Movement>();
         seeker = GetComponent<Seeker>();
         baseLocation = transform.position;
@@ -48,15 +55,20 @@ public class NPC_Brain : MonoBehaviour
         {
             if (Time.time >= timeToMoveOn)
             {
+                requestedToHalt = false;
                 isAtDestination = false;
                 UpdateStrategicDestination();
             }
         }
         else
         {
-            if (currentPath != null)
+            if (currentPath != null) // if there is a current path, then should be flying.
             {
                 SetTacticalDestinationToCurrentWaypoint();
+            }
+            if (isFlying && (transform.position - (Vector3)strategicDest).magnitude <= closeEnough)
+            {
+                isAtDestination = true;
             }
         }
     }
@@ -68,12 +80,12 @@ public class NPC_Brain : MonoBehaviour
         {
             seeker.StartPath(transform.position, strategicDest, HandleCompletedPath, graphMask);
         }
+        else
+        {
+            movement.TacticalDestination = strategicDest;
+        }
     }
 
-    private void FixedUpdate()
-    {
-        ExecuteMovementVector();
-    }
 
     private void HandleCompletedPath(Path newPath)
     {
@@ -110,20 +122,6 @@ public class NPC_Brain : MonoBehaviour
         }
     }
 
-    private void ExecuteMovementVector()
-    {
-        if (isFlying)
-        {
-            movement_Flying.x = Mathf.MoveTowards(movement_Flying.x, strategicDest.x, moveSpeed * Time.deltaTime);
-            movement_Flying.y = Mathf.MoveTowards(movement_Flying.y, strategicDest.y, moveSpeed * Time.deltaTime);
-            transform.position = movement_Flying;
-        }
-        else
-        {
-            // Non-flying movement is handled by the Movement Component, by providing it a Tactical Destination
-        }
-
-    }
 
     private void SetTacticalDestinationToCurrentWaypoint()
     {
@@ -141,7 +139,15 @@ public class NPC_Brain : MonoBehaviour
                 else
                 {
                     isAtDestination = true;
-                    timeToMoveOn = Time.time + (loiterTime_Average * UnityEngine.Random.Range(1 - loiterTime_RandomFactor, 1 + loiterTime_RandomFactor));
+                    if (requestedToHalt)
+                    {
+                        timeToMoveOn = Time.time + loiterTime_Average * 3;
+                    }
+                    else
+                    {
+                        timeToMoveOn = Time.time + (loiterTime_Average * UnityEngine.Random.Range(1 - loiterTime_RandomFactor, 1 + loiterTime_RandomFactor));
+                    }
+                    
                     break;
                 }
             }
@@ -153,4 +159,37 @@ public class NPC_Brain : MonoBehaviour
 
         movement.TacticalDestination = currentPath.vectorPath[currentWaypoint];
     }
+
+    private void HaltInResponseToPlayer()
+    {
+        diaman.ProvideReplyBarkToPlayer();
+        requestedToHalt = true;
+        strategicDest = GridHelper.SnapToGrid(transform.position, 1);
+    }
+
+    #region Public Methods
+    public bool RequestNPCToHalt(Vector3 positionOfPlayer)
+    {
+
+        if (willHaltIfRequested)
+        {
+            float dist = (positionOfPlayer - transform.position).magnitude;
+            if (dist <= diaman.RangeToBark)
+            {
+                HaltInResponseToPlayer();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    #endregion
 }

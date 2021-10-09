@@ -21,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     Camera mc;
     GameObject currentStrategicDestinationIcon;
     int layerMask_Letter = 1 << 9;
+    int layerMask_NPC = 1 << 17;
     public GameObject currentTargetGO;
 
     //param
@@ -55,6 +56,7 @@ public class PlayerInput : MonoBehaviour
     {
         HandleTouchInput();
         HandleMouseInput();
+
         PassTacticalDestinationToMoveBrain();
 
         //PauseWhenAtStrategicDestination();
@@ -73,6 +75,8 @@ public class PlayerInput : MonoBehaviour
                 strategicDestination = GridHelper.SnapToGrid(currentTouch.position, 1);
                 // Should I check that the destination is valid/reachable?
                 MoveStrategicDestinationIcon();
+                ReknitLetterAtStrategicDestination();
+                CheckStrategicDestinationForDialogPossibility();
                 seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
             }
         }
@@ -92,8 +96,19 @@ public class PlayerInput : MonoBehaviour
             // Should I check that the destination is valid/reachable?
             MoveStrategicDestinationIcon();
             ReknitLetterAtStrategicDestination();
+            CheckStrategicDestinationForDialogPossibility();
             Debug.DrawLine(transform.position, strategicDestination, Color.red, 1f);
             seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
+        }
+    }
+
+    private void CheckStrategicDestinationForDialogPossibility()
+    {
+        Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 0.2f, layerMask_NPC);
+        NPC_Brain npcBrain;
+        if (coll && coll.TryGetComponent(out npcBrain))
+        {
+            npcBrain.RequestNPCToHalt(transform.position);
         }
     }
 

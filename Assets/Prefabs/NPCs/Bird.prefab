@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &981623543082444246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4787081690950475617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e807227a631f79449ae2f4a1a6f4cd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dustcloudPrefab: {fileID: 0}
+  TacticalDestination: {x: 0, y: 0}
 --- !u!1001 &6121188674391858911
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7,6 +21,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -5129938840640066293, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 62b40d0efd718004281c837fca5899cf, type: 2}
     - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: possibleBarks.Array.size
       value: 1
@@ -95,5 +113,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3654289401799520710, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+--- !u!1 &4787081690950475617 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1629728869582127550, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+  m_PrefabInstance: {fileID: 6121188674391858911}
+  m_PrefabAsset: {fileID: 0}

@@ -13,13 +13,13 @@ public class Movement : MonoBehaviour, IFollowable
     /// </summary>
 
     WordBuilder_NPC wb;
-    Animator anim;
+    protected Animator anim;
     //public Action OnLeaderMoved;
     protected SpeedKeeper sk;
     //[SerializeField] List<Vector2> breadcrumbs = new List<Vector2>(8);
     //[SerializeField] GameObject reknitterPrefab = null;
     protected GameController gc;
-    [SerializeField] protected GameObject dustcloudPrefab = null;
+    [SerializeField] GameObject dustcloudPrefab = null;
     public Vector2 TacticalDestination;
     //GraphUpdateScene gus;
     //Bounds bounds;
@@ -30,7 +30,7 @@ public class Movement : MonoBehaviour, IFollowable
     protected int layerMask_TileImpassable = 1 << 13 | 1 << 15;
 
     //state
-    public Vector2 rawDesMove = new Vector2(1, 0);
+    protected Vector2 rawDesMove = new Vector2(1, 0);
     protected Vector2 validDesMove = Vector2.zero;
     protected Vector2 previousMove = Vector2.zero;
     protected Vector2 truePosition = Vector2.zero;
@@ -81,7 +81,7 @@ public class Movement : MonoBehaviour, IFollowable
             NullifyValidDesMoveIfAtTacticalDestination();
             //GetAlternativeValidDesMoveIfReversing();
 
-            if ((transform.position - previousSnappedPosition).magnitude > Mathf.Epsilon)
+            if (dustcloudPrefab && (transform.position - previousSnappedPosition).magnitude > Mathf.Epsilon)
             {
                 Instantiate(dustcloudPrefab, transform.position, Quaternion.identity);
             }
@@ -119,12 +119,20 @@ public class Movement : MonoBehaviour, IFollowable
     //}
 
 
-    private void HandleAnimation()
+    protected virtual void HandleAnimation()
     {
         if (validDesMove.magnitude > Mathf.Epsilon)
         {
+            //anim.SetBool("isIdle", false);
             anim.SetFloat("Horizontal", validDesMove.x);
             anim.SetFloat("Vertical", validDesMove.y);
+        }
+        else
+        {
+            //anim.SetBool("isIdle", true);
+            anim.SetFloat("Horizontal", 0);
+            anim.SetFloat("Vertical", -1);
+
         }
 
     }
