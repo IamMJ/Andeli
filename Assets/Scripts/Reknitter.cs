@@ -6,7 +6,7 @@ using Pathfinding;
 public class Reknitter : MonoBehaviour
 {
     GraphUpdateScene gus;
-    WordMakerMovement wmm;
+    Movement wmm;
     TailPieceManager tpm;
     void Start()
     {
@@ -23,7 +23,7 @@ public class Reknitter : MonoBehaviour
         }
     }
 
-    public void SetOwners(WordMakerMovement owner, TailPieceManager newTPM)
+    public void SetOwners(Movement owner, TailPieceManager newTPM)
     {
         wmm = owner;
         //wmm.OnLeaderMoved += ReknitGridGraph;

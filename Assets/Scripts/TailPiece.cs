@@ -8,7 +8,7 @@ using Pathfinding;
 public class TailPiece : MonoBehaviour, IFollowable
 {
     //init
-    WordMakerMovement wmm;  //wmm is subscribed to react to movement.
+    Movement wmm;  //wmm is subscribed to react to movement.
     IFollowable leaderToFollow;
     [SerializeField] TextMeshPro tmp;
     GraphUpdateScene gus;
@@ -20,7 +20,7 @@ public class TailPiece : MonoBehaviour, IFollowable
     //state
     [SerializeField] List<Vector2> breadcrumbs = new List<Vector2>();
 
-    public void OnCreation(WordMakerMovement parentWMM, IFollowable newLeaderToFollow, char letterToDisplay)
+    public void OnCreation(Movement parentWMM, IFollowable newLeaderToFollow, char letterToDisplay)
     {
         lastSnappedPos = transform.position;
         wmm = parentWMM;

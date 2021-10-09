@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public static class GridHelper : object
 {
@@ -18,6 +20,9 @@ public static class GridHelper : object
     static float lowestYValueForMoveInput_PermButtons = .2f;
     static float lowestXValueForMoveInput_PermButton_Left = .21f;
     static float highestXValueForMoveInput_PermButton_Right = .79f;
+
+    static int layerMask_Impassable = 1 << 13;
+    static float pointSize = 0.25f;
 
     public static Vector2 SnapToGrid(Vector2 inputPos, int subStepAmt)
     {
@@ -80,11 +85,64 @@ public static class GridHelper : object
     }
 
 
-    public static Vector2 GetRandomPositionOnWorldMap()
+    public static Vector2 CreateValidRandomPosition()
     {
         Vector2 output = new Vector2();
-        output.x = Random.Range(minX_worldmap, maxX_worldmap);
-        output.y = Random.Range(minY_worldmap, maxY_worldmap);
+        output.x = UnityEngine.Random.Range(minX_worldmap, maxX_worldmap);
+        output.y = UnityEngine.Random.Range(minY_worldmap, maxY_worldmap);
+        return output;
+    }
+
+    public static Vector2 CreateValidRandomPosition(Vector2 targetPosition, float range_unidimensional, bool ignoresImpassable)
+    {
+        Vector2 output = Vector2.zero;
+
+        if (ignoresImpassable)
+        {
+            output = CreateRandomPositionWithinWorldBoundaries(targetPosition, range_unidimensional);
+            return output;
+        }
+        else
+        {
+            bool isOccupiedSquare = false;
+            int attempts = 0;
+            do
+            {
+                output = CreateRandomPositionWithinWorldBoundaries(targetPosition, range_unidimensional);
+                isOccupiedSquare = CheckPositionForImpassable(output);
+                attempts++;
+                if (attempts > 50)
+                {
+                    break;
+                }
+            }
+            while (isOccupiedSquare);
+            return output;
+        }
+
+    }
+
+    private static bool CheckPositionForImpassable(Vector2 testPos)
+    {
+        var coll = Physics2D.OverlapCircle(testPos, 0.05f, layerMask_Impassable);
+        if (coll)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private static Vector2 CreateRandomPositionWithinWorldBoundaries(Vector2 targetPosition, float range_unidimensional)
+    {
+        Vector2 output = new Vector2();
+        output.x = UnityEngine.Random.Range(targetPosition.x - range_unidimensional, targetPosition.x + range_unidimensional);
+        output.x = Mathf.Clamp(output.x, minX_worldmap, maxX_worldmap);
+        output.y = UnityEngine.Random.Range(targetPosition.y - range_unidimensional, targetPosition.y + range_unidimensional);
+        output.y = Mathf.Clamp(output.y, minY_worldmap, maxY_worldmap);
+        output = SnapToGrid(output, 1);
         return output;
     }
 }

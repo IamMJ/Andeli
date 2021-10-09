@@ -7,11 +7,11 @@ public class TailPieceManager : MonoBehaviour
     //init
     [SerializeField] GameObject tailPiecePrefab = null;
     public List<TailPiece> tailPieces = new List<TailPiece>();
-    WordMakerMovement wmm;
+    Movement wmm;
 
     void Start()
     {
-        wmm = GetComponent<WordMakerMovement>();
+        wmm = GetComponent<Movement>();
     }
 
     public void AddNewTailPiece(char letterToDisplay)

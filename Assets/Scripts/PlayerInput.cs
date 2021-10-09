@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Pathfinding;
-[RequireComponent (typeof(WordMakerMovement), typeof(Seeker))]
+[RequireComponent (typeof(Movement), typeof(Seeker))]
 public class PlayerInput : MonoBehaviour
 {
     //init
@@ -13,7 +13,7 @@ public class PlayerInput : MonoBehaviour
     GameController gc;
     DebugHelper dh;
     GraphUpdateScene gus;
-    WordMakerMovement wmm;
+    Movement movement;
     Seeker seeker;
     Path currentPath;
     Touch currentTouch;
@@ -41,7 +41,7 @@ public class PlayerInput : MonoBehaviour
 
      void Start()
     {
-        wmm = GetComponent<WordMakerMovement>();
+        movement = GetComponent<Movement>();
         seeker = GetComponent<Seeker>();
         dh = FindObjectOfType<DebugHelper>();
         gc = FindObjectOfType<GameController>();
@@ -163,14 +163,14 @@ public class PlayerInput : MonoBehaviour
             {
                 stepDir = vecPath[i] - transform.position;
                 GameObject stepArrow = Instantiate(moveArrowPrefab, vecPath[i], Quaternion.identity);
-                stepArrow.GetComponent<MoveArrow>().Direction = WordMakerMovement.QuantifyMoveDirection(stepDir);
+                stepArrow.GetComponent<MoveArrow>().Direction = Movement.QuantifyMoveDirection(stepDir);
                 moveArrows.Add(stepArrow);
             }
             else
             {
                 stepDir = vecPath[i] - vecPath[i-1];
                 GameObject stepArrow = Instantiate(moveArrowPrefab, vecPath[i], Quaternion.identity);
-                stepArrow.GetComponent<MoveArrow>().Direction = WordMakerMovement.QuantifyMoveDirection(stepDir);
+                stepArrow.GetComponent<MoveArrow>().Direction = Movement.QuantifyMoveDirection(stepDir);
                 moveArrows.Add(stepArrow);
             }
         }
@@ -180,7 +180,7 @@ public class PlayerInput : MonoBehaviour
     {
         if (currentPath == null)
         {
-            wmm.TacticalDestination = transform.position;
+            movement.TacticalDestination = transform.position;
             return;
         }
         // Check in a loop if we are close enough to the current waypoint to switch to the next one.
@@ -215,9 +215,10 @@ public class PlayerInput : MonoBehaviour
             }
         }
 
-        wmm.TacticalDestination = currentPath.vectorPath[currentWaypoint];
+        Debug.Log($"passing tact dest as {currentPath.vectorPath[currentWaypoint]}");
+        movement.TacticalDestination = currentPath.vectorPath[currentWaypoint];
 
-        Debug.DrawLine(transform.position, wmm.TacticalDestination, Color.red);
+        Debug.DrawLine(transform.position, movement.TacticalDestination, Color.red);
 
     }
 
