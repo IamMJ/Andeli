@@ -41,7 +41,7 @@ public class ArenaBuilder : MonoBehaviour
         gc = FindObjectOfType<GameController>();
         gc.isInArena = true;
         gc.RegisterCurrentArenaBuilder(this);
-
+        gc.SetCameraToArenaOffset();
         startTime = Time.time;
         minX += Mathf.RoundToInt(transform.position.x);
         maxX += Mathf.RoundToInt(transform.position.x);
@@ -197,6 +197,7 @@ public class ArenaBuilder : MonoBehaviour
     public void CloseDownArena()
     {
         gc.ResumeGameSpeed(false);
+        gc.SetCameraToOverworldOffset();
         gc.isInArena = false;
         uid.ShowOverworldUIElements();
         Destroy(camMouse);

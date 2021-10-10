@@ -38,6 +38,8 @@ public class GameController : MonoBehaviour
     int cameraSize_ZoomedIn = 10;
     int cameraSize_ZoomedOut = 40;
     int zoomRate = 10;
+    Vector3 cameraOffset_Arena = new Vector3(0, -1.5f, 0);
+    Vector3 cameraOffset_Overworld = Vector3.zero;
 
 
     //state
@@ -104,6 +106,7 @@ public class GameController : MonoBehaviour
         driftingThing.SetActive(true);
         StopAllCoroutines();
         StartCoroutine(ZoomCamera(false));
+        SetCameraToOverworldOffset();
         // move cvc somewhere other than location where player quit?
     }
 
@@ -171,6 +174,7 @@ public class GameController : MonoBehaviour
         uid.ShowHideMainMenu(false);
         uid.ShowOverworldUIElements();
         SetCameraToFollowPlayer();
+        SetCameraToOverworldOffset();
         AdjustGameForStartMode();
         OnGameStart.Invoke();
     }
@@ -244,7 +248,15 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public void SetCameraToArenaOffset()
+    {
+        cvc.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = cameraOffset_Arena;
+    }
 
+    public void SetCameraToOverworldOffset()
+    {
+        cvc.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = cameraOffset_Overworld;
+    }
     public void RegisterCurrentArenaBuilder(ArenaBuilder ab)
     {
         currentArenaBuilder = ab;

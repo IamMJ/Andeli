@@ -10,6 +10,8 @@ public class NPCDialogManager : MonoBehaviour
     [SerializeField] Bark[] possibleReplyBarks = null;
     [SerializeField] Conversation[] possibleConversations = null;
     [SerializeField] GameObject barkPrefab = null;
+    [SerializeField] GameObject noticeMePrefab = null;
+    NoticeMeDriver noticeMe;
     GameController gc;
 
     //param
@@ -26,6 +28,10 @@ public class NPCDialogManager : MonoBehaviour
     void Start()
     {
         gc = FindObjectOfType<GameController>();
+        if (!noticeMe)
+        {
+            noticeMe = Instantiate(noticeMePrefab, transform).GetComponent<NoticeMeDriver>();
+        }
     }
 
     // Update is called once per frame

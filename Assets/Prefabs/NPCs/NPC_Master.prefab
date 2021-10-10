@@ -180,6 +180,7 @@ MonoBehaviour:
   possibleReplyBarks: []
   possibleConversations: []
   barkPrefab: {fileID: 4643434310906258457, guid: 842f42abd6b41fd4c937b09b850b2216, type: 3}
+  noticeMePrefab: {fileID: 9083388048152479329, guid: 593e522763621e740a5450a58bc3edfc, type: 3}
   CanSpeak: 1
 --- !u!95 &-5129938840640066293
 Animator:
