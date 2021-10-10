@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class Conversation : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] ConversationStep[] convoSteps = null;
+
+    ConversationStep currentConvoStep;    
+
+    public ConversationStep GetConversationStepAtIndex(int index)
     {
-        
+        return convoSteps[index];
     }
 
-    // Update is called once per frame
-    void Update()
+    public int GetConversationStepLength()
     {
-        
+        return convoSteps.Length;
     }
+
+
 }

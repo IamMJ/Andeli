@@ -31,7 +31,7 @@ public class NPC_Brain : MonoBehaviour
 
     //state
     Vector2 baseLocation;
-    bool requestedToHalt = false;
+    public bool requestedToHalt = false;
     [SerializeField] Vector2 strategicDest;
     [SerializeField] bool isAtDestination = false;
     float timeToMoveOn;

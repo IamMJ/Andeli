@@ -42,4 +42,9 @@ public class NoticeMeDriver : MonoBehaviour
         }
     }
 
+    public void ToggleNoticeMe(bool shouldBeShown)
+    {
+        gameObject.SetActive(shouldBeShown);
+    }
+
 }

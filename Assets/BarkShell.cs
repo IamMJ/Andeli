@@ -45,6 +45,7 @@ public class BarkShell : MonoBehaviour
 
     public void ActivateBark(Bark bark, Transform transformToFollow)
     {
+        if (bark == null) { return; }
         tmp.color = bark.DisplayColor;
         tmp.text = bark.BarkText;
         sr.color = defaultBGColor;
