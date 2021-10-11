@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba05eee4346492d4cb27a64deeeda018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCurrentSpeed: 0
+  targetCurrentSpeed: 2
   CurrentSpeed: 0
 --- !u!114 &3654289401799520710
 MonoBehaviour:
@@ -183,8 +183,11 @@ MonoBehaviour:
   possibleReplyBarks:
   - {fileID: 11400000, guid: 27c0c34d5717399449ce2305e01aaf39, type: 2}
   allConversations: []
+  availableBarks: []
+  availableConversations: []
   barkPrefab: {fileID: 4643434310906258457, guid: 842f42abd6b41fd4c937b09b850b2216, type: 3}
   noticeMePrefab: {fileID: 9083388048152479329, guid: 593e522763621e740a5450a58bc3edfc, type: 3}
+  noticeMe: {fileID: 0}
   CanSpeak: 1
 --- !u!95 &-5129938840640066293
 Animator:

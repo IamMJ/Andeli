@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpeedKeeper : MonoBehaviour
 {
     //param
-    float startingSpeed = 3f;
     float accelPerValidWord = 0.3f;
     float minSpeed = 1.0f;
     float maxSpeed = 6.0f;
@@ -13,7 +12,7 @@ public class SpeedKeeper : MonoBehaviour
 
     //state
     float stunTimeRemaining = 0;
-    public float targetCurrentSpeed;
+    public float targetCurrentSpeed = 2f;
 
     public float CurrentSpeed; //{ get; private set; } = 0;
 
@@ -27,7 +26,6 @@ public class SpeedKeeper : MonoBehaviour
         //    pm.OnIncrementWordCount += IncreaseSpeedOnValidWord;
         //}
 
-        targetCurrentSpeed = startingSpeed;
         CurrentSpeed = targetCurrentSpeed;
     }
 

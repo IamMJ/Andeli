@@ -22,7 +22,7 @@ public class NPC_Brain : MonoBehaviour
 
 
     // changeable params
-    [SerializeField] bool willHaltIfRequested = true;
+    [SerializeField] bool willHaltIfRequested_Normally = true;
     [SerializeField] bool isFlying = false;
     [SerializeField] float wanderRange = 4f;
     [SerializeField] float loiterTime_Average = 10f;
@@ -31,32 +31,42 @@ public class NPC_Brain : MonoBehaviour
 
     //state
     Vector2 baseLocation;
+    bool willHaltIfRequested_Currently;
     public bool requestedToHalt = false;
     [SerializeField] Vector2 strategicDest;
     [SerializeField] bool isAtDestination = false;
-    float timeToMoveOn;
+    [SerializeField] float timeToMoveOn;
     int currentWaypoint = 0;
 
 
     void Start()
     {
+        willHaltIfRequested_Currently = willHaltIfRequested_Normally;
         anim = GetComponent<Animation>();
         diaman = GetComponent<NPCDialogManager>();
         movement = GetComponent<Movement>();
         seeker = GetComponent<Seeker>();
         baseLocation = transform.position;
-        UpdateStrategicDestination();
+        UpdateStrategicDestination(GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying));
     }
 
     // Update is called once per frame
     void Update()
     {
+        //if (!isAtDestination)
+        //{
+        //    float dist = ((Vector3)strategicDest - transform.position).magnitude;
+        //    if (dist < 1f)
+        //    {
+        //        isAtDestination = true;
+        //    }
+        //}
         if (isAtDestination)
         {
             if (Time.time >= timeToMoveOn)
             {
-                requestedToHalt = false;
-                UpdateStrategicDestination();
+
+                UpdateStrategicDestination(GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying));
             }
         }
         else
@@ -72,10 +82,25 @@ public class NPC_Brain : MonoBehaviour
         }
     }
 
-    private void UpdateStrategicDestination()
+    //private void UpdateStrategicDestination()
+    //{
+    //    isAtDestination = false;
+    //    strategicDest = GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying);
+    //    if (!isFlying)
+    //    {
+    //        seeker.StartPath(transform.position, strategicDest, HandleCompletedPath, graphMask);
+    //    }
+    //    else
+    //    {
+    //        movement.TacticalDestination = strategicDest;
+    //    }
+    //}
+
+    private void UpdateStrategicDestination(Vector2 inputStrategicDest)
     {
+        currentPath = null;
+        strategicDest = inputStrategicDest;
         isAtDestination = false;
-        strategicDest = GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying);
         if (!isFlying)
         {
             seeker.StartPath(transform.position, strategicDest, HandleCompletedPath, graphMask);
@@ -83,18 +108,6 @@ public class NPC_Brain : MonoBehaviour
         else
         {
             movement.TacticalDestination = strategicDest;
-        }
-    }
-    private void UpdateStrategicDestination(Vector2 inputStrategicDest)
-    {
-        isAtDestination = false;
-        if (!isFlying)
-        {
-            seeker.StartPath(transform.position, inputStrategicDest, HandleCompletedPath, graphMask);
-        }
-        else
-        {
-            movement.TacticalDestination = inputStrategicDest;
         }
     }
 
@@ -107,7 +120,7 @@ public class NPC_Brain : MonoBehaviour
         }
         else
         {
-
+            Debug.Log($"{newPath.duration} seconds to calculate path");
             if (CheckIfPathLengthIsShortEnough(pathLengthMax))
             {
                 currentPath = newPath;
@@ -115,7 +128,7 @@ public class NPC_Brain : MonoBehaviour
             }
             else
             {
-                UpdateStrategicDestination();
+                UpdateStrategicDestination(GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying));
             }
 
 
@@ -153,12 +166,15 @@ public class NPC_Brain : MonoBehaviour
                     isAtDestination = true;
                     if (requestedToHalt)
                     {
+
                         timeToMoveOn = Time.time + loiterTime_Average * 3;
                     }
                     else
                     {
                         timeToMoveOn = Time.time + (loiterTime_Average * UnityEngine.Random.Range(1 - loiterTime_RandomFactor, 1 + loiterTime_RandomFactor));
                     }
+                    requestedToHalt = false;
+                    willHaltIfRequested_Currently = willHaltIfRequested_Normally;
                     
                     break;
                 }
@@ -174,30 +190,34 @@ public class NPC_Brain : MonoBehaviour
 
     private void HaltInResponseToPlayer()
     {
-        Debug.Log("requested to halt");
         diaman.ProvideReplyBarkToPlayer();
         requestedToHalt = true;
-        strategicDest = GridHelper.SnapToGrid(transform.position, 1);
+        UpdateStrategicDestination(GridHelper.SnapToGrid(transform.position, 1)); // Halt by setting current pos as dest
+
     }
 
     #region Public Methods
     public bool RequestNPCToHalt()
     {
-
-        if (willHaltIfRequested)
+        if (willHaltIfRequested_Currently)
         {            
             HaltInResponseToPlayer();
+            Debug.Log("asked to halt, said true");
             return true;
         }
         else
         {
+            Debug.Log("asked to halt, said false");
             return false;
         }
     }
 
     public void RequestNPCToMoveToSpecificDestination(Vector2 specificDest)
     {
+        willHaltIfRequested_Currently = false;
+        Debug.Log("requesting an NPC move to specific location");   
         UpdateStrategicDestination(specificDest);
+        timeToMoveOn = Time.time;
     }
 
     #endregion

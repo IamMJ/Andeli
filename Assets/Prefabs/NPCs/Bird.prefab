@@ -25,6 +25,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 62b40d0efd718004281c837fca5899cf, type: 2}
+    - target: {fileID: -3281640238176521745, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: targetCurrentSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: possibleBarks.Array.size
       value: 1

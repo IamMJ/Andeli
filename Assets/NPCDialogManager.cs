@@ -16,7 +16,7 @@ public class NPCDialogManager : MonoBehaviour
     [SerializeField] GameObject barkPrefab = null;
     [SerializeField] GameObject noticeMePrefab = null;
 
-    public NoticeMeDriver noticeMe;
+    NoticeMeDriver noticeMe;
     GameController gc;
     NPC_Brain brain;
     GameObject player;
@@ -25,7 +25,6 @@ public class NPCDialogManager : MonoBehaviour
 
     //param
     float timeBetweenBarks = 4;
-    float barkLifetime = 3;
     float conversationRange = 1.5f;
     [SerializeField] public bool CanSpeak = true;
 

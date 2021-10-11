@@ -55,6 +55,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Townie_Tutor
       objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108287, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: wanderRange
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108287, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: pathLengthMax
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
       propertyPath: possibleBarks.Array.size
       value: 3
