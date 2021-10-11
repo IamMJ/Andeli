@@ -56,7 +56,6 @@ public class NPC_Brain : MonoBehaviour
             if (Time.time >= timeToMoveOn)
             {
                 requestedToHalt = false;
-                isAtDestination = false;
                 UpdateStrategicDestination();
             }
         }
@@ -74,7 +73,8 @@ public class NPC_Brain : MonoBehaviour
     }
 
     private void UpdateStrategicDestination()
-    {        
+    {
+        isAtDestination = false;
         strategicDest = GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying);
         if (!isFlying)
         {
@@ -83,6 +83,18 @@ public class NPC_Brain : MonoBehaviour
         else
         {
             movement.TacticalDestination = strategicDest;
+        }
+    }
+    private void UpdateStrategicDestination(Vector2 inputStrategicDest)
+    {
+        isAtDestination = false;
+        if (!isFlying)
+        {
+            seeker.StartPath(transform.position, inputStrategicDest, HandleCompletedPath, graphMask);
+        }
+        else
+        {
+            movement.TacticalDestination = inputStrategicDest;
         }
     }
 
@@ -181,6 +193,11 @@ public class NPC_Brain : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public void RequestNPCToMoveToSpecificDestination(Vector2 specificDest)
+    {
+        UpdateStrategicDestination(specificDest);
     }
 
     #endregion

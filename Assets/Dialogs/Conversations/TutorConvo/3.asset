@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
   m_Name: 3
   m_EditorClassIdentifier: 
-  NPCText: Click Somewhere to Move
+  NPCText: Approaching an obelisk begins combat. Townsfolk like me are powerless
+    against them. Only a Spellsword can destroy them, using True Letters to spell
+    words of power.
   NPCSprite: {fileID: 0}
-  PlayerText_0: Okay.
+  PlayerText_0: True Letters?
   resultFromOption0: 0
   PlayerText_1: 
   resultFromOption1: 2
+  NPCDestinationIfMoving: {x: 0, y: 0}

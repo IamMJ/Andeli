@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
   m_Name: 1
   m_EditorClassIdentifier: 
-  NPCText: Hello. Tutor 1
+  NPCText: Are you a Spellsword? You seem new here. Do you need help figuring things
+    out?
   NPCSprite: {fileID: 0}
-  PlayerText_0: Teach me
+  PlayerText_0: Please teach me
   resultFromOption0: 0
-  PlayerText_1: No Thanks
+  PlayerText_1: Leave me alone
   resultFromOption1: 2

@@ -12,11 +12,11 @@ public class NPCDialogManager : MonoBehaviour
     [SerializeField] GameObject barkPrefab = null;
     [SerializeField] GameObject noticeMePrefab = null;
 
-    public NoticeMeDriver noticeMe;
+    NoticeMeDriver noticeMe;
     GameController gc;
     NPC_Brain brain;
     GameObject player;
-    public ConversationPanelDriver cpd;
+    ConversationPanelDriver cpd;
 
     //param
     float timeBetweenBarks = 4;
@@ -25,6 +25,9 @@ public class NPCDialogManager : MonoBehaviour
     [SerializeField] public bool CanSpeak = true;
 
     //state
+    [SerializeField] List<string> knownKeywords = new List<string>(); //This is used to 
+    //check if a particular bark or convo should be used or suppressed
+
     float timeForNextBark;
     BarkShell currentBark;
 
@@ -50,7 +53,7 @@ public class NPCDialogManager : MonoBehaviour
             UpdateBark();
         }
         
-        if (noticeMe && brain.requestedToHalt && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed)
+        if (brain.requestedToHalt && noticeMe.gameObject.activeSelf && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed)
         {
             if (!player)
             {
@@ -61,6 +64,7 @@ public class NPCDialogManager : MonoBehaviour
             {
                 if (cpd.ClaimConversationPanelDriverIfUnused(this))
                 {
+                    Debug.Log("start conv");
                     cpd.InitalizeConversationPanel(possibleConversations[0], this);
                     possibleConversations.RemoveAt(0);
                     noticeMe.ToggleNoticeMe(false);
@@ -71,19 +75,7 @@ public class NPCDialogManager : MonoBehaviour
         
     }
 
-    private void UpdateBark()
-    {
-        int rand = UnityEngine.Random.Range(0, possibleBarks.Length);
-        Bark bark = possibleBarks[rand];
-        if (!currentBark)
-        {
-            currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
-        }
-        currentBark?.ActivateBark(bark, transform);
-
-        timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
-    }
-
+    #region Public Methods
     public void ProvideReplyBarkToPlayer()
     {
         int rand = UnityEngine.Random.Range(0, possibleReplyBarks.Length);
@@ -95,6 +87,53 @@ public class NPCDialogManager : MonoBehaviour
         currentBark?.ActivateBark(bark, transform);
 
         timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
+    }
+
+    public void AddKeyword(string newKeyword)
+    {
+        knownKeywords.Add(newKeyword);
+    }
+
+    #endregion
+    private void UpdateBark()
+    {
+        int rand = UnityEngine.Random.Range(0, possibleBarks.Length);
+        Bark bark = possibleBarks[rand];
+
+        if (!currentBark)
+        {
+            currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
+        }
+        currentBark?.ActivateBark(bark, transform);
+
+        timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
+    }
+
+    private bool CheckForKnowledgeOfKeyword(string testKeyword)
+    {
+        bool result = false;
+        foreach (var keyword in knownKeywords)
+        {
+            if (keyword == testKeyword)
+            {
+                result = true;
+                return result;
+            }
+        }
+        return result;
+    }
+
+    private Conversation CheckForOpenConversationBasedOnCurrentKeyword()
+    {
+        foreach (var convo in possibleConversations)
+        {
+            string testKeyword = convo.RequiredKeywordToStart;
+            if (CheckForKnowledgeOfKeyword(testKeyword))
+            {
+                return convo;
+            }
+        }
+        return null;
     }
 
 

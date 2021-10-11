@@ -8,7 +8,7 @@ using System;
 public class ConversationPanelDriver : MonoBehaviour
 {
     //init
-    NPCDialogManager usingDiaman;
+    NPCDialogManager claimingDiaman;
     [SerializeField] Image NPCPortraitImage = null;
     [SerializeField] TextMeshProUGUI NPCTextTMP = null;
     [SerializeField] Image NPCMainImage = null;
@@ -42,14 +42,14 @@ public class ConversationPanelDriver : MonoBehaviour
     #region Public Methods
     public bool ClaimConversationPanelDriverIfUnused(NPCDialogManager claimant)
     {
-        if (usingDiaman)
+        if (claimingDiaman)
         {
             
             return false;
         }
         else
         {
-            usingDiaman = claimant;
+            claimingDiaman = claimant;
             return true;
         }
 
@@ -58,7 +58,7 @@ public class ConversationPanelDriver : MonoBehaviour
     public void InitalizeConversationPanel(Conversation newConvo, NPCDialogManager claimant)
     {
         convo = newConvo;
-        if (claimant != usingDiaman)
+        if (claimant != claimingDiaman)
         {
             return;
         }
@@ -76,6 +76,11 @@ public class ConversationPanelDriver : MonoBehaviour
 
     private void UpdateUIWithCurrentConvoStep()
     {
+        if (!convoStep)
+        {
+            Debug.Log("no convo step");
+            return;
+        }
         UpdatePortraitImages(convoStep);
         UpdateConversationText(convoStep);
         ShowHideNPCImage(convoStep);
@@ -90,7 +95,8 @@ public class ConversationPanelDriver : MonoBehaviour
     {
         gc.ResumeGameSpeed(true);
         ShowHideEntirePanel(false);
-        usingDiaman = null;
+        claimingDiaman.AddKeyword(convo.KeywordAtCompletion);
+        claimingDiaman = null;
 
     }
 
@@ -114,17 +120,23 @@ public class ConversationPanelDriver : MonoBehaviour
     {
         switch (option)
         {
-            case ConversationStep.ReplyOption.MoveToNextConvoStep:
-                currentConvoStepIndex += 1;
+            case ConversationStep.ReplyOption.AdvanceOneStep:
+                currentConvoStepIndex++;
                 convoStep = convo.GetConversationStepAtIndex(currentConvoStepIndex);
                 UpdateUIWithCurrentConvoStep();
                 return;
 
-            case ConversationStep.ReplyOption.SkipOneConvoStep:
-                currentConvoStepIndex += 2;
+            case ConversationStep.ReplyOption.AdvanceTwoSteps:
+                currentConvoStepIndex++;
+                currentConvoStepIndex++;
                 convoStep = convo.GetConversationStepAtIndex(currentConvoStepIndex);
                 UpdateUIWithCurrentConvoStep();
 
+                return;
+
+            case ConversationStep.ReplyOption.MoveNPCandQuitConvo:
+                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.NPCDestinationIfMoving);
+                ShutdownConversationPanel();
                 return;
 
             case ConversationStep.ReplyOption.QuitConvo:
@@ -167,8 +179,8 @@ public class ConversationPanelDriver : MonoBehaviour
 
     private void UpdatePortraitImages(ConversationStep convoStep)
     {
-        NPCPortraitImage.sprite = usingDiaman.GetComponent<SpriteRenderer>().sprite;
-        NPCPortraitImage.color = usingDiaman.GetComponent<SpriteRenderer>().color;
+        NPCPortraitImage.sprite = claimingDiaman.GetComponent<SpriteRenderer>().sprite;
+        NPCPortraitImage.color = claimingDiaman.GetComponent<SpriteRenderer>().color;
         PlayerPortraitImage.sprite = player.GetComponent<SpriteRenderer>().sprite;
         PlayerPortraitImage.color = player.GetComponent<SpriteRenderer>().color;
     }

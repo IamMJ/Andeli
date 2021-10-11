@@ -104,13 +104,11 @@ public class PlayerInput : MonoBehaviour
 
     private void CheckStrategicDestinationForDialogPossibility()
     {
-        Debug.Log("checking");
-        Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 1.5f, layerMask_NPC);
-        Debug.DrawLine(strategicDestination, strategicDestination + new Vector2(1.5f, 1.5f), Color.green, 2);
+        Collider2D coll = Physics2D.OverlapCircle(strategicDestination, 0.75f, layerMask_NPC);
+        //Debug.DrawLine(strategicDestination, strategicDestination + new Vector2(1.5f, 1.5f), Color.green, 2);
         NPC_Brain npcBrain;
         if (coll && coll.TryGetComponent(out npcBrain))
         {
-            Debug.Log("found an NPC");
             npcBrain.RequestNPCToHalt();
         }
     }

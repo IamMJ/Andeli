@@ -33,6 +33,10 @@ PrefabInstance:
       propertyPath: possibleBarks.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: c873fe17bc4621045b7848bd01dc5b00, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: CanSpeak
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1629728869582127544, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_Sprite
       value: 
