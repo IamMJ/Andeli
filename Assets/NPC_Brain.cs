@@ -120,7 +120,7 @@ public class NPC_Brain : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{newPath.duration} seconds to calculate path");
+            //Debug.Log($"{newPath.duration} seconds to calculate path");
             if (CheckIfPathLengthIsShortEnough(pathLengthMax))
             {
                 currentPath = newPath;
@@ -202,12 +202,10 @@ public class NPC_Brain : MonoBehaviour
         if (willHaltIfRequested_Currently)
         {            
             HaltInResponseToPlayer();
-            Debug.Log("asked to halt, said true");
             return true;
         }
         else
         {
-            Debug.Log("asked to halt, said false");
             return false;
         }
     }

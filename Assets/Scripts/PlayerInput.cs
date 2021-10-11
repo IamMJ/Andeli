@@ -173,7 +173,7 @@ public class PlayerInput : MonoBehaviour
         ClearMoveArrows();
         List<Vector3> vecPath = currentPath.vectorPath;
         Vector2 stepDir;
-        for (int i = 0; i < vecPath.Count; i++)
+        for (int i = 0; i < vecPath.Count-1; i++)
         {
             if (i == 0)
             {
