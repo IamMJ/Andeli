@@ -13,6 +13,7 @@ public class NoticeMeDriver : MonoBehaviour
 
     //state
     bool isDescending = false;
+    public bool isActivated = true;
 
 
     void Start()
@@ -45,6 +46,8 @@ public class NoticeMeDriver : MonoBehaviour
     public void ToggleNoticeMe(bool shouldBeShown)
     {
         gameObject.SetActive(shouldBeShown);
+        isActivated = shouldBeShown;
     }
+
 
 }

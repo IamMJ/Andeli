@@ -6,17 +6,22 @@ using UnityEngine;
 public class NPCDialogManager : MonoBehaviour
 {
     //init
-    [SerializeField] Bark[] possibleBarks = null;
+    [SerializeField] Bark[] allBarks = null;
     [SerializeField] Bark[] possibleReplyBarks = null;
-    [SerializeField] List<Conversation> possibleConversations = new List<Conversation>();
+    [SerializeField] List<Conversation> allConversations = new List<Conversation>();
+    public List<Bark> availableBarks = new List<Bark>();
+    public List<Conversation> availableConversations = new List<Conversation>();
+
+
     [SerializeField] GameObject barkPrefab = null;
     [SerializeField] GameObject noticeMePrefab = null;
 
-    NoticeMeDriver noticeMe;
+    public NoticeMeDriver noticeMe;
     GameController gc;
     NPC_Brain brain;
     GameObject player;
     ConversationPanelDriver cpd;
+    PlayerDialogMemory pdm;
 
     //param
     float timeBetweenBarks = 4;
@@ -25,8 +30,7 @@ public class NPCDialogManager : MonoBehaviour
     [SerializeField] public bool CanSpeak = true;
 
     //state
-    [SerializeField] List<string> knownKeywords = new List<string>(); //This is used to 
-    //check if a particular bark or convo should be used or suppressed
+    int currentBarkIndex = 0; 
 
     float timeForNextBark;
     BarkShell currentBark;
@@ -38,11 +42,39 @@ public class NPCDialogManager : MonoBehaviour
         brain = GetComponent<NPC_Brain>();
         cpd = FindObjectOfType<ConversationPanelDriver>();
         gc = FindObjectOfType<GameController>();
+        gc.OnGameStart += RespondToGameStart;
+
+    }
+
+    private void RespondToGameStart()
+    {
         player = gc.GetPlayer();
-        if (possibleConversations.Count > 0)
+        pdm = player.GetComponent<PlayerDialogMemory>();
+
+        availableBarks = RebuildAvailableBarksBasedOnPlayerKnownKeywords();
+        currentBarkIndex = 0;
+
+        availableConversations = RebuildAvailableConversationsBasedOnPlayerKnownKeywords();
+        if (availableConversations.Count > 0)
         {
             ActivateNoticeMe();
         }
+
+        pdm.OnKeywordAdded += RespondToPlayerGainingKeyword;
+    }
+
+
+
+    private void RespondToPlayerGainingKeyword(string newKeyword)
+    {
+        availableConversations = RebuildAvailableConversationsBasedOnPlayerKnownKeywords(newKeyword);
+        if (availableConversations.Count > 0)
+        {
+            ActivateNoticeMe();
+        }
+
+        availableBarks = RebuildAvailableBarksBasedOnPlayerKnownKeywords(newKeyword);
+        currentBarkIndex = 0;
     }
 
     // Update is called once per frame
@@ -52,8 +84,17 @@ public class NPCDialogManager : MonoBehaviour
         {
             UpdateBark();
         }
+
+        if (noticeMe && noticeMe.isActivated)
+        {
+            ListenForConversationEntryAttempt();
+        }       
         
-        if (brain.requestedToHalt && noticeMe.gameObject.activeSelf && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed)
+    }
+
+    private void ListenForConversationEntryAttempt()
+    {
+        if (brain.requestedToHalt && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed)
         {
             if (!player)
             {
@@ -64,15 +105,14 @@ public class NPCDialogManager : MonoBehaviour
             {
                 if (cpd.ClaimConversationPanelDriverIfUnused(this))
                 {
-                    Debug.Log("start conv");
-                    cpd.InitalizeConversationPanel(possibleConversations[0], this);
-                    possibleConversations.RemoveAt(0);
+                    //Debug.Log("start conv");
+                    cpd.InitalizeConversationPanel(availableConversations[0], this);
+                    availableConversations.RemoveAt(0);
                     noticeMe.ToggleNoticeMe(false);
                 }
-                
+
             }
-        }       
-        
+        }
     }
 
     #region Public Methods
@@ -89,17 +129,21 @@ public class NPCDialogManager : MonoBehaviour
         timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
     }
 
-    public void AddKeyword(string newKeyword)
+    public void PassNewKeywordToPlayerDialogMemory(string newKeyword)
     {
-        knownKeywords.Add(newKeyword);
+        pdm.AddKeyword(newKeyword);
     }
 
     #endregion
     private void UpdateBark()
-    {
-        int rand = UnityEngine.Random.Range(0, possibleBarks.Length);
-        Bark bark = possibleBarks[rand];
-
+    {   
+        if (currentBarkIndex > availableBarks.Count - 1)
+        {
+            currentBarkIndex = 0;
+        }
+        Bark bark = availableBarks[currentBarkIndex];
+        currentBarkIndex++;
+        
         if (!currentBark)
         {
             currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
@@ -109,31 +153,68 @@ public class NPCDialogManager : MonoBehaviour
         timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
     }
 
-    private bool CheckForKnowledgeOfKeyword(string testKeyword)
+    private List<Bark> RebuildAvailableBarksBasedOnPlayerKnownKeywords()
     {
-        bool result = false;
-        foreach (var keyword in knownKeywords)
+        List<Bark> availBarks = new List<Bark>();
+        foreach (var bark in allBarks)
         {
-            if (keyword == testKeyword)
+            string testKeyword = bark.KeywordToShowFor;
+            string bannedKeyword = bark.KeywordToHideFrom;
+            if (pdm.CheckForPlayerKnowledgeOfARequiredKeyword(testKeyword) &&
+                !pdm.CheckForPlayerKnowledgeOfABannedKeyword(bannedKeyword))
             {
-                result = true;
-                return result;
+                availBarks.Add(bark);
             }
         }
-        return result;
+        return availBarks;
     }
 
-    private Conversation CheckForOpenConversationBasedOnCurrentKeyword()
+    private List<Bark> RebuildAvailableBarksBasedOnPlayerKnownKeywords(string specificKeyword)
     {
-        foreach (var convo in possibleConversations)
+        List<Bark> availBarks = new List<Bark>(0);
+        foreach (var bark in allBarks)
         {
-            string testKeyword = convo.RequiredKeywordToStart;
-            if (CheckForKnowledgeOfKeyword(testKeyword))
+            string testKeyword = bark.KeywordToShowFor;
+            string bannedKeyword = bark.KeywordToHideFrom;
+
+            if (specificKeyword == testKeyword && specificKeyword != bannedKeyword)
             {
-                return convo;
+                availBarks.Add(bark);
             }
         }
-        return null;
+        return availBarks;
+    }
+
+    private List<Conversation> RebuildAvailableConversationsBasedOnPlayerKnownKeywords(string specificKeyword)
+    {
+        List<Conversation> availConvos = new List<Conversation>(0);
+        foreach (var convo in allConversations)
+        {
+            string testKeyword = convo.KeywordToShowFor;
+            string bannedKeyword = convo.KeywordToHideFrom;
+            
+            if (specificKeyword == testKeyword && specificKeyword != bannedKeyword)
+            {
+                availConvos.Add(convo);
+            }
+        }
+        return availConvos;
+    }
+
+    private List<Conversation> RebuildAvailableConversationsBasedOnPlayerKnownKeywords()
+    {
+        List<Conversation> availConvos = new List<Conversation>(0);
+        foreach (var convo in allConversations)
+        {
+            string testKeyword = convo.KeywordToShowFor;
+            string bannedKeyword = convo.KeywordToHideFrom;
+            if (pdm.CheckForPlayerKnowledgeOfARequiredKeyword(testKeyword) &&
+                !pdm.CheckForPlayerKnowledgeOfABannedKeyword(bannedKeyword))
+            {
+                availConvos.Add(convo);
+            }
+        }
+        return availConvos;
     }
 
 
@@ -142,10 +223,18 @@ public class NPCDialogManager : MonoBehaviour
         if (!noticeMe)
         {
             noticeMe = Instantiate(noticeMePrefab, transform).GetComponent<NoticeMeDriver>();
+            noticeMe.ToggleNoticeMe(true);
         }
         else
         {
             noticeMe.ToggleNoticeMe(true);
         }
     }
+
+    private void OnDestroy()
+    {
+        gc.OnGameStart -= RespondToGameStart;
+    }
+
+    
 }

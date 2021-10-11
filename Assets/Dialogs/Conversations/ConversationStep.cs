@@ -11,7 +11,6 @@ public class ConversationStep : ScriptableObject
     [SerializeField] public string PlayerText_1 = "Choice 1";
     [SerializeField] public ReplyOption resultFromOption1 = ReplyOption.QuitConvo;
     [SerializeField] public Vector2 NPCDestinationIfMoving = Vector2.zero;
-    [SerializeField] public string keyword = "";
 
     public enum ReplyOption { AdvanceOneStep, AdvanceTwoSteps, QuitConvo, MoveNPCandQuitConvo};
 }

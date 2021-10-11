@@ -106,6 +106,7 @@ MonoBehaviour:
   wanderRange: 4
   loiterTime_Average: 3
   pathLengthMax: 20
+  requestedToHalt: 0
   strategicDest: {x: 0, y: 0}
   isAtDestination: 0
 --- !u!114 &-2041444163922881062
@@ -176,9 +177,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa74b9e7b180a34795f92947b9ef330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  possibleBarks: []
-  possibleReplyBarks: []
-  possibleConversations: []
+  allBarks:
+  - {fileID: 11400000, guid: f46515805d4e0cc4e8b6490713a2eb5f, type: 2}
+  - {fileID: 11400000, guid: 3b03d6cd127e90b4eabf9cc16f2f8220, type: 2}
+  possibleReplyBarks:
+  - {fileID: 11400000, guid: 27c0c34d5717399449ce2305e01aaf39, type: 2}
+  allConversations: []
   barkPrefab: {fileID: 4643434310906258457, guid: 842f42abd6b41fd4c937b09b850b2216, type: 3}
   noticeMePrefab: {fileID: 9083388048152479329, guid: 593e522763621e740a5450a58bc3edfc, type: 3}
   CanSpeak: 1

@@ -95,7 +95,7 @@ public class ConversationPanelDriver : MonoBehaviour
     {
         gc.ResumeGameSpeed(true);
         ShowHideEntirePanel(false);
-        claimingDiaman.AddKeyword(convo.KeywordAtCompletion);
+        claimingDiaman.PassNewKeywordToPlayerDialogMemory(convo.KeywordAtCompletion);
         claimingDiaman = null;
 
     }

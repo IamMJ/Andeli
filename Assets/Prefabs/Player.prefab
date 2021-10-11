@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: -3077055182206633393}
   - component: {fileID: 5006189010876863907}
   - component: {fileID: 4683094222974374877}
+  - component: {fileID: -2790034786816923024}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -237,7 +238,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dustcloudPrefab: {fileID: 8717110635550957212, guid: ed73c7c44d7a05e40ab9bac161c7ff04, type: 3}
   TacticalDestination: {x: 0, y: 0}
-  rawDesMove: {x: 0, y: 0}
 --- !u!114 &5006189010876863907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,3 +305,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4e1dd8d039d018b4c89f003154fc2f7f, type: 2}
   - {fileID: 11400000, guid: e42957e679620724a8bc0601803a7620, type: 2}
   - {fileID: 11400000, guid: 634732ddd64d3e24b9aff184b8a60419, type: 2}
+--- !u!114 &-2790034786816923024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a23460b79dab67488319d98e8065450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knownKeywords:
+  - TUT0

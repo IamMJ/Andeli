@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ef45ff1508aca499ea6108f4ddff11, type: 3}
   m_Name: T1
   m_EditorClassIdentifier: 
+  KeywordToShowFor: 
+  KeywordToHideFrom: TUT1
   BarkText: New here? Need help?
   DisplayTime: 3
   DisplayColor: {r: 0, g: 0, b: 0, a: 1}
