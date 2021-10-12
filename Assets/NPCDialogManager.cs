@@ -24,9 +24,9 @@ public class NPCDialogManager : MonoBehaviour
     PlayerDialogMemory pdm;
 
     //param
-    float timeBetweenBarks = 4;
+    [SerializeField] float timeBetweenBarks_average = 4;
     float conversationRange = 1.5f;
-    [SerializeField] public bool CanSpeak = true;
+
 
     //state
     int currentBarkIndex = 0; 
@@ -125,7 +125,7 @@ public class NPCDialogManager : MonoBehaviour
         }
         currentBark?.ActivateBark(bark, transform);
 
-        timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
+        timeForNextBark = Time.time + (timeBetweenBarks_average*UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
     }
 
     public void PassNewKeywordToPlayerDialogMemory(string newKeyword)
@@ -149,7 +149,7 @@ public class NPCDialogManager : MonoBehaviour
         }
         currentBark?.ActivateBark(bark, transform);
 
-        timeForNextBark = Time.time + timeBetweenBarks + bark.DisplayTime;
+        timeForNextBark = Time.time + (timeBetweenBarks_average * UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
     }
 
     private List<Bark> RebuildAvailableBarksBasedOnPlayerKnownKeywords()
