@@ -63,7 +63,7 @@ public class LetterTileDropper : MonoBehaviour
 
         wv = FindObjectOfType<WordValidater>();
         ab = FindObjectOfType<ArenaBuilder>();
-        lmh_Enemy = ab.GetEnemiesInArena()[0].GetComponent<LetterMaskHolder>();
+        lmh_Enemy = ab.GetEnemyInArena().GetComponent<LetterMaskHolder>();
         lmh_Player = FindObjectOfType<GameController>().GetPlayer().GetComponent<LetterMaskHolder>();
 
         if (shouldSeparateVowelsFromConsonants)

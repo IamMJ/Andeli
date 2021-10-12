@@ -7,11 +7,12 @@ using Cinemachine;
 public class ArenaBuilder : MonoBehaviour
 {
     [SerializeField] GameObject cameraMousePrefab = null;
-    [SerializeField] GameObject wallPrefab = null;
-    [SerializeField] GameObject[] enemyPrefabs = null;
+    //[SerializeField] GameObject wallPrefab = null;
+    //[SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
     [SerializeField] GameObject arenaDebriefMenuPrefab = null;
 
+    [SerializeField] GameObject enemy;
     ArenaSettingHolder ash;
     CinemachineVirtualCamera cvc;
     GameController gc;
@@ -29,9 +30,10 @@ public class ArenaBuilder : MonoBehaviour
     int maxX = 6;
     int maxY = 6;
     float checkRadius = 0.01f;
+    Vector3 enemySpawnOffset = new Vector2(0, 0);
+
 
     //state
-    GameObject[] enemies;
     public LetterTileDropper ltd;
     GameObject camMouse;
     float startTime;
@@ -52,84 +54,84 @@ public class ArenaBuilder : MonoBehaviour
         uid.ShowArenaUIElements();
 
         player = gc.GetPlayer();
+        enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
         vm = gc.GetVictoryMeter();
         vm.ResetArena();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
-        enemies = new GameObject[enemyPrefabs.Length];
-        SetupStatueCameraMouseCat(centroid);
-        ash.SetupArena(ltd, player.GetComponent<WordMakerMemory>(), enemies[0].GetComponent<WordMakerMemory>(),
-            player.GetComponent<WordWeaponizer>(), enemies[0].GetComponent<WordWeaponizer>(), 
-            player.GetComponent<WordBuilder>(), enemies[0].GetComponent<WordBuilder_NPC>(), uid);
+        SetupStatueCameraMouse(centroid);
+        ash.SetupArena(ltd, player.GetComponent<WordMakerMemory>(), enemy.GetComponent<WordMakerMemory>(),
+            player.GetComponent<WordWeaponizer>(), enemy.GetComponent<WordWeaponizer>(), 
+            player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), uid);
 
         //SetupArenaBoundaries(centroid);
 
     }
-    private void SetupArenaBoundaries(Vector2 centroid)
-    {
-        Vector2 wallSection = new Vector2(0, minY);
-        for (float x = minX; x < maxX; x += 1f)
-        {
-            wallSection.x = x;
-            wallSection = GridHelper.SnapToGrid(wallSection, 1);
-            if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
-            {
-                continue;
-            }
-            else
-            {
-                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
-                arenaWallObjects.Add(wallPiece);
-            }
+    //private void SetupArenaBoundaries(Vector2 centroid)
+    //{
+    //    Vector2 wallSection = new Vector2(0, minY);
+    //    for (float x = minX; x < maxX; x += 1f)
+    //    {
+    //        wallSection.x = x;
+    //        wallSection = GridHelper.SnapToGrid(wallSection, 1);
+    //        if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
+    //        {
+    //            continue;
+    //        }
+    //        else
+    //        {
+    //            ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
+    //            arenaWallObjects.Add(wallPiece);
+    //        }
 
-        }
-        wallSection.y = maxY;
-        for (float x = minX; x < maxX; x += 1f)
-        {
-            wallSection.x = x;
-            wallSection = GridHelper.SnapToGrid(wallSection, 1);
-            if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
-            {
-                continue;
-            }
-            else
-            {
-                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
-                arenaWallObjects.Add(wallPiece);
-            }
-        }
-        wallSection.x = minX;
-        for (float y = minY; y < maxY; y += 1f)
-        {
-            wallSection.y = y;
-            wallSection = GridHelper.SnapToGrid(wallSection, 1);
-            if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
-            {
-                continue;
-            }
-            else
-            {
-                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
-                arenaWallObjects.Add(wallPiece);
-            }
-        }
-        wallSection.x = maxX;
-        for (float y = minY; y < maxY; y += 1f)
-        {
-            wallSection.y = y;
-            wallSection = GridHelper.SnapToGrid(wallSection, 1);
-            if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
-            {
-                continue;
-            }
-            else
-            {
-                ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
-                arenaWallObjects.Add(wallPiece);
-            }
-        }
-    }
+    //    }
+    //    wallSection.y = maxY;
+    //    for (float x = minX; x < maxX; x += 1f)
+    //    {
+    //        wallSection.x = x;
+    //        wallSection = GridHelper.SnapToGrid(wallSection, 1);
+    //        if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
+    //        {
+    //            continue;
+    //        }
+    //        else
+    //        {
+    //            ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
+    //            arenaWallObjects.Add(wallPiece);
+    //        }
+    //    }
+    //    wallSection.x = minX;
+    //    for (float y = minY; y < maxY; y += 1f)
+    //    {
+    //        wallSection.y = y;
+    //        wallSection = GridHelper.SnapToGrid(wallSection, 1);
+    //        if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
+    //        {
+    //            continue;
+    //        }
+    //        else
+    //        {
+    //            ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
+    //            arenaWallObjects.Add(wallPiece);
+    //        }
+    //    }
+    //    wallSection.x = maxX;
+    //    for (float y = minY; y < maxY; y += 1f)
+    //    {
+    //        wallSection.y = y;
+    //        wallSection = GridHelper.SnapToGrid(wallSection, 1);
+    //        if (Physics2D.OverlapCircle(wallSection, checkRadius, layerMask_Impassable))
+    //        {
+    //            continue;
+    //        }
+    //        else
+    //        {
+    //            ArenaWall wallPiece = Instantiate(wallPrefab, wallSection, Quaternion.identity).GetComponent<ArenaWall>();
+    //            arenaWallObjects.Add(wallPiece);
+    //        }
+    //    }
+    //}
 
-    private void SetupStatueCameraMouseCat(Vector2 centroid)
+    private void SetupStatueCameraMouse(Vector2 centroid)
     {
         ltd = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity).GetComponent<LetterTileDropper>();
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
@@ -141,10 +143,10 @@ public class ArenaBuilder : MonoBehaviour
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         cvc.Follow = camMouse.transform; //arenaStarter.transform;
 
-        for (int i = 0; i < enemyPrefabs.Length; i++)
-        {
-            enemies[i] = Instantiate(enemyPrefabs[i], centroid + Vector2.one, Quaternion.identity) as GameObject;
-        }
+        //for (int i = 0; i < enemyPrefabs.Length; i++)
+        //{
+        //    enemies[i] = Instantiate(enemyPrefabs[i], centroid + Vector2.one, Quaternion.identity) as GameObject;
+        //}
 
     }
 
@@ -191,7 +193,7 @@ public class ArenaBuilder : MonoBehaviour
         float timeElapsed = Mathf.Round( Time.time - startTime);
         GameObject debriefMenu = Instantiate(arenaDebriefMenuPrefab);
         debriefMenu.GetComponent<ArenaDebriefMenuDriver>().SetupDebriefMenu(gc, 
-            didPlayerWin, gc.GetPlayer(), enemies[0], timeElapsed);
+            didPlayerWin, gc.GetPlayer(), enemy, timeElapsed);
     }
 
     public void CloseDownArena()
@@ -202,10 +204,9 @@ public class ArenaBuilder : MonoBehaviour
         uid.ShowOverworldUIElements();
         Destroy(camMouse);
         cvc.Follow = player.transform;
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            Destroy(enemies[i]);
-        }
+
+        Destroy(enemy);
+
         ltd.DestroyAllLetters();
         Destroy(ltd?.gameObject);
         //foreach(var element in arenaWallObjects)
@@ -219,9 +220,9 @@ public class ArenaBuilder : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public GameObject[] GetEnemiesInArena()
+    public GameObject GetEnemyInArena()
     {
-        return enemies;
+        return enemy;
     }
 
     public ArenaSettingHolder GetArenaSettingsHolder()

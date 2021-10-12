@@ -18,4 +18,4 @@ MonoBehaviour:
   resultFromOption0: 3
   PlayerText_1: Not today
   resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 15, y: 15}
+  NPCDestinationIfMoving: {x: 10, y: -1}

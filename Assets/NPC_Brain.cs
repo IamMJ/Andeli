@@ -65,7 +65,7 @@ public class NPC_Brain : MonoBehaviour
         {
             if (Time.time >= timeToMoveOn)
             {
-
+                requestedToHalt = false;
                 UpdateStrategicDestination(GridHelper.CreateValidRandomPosition(baseLocation, wanderRange, isFlying));
             }
         }
@@ -173,7 +173,7 @@ public class NPC_Brain : MonoBehaviour
                     {
                         timeToMoveOn = Time.time + (loiterTime_Average * UnityEngine.Random.Range(1 - loiterTime_RandomFactor, 1 + loiterTime_RandomFactor));
                     }
-                    requestedToHalt = false;
+
                     willHaltIfRequested_Currently = willHaltIfRequested_Normally;
                     
                     break;

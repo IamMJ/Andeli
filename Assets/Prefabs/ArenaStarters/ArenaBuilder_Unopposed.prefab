@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7351801026652380497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6593999420485628271}
+  - component: {fileID: 269034482388354396}
+  - component: {fileID: 5086475317652339047}
+  m_Layer: 0
+  m_Name: ArenaBuilder_Unopposed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6593999420485628271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351801026652380497}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &269034482388354396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351801026652380497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893cdc71c3a6f2d4eb3acb784006e654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraMousePrefab: {fileID: 2732463253256724971, guid: f93d13bed616d9e488d5649a27c0d787, type: 3}
+  wallPrefab: {fileID: 3920682680305924606, guid: a2b180e6275bc7e4c949ef1b7138dfbb, type: 3}
+  enemyPrefabs: []
+  letterTileDropperPrefab: {fileID: 7061575934574750077, guid: 2ff7dc08238502c418b5341965d53746, type: 3}
+  arenaDebriefMenuPrefab: {fileID: 6017347352899268855, guid: 0c35392b59a4c8b4fa3dfb2d9805db7e, type: 3}
+  ltd: {fileID: 0}
+--- !u!114 &5086475317652339047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7351801026652380497}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5143face1dbe4534c94445991cc327b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -281,7 +281,7 @@ public class WordWeaponizer : MonoBehaviour
         if (isPlayer)
         {
 
-            currentEnemy = ab.GetEnemiesInArena()[0];
+            currentEnemy = ab.GetEnemyInArena();
         }
         else
         {

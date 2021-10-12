@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     GraphUpdateScene gus;
     Movement movement;
     Seeker seeker;
+    ConversationPanelDriver cpd;
     Path currentPath;
     Touch currentTouch;
     List<GameObject> moveArrows = new List<GameObject>();
@@ -46,6 +47,7 @@ public class PlayerInput : MonoBehaviour
         seeker = GetComponent<Seeker>();
         dh = FindObjectOfType<DebugHelper>();
         gc = FindObjectOfType<GameController>();
+        cpd = FindObjectOfType<ConversationPanelDriver>();
         isMobile = Application.isMobilePlatform;
         //dh.DisplayDebugLog($"isMobile: {isMobile}");
         mc = Camera.main;
@@ -54,8 +56,12 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        HandleTouchInput();
-        HandleMouseInput();
+        if (!gc.isPaused && !cpd.isDisplayed)
+        {
+            HandleTouchInput();
+            HandleMouseInput();
+        }
+
 
         PassTacticalDestinationToMoveBrain();
 
@@ -67,7 +73,7 @@ public class PlayerInput : MonoBehaviour
     { 
         if (Input.touchCount == 1)
         {
-            if (gc.isPaused) { return; }
+
             currentTouch = Input.GetTouch(0);
             if (currentTouch.phase == TouchPhase.Began &&
                 !GridHelper.CheckIsTouchingWordSection(currentTouch.position, gc.isInArena, gc.isInTutorialMode))

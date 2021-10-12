@@ -9,6 +9,7 @@ public class ArenaStarter : MonoBehaviour
     [SerializeField] GameObject arenaBriefMenuPrefab = null;
     [SerializeField] Sprite inactiveSprite = null;
     Sprite activeSprite;
+    [SerializeField] public GameObject ArenaEnemyPrefab = null;
 
     ArenaSettingHolder ash;
     GameObject ab;
@@ -19,6 +20,7 @@ public class ArenaStarter : MonoBehaviour
     Animator anim;
 
     //param
+    [SerializeField] bool canBeDestroyed = true;
     [SerializeField] float arenaTriggerRange;
     float timeBetweenPlayerResponses = 10f;
 
@@ -84,10 +86,21 @@ public class ArenaStarter : MonoBehaviour
     public void DeactivateArenaStarter()
     {
         //GridModifier.ReknitAllGridGraphs(transform);
+        if (canBeDestroyed)
+        {
+            isActivated = false;
+            if (anim)
+            {
+                anim.enabled = false;
+            }
 
-        isActivated = false;
-        anim.enabled = false;
-        sr.sprite = inactiveSprite;
+            sr.sprite = inactiveSprite;
+        }
+        else
+        {
+            timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
+        }
+
         //gameObject.SetActive(false);
     }
 
@@ -96,7 +109,11 @@ public class ArenaStarter : MonoBehaviour
         //gameObject.SetActive(true);
         isActivated = true;
         sr.sprite = activeSprite;
-        anim.enabled = true;
+        if (anim)
+        {
+            anim.enabled = true;
+        }
+
         //GridModifier.UnknitAllGridGraphs(transform);
     }
 

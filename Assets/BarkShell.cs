@@ -12,7 +12,7 @@ public class BarkShell : MonoBehaviour
     SpriteRenderer sr;
 
     //param
-    Vector3 offsetVector = new Vector3(0, 2,0);
+    Vector3 offsetVector = new Vector3(0, 1,0);
     float fadeoutTime = 1;
     Color defaultTextColor = Color.black;
     Color defaultBGColor = new Color(1,1,1,0.5f);
@@ -51,6 +51,7 @@ public class BarkShell : MonoBehaviour
     public void ActivateBark(Bark bark, Transform transformToFollow)
     {
         if (bark == null) { return; }
+        if (transformToFollow == null) { return; }
         currentBark = bark;
         tmp.color = currentBark.DisplayColor;
         tmp.SetText(currentBark.BarkText);

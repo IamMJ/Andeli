@@ -48,7 +48,7 @@ public class StrategyBrainV2 : MonoBehaviour
         graphMask = 1 << GraphIndex;
 
         strategicDestination = ab.CreatePassableRandomPointWithinArena();
-        seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);        
+        seeker?.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);        
     } 
 
     // Update is called once per frame
@@ -86,9 +86,9 @@ public class StrategyBrainV2 : MonoBehaviour
 
     private void StartPathToStrategicDestination()
     {
-        if (seeker.IsDone() == true)
+        if (seeker?.IsDone() == true)
         {
-            seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
+            seeker?.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
         }
     }
 

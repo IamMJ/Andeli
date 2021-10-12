@@ -13,7 +13,7 @@ public class ArenaSettingHolder : MonoBehaviour
     WordWeaponizer wwz_Player;
     WordWeaponizer wwz_Enemy;
     WordBuilder wbd_Player;
-    WordBuilder_NPC wbd_Enemy;
+    WordBuilder wbd_Enemy;
     UIDriver uid;
 
     
@@ -21,7 +21,7 @@ public class ArenaSettingHolder : MonoBehaviour
     public enum ArenaSettingOptions {Plain, Mists, Sandy, Blizzard, Jungle, Graveyard }
 
     public void SetupArena(LetterTileDropper letterTileDropper, WordMakerMemory playerPlayMem, WordMakerMemory enemyPlayMem,
-        WordWeaponizer wwzPlayer, WordWeaponizer wwzEnemy, WordBuilder wbPlayer, WordBuilder_NPC wbEnemy, UIDriver uIDriver)
+        WordWeaponizer wwzPlayer, WordWeaponizer wwzEnemy, WordBuilder wbPlayer, WordBuilder wbEnemy, UIDriver uIDriver)
     {
         ltd = letterTileDropper;
         playerMemory = playerPlayMem;

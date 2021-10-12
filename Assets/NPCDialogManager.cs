@@ -25,11 +25,11 @@ public class NPCDialogManager : MonoBehaviour
 
     //param
     [SerializeField] float timeBetweenBarks_average = 4;
-    float conversationRange = 1.5f;
+    float conversationRange = 2f;
 
 
     //state
-    int currentBarkIndex = 0; 
+    int currentBarkIndex = -1; 
 
     float timeForNextBark;
     BarkShell currentBark;
@@ -51,7 +51,7 @@ public class NPCDialogManager : MonoBehaviour
         pdm = player.GetComponent<PlayerDialogMemory>();
 
         availableBarks = RebuildAvailableBarksBasedOnPlayerKnownKeywords();
-        currentBarkIndex = 0;
+
 
         availableConversations = RebuildAvailableConversationsBasedOnPlayerKnownKeywords();
         if (availableConversations.Count > 0)
@@ -123,7 +123,7 @@ public class NPCDialogManager : MonoBehaviour
         {
             currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
         }
-        currentBark?.ActivateBark(bark, transform);
+        currentBark.ActivateBark(bark, transform);
 
         timeForNextBark = Time.time + (timeBetweenBarks_average*UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
     }
@@ -135,22 +135,26 @@ public class NPCDialogManager : MonoBehaviour
 
     #endregion
     private void UpdateBark()
-    {   
+    {
+        currentBarkIndex++;
         if (currentBarkIndex > availableBarks.Count - 1)
         {
             currentBarkIndex = 0;
         }
         Bark bark = availableBarks[currentBarkIndex];
-        currentBarkIndex++;
+
         
-        if (!currentBark)
+        if (currentBark == null)
         {
             currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
         }
-        currentBark?.ActivateBark(bark, transform);
-
-        timeForNextBark = Time.time + (timeBetweenBarks_average * UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
+        else
+        {
+            currentBark.ActivateBark(bark, transform);
+            timeForNextBark = Time.time + (timeBetweenBarks_average * UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
+        }
     }
+        
 
     private List<Bark> RebuildAvailableBarksBasedOnPlayerKnownKeywords()
     {

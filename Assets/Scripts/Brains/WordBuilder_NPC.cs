@@ -27,9 +27,12 @@ public class WordBuilder_NPC : WordBuilder
         ss = GetComponent<SpellingStrategy>();
         sb = GetComponent<StrategyBrainV2>();
         ltd = FindObjectOfType<LetterTileDropper>();
-        ltd.OnLetterListModified += DetermineBestTargetLetter;
-        //tpm = GetComponent<TailPieceManager>();
-        
+        if (ltd)
+        {
+            ltd.OnLetterListModified += DetermineBestTargetLetter;
+        }
+
+        //tpm = GetComponent<TailPieceManager>();        
     }
 
     private void Update()

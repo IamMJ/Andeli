@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 791868953
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 9860fd8cf887dc744a5588b2e3afe53f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 54d522acfea0fc34fb9444a9e118b11e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,15 +97,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allBarks:
-  - {fileID: 11400000, guid: 7b0c80d124ffc2e46b0cea77a1d1b13d, type: 2}
-  - {fileID: 11400000, guid: 2765ee7b22c75ec48b688089eede3466, type: 2}
+  - {fileID: 11400000, guid: 21d9fa5d4659b444e9e99dceeba22bf8, type: 2}
   possibleReplyBarks: []
   allConversations: []
   availableBarks: []
   availableConversations: []
   barkPrefab: {fileID: 4643434310906258457, guid: 842f42abd6b41fd4c937b09b850b2216, type: 3}
   noticeMePrefab: {fileID: 0}
-  CanSpeak: 1
+  timeBetweenBarks_average: 4
 --- !u!58 &8348216205034714528
 CircleCollider2D:
   m_ObjectHideFlags: 0
