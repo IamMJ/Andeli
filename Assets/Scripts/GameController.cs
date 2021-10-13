@@ -26,6 +26,7 @@ public class GameController : MonoBehaviour
     Tutor tutor;
     ArenaBuilder currentArenaBuilder;
     PixelPerfectCamera ppc;
+    MusicController mc;
 
     public Action OnGameStart;
 
@@ -36,7 +37,7 @@ public class GameController : MonoBehaviour
     Vector2 tutorialStartLocation = new Vector2(-4, 17);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
     int cameraSize_ZoomedIn = 10;
-    int cameraSize_ZoomedOut = 40;
+    int cameraSize_ZoomedOut = 30;
     int zoomRate = 10;
     Vector3 cameraOffset_Arena = new Vector3(0, -1.5f, 0);
     Vector3 cameraOffset_Overworld = Vector3.zero;
@@ -74,6 +75,7 @@ public class GameController : MonoBehaviour
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         ppc = Camera.main.GetComponent<PixelPerfectCamera>();
         uid = FindObjectOfType<UIDriver>();
+        mc = FindObjectOfType<MusicController>();
         uid.HideAllOverworldUIElements();
         uid.ShowHideMainMenu(true);
 
@@ -114,12 +116,15 @@ public class GameController : MonoBehaviour
     {
         if (shouldZoomIn)
         {
+            
             Time.timeScale = 1;
             ppc.enabled = false;
             while (currentZoom > cameraSize_ZoomedIn)
             {
                 currentZoom -= Time.deltaTime * zoomRate;
-
+                
+                float factor = Mathf.InverseLerp(cameraSize_ZoomedIn, cameraSize_ZoomedOut, currentZoom);
+                mc.FadeMainThemeWithZoom(factor);
                 if (currentZoom - cameraSize_ZoomedIn <= 1)
                 {
                     ppc.enabled = true;
@@ -137,6 +142,8 @@ public class GameController : MonoBehaviour
             while (currentZoom < cameraSize_ZoomedOut)
             {
                 currentZoom += Time.deltaTime * zoomRate;
+                float factor = Mathf.InverseLerp(cameraSize_ZoomedIn, cameraSize_ZoomedOut, currentZoom);
+                mc.FadeMainThemeWithZoom(factor);
                 if (cameraSize_ZoomedOut - currentZoom <= 1)
                 {
                     ppc.enabled = true;
