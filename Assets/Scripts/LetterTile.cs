@@ -53,6 +53,7 @@ public class LetterTile : MonoBehaviour
 
     Color fadeColor_sr;
     Color fadeColor_mr;
+    ParticleSystem ps;
 
     public struct SpriteColorYMod
     {
@@ -103,6 +104,7 @@ public class LetterTile : MonoBehaviour
         AssignStartingSprite();
         fadeColor_sr = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
         fadeColor_mr = new Color(tmp.color.r, tmp.color.g, tmp.color.b, 1);
+        ps = GetComponent<ParticleSystem>();
 
     }
 
@@ -142,7 +144,11 @@ public class LetterTile : MonoBehaviour
                 }
                 GridModifier.UnknitAllGridGraphs(transform);
                 letterTileDropper.AddLetterToSpawnedLetterList(this);
-
+                ParticleSystem.MainModule mainmod = ps.main;
+                mainmod.startColor = sr.color;
+                ParticleSystem.EmissionModule emod = ps.emission;
+                emod.rateOverTime = Power_Player * 1;
+                ps.Play();
             }
             return;
         }
@@ -214,7 +220,7 @@ public class LetterTile : MonoBehaviour
             assignedShadow.RemoveShadow();
         }
         GridModifier.ReknitAllGridGraphs(transform);
-
+        ps.Stop();
     }
 
     public void DestroyLetterTile()
