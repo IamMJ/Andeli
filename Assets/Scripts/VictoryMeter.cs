@@ -52,6 +52,7 @@ public class VictoryMeter : MonoBehaviour
     }
     public bool ModifyBalanceAndCheckForArenaEnd(float amountToAdd)
     {
+        Debug.Log($"hitting for {amountToAdd}");
         currentBalance += amountToAdd;
         if (amountToAdd < 0)
         {

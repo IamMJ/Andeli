@@ -188,6 +188,7 @@ public class WordBuilder : MonoBehaviour
     private SwordWordPower CreateSwordWordPowerFromCurrentWord()
     {
         SwordWordPower newSwordWord = new SwordWordPower(currentWord.Length, 0);
+        newSwordWord.Power = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
         for (int i = 0; i < currentWord.Length; i++)
         {
             newSwordWord.letterSprites[i] = lettersOnSword[i].GetComponent<SpriteRenderer>().sprite;
@@ -304,7 +305,7 @@ public class WordBuilder : MonoBehaviour
     }
     public void IncreasePower(int amount)
     {
-        if (CurrentPower == 0)
+        if (CurrentPower == 0 && Mathf.Abs(amount) > 0) 
         {
             CurrentPower = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
         }
