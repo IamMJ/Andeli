@@ -12,5 +12,5 @@ public class ConversationStep : ScriptableObject
     [SerializeField] public ReplyOption resultFromOption1 = ReplyOption.QuitConvo;
     [SerializeField] public Vector2 NPCDestinationIfMoving = Vector2.zero;
 
-    public enum ReplyOption { AdvanceOneStep, AdvanceTwoSteps, QuitConvo, MoveNPCandQuitConvo};
+    public enum ReplyOption { AdvanceOneStep, AdvanceTwoSteps, QuitConvo, TempMoveNPCandQuitConvo, PermMoveNPCandQuitConvo};
 }

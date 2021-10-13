@@ -6,11 +6,14 @@ using UnityEngine;
 public class NPCDialogManager : MonoBehaviour
 {
     //init
-    [SerializeField] Bark[] allBarks = null;
-    [SerializeField] Bark[] possibleReplyBarks = null;
+    [SerializeField] Bark[] allPeaceBarks = null;
+    [SerializeField] Bark[] allReplyBarks = null;
+    [SerializeField] Bark[] allCombatBarks = null;
     [SerializeField] List<Conversation> allConversations = new List<Conversation>();
-    public List<Bark> availableBarks = new List<Bark>();
-    public List<Conversation> availableConversations = new List<Conversation>();
+    [SerializeField]  List<Bark> availablePeaceBarks = new List<Bark>();
+    [SerializeField]  List<Bark> availableReplyBarks = new List<Bark>();
+    [SerializeField]  List<Bark> availableCombatBarks = new List<Bark>();
+    [SerializeField]  List<Conversation> availableConversations = new List<Conversation>();
 
 
     [SerializeField] GameObject barkPrefab = null;
@@ -50,9 +53,9 @@ public class NPCDialogManager : MonoBehaviour
         player = gc.GetPlayer();
         pdm = player.GetComponent<PlayerDialogMemory>();
 
-        availableBarks = RebuildAvailableBarksBasedOnPlayerKnownKeywords();
-
-
+        availablePeaceBarks = RebuildAvailableBarks(ref allPeaceBarks);
+        availableReplyBarks = RebuildAvailableBarks(ref allReplyBarks);
+        availableCombatBarks = RebuildAvailableBarks(ref allCombatBarks);
         availableConversations = RebuildAvailableConversationsBasedOnPlayerKnownKeywords();
         if (availableConversations.Count > 0)
         {
@@ -72,14 +75,16 @@ public class NPCDialogManager : MonoBehaviour
             ActivateNoticeMe();
         }
 
-        availableBarks = RebuildAvailableBarksBasedOnPlayerKnownKeywords(newKeyword);
+        availablePeaceBarks = RebuildAvailableBarks(ref allPeaceBarks, newKeyword);
+        availableReplyBarks = RebuildAvailableBarks(ref allReplyBarks, newKeyword);
+        availableCombatBarks = RebuildAvailableBarks(ref allCombatBarks, newKeyword);
         currentBarkIndex = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Time.time > timeForNextBark && gc.isInGame && !gc.isInArena)
+        if (Time.time > timeForNextBark && gc.isInGame)
         {
             UpdateBark();
         }
@@ -117,8 +122,9 @@ public class NPCDialogManager : MonoBehaviour
     #region Public Methods
     public void ProvideReplyBarkToPlayer()
     {
-        int rand = UnityEngine.Random.Range(0, possibleReplyBarks.Length);
-        Bark bark = possibleReplyBarks[rand];
+        if (availableReplyBarks.Count == 0) { return; }
+        int rand = UnityEngine.Random.Range(0, availableReplyBarks.Count);
+        Bark bark = availableReplyBarks[rand];
         if (!currentBark)
         {
             currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
@@ -136,13 +142,28 @@ public class NPCDialogManager : MonoBehaviour
     #endregion
     private void UpdateBark()
     {
-        currentBarkIndex++;
-        if (currentBarkIndex > availableBarks.Count - 1)
+        Bark bark;
+        if (gc.isInArena)
         {
-            currentBarkIndex = 0;
-        }
-        Bark bark = availableBarks[currentBarkIndex];
+            if (availableCombatBarks.Count == 0) { return; }
+            currentBarkIndex++;
+            if (currentBarkIndex > availableCombatBarks.Count - 1)
+            {
+                currentBarkIndex = 0;
+            }
 
+            bark = availableCombatBarks[currentBarkIndex];
+        }
+        else
+        {
+            if (availablePeaceBarks.Count == 0) { return; }
+            currentBarkIndex++;
+            if (currentBarkIndex > availablePeaceBarks.Count - 1)
+            {
+                currentBarkIndex = 0;
+            }
+            bark = availablePeaceBarks[currentBarkIndex];
+        }
         
         if (currentBark == null)
         {
@@ -156,10 +177,10 @@ public class NPCDialogManager : MonoBehaviour
     }
         
 
-    private List<Bark> RebuildAvailableBarksBasedOnPlayerKnownKeywords()
+    private List<Bark> RebuildAvailableBarks(ref Bark[] masterBarkList)
     {
         List<Bark> availBarks = new List<Bark>();
-        foreach (var bark in allBarks)
+        foreach (var bark in masterBarkList)
         {
             string testKeyword = bark.KeywordToShowFor;
             string bannedKeyword = bark.KeywordToHideFrom;
@@ -171,11 +192,10 @@ public class NPCDialogManager : MonoBehaviour
         }
         return availBarks;
     }
-
-    private List<Bark> RebuildAvailableBarksBasedOnPlayerKnownKeywords(string specificKeyword)
+    private List<Bark> RebuildAvailableBarks(ref Bark[] masterBarkList, string specificKeyword)
     {
         List<Bark> availBarks = new List<Bark>(0);
-        foreach (var bark in allBarks)
+        foreach (var bark in masterBarkList)
         {
             string testKeyword = bark.KeywordToShowFor;
             string bannedKeyword = bark.KeywordToHideFrom;

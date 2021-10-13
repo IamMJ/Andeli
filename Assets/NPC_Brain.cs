@@ -31,7 +31,7 @@ public class NPC_Brain : MonoBehaviour
 
     //state
     Vector2 baseLocation;
-    bool willHaltIfRequested_Currently;
+    bool willHaltIfRequested_Currently;  //If true, the NPC is on a mission and shouldn't be allowed to stop
     public bool requestedToHalt = false;
     [SerializeField] Vector2 strategicDest;
     [SerializeField] bool isAtDestination = false;
@@ -210,10 +210,13 @@ public class NPC_Brain : MonoBehaviour
         }
     }
 
-    public void RequestNPCToMoveToSpecificDestination(Vector2 specificDest)
+    public void RequestNPCToMoveToSpecificDestination(Vector2 specificDest, bool shouldSetNewHomePosition)
     {
-        willHaltIfRequested_Currently = false;
-        Debug.Log("requesting an NPC move to specific location");   
+        if (shouldSetNewHomePosition)
+        {
+            baseLocation = specificDest;
+        }
+        willHaltIfRequested_Currently = false; 
         UpdateStrategicDestination(specificDest);
         timeToMoveOn = Time.time;
     }

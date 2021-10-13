@@ -15,7 +15,7 @@ MonoBehaviour:
   NPCText: Want some practice? Follow me and I'll help you.
   NPCSprite: {fileID: 0}
   PlayerText_0: I'll go practice
-  resultFromOption0: 3
+  resultFromOption0: 4
   PlayerText_1: Not today
   resultFromOption1: 2
   NPCDestinationIfMoving: {x: 10, y: -1}

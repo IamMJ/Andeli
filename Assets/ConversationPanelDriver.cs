@@ -134,8 +134,13 @@ public class ConversationPanelDriver : MonoBehaviour
 
                 return;
 
-            case ConversationStep.ReplyOption.MoveNPCandQuitConvo:
-                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.NPCDestinationIfMoving);
+            case ConversationStep.ReplyOption.TempMoveNPCandQuitConvo:
+                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.NPCDestinationIfMoving, false);
+                ShutdownConversationPanel();
+                return;
+
+            case ConversationStep.ReplyOption.PermMoveNPCandQuitConvo:
+                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.NPCDestinationIfMoving, true);
                 ShutdownConversationPanel();
                 return;
 

@@ -29,6 +29,7 @@ public class PlayerInput : MonoBehaviour
     float nextWaypointDistance = 1;
 
     //state
+    bool wasValidButtonDown = false;
     bool isMobile = false;
     bool isSnapped = false;
     GraphMask graphMask = 1 << 0;
@@ -73,7 +74,6 @@ public class PlayerInput : MonoBehaviour
     { 
         if (Input.touchCount == 1)
         {
-
             currentTouch = Input.GetTouch(0);
             if (currentTouch.phase == TouchPhase.Began &&
                 !GridHelper.CheckIsTouchingWordSection(currentTouch.position, gc.isInArena, gc.isInTutorialMode))
@@ -91,7 +91,11 @@ public class PlayerInput : MonoBehaviour
     private void HandleMouseInput()
     {
         if (gc.isPaused) { return; }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0))
+        {
+            wasValidButtonDown = true;
+        }
+        if (Input.GetMouseButtonUp(0) && wasValidButtonDown)
         {
             Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
             if (GridHelper.CheckIsTouchingWordSection(Input.mousePosition, gc.isInArena, gc.isInTutorialMode))
@@ -105,6 +109,7 @@ public class PlayerInput : MonoBehaviour
             CheckStrategicDestinationForDialogPossibility();
             Debug.DrawLine(transform.position, strategicDestination, Color.red, 1f);
             seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
+            wasValidButtonDown = false;
         }
     }
 

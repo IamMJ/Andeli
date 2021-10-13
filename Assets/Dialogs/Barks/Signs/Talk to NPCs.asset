@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   KeywordToShowFor: 
   KeywordToHideFrom: 
-  BarkText: Tap NPCs to talk
+  BarkText: Tap on people to talk
   DisplayTime: 3
   DisplayColor: {r: 0, g: 0, b: 0, a: 1}
