@@ -245,7 +245,6 @@ public class UIDriver : MonoBehaviour
 
     private void NotifyWordBuilderToDestroyLetterAtIndex(int index)
     {
-        Debug.Log("shoud be blowing up a letter");
         ParticleSystem.MainModule newMod = wordboxImages[index].GetComponent<ParticleSystem>().main;
         newMod.startColor = wordboxImages[index].color;
         wordboxImages[index].GetComponent<ParticleSystem>().Play();
@@ -290,15 +289,15 @@ public class UIDriver : MonoBehaviour
     #endregion
     
 
-    public void RemoveParticleEffectsAtIndexInWord(int indexInWord)
-    {
-        GameObject go = wordboxImages[indexInWord - wordbarScroll].gameObject;
-        int children = go.transform.childCount;
-        for (int i = 0; i < children; i++)
-        {
-            Destroy(go.gameObject.transform.GetChild(i).gameObject);
-        }
-    }
+    //public void RemoveParticleEffectsAtIndexInWord(int indexInWord)
+    //{
+    //    GameObject go = wordboxImages[indexInWord - wordbarScroll].gameObject;
+    //    int children = go.transform.childCount;
+    //    for (int i = 0; i < children; i++)
+    //    {
+    //        Destroy(go.gameObject.transform.GetChild(i).gameObject);
+    //    }
+    //}
 
     public void ModifyPowerMeterTMP(int valueToShow)
     {
@@ -454,7 +453,7 @@ public class UIDriver : MonoBehaviour
         wordboxTMPs[0].text = "...";
         wordboxImages[0].sprite = blankTileDefault.sprite;
         wordboxImages[0].color = Color.white;
-        RemoveParticleEffectsAtIndexInWord(0 + wordbarScroll);
+        //RemoveParticleEffectsAtIndexInWord(0 + wordbarScroll);
 
         for (int i = 1; i < wordboxImages.Length-1; i++)
         {
@@ -482,10 +481,10 @@ public class UIDriver : MonoBehaviour
         {
             image.sprite = blankTileDefault.sprite;
             image.color = blankTileDefault.color;
-            if (image.gameObject.transform.childCount > 0)
-            {
-                Destroy(image.gameObject.transform.GetChild(0).gameObject);
-            }
+            //if (image.gameObject.transform.childCount > 0)
+            //{
+            //    Destroy(image.gameObject.transform.GetChild(0).gameObject);
+            //}
         }
         foreach(var TMP in wordboxTMPs)
         {

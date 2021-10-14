@@ -23,11 +23,6 @@ public class MusicController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void FadeMainThemeWithZoom(float factor)
     {
         auso_pri.volume = (Mathf.Clamp(factor, 0.5f, 1));
