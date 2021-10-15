@@ -50,7 +50,7 @@ public class ArenaDebriefMenuDriver : MonoBehaviour
             loserImage.sprite = player.GetComponent<SpriteRenderer>().sprite;
             loserSilhouetteImage.sprite = player.GetComponent<SpriteRenderer>().sprite;
         }
-
+        loserFadeMaterial.SetFloat("_FadeAmount", 0);
         WordMakerMemory.ArenaData ad = pm.GetCurrentArenaData();
         timeTMP.text = "Time: " + timeInArena.ToString();
         powerDealtTMP.text = "Power Dealt: " + ad.powerDealt.ToString();
