@@ -75,7 +75,7 @@ public class WordBuilder_NPC : WordBuilder
     public void EraseWord()
     {        
         ClearCurrentWord();
-        ClearPowerLevel();
+        //ClearPowerLevel();
     }
     #endregion
 

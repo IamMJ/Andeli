@@ -303,30 +303,16 @@ public class WordBuilder : MonoBehaviour
     {
         return lettersOnSword;
     }
-    public void IncreasePower(int amount)
-    {
-        if (CurrentPower == 0 && Mathf.Abs(amount) > 0) 
-        {
-            CurrentPower = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
-        }
-        CurrentPower += amount;
-        if (hasUI)
-        {
-            uid.ModifyPowerMeterTMP(CurrentPower);
-        }
+    //public void ClearPowerLevel()
+    //{
+    //    CurrentPower = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
 
-    }
+    //    if (hasUI)
+    //    {
+    //        uid.ModifyPowerMeterTMP(CurrentPower);
+    //    }
 
-    public void ClearPowerLevel()
-    {
-        CurrentPower = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
-
-        if (hasUI)
-        {
-            uid.ModifyPowerMeterTMP(CurrentPower);
-        }
-
-    }
+    //}
 
     public bool ToggleLetterRoutingMode()
     {

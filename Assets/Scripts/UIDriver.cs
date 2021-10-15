@@ -36,6 +36,7 @@ public class UIDriver : MonoBehaviour
     //[SerializeField] Image energySliderFill_1 = null;
     //[SerializeField] Image energySliderFill_2 = null;
 
+
     [SerializeField] TextMeshProUGUI tutorialTMP = null;
     [SerializeField] GameObject tutorialPanel = null;
 
@@ -48,11 +49,13 @@ public class UIDriver : MonoBehaviour
     GameController gc;
     SceneLoader sl;
     Tutor tutor;
+    SwordGlowDriver sgd;
 
     //param
     float panelDeployRate = 100f; // pixels per second
     float topPanelShown_Y = -77f;
     float topPanelHidden_Y = 100f;
+
 
     //state
     [SerializeField] bool wasLongPress = false;
@@ -68,6 +71,7 @@ public class UIDriver : MonoBehaviour
 
     private void Start()
     {
+        sgd = GetComponent<SwordGlowDriver>();
         ClearWordBar();
     }
 
@@ -221,7 +225,7 @@ public class UIDriver : MonoBehaviour
     private void CompleteLongPress_WordBoxActions()
     {
         playerWB.ClearCurrentWord();
-        playerWB.ClearPowerLevel();
+        //playerWB.ClearPowerLevel();
         IncompleteLongPress_WordBoxActions();
     }
     private void IncompleteLongPress_WordBoxActions()
@@ -299,10 +303,13 @@ public class UIDriver : MonoBehaviour
     //    }
     //}
 
-    public void ModifyPowerMeterTMP(int valueToShow)
-    {
-        powerMeterTMP.text = valueToShow.ToString();
-    }
+    //public void ModifyPowerMeterTMP(int valueToShow)
+    //{
+    //    //powerMeterTMP.text = valueToShow.ToString();
+    //    UpdateSpellSwordGlow(valueToShow);
+    //}
+
+
 
     public void ShowHideMainMenu(bool shouldBeShown)
     {
@@ -416,6 +423,7 @@ public class UIDriver : MonoBehaviour
     public void UpdateLettersOnSwordAndPower(WordBuilder.SwordWordPower newSwordWord)
     {
         powerMeterTMP.text = newSwordWord.Power.ToString();
+        sgd.UpdateTargetSpellswordGlow(newSwordWord.Power);
         for(int i = 0; i < wordboxTMPs.Length; i++)
         {
             if (i < newSwordWord.letterSprites.Length)
@@ -491,6 +499,7 @@ public class UIDriver : MonoBehaviour
             TMP.text = "";
         }
         wordbarScroll = 0;
+        sgd.UpdateTargetSpellswordGlow(0);
     }
 
     public void UpdateIgnitionChanceTMP(float value)
