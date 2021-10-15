@@ -145,7 +145,7 @@ public class LetterTile : MonoBehaviour
                 GridModifier.UnknitAllGridGraphs(transform);
                 letterTileDropper.AddLetterToSpawnedLetterList(this);
                 ParticleSystem.MainModule mainmod = ps.main;
-                mainmod.startColor = sr.color;
+                mainmod.startColor = Color.Lerp(Color.white, Color.yellow, Power_Player / 10f);
                 ParticleSystem.EmissionModule emod = ps.emission;
                 emod.rateOverTime = Power_Player * 1;
                 ps.Play();

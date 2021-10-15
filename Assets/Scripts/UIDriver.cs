@@ -19,7 +19,7 @@ public class UIDriver : MonoBehaviour
     [SerializeField] GameObject bottomBarPanel = null;
 
     [SerializeField] Slider wordEraseSliderBG = null;
-    [SerializeField] Slider wordFiringSliderBG = null;
+    [SerializeField] Image attackButtonGlow = null;
     [SerializeField] TextMeshProUGUI powerMeterTMP = null;
 
     [SerializeField] SpriteRenderer blankTileDefault = null;
@@ -191,7 +191,7 @@ public class UIDriver : MonoBehaviour
         {
             timeButtonDepressed += Time.unscaledDeltaTime;
             Time.timeScale = 0;
-            FillWordFiringSlider(timeButtonDepressed / UIParameters.LongPressTime);
+            UpdateAttackButtonPressGlow(timeButtonDepressed / UIParameters.LongPressTime);
             if (timeButtonDepressed >= UIParameters.LongPressTime)
             {
                 if (playerWWZ.AttemptToFireWordAsPlayer())
@@ -212,14 +212,9 @@ public class UIDriver : MonoBehaviour
         wordEraseSliderBG.value = 0f;
     }
 
-    private void FillWordFiringSlider(float amount)
+    private void UpdateAttackButtonPressGlow(float amount)
     {
-        wordFiringSliderBG.value = amount;
-    }
-
-    private void ClearWordFiringSlider()
-    {
-        wordFiringSliderBG.value = 0;
+        attackButtonGlow.fillAmount = amount;
     }
 
     private void CompleteLongPress_WordBoxActions()
@@ -231,7 +226,7 @@ public class UIDriver : MonoBehaviour
     private void IncompleteLongPress_WordBoxActions()
     {
         ClearWordEraseSlider();
-        ClearWordFiringSlider();
+        UpdateAttackButtonPressGlow(0);
         timeButtonDepressed = 0;
         Time.timeScale = 1f;
         isFireWeaponButtonPressed = false;

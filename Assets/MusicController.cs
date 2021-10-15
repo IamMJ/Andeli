@@ -19,7 +19,7 @@ public class MusicController : MonoBehaviour
         auso_pri.Play();
         auso_aux.clip = windLoop;
         auso_aux.loop = true;
-        auso_aux.Play();
+        auso_aux?.Play();
     }
 
     // Update is called once per frame

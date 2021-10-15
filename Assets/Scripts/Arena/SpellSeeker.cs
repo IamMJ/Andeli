@@ -9,9 +9,10 @@ public class SpellSeeker : MonoBehaviour
     Rigidbody2D rb;
     VictoryMeter vm;
     GameController gc;
+    [SerializeField] GameObject particleImpactFXprefab = null;
 
     //param
-    float thrust = 30f;
+    float thrust = 40f;
     float closeEnough = 0.1f;
     float minTimeAlive = 1.0f;
 
@@ -83,6 +84,7 @@ public class SpellSeeker : MonoBehaviour
         if (dist <= closeEnough)
         {
             HandleImpact();
+            Instantiate(particleImpactFXprefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

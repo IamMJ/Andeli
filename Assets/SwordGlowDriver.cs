@@ -37,6 +37,6 @@ public class SwordGlowDriver : MonoBehaviour
         factor = Mathf.Clamp01(factor);
 
         swordFGglow.fillAmount = factor;
-        swordBGglow.fillAmount = factor * 0.97f;
+        swordBGglow.fillAmount = factor * 0.99f;
     }
 }

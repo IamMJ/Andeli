@@ -32,9 +32,9 @@ public class WordWeaponizer : MonoBehaviour
     //state
     bool isPlayer = false;
     int powerSign = -1;
-    float energyRegenRate_Target = 2f; // units per second;
+    float energyRegenRate_Target = 0.5f; // units per second;
     float energyRegenRate_Current;
-    float energyRegenDriftRate = 0.2f; //how fast the current energy regen rate drifts back to its target. 
+    float energyRegenDriftRate = 0.1f; //how fast the current energy regen rate drifts back to its target. 
     float currentEnergyLevel;
     TrueLetter.Ability abilityToAutoIgnite = TrueLetter.Ability.Normal;
 

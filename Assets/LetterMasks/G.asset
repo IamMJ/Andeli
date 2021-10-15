@@ -15,4 +15,4 @@ MonoBehaviour:
   AssociatedTrueLetter: {fileID: 11400000, guid: bbc8bdd0c1e1e4d4d98e6e4614d77346, type: 2}
   ShownSprite: {fileID: 0}
   ShownColor: {r: 0, g: 0, b: 0, a: 0}
-  ability: 0
+  ability: 1

@@ -16,8 +16,8 @@ MonoBehaviour:
   briefScreenText: The plains; no special rules here.
   aso: 0
   letterLifetime: 20
-  lettersPerWave: 4
-  timeBetweenWaves: 5
+  lettersPerWave: 2
+  timeBetweenWaves: 2
   lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 12
