@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
   m_Name: 4
   m_EditorClassIdentifier: 
-  NPCText: You are a Spellsword, right? True Letters like these appear while in combat!
-  NPCSprite: {fileID: 0}
+  NPCText: In combat, use these letters to spell words to fight!
+  NPCSprite: {fileID: 21300000, guid: 5c06a0a1b33c3c74ebf5f8788c9c5317, type: 3}
   PlayerText_0: Oh, right.
   resultFromOption0: 0
   PlayerText_1: 
