@@ -69,7 +69,10 @@ public class WordWeaponizer : MonoBehaviour
         if (uid)
         {
             //uid.UpdateSpellEnergySlider(currentEnergyLevel);
-            jm.UpdateJewelImage(currentEnergyLevel / maxEnergy * 100);
+            if (gc.isInArena)
+            {
+                jm.UpdateJewelImage(currentEnergyLevel / maxEnergy * 100);
+            }
         }
     }
 
@@ -90,6 +93,8 @@ public class WordWeaponizer : MonoBehaviour
     //        return false;
     //    }
     //}
+
+    #region Public Methods
     public bool AttemptToFireWordAsPlayer()
     {
         //Check for sufficient Spell Energy...
@@ -120,13 +125,7 @@ public class WordWeaponizer : MonoBehaviour
         }
     }
 
-    private void CreateWordPuff(string word, int powerForColor)
-    {
-        GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
-        WordPuff wordPuff = puff.GetComponent<WordPuff>();
-        wordPuff.SetText(testWord);
-        wordPuff.SetColorByPower(wbd.CurrentPower);
-    }
+
 
     /// <summary>
     /// This is the same as 'AttemptToFireWordAsPlayer' except it does not check for word validity first. The NPC
@@ -176,7 +175,26 @@ public class WordWeaponizer : MonoBehaviour
         }
         
     }
+    public void ModifyEnergyRegent(float amount)
+    {
+        energyRegenRate_Current += amount;
+    }
 
+    public void HandleArenaEntry()
+    {
+        energyRegenRate_Current = energyRegenRate_Target;
+        currentEnergyLevel = maxEnergy;
+        jm.ProvideFeedbackAboutInsufficientEnergy(99);
+    }
+
+    #endregion
+    private void CreateWordPuff(string word, int powerForColor)
+    {
+        GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
+        WordPuff wordPuff = puff.GetComponent<WordPuff>();
+        wordPuff.SetText(testWord);
+        wordPuff.SetColorByPower(wbd.CurrentPower);
+    }
     private void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
     {
         if (isPlayer)
@@ -290,10 +308,7 @@ public class WordWeaponizer : MonoBehaviour
         }
     }
 
-    public void ModifyEnergyRegent(float amount)
-    {
-        energyRegenRate_Current += amount;
-    }
+
 
     #region Public Arena Parameter Setting
 

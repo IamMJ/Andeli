@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class JewelManager : MonoBehaviour
 {
     [SerializeField] Image[] jewelImages = null;
-    [SerializeField] ParticleSystem jewel0PS = null;
+    [SerializeField] ParticleSystem[] jewelPSs = null;
 
     //state
     int jewelsInstalled = 1;
@@ -21,22 +21,21 @@ public class JewelManager : MonoBehaviour
 
     public void UpdateJewelImage(float factor)
     {
+        int lowestEmpty = -1;
         float subamount = 100 / jewelsInstalled;
-        for (int i = 0; i < jewelsInstalled; i++)
+        for (int i = jewelsInstalled-1; i >= 0; i--)
         {
             float specificFactor = Mathf.Clamp01((factor - (subamount * i)) / subamount);
             jewelImages[i].color = Color.HSVToRGB(0, specificFactor, 1);
-            if (i == 0 && specificFactor < 1)
+            if (specificFactor < 1)
             {
-                Debug.Log("insuff");
-                ProvideFeedbackAboutInsufficientEnergy(true);
+                lowestEmpty = i;
             }
-            if (i == 0 && specificFactor >= 1)
-            {
-                Debug.Log("plenty");
-                ProvideFeedbackAboutInsufficientEnergy(false);
-            }
+
         }
+        Debug.Log($"Lowest empty jewel: {lowestEmpty}");
+        ProvideFeedbackAboutInsufficientEnergy(lowestEmpty);
+
     }
 
     public void ModifyJewelCount(int newJewelCount)
@@ -48,17 +47,21 @@ public class JewelManager : MonoBehaviour
         }
     }
 
-    public void ProvideFeedbackAboutInsufficientEnergy(bool isInsufficient)
+    public void ProvideFeedbackAboutInsufficientEnergy(int chargingJewelIndex)
     {
-        if (isInsufficient)
+        if (chargingJewelIndex == -1) { return; }
+        for (int i = 0; i < jewelsInstalled; i++)
         {
-            ParticleSystem.EmissionModule em = jewel0PS.emission;
-            em.rateOverTime = 6;
-        }
-        else
-        {
-            ParticleSystem.EmissionModule em = jewel0PS.emission;
-            em.rateOverTime = 0;
+            if (i == chargingJewelIndex)
+            {
+                ParticleSystem.EmissionModule em = jewelPSs[i].emission;
+                em.rateOverTime = 6;
+            }
+            else
+            {
+                ParticleSystem.EmissionModule em = jewelPSs[i].emission;
+                em.rateOverTime = 0;
+            }
         }
     }
 }

@@ -54,6 +54,9 @@ public class ArenaBuilder : MonoBehaviour
         uid.ShowArenaUIElements();
 
         player = gc.GetPlayer();
+        player.GetComponent<WordWeaponizer>().HandleArenaEntry();
+        player.GetComponent<WordBuilder>().ClearCurrentWord();
+        FindObjectOfType<BagManager>().RequestClearOutBag();
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
         vm = gc.GetVictoryMeter();
         vm.ResetArena();

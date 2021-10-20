@@ -29,7 +29,7 @@ public class BagManager : MonoBehaviour
         gc = FindObjectOfType<GameController>();
         gc.OnGameStart += HandleGameStart;
         letterTilesInBag = new LetterTile[bagImages.Length];
-        ClearAllLetterIcons();
+        ClearAllLettersFromBag();
     }
 
     private void HandleGameStart()
@@ -37,7 +37,7 @@ public class BagManager : MonoBehaviour
         wb_player = gc.GetPlayer().GetComponent<WordBuilder>();
     }
 
-    private void ClearAllLetterIcons()
+    private void ClearAllLettersFromBag()
     {
         for (int i = 0; i < letterTilesInBag.Length; i++)
         {
@@ -122,6 +122,11 @@ public class BagManager : MonoBehaviour
             // TODO shake a bag a bit
             return false;
         }
+    }
+
+    public void RequestClearOutBag()
+    {
+        ClearAllLettersFromBag();
     }
     #endregion
 
