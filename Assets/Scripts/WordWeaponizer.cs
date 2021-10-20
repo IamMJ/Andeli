@@ -50,6 +50,7 @@ public class WordWeaponizer : MonoBehaviour
             powerSign = 1;
             uid = FindObjectOfType<UIDriver>();
             jm = FindObjectOfType<JewelManager>();
+            jm.UpdateJewelImage(100);
         }
         gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
