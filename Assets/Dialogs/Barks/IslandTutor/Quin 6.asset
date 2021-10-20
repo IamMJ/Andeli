@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51ef45ff1508aca499ea6108f4ddff11, type: 3}
-  m_Name: Quin1 2
+  m_Name: Quin 6
   m_EditorClassIdentifier: 
-  KeywordToShowFor: TUT1
+  KeywordToShowFor: ITUT1
   KeywordToHideFrom: 
-  BarkText: Letters will start falling.
+  BarkText: Once you have a word...
   DisplayTime: 2
   DisplayColor: {r: 0, g: 0, b: 0, a: 1}

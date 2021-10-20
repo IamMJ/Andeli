@@ -7,6 +7,7 @@ using System;
 
 public class BagManager : MonoBehaviour
 {
+    [SerializeField] GameObject[] bagSlotPanel = null;
     [SerializeField] Image[] bagImages = null;
     [SerializeField] TextMeshProUGUI[] bagTMPS = null;
     [SerializeField] SpriteRenderer emptyLetterSpriteRef = null;
@@ -22,6 +23,7 @@ public class BagManager : MonoBehaviour
     bool isButtonDepressed = false;
     float timeButtonDepressed;
     bool wasLongPress = false;
+    int numberOfBagsEnabled = 4;
 
 
     void Start()
@@ -105,7 +107,20 @@ public class BagManager : MonoBehaviour
     #endregion
 
     #region Public Methods
-
+    
+    public void ModifyBagsEnabled(int numberOfEnabledBags)
+    {
+        ClearAllLettersFromBag();
+        numberOfBagsEnabled = numberOfEnabledBags;
+        for (int i = 0; i < numberOfEnabledBags; i++)
+        {
+            bagSlotPanel[i].SetActive(true);
+        }
+        for (int j = numberOfEnabledBags; j < bagSlotPanel.Length; j++)
+        {
+            bagSlotPanel[j].SetActive(false);
+        }
+    }
     public bool AttemptToReceiveLetter(LetterTile incomingLT)
     {
        int openSlot = -1;
@@ -196,7 +211,7 @@ public class BagManager : MonoBehaviour
     private bool FindEmptyBagSlot(out int openSlot)
     {
         
-        for (int i = 0; i < letterTilesInBag.Length; i++)
+        for (int i = 0; i < numberOfBagsEnabled; i++)
         {
             if (letterTilesInBag[i] == null)
             {

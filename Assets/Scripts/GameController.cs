@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
 
     //param
     Vector2 storyStartLocation = new Vector2(10, -15);
-    Vector2 tutorialStartLocation = new Vector2(-4, 17);
+    Vector2 tutorialStartLocation = new Vector2(101, 66);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
     int cameraSize_ZoomedIn = 10;
     int cameraSize_ZoomedOut = 30;
@@ -47,7 +47,7 @@ public class GameController : MonoBehaviour
     public StartMode startMode = StartMode.Story;
 
     int pauseRequests = 0;
-    public bool isPaused { get; set; } = false;
+    public bool isPaused = false;
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
     public bool isInTutorialMode { get; set; } = false;
@@ -190,7 +190,7 @@ public class GameController : MonoBehaviour
     {
         if (!player)
         {
-            player = Instantiate(playerPrefab, storyStartLocation, Quaternion.identity) as GameObject;
+            player = Instantiate(playerPrefab, tutorialStartLocation, Quaternion.identity) as GameObject;
         }
     }
     private void SetCameraToFollowPlayer()
@@ -214,14 +214,14 @@ public class GameController : MonoBehaviour
         switch (startMode)
         {
             case StartMode.Story:
-                player.transform.position = storyStartLocation;
+                player.transform.position = tutorialStartLocation;
                 return;
 
             case StartMode.Tutorial:
                 FindObjectOfType<Tutor>().gc = this;
                 player.transform.position = tutorialStartLocation;
                 isInTutorialMode = true;
-                uid.ShowHideTutorialPanel(true);
+                //uid.ShowHideTutorialPanel(true);
                 return;
 
             case StartMode.Skirmish:
@@ -281,6 +281,7 @@ public class GameController : MonoBehaviour
 
     public void PauseGame()
     {
+        Debug.Log("attempted to pause");
         isPaused = true;
         Time.timeScale = 0;
         pauseRequests++;

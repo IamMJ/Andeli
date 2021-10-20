@@ -18,6 +18,7 @@ public class LetterTileDropper : MonoBehaviour
     
     WordValidater wv;
     ArenaBuilder ab;
+    GameController gc;
     LetterMaskHolder lmh_Player; // the player's letter mask holder is needed to assign correct sprite/color/power/ability to each letter Tile
     LetterMaskHolder lmh_Enemy;
     int layerMask_Impassable = 1 << 13;
@@ -60,7 +61,7 @@ public class LetterTileDropper : MonoBehaviour
     {
         // Rather than starting will all 26 True Letters, probably should pull this from the player every time an Arena is built
         // trueLetters = GetPlayersTrueLetters();
-
+        gc = FindObjectOfType<GameController>();
         wv = FindObjectOfType<WordValidater>();
         ab = FindObjectOfType<ArenaBuilder>();
         lmh_Enemy = ab.GetEnemyInArena().GetComponent<LetterMaskHolder>();
@@ -123,6 +124,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Update()
     {
+        if (gc.isPaused) { return; }
         if (!wv.GetPreppedStatus()) { return; }        
        
         if (Time.time >= timeForNextWave && lettersOnBoard.Length < maxLettersOnBoard)
@@ -613,7 +615,7 @@ public class LetterTileDropper : MonoBehaviour
             string bannedLetter = trueLetters[i].GetLetter().ToString();
             if (letterstoIgnore.Contains(bannedLetter))
             {
-                Debug.Log($"removing {bannedLetter}");
+                //Debug.Log($"removing {bannedLetter}");
                 trueLetters.RemoveAt(i);
             }
         }

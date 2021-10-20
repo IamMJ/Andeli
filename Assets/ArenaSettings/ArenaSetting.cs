@@ -19,6 +19,7 @@ public class ArenaSetting : ScriptableObject
     public int maxLettersOnBoard = 12;
 
     // power effects
+    public int startingVictoryMeterBalance = 50;
     public int powerModifierForWordCount = 0;
         // Set this to 1 to grant bonus for playing lots of words
         // Set to -1 to penalize playing lots of words this arena.

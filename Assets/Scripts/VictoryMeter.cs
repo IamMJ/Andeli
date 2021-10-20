@@ -50,9 +50,13 @@ public class VictoryMeter : MonoBehaviour
         SetBalance(startingBalance);
         SetDecayAmount(0);
     }
+    public void ResetArena(int newStartingBalance)
+    {
+        SetBalance(newStartingBalance);
+        SetDecayAmount(0);
+    }
     public bool ModifyBalanceAndCheckForArenaEnd(float amountToAdd)
     {
-        Debug.Log($"hitting for {amountToAdd}");
         currentBalance += amountToAdd;
         if (amountToAdd < 0)
         {

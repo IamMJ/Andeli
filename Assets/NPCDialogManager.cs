@@ -16,15 +16,15 @@ public class NPCDialogManager : MonoBehaviour
     [SerializeField]  List<Conversation> availableConversations = new List<Conversation>();
 
 
-    [SerializeField] GameObject barkPrefab = null;
-    [SerializeField] GameObject noticeMePrefab = null;
+    [SerializeField] protected GameObject barkPrefab = null;
+    [SerializeField] protected GameObject noticeMePrefab = null;
 
-    NoticeMeDriver noticeMe;
-    GameController gc;
-    NPC_Brain brain;
-    GameObject player;
-    ConversationPanelDriver cpd;
-    PlayerDialogMemory pdm;
+    protected NoticeMeDriver noticeMe;
+    protected GameController gc;
+    protected NPC_Brain brain;
+    protected GameObject player;
+    protected ConversationPanelDriver cpd;
+    protected PlayerDialogMemory pdm;
 
     //param
     [SerializeField] float timeBetweenBarks_average = 4;
@@ -39,7 +39,7 @@ public class NPCDialogManager : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         brain = GetComponent<NPC_Brain>();
         cpd = FindObjectOfType<ConversationPanelDriver>();
@@ -82,8 +82,9 @@ public class NPCDialogManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
+        if (gc.isPaused) { return; }
         if (Time.time > timeForNextBark && gc.isInGame)
         {
             UpdateBark();
@@ -140,6 +141,10 @@ public class NPCDialogManager : MonoBehaviour
     }
 
     #endregion
+
+    #region Private Helpers
+
+
     private void UpdateBark()
     {
         Bark bark;
@@ -176,6 +181,7 @@ public class NPCDialogManager : MonoBehaviour
         }
     }
         
+    
 
     private List<Bark> RebuildAvailableBarks(ref Bark[] masterBarkList)
     {
@@ -254,10 +260,13 @@ public class NPCDialogManager : MonoBehaviour
         }
     }
 
+    #endregion
+
     private void OnDestroy()
     {
         gc.OnGameStart -= RespondToGameStart;
     }
+
 
     
 }

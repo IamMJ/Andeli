@@ -21,8 +21,11 @@ public class ArenaBuilder : MonoBehaviour
     UIDriver uid;
     ArenaStarter arenaStarter;
     List<ArenaWall> arenaWallObjects = new List<ArenaWall>();
+    TutorDialogManager tutorDM;
+    WordWeaponizer playerWWZ;
     int layerMask_Impassable = 1 << 13;
     int layerMask_Passable = 1 << 14;
+
 
     //parameters
     int minX = -6;
@@ -54,17 +57,20 @@ public class ArenaBuilder : MonoBehaviour
         uid.ShowArenaUIElements();
 
         player = gc.GetPlayer();
-        player.GetComponent<WordWeaponizer>().HandleArenaEntry();
+        playerWWZ = player.GetComponent<WordWeaponizer>();
+        playerWWZ.HandleArenaEntry();
         player.GetComponent<WordBuilder>().ClearCurrentWord();
         FindObjectOfType<BagManager>().RequestClearOutBag();
+
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
+
         vm = gc.GetVictoryMeter();
-        vm.ResetArena();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         SetupStatueCameraMouse(centroid);
         ash.SetupArena(ltd, player.GetComponent<WordMakerMemory>(), enemy.GetComponent<WordMakerMemory>(),
-            player.GetComponent<WordWeaponizer>(), enemy.GetComponent<WordWeaponizer>(), 
-            player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), uid);
+            playerWWZ, enemy.GetComponent<WordWeaponizer>(), 
+            player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), vm, uid);
+
 
         //SetupArenaBoundaries(centroid);
 

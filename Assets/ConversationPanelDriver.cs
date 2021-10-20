@@ -65,6 +65,7 @@ public class ConversationPanelDriver : MonoBehaviour
         if (!player)
         {
             player = gc.GetPlayer();
+            player.GetComponent<PlayerInput>().HaltPlayerMovement();
         }
 
         ShowHideEntirePanel(true);

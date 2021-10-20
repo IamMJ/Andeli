@@ -28,6 +28,7 @@ public class UIDriver : MonoBehaviour
     [SerializeField] Image[] wordboxImages = null;
     [SerializeField] TextMeshProUGUI[] wordboxTMPs = null;
 
+    [SerializeField] GameObject ignitionChancePanel = null;
     [SerializeField] TextMeshProUGUI ignitionChanceTMP = null;
 
     //[SerializeField] Slider spellEnergySlider_0 = null;
@@ -39,8 +40,6 @@ public class UIDriver : MonoBehaviour
     //[SerializeField] Image energySliderFill_2 = null;
 
 
-    [SerializeField] TextMeshProUGUI tutorialTMP = null;
-    [SerializeField] GameObject tutorialPanel = null;
 
     Color fullBar = new Color(1, 1, 0);
     Color partialBar = new Color(.7169f, .7169f, .3551f);
@@ -77,6 +76,7 @@ public class UIDriver : MonoBehaviour
     {
         sgd = GetComponent<SwordGlowDriver>();
         wv = FindObjectOfType<WordValidater>();
+        bagman = FindObjectOfType<BagManager>();
         ClearWordBar();
     }
 
@@ -319,7 +319,7 @@ public class UIDriver : MonoBehaviour
 
     public void HideAllOverworldUIElements()
     {
-        ShowHideTutorialPanel(false);
+        //ShowHideTutorialPanel(false);
         ShowHideBottomPanel(false);
         ShowHideTopPanel(false);
         ShowHideVictoryMeter(false);
@@ -383,10 +383,11 @@ public class UIDriver : MonoBehaviour
         }
     }
 
-    private void ShowHideTopPanel(bool shouldBeShown)
+    public void ShowHideTopPanel(bool shouldBeShown)
     {
         //StartCoroutine(ShowHideTopPanel_Coroutine(shouldBeShown));
         topBarPanel.SetActive(shouldBeShown);
+
     }
 
     private void ShowHideBottomPanel(bool shouldBeShown)
@@ -399,6 +400,39 @@ public class UIDriver : MonoBehaviour
         victoryBarSlider.gameObject.SetActive(shouldBeShown);
     }
 
+    //public void ShowHideTopBelt(bool shouldBeShown)
+    //{
+    //    topBeltPanel.SetActive(shouldBeShown);
+    //    if (!bagman)
+    //    {
+    //        bagman = FindObjectOfType<BagManager>();
+    //    }
+    //    if (shouldBeShown)
+    //    {
+    //        bagman.ModifyBagsEnabled(2);
+    //    }
+    //    else
+    //    {
+    //        bagman.ModifyBagsEnabled(0);
+    //    }
+    //}
+
+    //public void ShowHideBottomBelt(bool shouldBeShown)
+    //{
+    //    bottomBeltPanel.SetActive(shouldBeShown);
+    //    if (!bagman)
+    //    {
+    //        bagman = FindObjectOfType<BagManager>();
+    //    }
+    //    if (shouldBeShown)
+    //    {
+    //        bagman.ModifyBagsEnabled(4);
+    //    }
+    //    else
+    //    {
+    //        bagman.ModifyBagsEnabled(2);
+    //    }
+    //}
     public void ShowHideOptionsMenu(bool shouldBeShown)
     {
         if (!gc)
@@ -422,15 +456,15 @@ public class UIDriver : MonoBehaviour
 
     }
 
-    public TextMeshProUGUI GetTutorialTMP()
-    {
-        return tutorialTMP;
-    }
+    //public TextMeshProUGUI GetTutorialTMP()
+    //{
+    //    return tutorialTMP;
+    //}
 
-    public void ShowHideTutorialPanel(bool isTutorialSupposedToBeVisible)
-    {
-        tutorialPanel.SetActive(isTutorialSupposedToBeVisible);
-    }
+    //public void ShowHideTutorialPanel(bool isTutorialSupposedToBeVisible)
+    //{
+    //    tutorialPanel.SetActive(isTutorialSupposedToBeVisible);
+    //}
 
     public void SetTutorRef(Tutor tutorRef)
     {
@@ -522,6 +556,11 @@ public class UIDriver : MonoBehaviour
         }
         wordbarScroll = 0;
         sgd.UpdateTargetSpellswordGlow(0);
+    }
+
+    public void ShowHideIgnitionChancePanel(bool shouldBeShown)
+    {
+        ignitionChancePanel.SetActive(shouldBeShown);
     }
 
     public void UpdateIgnitionChanceTMP(float value)

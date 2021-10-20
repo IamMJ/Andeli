@@ -32,17 +32,17 @@ public class Tutor : MonoBehaviour
     {
         uid = FindObjectOfType<UIDriver>();
         uid.SetTutorRef(this);
-        tutorialTMP = uid.GetTutorialTMP();
+        //tutorialTMP = uid.GetTutorialTMP();
         gc = FindObjectOfType<GameController>();
-        if (gc.isInTutorialMode == false)
-        {
-            uid.ShowHideTutorialPanel(false);
-            return;
-        }
-        else
-        {
-            uid.ShowHideTutorialPanel(true);
-        }
+        //if (gc.isInTutorialMode == false)
+        //{
+        //    uid.ShowHideTutorialPanel(false);
+        //    return;
+        //}
+        //else
+        //{
+        //    uid.ShowHideTutorialPanel(true);
+        //}
 
         currentTutorialStep = tutorialSteps[0];
         tutorialTMP.text = currentTutorialStep.instruction;
@@ -57,7 +57,7 @@ public class Tutor : MonoBehaviour
         currentStep++;
         if (currentStep >= tutorialSteps.Length)
         {
-            uid.ShowHideTutorialPanel(false);
+            //uid.ShowHideTutorialPanel(false);
             arrow_UI.gameObject.SetActive(false);
             arrow_worldSpace.gameObject.SetActive(false);
             return;

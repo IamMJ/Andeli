@@ -151,6 +151,14 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
+    #region Public Methods
+
+    public void HaltPlayerMovement()
+    {
+        strategicDestination = GridHelper.SnapToGrid(transform.position, 1);
+    }
+    #endregion
+
     #region Helpers
     private void MoveStrategicDestinationIcon()
     {

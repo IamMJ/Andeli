@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class WordWeaponizer : MonoBehaviour
 {
@@ -38,6 +39,7 @@ public class WordWeaponizer : MonoBehaviour
     float currentEnergyLevel;
     TrueLetter.Ability abilityToAutoIgnite = TrueLetter.Ability.Normal;
 
+    public Action OnFireWord;
 
     void Start()
     {
@@ -163,7 +165,7 @@ public class WordWeaponizer : MonoBehaviour
         {
             if (letter.Ability_Player != abilityToAutoIgnite)
             {
-                int roll = Random.Range(1, 20);
+                int roll = UnityEngine.Random.Range(1, 20);
 
 
                 if (wbd.GetModifiedWordLength() >= roll)
@@ -173,6 +175,7 @@ public class WordWeaponizer : MonoBehaviour
             }
 
         }
+        OnFireWord?.Invoke();
         
     }
     public void ModifyEnergyRegent(float amount)
@@ -265,7 +268,7 @@ public class WordWeaponizer : MonoBehaviour
 
     private void CreateSpell(Transform target, float spellPotency, TrueLetter.Ability spellType)
     {
-        float amount = Random.Range(-180f, 179f);
+        float amount = UnityEngine.Random.Range(-180f, 179f);
         Quaternion randRot = Quaternion.Euler(0, 0, amount);
         SpellSeeker spell;        
 

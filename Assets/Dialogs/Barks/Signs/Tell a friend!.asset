@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ef45ff1508aca499ea6108f4ddff11, type: 3}
   m_Name: Tell a friend!
   m_EditorClassIdentifier: 
-  KeywordToShowFor: TUT1
+  KeywordToShowFor: ITUT1
   KeywordToHideFrom: 
   BarkText: Tell a friend about Spellsword!
   DisplayTime: 2

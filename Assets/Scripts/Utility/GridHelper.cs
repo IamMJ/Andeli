@@ -9,9 +9,9 @@ public static class GridHelper : object
     //int horizUnits = 20;
     //int vertUnits = 40;
     static int minX_worldmap = -50;
-    static int maxX_worldmap = 50;
+    static int maxX_worldmap = 100;
     static int minY_worldmap = -50;
-    static int maxY_worldmap = 50;
+    static int maxY_worldmap = 90;
         
     static float gridUnit = 1f;
     static float lowestYValueForMoveInput_BottomPanel = 0.3f;
