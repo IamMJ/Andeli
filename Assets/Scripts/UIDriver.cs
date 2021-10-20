@@ -19,6 +19,8 @@ public class UIDriver : MonoBehaviour
     [SerializeField] GameObject bottomBarPanel = null;
 
     [SerializeField] Slider wordEraseSliderBG = null;
+    [SerializeField] Image attackButtonMain = null;
+    [SerializeField] Image attackButtonRunes = null;
     [SerializeField] Image attackButtonGlow = null;
     [SerializeField] TextMeshProUGUI powerMeterTMP = null;
 
@@ -50,6 +52,7 @@ public class UIDriver : MonoBehaviour
     SceneLoader sl;
     Tutor tutor;
     SwordGlowDriver sgd;
+    WordValidater wv;
 
     //param
     float panelDeployRate = 100f; // pixels per second
@@ -63,6 +66,7 @@ public class UIDriver : MonoBehaviour
     bool isFireWeaponButtonPressed = false;
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
+    [SerializeField] bool canPressAttackButton = false;
     
     public float timeSpentLongPressing { get; private set; }
     [SerializeField] int wordbarScroll = 0;
@@ -72,6 +76,7 @@ public class UIDriver : MonoBehaviour
     private void Start()
     {
         sgd = GetComponent<SwordGlowDriver>();
+        wv = FindObjectOfType<WordValidater>();
         ClearWordBar();
     }
 
@@ -96,8 +101,8 @@ public class UIDriver : MonoBehaviour
     #region Initial Button Press Handlers
     public void OnPressDownFireWord()
     {
-        if (playerWB.GetCurrentWord().Length == 0) { return; }
-
+        //if (playerWB.GetCurrentWord().Length == 0) { return; }
+        if (!canPressAttackButton) { return; }
 
         if (isEraseWeaponButtonPressed == false)
         {
@@ -160,6 +165,7 @@ public class UIDriver : MonoBehaviour
 
     private void HandleSwordButtonBeingPressed()
     {
+
         if (selectedSwordLetterIndex != -1)
         {
             timeButtonDepressed += Time.unscaledDeltaTime;
@@ -331,6 +337,22 @@ public class UIDriver : MonoBehaviour
         ShowHideOptionMenuButton(true);
     }
 
+    private void ModifyAttackButtonWithWordValidationUponNewSwordWord(bool isValid)
+    {
+        if (isValid)
+        {
+            canPressAttackButton = true;
+            attackButtonMain.color = new Color(.37f, .70f, .34f);
+            attackButtonRunes.color = new Color(.09f, .56f, 0.0f, 1);
+        }
+        else
+        {
+            canPressAttackButton = false;
+            attackButtonMain.color = new Color(.70f, .70f, .70f);
+            attackButtonRunes.color = new Color(.09f, .56f, 0.0f, 0);
+        }
+    }
+
     private void ShowHideLetterPowerButton(bool shouldBeShown)
     {
         letterPowersMenuButton.gameObject.SetActive(shouldBeShown);
@@ -419,7 +441,10 @@ public class UIDriver : MonoBehaviour
     {
         powerMeterTMP.text = newSwordWord.Power.ToString();
         sgd.UpdateTargetSpellswordGlow(newSwordWord.Power);
-        for(int i = 0; i < wordboxTMPs.Length; i++)
+
+        bool isNewWordValid = wv.CheckWordValidity(newSwordWord.word);
+        ModifyAttackButtonWithWordValidationUponNewSwordWord(isNewWordValid);
+        for (int i = 0; i < wordboxTMPs.Length; i++)
         {
             if (i < newSwordWord.letterSprites.Length)
             {
@@ -484,6 +509,8 @@ public class UIDriver : MonoBehaviour
         {
             image.sprite = blankTileDefault.sprite;
             image.color = blankTileDefault.color;
+            ModifyAttackButtonWithWordValidationUponNewSwordWord(false);
+            powerMeterTMP.text = 0.ToString();
             //if (image.gameObject.transform.childCount > 0)
             //{
             //    Destroy(image.gameObject.transform.GetChild(0).gameObject);

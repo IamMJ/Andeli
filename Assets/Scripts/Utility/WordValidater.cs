@@ -79,6 +79,7 @@ public class WordValidater : MonoBehaviour
 
     }
 
+
     public WordBand FindWordBandWithStubWord(string stubWord)
     {
         StringComparison sc = new StringComparison(stubWord);

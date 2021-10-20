@@ -22,6 +22,7 @@ public class WordBuilder : MonoBehaviour
         public Sprite[] letterSprites;
         public Color[] letterColors;
         public string[] letterLetters;
+        public string word;
         public int Power;
 
         public SwordWordPower(int wordLength, int power)
@@ -30,6 +31,7 @@ public class WordBuilder : MonoBehaviour
             letterColors = new Color[wordLength];
             letterLetters = new string[wordLength];
             Power = power;
+            word = "";
         }
     }
 
@@ -188,6 +190,7 @@ public class WordBuilder : MonoBehaviour
     private SwordWordPower CreateSwordWordPowerFromCurrentWord()
     {
         SwordWordPower newSwordWord = new SwordWordPower(currentWord.Length, 0);
+        newSwordWord.word = currentWord;
         newSwordWord.Power = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
         for (int i = 0; i < currentWord.Length; i++)
         {
