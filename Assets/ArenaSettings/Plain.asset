@@ -21,6 +21,7 @@ MonoBehaviour:
   lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 12
+  startingVictoryMeterBalance: 20
   powerModifierForWordCount: 0
   shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 1

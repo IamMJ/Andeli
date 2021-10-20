@@ -18,5 +18,5 @@ MonoBehaviour:
   PlayerText_0: Okay
   resultFromOption0: 0
   PlayerText_1: 
-  resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 99, y: 80}
+  resultFromOption1: 3
+  Destination: {x: 0, y: 0}

@@ -17,9 +17,13 @@ MonoBehaviour:
   aso: 2
   letterLifetime: 10
   lettersPerWave: 2
-  lettersToNotDrop: 
+  timeBetweenWaves: 7
+  lettersToIgnore: 
   percentageOfLettersAsMisty: 0
-  powerModifierForWordCountThisArena: 0
+  maxLettersOnBoard: 12
+  startingVictoryMeterBalance: 20
+  powerModifierForWordCount: 0
+  shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 1
   abilityToAutoIgnite: 0
   maxWordLength: 7

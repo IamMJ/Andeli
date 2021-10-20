@@ -17,5 +17,5 @@ MonoBehaviour:
   PlayerText_0: Ominous indeed
   resultFromOption0: 1
   PlayerText_1: I'm leaving.
-  resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 99, y: 80}
+  resultFromOption1: 3
+  Destination: {x: 0, y: 0}

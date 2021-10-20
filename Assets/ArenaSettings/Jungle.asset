@@ -18,9 +18,10 @@ MonoBehaviour:
   letterLifetime: 20
   lettersPerWave: 3
   timeBetweenWaves: 7
-  lettersToNotDrop: 
+  lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 12
+  startingVictoryMeterBalance: 20
   powerModifierForWordCount: 1
   shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 2

@@ -18,10 +18,12 @@ MonoBehaviour:
   letterLifetime: 40
   lettersPerWave: 1
   timeBetweenWaves: 1
-  lettersToNotDrop: AEOU
+  lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 8
-  powerModifierForWordCountThisArena: 0
+  startingVictoryMeterBalance: 20
+  powerModifierForWordCount: 0
+  shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 1
   abilityToAutoIgnite: 2
   maxWordLength: 7

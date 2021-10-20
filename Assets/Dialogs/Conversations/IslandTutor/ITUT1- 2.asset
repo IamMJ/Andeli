@@ -15,7 +15,7 @@ MonoBehaviour:
   NPCText: Okay then. Talk to the ship captain.
   NPCSprite: {fileID: 0}
   PlayerText_0: Goodbye
-  resultFromOption0: 2
+  resultFromOption0: 3
   PlayerText_1: 
   resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 99, y: 80}
+  Destination: {x: 0, y: 0}

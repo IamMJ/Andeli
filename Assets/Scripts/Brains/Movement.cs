@@ -165,6 +165,19 @@ public class Movement : MonoBehaviour, IFollowable
     }
     #endregion
 
+    #region Public Methods
+
+    public void HaltPlayerMovement()
+    {
+        transform.position = GridHelper.SnapToGrid(transform.position, 1);
+        TacticalDestination = transform.position;
+        truePosition = transform.position;
+        validDesMove = Vector2.zero;
+
+    }
+    
+    #endregion
+
     protected virtual void PushWordMakerMovement()
     {
         //OnLeaderMoved?.Invoke();

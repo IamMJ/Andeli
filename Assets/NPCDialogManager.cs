@@ -29,11 +29,11 @@ public class NPCDialogManager : MonoBehaviour
     //param
     [SerializeField] float timeBetweenBarks_average = 4;
     float conversationRange = 2f;
-
+    float timeBetweenConvoReset = 4f;
 
     //state
-    int currentBarkIndex = -1; 
-
+    int currentBarkIndex = -1;
+    public float timeForNextConvo = 0;
     float timeForNextBark;
     BarkShell currentBark;
 
@@ -99,7 +99,7 @@ public class NPCDialogManager : MonoBehaviour
 
     private void ListenForConversationEntryAttempt()
     {
-        if (brain.requestedToHalt && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed)
+        if (brain.requestedToHalt && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed && Time.time >= timeForNextConvo)
         {
             if (!player)
             {
@@ -114,6 +114,12 @@ public class NPCDialogManager : MonoBehaviour
                     cpd.InitalizeConversationPanel(availableConversations[0], this);
                     availableConversations.RemoveAt(0);
                     noticeMe.ToggleNoticeMe(false);
+                    availableConversations = RebuildAvailableConversationsBasedOnPlayerKnownKeywords();
+                    if (availableConversations.Count > 0)
+                    {
+                        ActivateNoticeMe();
+                        timeForNextConvo = Time.time + timeBetweenConvoReset;
+                    }
                 }
 
             }

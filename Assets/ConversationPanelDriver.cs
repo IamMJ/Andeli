@@ -92,11 +92,14 @@ public class ConversationPanelDriver : MonoBehaviour
         }
     }
 
-    public void ShutdownConversationPanel()
+    public void ShutdownConversationPanel(bool shouldPassAlongKeyWord)
     {
         gc.ResumeGameSpeed(true);
         ShowHideEntirePanel(false);
-        claimingDiaman.PassNewKeywordToPlayerDialogMemory(convo.KeywordAtCompletion);
+        if (shouldPassAlongKeyWord && convo.KeywordAtCompletion != "")
+        {
+            claimingDiaman.PassNewKeywordToPlayerDialogMemory(convo.KeywordAtCompletion);
+        }
         claimingDiaman = null;
 
     }
@@ -136,18 +139,29 @@ public class ConversationPanelDriver : MonoBehaviour
                 return;
 
             case ConversationStep.ReplyOption.TempMoveNPCandQuitConvo:
-                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.NPCDestinationIfMoving, false);
-                ShutdownConversationPanel();
+                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.Destination, false);
+                ShutdownConversationPanel(true);
                 return;
 
             case ConversationStep.ReplyOption.PermMoveNPCandQuitConvo:
-                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.NPCDestinationIfMoving, true);
-                ShutdownConversationPanel();
+                claimingDiaman.GetComponent<NPC_Brain>().RequestNPCToMoveToSpecificDestination(convoStep.Destination, true);
+                ShutdownConversationPanel(true);
                 return;
 
-            case ConversationStep.ReplyOption.QuitConvo:
+            case ConversationStep.ReplyOption.PermQuitConvo:
+                ShutdownConversationPanel(true);
+                return;
 
-                ShutdownConversationPanel();
+            case ConversationStep.ReplyOption.TempQuitConvo:
+                ShutdownConversationPanel(false);
+                return;
+
+            case ConversationStep.ReplyOption.TeleportPlayerAndQuitConvo:
+                Debug.Log("attempting to move player to " + convoStep.Destination);
+                player.transform.position = convoStep.Destination;
+                player.GetComponent<PlayerInput>().HaltPlayerMovement();
+                player.GetComponent<Movement>().HaltPlayerMovement();
+                ShutdownConversationPanel(true);
                 return;
         }
     }
