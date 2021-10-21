@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
-  m_Name: ITUT4- 3
+  m_Name: ITUT4- 3.0
   m_EditorClassIdentifier: 
   NPCText: 'For now, the only special letters you have are these Shiny letters. '
   NPCSprite: {fileID: 21300000, guid: 979d416e7e04a3a488865caa78afef41, type: 3}

@@ -45,6 +45,8 @@ public class NPCDialogManager : MonoBehaviour
         cpd = FindObjectOfType<ConversationPanelDriver>();
         gc = FindObjectOfType<GameController>();
         gc.OnGameStart += RespondToGameStart;
+        timeForNextBark = Time.time + 2;
+        timeForNextConvo = Time.time + 2;
 
     }
 

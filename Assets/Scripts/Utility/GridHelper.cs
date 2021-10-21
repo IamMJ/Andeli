@@ -47,9 +47,9 @@ public static class GridHelper : object
     }
 
 
-    public static bool CheckIsTouchingWordSection(Vector2 touchPos, bool isInArena, bool isInTutorialMode)
+    public static bool CheckIsTouchingWordSection(Vector2 touchPos, bool isInArena)
     {
-        if (isInArena || isInTutorialMode)
+        if (isInArena)
         {
             if (touchPos.y < lowestYValueForMoveInput_BottomPanel * Screen.height || touchPos.y > highestYValueForMoveInput_TopPanel * Screen.height)
             {

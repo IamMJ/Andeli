@@ -75,8 +75,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.touchCount == 1)
         {
             currentTouch = Input.GetTouch(0);
-            if (currentTouch.phase == TouchPhase.Began &&
-                !GridHelper.CheckIsTouchingWordSection(currentTouch.position, gc.isInArena, gc.isInTutorialMode))
+            if (currentTouch.phase == TouchPhase.Began && !GridHelper.CheckIsTouchingWordSection(currentTouch.position, gc.isInArena))
             {
                 strategicDestination = GridHelper.SnapToGrid(currentTouch.position, 1);
                 // Should I check that the destination is valid/reachable?
@@ -98,7 +97,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetMouseButtonUp(0) && wasValidButtonDown)
         {
             Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
-            if (GridHelper.CheckIsTouchingWordSection(Input.mousePosition, gc.isInArena, gc.isInTutorialMode))
+            if (GridHelper.CheckIsTouchingWordSection(Input.mousePosition, gc.isInArena))
             {
                 return;
             }

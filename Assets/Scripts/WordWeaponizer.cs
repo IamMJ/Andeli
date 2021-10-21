@@ -206,7 +206,8 @@ public class WordWeaponizer : MonoBehaviour
             {
 
                 case TrueLetter.Ability.Shiny:
-                    //
+                    float bonusPower = activatedLetter.Power_Player;
+                    CreateSpell(targetWMM.transform, bonusPower, TrueLetter.Ability.Normal);
                     break;
 
                 case TrueLetter.Ability.Frozen:

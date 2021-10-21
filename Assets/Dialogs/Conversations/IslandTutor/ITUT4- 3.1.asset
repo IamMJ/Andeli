@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
-  m_Name: ITUT4- 3
+  m_Name: ITUT4- 3.1
   m_EditorClassIdentifier: 
   NPCText: Shiny letters have a chance of creating additional, weaker spells when
     you attack with a word.

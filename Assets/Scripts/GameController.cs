@@ -23,7 +23,6 @@ public class GameController : MonoBehaviour
     MainMenuDriver mmd;
     LetterPowerMenuDriver lpmd;
     OptionMenuDriver pmd;
-    Tutor tutor;
     ArenaBuilder currentArenaBuilder;
     PixelPerfectCamera ppc;
     MusicController mc;
@@ -50,7 +49,7 @@ public class GameController : MonoBehaviour
     public bool isPaused = false;
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
-    public bool isInTutorialMode { get; set; } = false;
+
     [SerializeField] float currentZoom;
     public bool debug_IgniteAll = false;
 
@@ -210,18 +209,11 @@ public class GameController : MonoBehaviour
 
     private void AdjustGameForStartMode()
     {
-        isInTutorialMode = false;
+
         switch (startMode)
         {
             case StartMode.Story:
                 player.transform.position = tutorialStartLocation;
-                return;
-
-            case StartMode.Tutorial:
-                FindObjectOfType<Tutor>().gc = this;
-                player.transform.position = tutorialStartLocation;
-                isInTutorialMode = true;
-                //uid.ShowHideTutorialPanel(true);
                 return;
 
             case StartMode.Skirmish:
@@ -237,7 +229,6 @@ public class GameController : MonoBehaviour
     public void EndCurrentGame()
     {
         isPaused = false;
-        isInTutorialMode = false;
         isInArena = false;
         isInGame = false;
         if (currentArenaBuilder)
