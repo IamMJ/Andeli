@@ -42,7 +42,12 @@ public class TutorDialogManager : NPCDialogManager
         if (wordsFired == wordFiredToStartConvo1)
         {
             StartCombatConversation(combatConvo1);
-            bagman.ModifyBagsEnabled(3);
+            bagman.ModifyBagsEnabled(2);
+        }
+        if (wordsFired == wordFiredToStartConvo2)
+        {
+            StartCombatConversation(combatConvo2);
+            uid.ShowHideTopPanel(true);
         }
     }
 

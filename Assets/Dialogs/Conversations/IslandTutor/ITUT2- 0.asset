@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ITUT2- 0
   m_EditorClassIdentifier: 
   NPCText: Nice work on the basics. Now, here are your letter holders
-  NPCSprite: {fileID: 21300000, guid: 92825d5f067efc14b800fd6778abc849, type: 3}
+  NPCSprite: {fileID: 21300000, guid: 8c3e9261f9451a64585bdf6afa5fe9da, type: 3}
   PlayerText_0: Thanks!
   resultFromOption0: 0
   PlayerText_1: 
   resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 0, y: 0}
+  Destination: {x: 0, y: 0}

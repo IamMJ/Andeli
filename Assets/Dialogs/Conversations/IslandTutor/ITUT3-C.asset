@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eec409702d85c9c48a879427ed467f66, type: 3}
+  m_Name: ITUT3-C
+  m_EditorClassIdentifier: 
+  KeywordToShowFor: ITUT2
+  KeywordToHideFrom: ITUT3
+  KeywordAtCompletion: ITUT3
+  convoSteps:
+  - {fileID: 11400000, guid: 9cad84c0401f3ce47b1ea8179c6217ff, type: 2}
+  - {fileID: 11400000, guid: 0b88b75aecbc1e247a63c8e162ffd8de, type: 2}

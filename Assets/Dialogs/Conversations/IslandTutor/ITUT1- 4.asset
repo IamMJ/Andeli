@@ -15,7 +15,7 @@ MonoBehaviour:
   NPCText: Approach the dummy and enter combat. I'll coach you through it.
   NPCSprite: {fileID: 21300000, guid: 5877018fbd795df46b466505fcee050e, type: 3}
   PlayerText_0: Okay
-  resultFromOption0: 4
+  resultFromOption0: 5
   PlayerText_1: 
   resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 98, y: 80}
+  Destination: {x: 98, y: 80}

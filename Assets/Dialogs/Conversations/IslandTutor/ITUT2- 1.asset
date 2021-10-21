@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ITUT2- 1
   m_EditorClassIdentifier: 
   NPCText: These let you swap True Letters to and from your Spellsword. Just tap
-    a letter to move it. Give it a try.
+    a letter to move it. Try using it to help spell some more words.
   NPCSprite: {fileID: 0}
-  PlayerText_0: Okay
+  PlayerText_0: Let me try
   resultFromOption0: 2
   PlayerText_1: 
   resultFromOption1: 2
-  NPCDestinationIfMoving: {x: 0, y: 0}
+  Destination: {x: 0, y: 0}

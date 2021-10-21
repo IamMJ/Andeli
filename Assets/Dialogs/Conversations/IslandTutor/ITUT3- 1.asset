@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
+  m_Name: ITUT3- 1
+  m_EditorClassIdentifier: 
+  NPCText: As the enemy fires spells at you, the bar will drain. Your spells will
+    help fill the bar. Combat ends once the bar is completely drained or filled.
+  NPCSprite: {fileID: 0}
+  PlayerText_0: Got it.
+  resultFromOption0: 2
+  PlayerText_1: 
+  resultFromOption1: 2
+  Destination: {x: 0, y: 0}
