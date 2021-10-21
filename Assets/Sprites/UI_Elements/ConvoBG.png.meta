@@ -1,7 +1,34 @@
 fileFormatVersion: 2
 guid: 20015d76117a4ff4a8fff2153c882192
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -1448243634650136378
+    second: ConvoBG_0
+  - first:
+      213: 761549399643661646
+    second: ConvoBG_1
+  - first:
+      213: 6072479137056929724
+    second: ConvoBG_2
+  - first:
+      213: 5735896655271074900
+    second: ConvoBG_3
+  - first:
+      213: 966718860317175536
+    second: ConvoBG_4
+  - first:
+      213: -233699292276830891
+    second: ConvoBG_5
+  - first:
+      213: 4301424192178439818
+    second: ConvoBG_6
+  - first:
+      213: 8853957005428072150
+    second: ConvoBG_7
+  - first:
+      213: 7838433711603062997
+    second: ConvoBG_8
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -42,12 +69,12 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 1
-  spriteExtrude: 1
-  spriteMeshType: 1
+  spriteExtrude: 0
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 8
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 13, y: 13, z: 13, w: 13}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1

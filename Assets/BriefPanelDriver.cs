@@ -1,0 +1,90 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class BriefPanelDriver : MonoBehaviour
+{
+    [SerializeField] GameObject[] otherGOs = null;
+    [SerializeField] Image enemyImage = null;
+    [SerializeField] Image settingImage = null;
+    [SerializeField] TextMeshProUGUI settingNameTMP = null;
+    [SerializeField] TextMeshProUGUI settingDescTMP_0 = null;
+    [SerializeField] TextMeshProUGUI settingDescTMP_1 = null;
+    [SerializeField] TextMeshProUGUI settingDescTMP_2 = null;
+
+    ArenaStarter arenaStarter;
+
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void HandleRetreatClick()
+    {
+        arenaStarter.RetreatFromArena();
+        ShowHideEntirePanel(false);
+    }
+
+    public void HandleAttackClick()
+    {
+        arenaStarter.StartArena();
+        ShowHideEntirePanel(false);
+    }
+
+    public void ActivateBriefPanel(ArenaStarter arst, ArenaSetting currentArenaSetting)
+    {
+        arenaStarter = arst;
+        ShowHideEntirePanel(true);
+
+        enemyImage.sprite = arst.ArenaEnemyPrefab.GetComponent<SpriteRenderer>().sprite;
+        settingImage.sprite = currentArenaSetting.settingIcon;
+        settingNameTMP.text = currentArenaSetting.settingName;
+        settingDescTMP_0.text = currentArenaSetting.settingDesc_0;
+        settingDescTMP_1.text = currentArenaSetting.settingDesc_1;
+        settingDescTMP_2.text = currentArenaSetting.settingDesc_2;
+
+    }
+
+    private void ShowHideEntirePanel(bool shouldBeShown)
+    {
+
+        if (shouldBeShown)
+        {
+            foreach (var GO in otherGOs)
+            {
+                GO.SetActive(true);
+            }
+            GetComponent<Image>().enabled = true;
+            enemyImage.enabled = true;
+            settingImage.enabled = true;
+            settingNameTMP.enabled = true;
+            settingDescTMP_0.enabled = true;
+            settingDescTMP_1.enabled = true;
+            settingDescTMP_2.enabled = true;
+        }
+        else
+        {
+            foreach (var GO in otherGOs)
+            {
+                GO.SetActive(false);
+            }
+            GetComponent<Image>().enabled = false;
+            enemyImage.enabled = false;
+            settingImage.enabled = false;
+            settingNameTMP.enabled = false;
+            settingDescTMP_0.enabled = false;
+            settingDescTMP_1.enabled = false;
+            settingDescTMP_2.enabled = false;
+        }
+    }
+
+
+}

@@ -6,8 +6,11 @@ using UnityEngine;
 public class ArenaSetting : ScriptableObject
 {
 
-    [SerializeField] public Sprite briefScreenIcon = null;
-    [SerializeField] public string briefScreenText = null;
+    [SerializeField] public Sprite settingIcon = null;
+    [SerializeField] public string settingName = null;
+    [SerializeField] public string settingDesc_0 = null;
+    [SerializeField] public string settingDesc_1 = null;
+    [SerializeField] public string settingDesc_2 = null;
     public ArenaSettingHolder.ArenaSettingOptions aso = ArenaSettingHolder.ArenaSettingOptions.Plain;
 
     // letter dropping effects
@@ -39,12 +42,12 @@ public class ArenaSetting : ScriptableObject
 
     public Sprite GetBriefIcon()
     {
-        return briefScreenIcon;
+        return settingIcon;
     }
 
     public string GetBriefText()
     {
-        return briefScreenText;
+        return settingName;
     }
 
 

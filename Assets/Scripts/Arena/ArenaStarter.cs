@@ -6,16 +6,15 @@ using Pathfinding;
 public class ArenaStarter : MonoBehaviour
 {
     [SerializeField] GameObject arenaBuilderPrefab = null;
-    [SerializeField] GameObject arenaBriefMenuPrefab = null;
     [SerializeField] Sprite inactiveSprite = null;
     Sprite activeSprite;
     [SerializeField] public GameObject ArenaEnemyPrefab = null;
 
+    BriefPanelDriver bpd;
     ArenaSettingHolder ash;
     GameObject ab;
     GameController gc;
     GameObject player;
-    GameObject arenaBrief;
     SpriteRenderer sr;
     Animator anim;
 
@@ -31,7 +30,7 @@ public class ArenaStarter : MonoBehaviour
 
     private void Start()
     {
-
+        bpd = FindObjectOfType<BriefPanelDriver>();
         gc = FindObjectOfType<GameController>();
         gc.OnGameStart += HandleOnGameStart;
         player = gc.GetPlayer();
@@ -55,13 +54,7 @@ public class ArenaStarter : MonoBehaviour
         if (Time.time < timeToBecomeResponsiveToPlayer) { return; }
         if ((player.transform.position - transform.position).magnitude <= arenaTriggerRange)
         {
-            if (!arenaBrief)
-            {
-                arenaBrief = Instantiate(arenaBriefMenuPrefab);
-                arenaBrief.GetComponent<ArenaBriefMenuDriver>().SetupArenaBriefMenu(
-                    this, ash.arenaSetting.briefScreenIcon, ash.arenaSetting.briefScreenText);
-            }
-            arenaBrief.SetActive(true);
+            bpd.ActivateBriefPanel(this, ash.arenaSetting);
             gc.PauseGame();
             timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
         }
@@ -69,13 +62,11 @@ public class ArenaStarter : MonoBehaviour
 
     public void RetreatFromArena()
     {
-        arenaBrief.SetActive(false);
         gc.ResumeGameSpeed(false);
     }
 
     public void StartArena()
     {
-        arenaBrief.SetActive(false);
         ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
         arenaBuilder.SetArenaStarter(this, ash);
