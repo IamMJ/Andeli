@@ -16,6 +16,7 @@ public class MusicController : MonoBehaviour
         gc = GetComponent<GameController>();
         auso_pri.clip = mainTheme;
         auso_pri.loop = true;
+        auso_pri.volume = 0.1f;
         auso_pri.Play();
         auso_aux.clip = windLoop;
         auso_aux.loop = true;
@@ -25,7 +26,7 @@ public class MusicController : MonoBehaviour
     // Update is called once per frame
     public void FadeMainThemeWithZoom(float factor)
     {
-        auso_pri.volume = (Mathf.Clamp(factor, 0.5f, 1));
+        auso_pri.volume = (Mathf.Clamp(factor, 0.02f, .1f));
         auso_aux.volume = factor;
     }
 }

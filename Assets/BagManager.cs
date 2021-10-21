@@ -189,6 +189,7 @@ public class BagManager : MonoBehaviour
         letterTilesInBag[index].DestroyLetterTile();
         letterTilesInBag[index] = null;
         UpdateUI();
+        wb_player.PlayDestroyLetterClip();
         
     }
 

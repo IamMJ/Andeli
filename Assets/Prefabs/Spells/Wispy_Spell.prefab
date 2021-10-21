@@ -63,6 +63,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4772897009456720354, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
+      propertyPath: impactSoundClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0aba84bfc960574428f57cfd37ec140e, type: 3}
     - target: {fileID: 7941282901840960525, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
       propertyPath: m_Name
       value: Wispy_Spell

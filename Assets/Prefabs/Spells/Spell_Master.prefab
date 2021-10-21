@@ -118,3 +118,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   particleImpactFXprefab: {fileID: 8992233951233446527, guid: 27702393e352cec4588bab73d6d970ef, type: 3}
+  impactSoundClip: {fileID: 8300000, guid: 84a9532c5199b4b4fab0ddd5af24ebbc, type: 3}

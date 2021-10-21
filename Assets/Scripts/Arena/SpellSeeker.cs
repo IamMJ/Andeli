@@ -10,6 +10,7 @@ public class SpellSeeker : MonoBehaviour
     VictoryMeter vm;
     GameController gc;
     [SerializeField] GameObject particleImpactFXprefab = null;
+    [SerializeField] AudioClip impactSoundClip = null;
 
     //param
     float thrust = 40f;
@@ -84,6 +85,7 @@ public class SpellSeeker : MonoBehaviour
         if (dist <= closeEnough)
         {
             HandleImpact();
+            AudioSource.PlayClipAtPoint(impactSoundClip, transform.position);
             Instantiate(particleImpactFXprefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }

@@ -16,7 +16,10 @@ public class WordBuilder : MonoBehaviour
     ArenaLetterEffectsHandler aleh;
     GameController gc;
     BagManager bagman;
-
+    AudioSource auso;
+    [SerializeField] AudioClip addLetterToSwordClip = null;
+    [SerializeField] AudioClip addLetterToBagClip = null;
+    [SerializeField] AudioClip destroyLetterClip = null;
     public struct SwordWordPower
     {
         public Sprite[] letterSprites;
@@ -52,6 +55,7 @@ public class WordBuilder : MonoBehaviour
         gc = FindObjectOfType<GameController>();
         wwz = GetComponent<WordWeaponizer>();
         pi = GetComponent<PlayerInput>();
+        auso = GetComponent<AudioSource>();
         memory = GetComponent<WordMakerMemory>();
         wv = FindObjectOfType<WordValidater>();
         if (pi)
@@ -74,7 +78,7 @@ public class WordBuilder : MonoBehaviour
         //IncreasePower(newLetter.Power_Player);
         SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
         CurrentPower = swordWord.Power;
-
+        auso.PlayOneShot(addLetterToSwordClip);
         if (hasUI)
         {
             //if (memory.CheckIfWordHasBeenPlayedByPlayerAlready(currentWord))
@@ -225,6 +229,7 @@ public class WordBuilder : MonoBehaviour
     {
         if (bagman.AttemptToReceiveLetter(lettersOnSword[index]))
         {
+            auso.PlayOneShot(addLetterToBagClip);
             lettersOnSword.RemoveAt(index);
             RewriteCurrentWordFromLettersOnSword();
             SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
@@ -241,6 +246,7 @@ public class WordBuilder : MonoBehaviour
         SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
         uid.UpdateLettersOnSwordAndPower(swordWord);
         modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
+        auso.PlayOneShot(destroyLetterClip);
         //// Subtract the base word power from current power
         //CurrentPower -= letterToRemove.Power_Player;
 
@@ -261,6 +267,11 @@ public class WordBuilder : MonoBehaviour
         // Remove letter from current word
 
 
+    }
+
+    public void PlayDestroyLetterClip()
+    {
+        auso.PlayOneShot(destroyLetterClip);
     }
 
     public void RebuildCurrentWordForUI()

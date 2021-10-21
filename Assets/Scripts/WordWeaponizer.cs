@@ -9,7 +9,9 @@ public class WordWeaponizer : MonoBehaviour
     [SerializeField] GameObject normalSpellPrefab = null;
     [SerializeField] GameObject freezeSpellPrefab = null;
     [SerializeField] GameObject wispySpellPrefab = null;
+    [SerializeField] AudioClip normalSpellCastClip = null;
 
+    AudioSource auso;
     GameController gc;
     WordBuilder wbd;
     DebugHelper dh;
@@ -58,6 +60,7 @@ public class WordWeaponizer : MonoBehaviour
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
+        auso = GetComponent<AudioSource>();
         currentEnergyLevel = maxEnergy; //maxEnergy;
         energyRegenRate_Current = energyRegenRate_Target;
     }
@@ -161,6 +164,7 @@ public class WordWeaponizer : MonoBehaviour
         float spellpower = (wbd.CurrentPower + memory.GetCurrentArenaData().wordsSpelled 
             * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount);
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
+        auso.PlayOneShot(normalSpellCastClip);
         foreach (var letter in wbd.GetLettersCollected())
         {
             if (letter.Ability_Player != abilityToAutoIgnite)
