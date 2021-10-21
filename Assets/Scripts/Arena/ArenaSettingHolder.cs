@@ -101,7 +101,7 @@ public class ArenaSettingHolder : MonoBehaviour
                 ltd.SetupArenaParameters_MaxLettersOnBoard(arenaSetting.maxLettersOnBoard);
                 ltd.SetupArenaParameters_LettersToIgnore(arenaSetting.lettersToIgnore);
                 vm.ResetArena(arenaSetting.startingVictoryMeterBalance);
-
+                wwz_Player.SetupArenaParameters_EnergyRegenRate(arenaSetting.energyRegenRateModifier);
                 tutorDM = GameObject.FindGameObjectWithTag("Tutor").GetComponent<TutorDialogManager>();
                 tutorDM.SetupTutorDM(wwz_Player);
                 return;

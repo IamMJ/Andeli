@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Training
   m_EditorClassIdentifier: 
   briefScreenIcon: {fileID: 21300000, guid: 5877018fbd795df46b466505fcee050e, type: 3}
-  briefScreenText: The training ground contains only common letters.
+  briefScreenText: Contains only common letters. Much faster energy regen.
   aso: 6
   letterLifetime: 15
   lettersPerWave: 1
@@ -24,6 +24,6 @@ MonoBehaviour:
   startingVictoryMeterBalance: 1
   powerModifierForWordCount: 0
   shouldNotCountIfRepeatingWord: 0
-  energyRegenRateModifier: 1
+  energyRegenRateModifier: 3
   abilityToAutoIgnite: 0
   maxWordLength: 7

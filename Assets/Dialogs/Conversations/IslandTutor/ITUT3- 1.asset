@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
   m_Name: ITUT3- 1
   m_EditorClassIdentifier: 
-  NPCText: As the enemy fires spells at you, the bar will drain. Your spells will
-    help fill the bar. Combat ends once the bar is completely drained or filled.
+  NPCText: When the enemy hits you with spells, the bar will drain. Similarly, your
+    spells will help fill the bar. Combat ends once the bar is completely drained
+    or filled.
   NPCSprite: {fileID: 0}
   PlayerText_0: Got it.
-  resultFromOption0: 2
+  resultFromOption0: 0
   PlayerText_1: 
   resultFromOption1: 2
   Destination: {x: 0, y: 0}

@@ -157,7 +157,6 @@ public class ConversationPanelDriver : MonoBehaviour
                 return;
 
             case ConversationStep.ReplyOption.TeleportPlayerAndQuitConvo:
-                Debug.Log("attempting to move player to " + convoStep.Destination);
                 player.transform.position = convoStep.Destination;
                 player.GetComponent<PlayerInput>().HaltPlayerMovement();
                 player.GetComponent<Movement>().HaltPlayerMovement();

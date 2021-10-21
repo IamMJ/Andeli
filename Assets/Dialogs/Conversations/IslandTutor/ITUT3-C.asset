@@ -18,3 +18,5 @@ MonoBehaviour:
   convoSteps:
   - {fileID: 11400000, guid: 9cad84c0401f3ce47b1ea8179c6217ff, type: 2}
   - {fileID: 11400000, guid: 0b88b75aecbc1e247a63c8e162ffd8de, type: 2}
+  - {fileID: 11400000, guid: ccf66abc95394434990a236b4f9192c7, type: 2}
+  - {fileID: 11400000, guid: 1febec6c18b280b45967c8b57a42fd5c, type: 2}

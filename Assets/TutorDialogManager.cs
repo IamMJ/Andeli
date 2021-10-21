@@ -30,6 +30,7 @@ public class TutorDialogManager : NPCDialogManager
         this.playerWWZ = playerWWZ;
         playerWWZ.OnFireWord += HandleWordFired;
 
+        uid.ShowHideIgnitionChancePanel(false);
         uid.ShowHideTopPanel(false);
         bagman = FindObjectOfType<BagManager>();
         bagman.ModifyBagsEnabled(0);
@@ -48,6 +49,12 @@ public class TutorDialogManager : NPCDialogManager
         {
             StartCombatConversation(combatConvo2);
             uid.ShowHideTopPanel(true);
+        }
+        if (wordsFired == wordFiredToStartConvo3)
+        {
+            StartCombatConversation(combatConvo3);
+            uid.ShowHideIgnitionChancePanel(true);
+
         }
     }
 
