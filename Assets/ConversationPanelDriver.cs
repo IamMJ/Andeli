@@ -168,7 +168,7 @@ public class ConversationPanelDriver : MonoBehaviour
 
     #endregion
 
-    private void ShowHideEntirePanel(bool shouldShowPanel)
+    public void ShowHideEntirePanel(bool shouldShowPanel)
     {
         if (shouldShowPanel)
         {

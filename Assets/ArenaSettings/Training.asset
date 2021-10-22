@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
   m_Name: Training
   m_EditorClassIdentifier: 
-  briefScreenIcon: {fileID: 21300000, guid: 5877018fbd795df46b466505fcee050e, type: 3}
-  briefScreenText: Contains only common letters. Much faster energy regen.
+  settingIcon: {fileID: 21300000, guid: 5877018fbd795df46b466505fcee050e, type: 3}
+  settingName: Training
+  settingDesc_0: Slower Letter Drops
+  settingDesc_1: Faster Energy Regen
+  settingDesc_2: Common Letters Only
   aso: 6
   letterLifetime: 15
   lettersPerWave: 1

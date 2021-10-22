@@ -10,9 +10,9 @@ public class ArenaBuilder : MonoBehaviour
     //[SerializeField] GameObject wallPrefab = null;
     //[SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
-    [SerializeField] GameObject arenaDebriefMenuPrefab = null;
 
-    [SerializeField] GameObject enemy;
+    DebriefPanelDriver dpd;
+    GameObject enemy;
     ArenaSettingHolder ash;
     CinemachineVirtualCamera cvc;
     GameController gc;
@@ -43,6 +43,7 @@ public class ArenaBuilder : MonoBehaviour
 
     public void SetupArena(Vector2 centroid)
     {
+        dpd = FindObjectOfType<DebriefPanelDriver>();
         gc = FindObjectOfType<GameController>();
         gc.isInArena = true;
         gc.RegisterCurrentArenaBuilder(this);
@@ -191,23 +192,18 @@ public class ArenaBuilder : MonoBehaviour
     private void HandleArenaCompletion(bool didPlayerWin)
     {
         // if (didplayerwin) leads to different outcomes, such as awarding a True Letter, or some currency
-        CreateArenaDebriefMenu(didPlayerWin);
+
+        float timeElapsed = Mathf.Round(Time.time - startTime);
+
         CloseDownArena();
+        dpd.ActivateDebriefPanel(didPlayerWin, player, enemy, timeElapsed);
         vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
     }
 
-    private void CreateArenaDebriefMenu(bool didPlayerWin)
-    {
-        gc.PauseGame();
-        float timeElapsed = Mathf.Round( Time.time - startTime);
-        GameObject debriefMenu = Instantiate(arenaDebriefMenuPrefab);
-        debriefMenu.GetComponent<ArenaDebriefMenuDriver>().SetupDebriefMenu(gc, 
-            didPlayerWin, gc.GetPlayer(), enemy, timeElapsed);
-    }
 
     public void CloseDownArena()
     {
-        gc.ResumeGameSpeed(false);
+
         gc.SetCameraToOverworldOffset();
         gc.isInArena = false;
         uid.ShowOverworldUIElements();

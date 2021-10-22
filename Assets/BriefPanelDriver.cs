@@ -15,10 +15,12 @@ public class BriefPanelDriver : MonoBehaviour
     [SerializeField] TextMeshProUGUI settingDescTMP_2 = null;
 
     ArenaStarter arenaStarter;
+    GameController gc;
 
     void Start()
     {
-        
+        gc = FindObjectOfType<GameController>();
+        ShowHideEntirePanel(false);
     }
 
     // Update is called once per frame
@@ -53,11 +55,12 @@ public class BriefPanelDriver : MonoBehaviour
 
     }
 
-    private void ShowHideEntirePanel(bool shouldBeShown)
+    public void ShowHideEntirePanel(bool shouldBeShown)
     {
 
         if (shouldBeShown)
         {
+            gc.PauseGame();
             foreach (var GO in otherGOs)
             {
                 GO.SetActive(true);
@@ -72,6 +75,7 @@ public class BriefPanelDriver : MonoBehaviour
         }
         else
         {
+            gc.ResumeGameSpeed(false);
             foreach (var GO in otherGOs)
             {
                 GO.SetActive(false);

@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 791868953
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 5877018fbd795df46b466505fcee050e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -150,7 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arenaBuilderPrefab: {fileID: 7351801026652380497, guid: d404e3b67bb25074497454435e73c70b, type: 3}
-  arenaBriefMenuPrefab: {fileID: 6017347352899268855, guid: 3ecfd3f03ff2baf4f8f079694314d7f1, type: 3}
   inactiveSprite: {fileID: 21300000, guid: 61b37b9c66f3f094e87f6f2086d91554, type: 3}
   ArenaEnemyPrefab: {fileID: 6646722358577865907, guid: 0a0819c3d6dbeaf4f9958e8b39440fd7, type: 3}
   canBeDestroyed: 0
@@ -197,6 +196,7 @@ MonoBehaviour:
   normalSpellPrefab: {fileID: 0}
   freezeSpellPrefab: {fileID: 0}
   wispySpellPrefab: {fileID: 0}
+  normalSpellCastClip: {fileID: 0}
   memory: {fileID: 0}
   currentEnemy: {fileID: 0}
 --- !u!114 &5588489789330998112
@@ -223,6 +223,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58403573c0a2f94c8114a3053b1ff15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  addLetterToSwordClip: {fileID: 0}
+  addLetterToBagClip: {fileID: 0}
+  destroyLetterClip: {fileID: 0}
   lettersOnSword: []
   currentWord: 
   CurrentPower: 0

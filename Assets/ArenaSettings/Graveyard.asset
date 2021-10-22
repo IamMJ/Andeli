@@ -12,15 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
   m_Name: Graveyard
   m_EditorClassIdentifier: 
-  briefScreenIcon: {fileID: 6273885850348558317, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
-  briefScreenText: Slow regen, constant drain, word count penalty
+  settingIcon: {fileID: 0}
+  settingName: Graveyard
+  settingDesc_0: Scary
+  settingDesc_1: Dark
+  settingDesc_2: Hard
   aso: 5
   letterLifetime: 20
   lettersPerWave: 3
   timeBetweenWaves: 7
-  lettersToNotDrop: 
+  lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 12
+  startingVictoryMeterBalance: 20
   powerModifierForWordCount: -1
   shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 0.5

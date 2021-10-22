@@ -29,7 +29,7 @@ public class PlayerInput : MonoBehaviour
     float nextWaypointDistance = 1;
 
     //state
-    bool wasValidButtonDown = false;
+    public bool wasValidButtonDown = false;
     bool isMobile = false;
     bool isSnapped = false;
     GraphMask graphMask = 1 << 0;
@@ -89,13 +89,14 @@ public class PlayerInput : MonoBehaviour
 
     private void HandleMouseInput()
     {
-        if (gc.isPaused) { return; }
         if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("button was pressed down, and was valid press down: "+ wasValidButtonDown);
             wasValidButtonDown = true;
         }
         if (Input.GetMouseButtonUp(0) && wasValidButtonDown)
         {
+            Debug.Log("button was released and was valid press down: "+ wasValidButtonDown);
             Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
             if (GridHelper.CheckIsTouchingWordSection(Input.mousePosition, gc.isInArena))
             {
@@ -108,6 +109,10 @@ public class PlayerInput : MonoBehaviour
             CheckStrategicDestinationForDialogPossibility();
             Debug.DrawLine(transform.position, strategicDestination, Color.red, 1f);
             seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
+            wasValidButtonDown = false;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
             wasValidButtonDown = false;
         }
     }

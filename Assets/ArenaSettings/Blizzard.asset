@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
   m_Name: Blizzard
   m_EditorClassIdentifier: 
-  briefScreenIcon: {fileID: -3995436057480826959, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
-  briefScreenText: Brrr! This is a blizzard!
+  settingIcon: {fileID: -5460322063802268859, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
+  settingName: Blizzard
+  settingDesc_0: desc 0
+  settingDesc_1: desc 1
+  settingDesc_2: desc 2
   aso: 3
   letterLifetime: 40
   lettersPerWave: 1

@@ -20,6 +20,9 @@ public class GameController : MonoBehaviour
     GameStateHolder gash;
 
     UIDriver uid;
+    ConversationPanelDriver cpd;
+    BriefPanelDriver bpd;
+    DebriefPanelDriver dpd;
     MainMenuDriver mmd;
     LetterPowerMenuDriver lpmd;
     OptionMenuDriver pmd;
@@ -74,9 +77,19 @@ public class GameController : MonoBehaviour
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         ppc = Camera.main.GetComponent<PixelPerfectCamera>();
         uid = FindObjectOfType<UIDriver>();
+        cpd = FindObjectOfType<ConversationPanelDriver>();
+        dpd = FindObjectOfType<DebriefPanelDriver>();
+        bpd = FindObjectOfType<BriefPanelDriver>();
+        cpd.ShowHideEntirePanel(false);
+        dpd.ShowHideEntirePanel(false);
+        bpd.ShowHideEntirePanel(false);
+
+
         mc = FindObjectOfType<MusicController>();
         uid.HideAllOverworldUIElements();
         uid.ShowHideMainMenu(true);
+
+
 
         gash = FindObjectOfType<GameStateHolder>();
         vm = FindObjectOfType<VictoryMeter>();
@@ -228,16 +241,19 @@ public class GameController : MonoBehaviour
     #region End Game Methods
     public void EndCurrentGame()
     {
-        isPaused = false;
         isInArena = false;
         isInGame = false;
         if (currentArenaBuilder)
         {
             currentArenaBuilder.CloseDownArena();
+            ResumeGameSpeed(true);
         }
         Destroy(player);
         uid.HideAllOverworldUIElements();
         uid.ShowHideMainMenu(true);
+        cpd.ShowHideEntirePanel(false);
+        dpd.ShowHideEntirePanel(false);
+        bpd.ShowHideEntirePanel(false);
         BeginIdleMode();
         // uid.disable or hide everything
         //

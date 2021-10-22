@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
   m_Name: Plain
   m_EditorClassIdentifier: 
-  briefScreenIcon: {fileID: 3308275713196472214, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
-  briefScreenText: The plains; no special rules here.
+  settingIcon: {fileID: 7032761679217577175, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
+  settingName: Plains
+  settingDesc_0: No Special Modifiers
+  settingDesc_1: 
+  settingDesc_2: 
   aso: 0
   letterLifetime: 20
   lettersPerWave: 2

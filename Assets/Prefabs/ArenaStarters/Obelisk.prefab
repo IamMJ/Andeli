@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 791868953
   m_SortingLayer: 4
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7627744279514922280, guid: 725ba54183346334bbe8dd53a52e7a8b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -147,7 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arenaBuilderPrefab: {fileID: 7351801026652380497, guid: a2f7ccd8cac18f14bbddbcce0f833d87, type: 3}
-  arenaBriefMenuPrefab: {fileID: 6017347352899268855, guid: 3ecfd3f03ff2baf4f8f079694314d7f1, type: 3}
   inactiveSprite: {fileID: 21300000, guid: 61b37b9c66f3f094e87f6f2086d91554, type: 3}
   ArenaEnemyPrefab: {fileID: 6646722358577865907, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
   canBeDestroyed: 1
