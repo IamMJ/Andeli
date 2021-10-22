@@ -23,6 +23,7 @@ public class DebriefPanelDriver : MonoBehaviour
 
     GameController gc;
     RewardPanelDriver rpd;
+    AdvertPanelDriver apd;
 
     //param
     float timeBeforeLoserFade = 1f;
@@ -35,6 +36,7 @@ public class DebriefPanelDriver : MonoBehaviour
     {
         gc = FindObjectOfType<GameController>();
         rpd = FindObjectOfType<RewardPanelDriver>();
+        apd = FindObjectOfType<AdvertPanelDriver>();
         ShowHideEntirePanel(false);
     }
 
@@ -65,7 +67,8 @@ public class DebriefPanelDriver : MonoBehaviour
     public void HandleAdRewardClick()
     {
         Debug.Log("get the ad reward");
-        rpd.ActivateRewardPanel(100);
+        //rpd.ActivateRewardPanel(100);
+        apd.ActivateAdvertPanel();
         ShowHideEntirePanel(false);
     }
 
