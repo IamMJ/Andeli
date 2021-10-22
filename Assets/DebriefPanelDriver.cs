@@ -22,6 +22,7 @@ public class DebriefPanelDriver : MonoBehaviour
     [SerializeField] GameObject acceptDefeatButton = null;
 
     GameController gc;
+    RewardPanelDriver rpd;
 
     //param
     float timeBeforeLoserFade = 1f;
@@ -33,6 +34,7 @@ public class DebriefPanelDriver : MonoBehaviour
     void Start()
     {
         gc = FindObjectOfType<GameController>();
+        rpd = FindObjectOfType<RewardPanelDriver>();
         ShowHideEntirePanel(false);
     }
 
@@ -56,12 +58,14 @@ public class DebriefPanelDriver : MonoBehaviour
     public void HandleBaseRewardClick()
     {
         Debug.Log("get the base reward");
+        rpd.ActivateRewardPanel(33);
         ShowHideEntirePanel(false);
     }
 
     public void HandleAdRewardClick()
     {
         Debug.Log("get the ad reward");
+        rpd.ActivateRewardPanel(100);
         ShowHideEntirePanel(false);
     }
 
@@ -95,6 +99,7 @@ public class DebriefPanelDriver : MonoBehaviour
         WordsSpelledTMP.text = "Words Spelled: " + ad.wordsSpelled.ToString();
         BestWordTMP.text = ad.bestWordSpelled + " - " + ad.currentBestSinglePowerGain.ToString();
         pm.ResetCurrentArenaData();
+        SetButtonsForVictoryDefeat(didPlayerWin);
     }
 
     public void ShowHideEntirePanel(bool shouldBeShown)

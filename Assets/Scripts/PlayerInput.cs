@@ -62,6 +62,10 @@ public class PlayerInput : MonoBehaviour
             HandleTouchInput();
             HandleMouseInput();
         }
+        if (Input.GetMouseButtonUp(0))
+        {
+            wasValidButtonDown = false;
+        }
 
 
         PassTacticalDestinationToMoveBrain();
@@ -90,13 +94,11 @@ public class PlayerInput : MonoBehaviour
     private void HandleMouseInput()
     {
         if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("button was pressed down, and was valid press down: "+ wasValidButtonDown);
+        {            
             wasValidButtonDown = true;
         }
         if (Input.GetMouseButtonUp(0) && wasValidButtonDown)
         {
-            Debug.Log("button was released and was valid press down: "+ wasValidButtonDown);
             Vector2 mousePos = mc.ScreenToWorldPoint(Input.mousePosition);
             if (GridHelper.CheckIsTouchingWordSection(Input.mousePosition, gc.isInArena))
             {
@@ -111,10 +113,7 @@ public class PlayerInput : MonoBehaviour
             seeker.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
             wasValidButtonDown = false;
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            wasValidButtonDown = false;
-        }
+
     }
 
     private void CheckStrategicDestinationForDialogPossibility()

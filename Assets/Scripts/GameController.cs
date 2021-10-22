@@ -23,9 +23,12 @@ public class GameController : MonoBehaviour
     ConversationPanelDriver cpd;
     BriefPanelDriver bpd;
     DebriefPanelDriver dpd;
+    RewardPanelDriver rpd;
     MainMenuDriver mmd;
     LetterPowerMenuDriver lpmd;
     OptionMenuDriver pmd;
+
+
     ArenaBuilder currentArenaBuilder;
     PixelPerfectCamera ppc;
     MusicController mc;
@@ -80,9 +83,12 @@ public class GameController : MonoBehaviour
         cpd = FindObjectOfType<ConversationPanelDriver>();
         dpd = FindObjectOfType<DebriefPanelDriver>();
         bpd = FindObjectOfType<BriefPanelDriver>();
+        rpd = FindObjectOfType<RewardPanelDriver>();
+
         cpd.ShowHideEntirePanel(false);
         dpd.ShowHideEntirePanel(false);
         bpd.ShowHideEntirePanel(false);
+        rpd.ShowHideEntirePanel(false);
 
 
         mc = FindObjectOfType<MusicController>();

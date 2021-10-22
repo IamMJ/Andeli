@@ -78,7 +78,7 @@ public class WordBuilder : MonoBehaviour
         //IncreasePower(newLetter.Power_Player);
         SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
         CurrentPower = swordWord.Power;
-        auso.PlayOneShot(addLetterToSwordClip);
+        auso?.PlayOneShot(addLetterToSwordClip);
         if (hasUI)
         {
             //if (memory.CheckIfWordHasBeenPlayedByPlayerAlready(currentWord))
@@ -229,7 +229,7 @@ public class WordBuilder : MonoBehaviour
     {
         if (bagman.AttemptToReceiveLetter(lettersOnSword[index]))
         {
-            auso.PlayOneShot(addLetterToBagClip);
+            auso?.PlayOneShot(addLetterToBagClip);
             lettersOnSword.RemoveAt(index);
             RewriteCurrentWordFromLettersOnSword();
             SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
@@ -246,7 +246,7 @@ public class WordBuilder : MonoBehaviour
         SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
         uid.UpdateLettersOnSwordAndPower(swordWord);
         modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
-        auso.PlayOneShot(destroyLetterClip);
+        auso?.PlayOneShot(destroyLetterClip);
         //// Subtract the base word power from current power
         //CurrentPower -= letterToRemove.Power_Player;
 
@@ -271,7 +271,7 @@ public class WordBuilder : MonoBehaviour
 
     public void PlayDestroyLetterClip()
     {
-        auso.PlayOneShot(destroyLetterClip);
+        auso?.PlayOneShot(destroyLetterClip);
     }
 
     public void RebuildCurrentWordForUI()
