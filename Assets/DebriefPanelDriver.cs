@@ -10,12 +10,16 @@ public class DebriefPanelDriver : MonoBehaviour
     [SerializeField] Image defeatedImage_bottom = null;
     [SerializeField] Image defeatedImage_top = null;
     [SerializeField] GameObject[] otherGOs = null;
+    
     [SerializeField] TextMeshProUGUI outcomeTMP = null;
     [SerializeField] TextMeshProUGUI TimeTMP = null;
     [SerializeField] TextMeshProUGUI PowerDealtTMP = null;
     [SerializeField] TextMeshProUGUI WordsSpelledTMP = null;
     [SerializeField] TextMeshProUGUI BestWordTMP = null;
     [SerializeField] Material loserFadeMaterial = null;
+
+    [SerializeField] GameObject[] rewardButtons = null;
+    [SerializeField] GameObject acceptDefeatButton = null;
 
     GameController gc;
 
@@ -58,6 +62,11 @@ public class DebriefPanelDriver : MonoBehaviour
     public void HandleAdRewardClick()
     {
         Debug.Log("get the ad reward");
+        ShowHideEntirePanel(false);
+    }
+
+    public void HandleAcceptDefeatClick()
+    {
         ShowHideEntirePanel(false);
     }
 
@@ -114,6 +123,11 @@ public class DebriefPanelDriver : MonoBehaviour
             {
                 GO.SetActive(false);
             }
+            foreach (var GO in rewardButtons)
+            {
+                GO.SetActive(false);
+            }
+            acceptDefeatButton.SetActive(false);
             outcomeTMP.enabled = false;
             defeatedImage_bottom.enabled = false;
             defeatedImage_top.enabled = false;
@@ -121,6 +135,26 @@ public class DebriefPanelDriver : MonoBehaviour
             PowerDealtTMP.enabled = false;
             WordsSpelledTMP.enabled = false;
             BestWordTMP.enabled = false;
+        }
+    }
+
+    private void SetButtonsForVictoryDefeat(bool shouldShowVictory)
+    {
+        if (shouldShowVictory)
+        {
+            foreach (var GO in rewardButtons)
+            {
+                GO.SetActive(true);
+            }
+            acceptDefeatButton.SetActive(false);
+        }
+        else
+        {
+            foreach (var GO in rewardButtons)
+            {
+                GO.SetActive(false);
+            }
+            acceptDefeatButton.SetActive(true);
         }
     }
 
