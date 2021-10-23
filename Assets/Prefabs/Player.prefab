@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayerID: 791868953
   m_SortingLayer: 4
   m_SortingOrder: 2
-  m_Sprite: {fileID: -1020414804532188053, guid: c8a3a846ed7d5164681ec78c407f6a06, type: 3}
+  m_Sprite: {fileID: -4464185934544814259, guid: 58568bd0c960e224a929a0646bc0e4ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -147,6 +147,7 @@ MonoBehaviour:
   moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
   strategicDestinationPrefab: {fileID: 7910314228762140595, guid: 36498f27111132e4cadd7de16ca5efda, type: 3}
   currentTargetGO: {fileID: 0}
+  wasValidButtonDown: 0
 --- !u!114 &-2375094335787212340
 MonoBehaviour:
   m_ObjectHideFlags: 0

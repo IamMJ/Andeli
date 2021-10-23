@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &303652184526574915
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1119326906612742283, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6f470be6997be0949936c7bd737aaaf8, type: 2}
+    - target: {fileID: 2439715062605108280, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4531313037694696238, guid: b869d8d9d84cdfa4bbc5fc8d0bdcfbd1, type: 3}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108281, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108286, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: m_Name
+      value: IslandCaptain Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2439715062605108287, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: wanderRange
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: allPeaceBarks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: availableConversations.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: allConversations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: allPeaceBarks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: e88c230012151b148832d19895e68eba, type: 2}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: allPeaceBarks.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 553ef85085d9b904abef04a4d87fa383, type: 2}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: availableConversations.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: ede5a4e57426a7f45a99383f414c0222, type: 2}
+    - target: {fileID: 4152124249352675143, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
+      propertyPath: allConversations.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: ede5a4e57426a7f45a99383f414c0222, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fd8d3144ba571294789c0c2ef6ebc41d, type: 3}
