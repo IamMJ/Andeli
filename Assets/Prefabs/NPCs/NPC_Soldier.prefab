@@ -11,17 +11,29 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 34d78d11b0aa3bb46a0620274247adc8, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2031bc8c04161b945821d65b6bc7c736, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8e8a0e50c1837734daced27bd40d3305, type: 2}
     - target: {fileID: 1629728869582127544, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 1372395719698117601, guid: 869339cc0fdd47d47b04eada9899f94c, type: 3}
     - target: {fileID: 1629728869582127545, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1629728869582127545, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 1629728869582127545, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_LocalPosition.z

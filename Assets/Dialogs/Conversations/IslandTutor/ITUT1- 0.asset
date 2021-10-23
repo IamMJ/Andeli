@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
   m_Name: ITUT1- 0
   m_EditorClassIdentifier: 
-  NPCText: Spellsword - the land needs you. Do you remember your training?
+  NPCText: Spellsword - the land needs you. I am called Tutor. Do you remember your
+    training? If not, I can help you learn.
   NPCSprite: {fileID: 0}
   PlayerText_0: No, I need help.
   resultFromOption0: 0
   PlayerText_1: Yes - I'll go to the ship
   resultFromOption1: 1
-  NPCDestinationIfMoving: {x: 99, y: 80}
+  Destination: {x: 0, y: 0}

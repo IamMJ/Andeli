@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   KeywordToShowFor: 
   KeywordToHideFrom: 
-  BarkText: Let's get to sea!
+  BarkText: I'll take you from Tutor Island
   DisplayTime: 2
   DisplayColor: {r: 0, g: 0, b: 0, a: 1}

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   KeywordToShowFor: 
   KeywordToHideFrom: ITUT1
-  BarkText: The world needs you!
+  BarkText: I'll train you.
   DisplayTime: 2
   DisplayColor: {r: 0, g: 0, b: 0, a: 1}
