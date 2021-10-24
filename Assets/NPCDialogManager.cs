@@ -32,9 +32,10 @@ public class NPCDialogManager : MonoBehaviour
     float timeBetweenConvoReset = 4f;
 
     //state
+    bool isPlayerInRange = false;
     int currentBarkIndex = -1;
-    public float timeForNextConvo = 0;
-    float timeForNextBark;
+    protected float timeForNextConvo = 0;
+    protected float timeForNextBark;
     BarkShell currentBark;
 
 
@@ -76,6 +77,10 @@ public class NPCDialogManager : MonoBehaviour
         {
             ActivateNoticeMe();
         }
+        else
+        {
+            DeactivateNoticeMe();
+        }
 
         availablePeaceBarks = RebuildAvailableBarks(ref allPeaceBarks, newKeyword);
         availableReplyBarks = RebuildAvailableBarks(ref allReplyBarks, newKeyword);
@@ -87,7 +92,8 @@ public class NPCDialogManager : MonoBehaviour
     protected virtual void Update()
     {
         if (gc.isPaused) { return; }
-        if (Time.time > timeForNextBark && gc.isInGame)
+
+        if (Time.time > timeForNextBark && gc.isInGame && isPlayerInRange)
         {
             UpdateBark();
         }
@@ -99,7 +105,7 @@ public class NPCDialogManager : MonoBehaviour
         
     }
 
-    private void ListenForConversationEntryAttempt()
+    protected void ListenForConversationEntryAttempt()
     {
         if (brain.requestedToHalt && !gc.isInArena && !gc.isPaused && !cpd.isDisplayed && Time.time >= timeForNextConvo)
         {
@@ -152,8 +158,24 @@ public class NPCDialogManager : MonoBehaviour
 
     #region Private Helpers
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 15)
+        {
+            isPlayerInRange = true;
+        }
+        
+    }
 
-    private void UpdateBark()
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 15)
+        {
+            isPlayerInRange = false;
+        }
+    }
+
+    protected void UpdateBark()
     {
         Bark bark;
         if (gc.isInArena)
@@ -265,6 +287,14 @@ public class NPCDialogManager : MonoBehaviour
         else
         {
             noticeMe.ToggleNoticeMe(true);
+        }
+    }
+
+    private void DeactivateNoticeMe()
+    {
+        if (noticeMe)
+        {
+            noticeMe.ToggleNoticeMe(false);
         }
     }
 

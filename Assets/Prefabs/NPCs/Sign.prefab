@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8348216205034714530}
   - component: {fileID: 8348216205034714529}
   - component: {fileID: 8348216205034714528}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,15 +96,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa74b9e7b180a34795f92947b9ef330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allBarks:
-  - {fileID: 11400000, guid: 21d9fa5d4659b444e9e99dceeba22bf8, type: 2}
-  possibleReplyBarks: []
+  allPeaceBarks: []
+  allReplyBarks: []
+  allCombatBarks: []
   allConversations: []
-  availableBarks: []
+  availablePeaceBarks: []
+  availableReplyBarks: []
+  availableCombatBarks: []
   availableConversations: []
   barkPrefab: {fileID: 4643434310906258457, guid: 842f42abd6b41fd4c937b09b850b2216, type: 3}
   noticeMePrefab: {fileID: 0}
   timeBetweenBarks_average: 4
+  isPlayerInRange: 0
+  timeForNextConvo: 0
 --- !u!58 &8348216205034714528
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -25,6 +25,18 @@ public class TutorDialogManager : NPCDialogManager
         uid = FindObjectOfType<UIDriver>();
     }
 
+    protected override void Update()
+    {
+        if (gc.isPaused) { return; }
+        if (Time.time > timeForNextBark && gc.isInGame)
+        {
+            UpdateBark();
+        }
+        if (noticeMe && noticeMe.isActivated)
+        {
+            ListenForConversationEntryAttempt();
+        }    
+    }
     public void SetupTutorDM(WordWeaponizer playerWWZ)
     {
         this.playerWWZ = playerWWZ;

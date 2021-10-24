@@ -23,7 +23,7 @@ TagManager:
   - EnemyWeapon
   - Impassable
   - Passable
-  - Tail
+  - PlayerConvoStarter
   - MysticLetter
   - NPC
   - 

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51ef45ff1508aca499ea6108f4ddff11, type: 3}
-  m_Name: PostTrain 1
+  m_Name: Quin3 2
   m_EditorClassIdentifier: 
-  KeywordToShowFor: ITUT1
+  KeywordToShowFor: ITUT3
   KeywordToHideFrom: 
-  BarkText: I have taught you the basics.
+  BarkText: Stronger letters sparkle more.
   DisplayTime: 2
   DisplayColor: {r: 0, g: 0, b: 0, a: 1}
