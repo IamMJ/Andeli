@@ -78,7 +78,11 @@ public class WordBuilder : MonoBehaviour
         //IncreasePower(newLetter.Power_Player);
         SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
         CurrentPower = swordWord.Power;
-        auso?.PlayOneShot(addLetterToSwordClip);
+        if (hasUI)
+        {
+            auso?.PlayOneShot(addLetterToSwordClip);
+        }
+
         if (hasUI)
         {
             //if (memory.CheckIfWordHasBeenPlayedByPlayerAlready(currentWord))

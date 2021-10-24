@@ -159,6 +159,7 @@ public class PlayerInput : MonoBehaviour
     public void HaltPlayerMovement()
     {
         strategicDestination = GridHelper.SnapToGrid(transform.position, 1);
+        currentPath = null;
     }
     #endregion
 

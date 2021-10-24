@@ -8,6 +8,7 @@ public class JewelManager : MonoBehaviour
 {
     [SerializeField] Image[] jewelImages = null;
     [SerializeField] ParticleSystem[] jewelPSs = null;
+    GameController gc;
 
     //state
     int jewelsInstalled = 1;
@@ -16,6 +17,7 @@ public class JewelManager : MonoBehaviour
     {
         //jewelsInstalled = jewelImages.Length;
         ModifyJewelCount(3);
+        gc = FindObjectOfType<GameController>();
 
     }
 
@@ -33,7 +35,6 @@ public class JewelManager : MonoBehaviour
             }
 
         }
-        Debug.Log($"Lowest empty jewel: {lowestEmpty}");
         ProvideFeedbackAboutInsufficientEnergy(lowestEmpty);
 
     }
@@ -49,6 +50,13 @@ public class JewelManager : MonoBehaviour
 
     public void ProvideFeedbackAboutInsufficientEnergy(int chargingJewelIndex)
     {
+        //if (gc.isPaused)
+        //{
+        //    foreach (var part in jewelPSs)
+        //    {
+        //        part.Stop();
+        //    }
+        //}
         if (chargingJewelIndex == -1) { return; }
         for (int i = 0; i < jewelsInstalled; i++)
         {

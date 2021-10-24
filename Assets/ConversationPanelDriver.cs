@@ -10,7 +10,8 @@ public class ConversationPanelDriver : MonoBehaviour
     //init
     NPCDialogManager claimingDiaman;
     [SerializeField] Image NPCPortraitImage = null;
-    [SerializeField] TextMeshProUGUI NPCTextTMP = null;
+    [SerializeField] TextMeshProUGUI NPCTextTMP_Long = null;
+    [SerializeField] TextMeshProUGUI NPCTextTMP_Short = null;
     [SerializeField] Image NPCMainImage = null;
     [SerializeField] Image PlayerPortraitImage = null;
     [SerializeField] GameObject playerResponseGO_0 = null;
@@ -158,8 +159,8 @@ public class ConversationPanelDriver : MonoBehaviour
 
             case ConversationStep.ReplyOption.TeleportPlayerAndQuitConvo:
                 player.transform.position = convoStep.Destination;
-                player.GetComponent<PlayerInput>().HaltPlayerMovement();
                 player.GetComponent<Movement>().HaltPlayerMovement();
+                player.GetComponent<PlayerInput>().HaltPlayerMovement();
                 ShutdownConversationPanel(true);
                 return;
         }
@@ -173,7 +174,8 @@ public class ConversationPanelDriver : MonoBehaviour
         if (shouldShowPanel)
         {
             NPCPortraitImage.enabled = true;
-            NPCTextTMP.enabled = true;
+            NPCTextTMP_Long.enabled = true;
+            NPCTextTMP_Short.enabled = true;
             NPCMainImage.enabled = true;
             PlayerPortraitImage.enabled = true;
             playerResponseGO_0.SetActive(true);
@@ -185,7 +187,8 @@ public class ConversationPanelDriver : MonoBehaviour
         if (shouldShowPanel == false)
         {
             NPCPortraitImage.enabled = false;
-            NPCTextTMP.enabled = false;
+            NPCTextTMP_Long.enabled = false;
+            NPCTextTMP_Short.enabled = false;
             NPCMainImage.enabled = false;
             PlayerPortraitImage.enabled = false;
             playerResponseGO_0.SetActive(false);
@@ -206,7 +209,19 @@ public class ConversationPanelDriver : MonoBehaviour
 
     private void UpdateConversationText(ConversationStep convoStep)
     {
-        NPCTextTMP.text = convoStep.NPCText;
+        if (convoStep.NPCSprite)
+        {
+            NPCTextTMP_Long.enabled = false;
+            NPCTextTMP_Short.enabled = true;
+            NPCTextTMP_Short.text = convoStep.NPCText;
+        }
+        else
+        {
+            NPCTextTMP_Long.enabled = true;
+            NPCTextTMP_Short.enabled = false;
+            NPCTextTMP_Long.text = convoStep.NPCText;
+        }
+
         playerResponseTMP_0.text = convoStep.PlayerText_0;
         if (convoStep.PlayerText_1 != "")
         {

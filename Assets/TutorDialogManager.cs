@@ -30,11 +30,13 @@ public class TutorDialogManager : NPCDialogManager
         this.playerWWZ = playerWWZ;
         playerWWZ.OnFireWord += HandleWordFired;
 
-        uid.ShowHideIgnitionChancePanel(false);
-        uid.ShowHideTopPanel(false);
-        bagman = FindObjectOfType<BagManager>();
-        bagman.ModifyBagsEnabled(0);
-
+        if (player.GetComponent<PlayerDialogMemory>().CheckForPlayerKnowledgeOfARequiredKeyword("ITUT1"))
+        {
+            uid.ShowHideIgnitionChancePanel(false);
+            uid.ShowHideTopPanel(false);
+            bagman = FindObjectOfType<BagManager>();
+            bagman.ModifyBagsEnabled(0);
+        }
     }
 
     private void HandleWordFired()

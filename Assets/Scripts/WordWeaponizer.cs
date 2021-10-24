@@ -164,7 +164,7 @@ public class WordWeaponizer : MonoBehaviour
         float spellpower = (wbd.CurrentPower + memory.GetCurrentArenaData().wordsSpelled 
             * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount);
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
-        auso.PlayOneShot(normalSpellCastClip);
+        auso?.PlayOneShot(normalSpellCastClip);
         foreach (var letter in wbd.GetLettersCollected())
         {
             if (letter.Ability_Player != abilityToAutoIgnite)
