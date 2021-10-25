@@ -36,6 +36,7 @@ public class StrategyBrainV2 : MonoBehaviour
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
     Vector2 previousDirection = Vector2.zero;
+    [SerializeField] LetterTile previousLTT;
 
     void Start()
     {
@@ -58,12 +59,12 @@ public class StrategyBrainV2 : MonoBehaviour
         {
             SetRandomStrategicDestination();
         }
-        if (wb.TargetLetterTile)
+        if (wb.TargetLetterTile && wb.TargetLetterTile != previousLTT)
         {
+            previousLTT = wb.TargetLetterTile;
             SetTLLasStrategicDestination();
         }
 
-        StartPathToStrategicDestination();
         PassTacticalDestinationToMoveBrain();
     }
 
@@ -72,7 +73,9 @@ public class StrategyBrainV2 : MonoBehaviour
         if ((transform.position - (Vector3)strategicDestination).magnitude < closeEnough)
         {
             strategicDestination = ab.CreatePassableRandomPointWithinArena();
+            StartPathToStrategicDestination();
         }
+        
     }
 
     private void SetTLLasStrategicDestination()
@@ -80,6 +83,7 @@ public class StrategyBrainV2 : MonoBehaviour
         if ((strategicDestination - (Vector2)wb.TargetLetterTile.transform.position).magnitude > Mathf.Epsilon)
         {
             strategicDestination = wb.TargetLetterTile.transform.position;
+            StartPathToStrategicDestination();
         }
 
     }

@@ -366,7 +366,7 @@ public class WordBuilder : MonoBehaviour
         if (collision.gameObject.layer == 9)
         {
             LetterTile letterTile = collision.gameObject.GetComponent<LetterTile>();
-            if (letterTile.IsMystic)
+            if (hasUI)
             {
                 if (AttemptToPickUpLetterTile_Player(letterTile))
                 {
@@ -375,20 +375,20 @@ public class WordBuilder : MonoBehaviour
             }
             else
             {
-                if (hasUI)
-                {
-                    if (AttemptToPickUpLetterTile_Player(letterTile))
-                    {
-                        //TODO play a bump sound;
-                    }
-                }
-                else
-                {
-                    AttemptToPickUpLetterTile_NPC(letterTile);
-                }
-
+                AttemptToPickUpLetterTile_NPC(letterTile);
             }
         }
+        if (collision.gameObject.layer == 16 && hasUI)
+        {
+            LetterTile letterTile = collision.gameObject.GetComponent<LetterTile>();
+            if (AttemptToPickUpLetterTile_Player(letterTile))
+            {
+                //TODO play a bump sound;
+            }
+
+
+        }
+
     }
 
     private bool AttemptToPickUpLetterTile_Player(LetterTile letterTile)

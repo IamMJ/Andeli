@@ -28,8 +28,15 @@ public abstract class SpellingStrategy : MonoBehaviour
         ltd = FindObjectOfType<LetterTileDropper>();
 
     }
+    /// <summary>
+    /// This should determine the AI's next course of action after gaining a letter.
+    /// </summary>
     public abstract void EvaluateWordAfterGainingALetter();
 
+    /// <summary>
+    /// This should pull all letter tiles currently on board, regardless of remaining lifetime, and then output a 'best' LTT
+    /// </summary>
+    /// <returns></returns>
     public abstract LetterTile FindBestLetterFromAllOnBoard();
 
     protected void FireOffOREraseCurrentWordIfFutureWordsUnlikely(int thresholdForTooUnlikely)

@@ -47,7 +47,7 @@ public class WordBuilder_NPC : WordBuilder
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        if (collision.gameObject.GetComponent<LetterTile>())
+        if (collision.gameObject.layer == 9)
         {
             ss.EvaluateWordAfterGainingALetter();
         }
@@ -79,6 +79,11 @@ public class WordBuilder_NPC : WordBuilder
     }
     #endregion
 
+    /// <summary>
+    /// This is called by the Letter Tile Dropper when a new tile is added to the board.
+    /// </summary>
+    /// <param name="changedLetterTile"></param>
+    /// <param name="wasLetterAdded"></param>
     private void DetermineBestTargetLetter(LetterTile changedLetterTile, bool wasLetterAdded)
     {
         if (TargetLetterTile)
