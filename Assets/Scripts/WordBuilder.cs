@@ -316,6 +316,11 @@ public class WordBuilder : MonoBehaviour
         //tpm.DestroyEntireTail();
     }
 
+    public void ClearCurrentWord(int numberOfLettersToRemoveFromEnd)
+    {
+        //TODO
+    }
+
     public List<LetterTile> GetLettersCollected()
     {
         return lettersOnSword;

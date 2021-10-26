@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SpeedKeeper : MonoBehaviour
 {
+    GameController gc;
+    PlayerMemory pm;
+
     //param
     float accelPerValidWord = 0.3f;
     float minSpeed = 1.0f;
@@ -12,13 +15,21 @@ public class SpeedKeeper : MonoBehaviour
 
     //state
     float stunTimeRemaining = 0;
-    public float targetCurrentSpeed = 2f;
+    [SerializeField] float targetCurrentSpeed = 2f;
 
     public float CurrentSpeed; //{ get; private set; } = 0;
 
+    bool isPlayer = false;
 
     private void Start()
     {
+        gc = FindObjectOfType<GameController>();
+        if (GetComponent<PlayerInput>())
+        {
+            isPlayer = true;
+            pm = GetComponent<PlayerMemory>();
+            pm.BaseMoveSpeed = targetCurrentSpeed;
+        }
         //WordMakerMemory pm = GetComponent<WordMakerMemory>();
         //if (pm)
         //{
@@ -26,15 +37,31 @@ public class SpeedKeeper : MonoBehaviour
         //    pm.OnIncrementWordCount += IncreaseSpeedOnValidWord;
         //}
 
+        ResetSpeedStats();
+    }
+
+    public void ResetSpeedStats()
+    {
+        if (isPlayer)
+        {
+            targetCurrentSpeed = pm.BaseMoveSpeed;
+        }
+
+
         CurrentSpeed = targetCurrentSpeed;
     }
 
     private void Update()
     {
+        if (!gc.isInArena) { return; }
         CurrentSpeed = Mathf.MoveTowards(CurrentSpeed, targetCurrentSpeed, speedRecoveryRate * Time.deltaTime);
         CurrentSpeed = Mathf.Clamp(CurrentSpeed, minSpeed, maxSpeed);
     }
 
+    public float GetStartingSpeed()
+    {
+        return targetCurrentSpeed;
+    }
     //private void IncreaseSpeedOnValidWord()
     //{
     //    CurrentSpeed += accelPerValidWord;
@@ -65,5 +92,11 @@ public class SpeedKeeper : MonoBehaviour
     {
         //Debug.Log($"{gameObject.name} just was slowed by {freezePenalty}");
         CurrentSpeed -= freezePenalty;
+    }
+
+    public void ModifyTargetSpeed(float multiplier)
+    {
+        targetCurrentSpeed *= multiplier;
+        CurrentSpeed = targetCurrentSpeed;
     }
 }

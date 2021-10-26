@@ -22,7 +22,7 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected LetterTileDropper ltd;
     //protected List<(string, float)> evaluatedList = new List<(string, float)>();
     protected Dictionary<LetterTile, float> evaluatedLTs = new Dictionary<LetterTile, float>();
-    [SerializeField] protected StrategyValues sv;
+    [SerializeField] protected EnemyProfile ep;
 
     public enum PossibleWordStrategies {EraseWord, FireWord, KeepBuildingCurrentWord, NoStrategyAvailable};
     public Action<PossibleWordStrategies> OnRecommendedStrategyChange;
@@ -98,7 +98,7 @@ public abstract class SpellingStrategy : MonoBehaviour
             }
         }
         CurrentBestLTT = currentBestLT;
-
+        //Debug.Log("best letter: " + CurrentBestLTT.Letter);
         UpdateStrategy();
 
        
@@ -108,6 +108,12 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected virtual void OnDestroy()
     {
         ltd.OnLetterListModified -= ModifyEvaluatedLetterDictionary;
+    }
+
+    public virtual void ImplementSpeedEnergySettingsFromEP()
+    {
+        GetComponent<WordWeaponizer>().ModifyEnergyRate(ep.BaseEnergyRegenMultiplier);
+        GetComponent<SpeedKeeper>().ModifyTargetSpeed(ep.BaseSpeedMultiplier);
     }
 
 

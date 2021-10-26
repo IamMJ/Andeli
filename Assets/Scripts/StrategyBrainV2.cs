@@ -52,7 +52,7 @@ public class StrategyBrainV2 : MonoBehaviour
         wmm = GetComponent<Movement>();
         wwz = GetComponent<WordWeaponizer>();
         wb = GetComponent<WordBuilder>();
-        wb.OnAddLetterToSword += ReactToPickingUpLetter;
+
         ss = GetComponent<SpellingStrategy>();
         ss.OnRecommendedStrategyChange += ReactToStrategyChange;
         ab = FindObjectOfType<ArenaBuilder>();
@@ -113,14 +113,14 @@ public class StrategyBrainV2 : MonoBehaviour
 
             case SpellingStrategy.PossibleWordStrategies.KeepBuildingCurrentWord:
                 TargetLetterTile = ss.CurrentBestLTT;
-                GridModifier.ReknitAllGridGraphs(TargetLetterTile.transform);//, graphMask);
+                GridModifier.ReknitSpecificGridGraph(TargetLetterTile.transform, GraphIndex);
 
-                    //if (previousLTT && TargetLetterTile != previousLTT)
-                    //{
-                    //    GridModifier.UnknitSpecificGridGraph(previousLTT.transform, graphMask);
-                    //    previousLTT = TargetLetterTile;
-                    //}
-            
+                if (previousLTT && TargetLetterTile != previousLTT)
+                {
+                    GridModifier.UnknitSpecificGridGraph(previousLTT.transform, GraphIndex);
+                    previousLTT = TargetLetterTile;
+                }
+
                 SetTLLasStrategicDestination();
                 return;
 
@@ -193,14 +193,11 @@ public class StrategyBrainV2 : MonoBehaviour
         //strategicDestination = wb.TargetLetterTile.transform.position;
     }
 
-    private void ReactToPickingUpLetter()
-    {
 
-    }
 
     private void OnDestroy()
     {
-        wb.OnAddLetterToSword -= ReactToPickingUpLetter;
+       
     }
 
     //public static void DebugDrawPath(Vector3[] corners)

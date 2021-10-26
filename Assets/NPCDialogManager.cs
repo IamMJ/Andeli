@@ -24,7 +24,7 @@ public class NPCDialogManager : MonoBehaviour
     protected NPC_Brain brain;
     protected GameObject player;
     protected ConversationPanelDriver cpd;
-    protected PlayerDialogMemory pdm;
+    protected PlayerMemory pdm;
 
     //param
     [SerializeField] float timeBetweenBarks_average = 4;
@@ -54,7 +54,7 @@ public class NPCDialogManager : MonoBehaviour
     private void RespondToGameStart()
     {
         player = gc.GetPlayer();
-        pdm = player.GetComponent<PlayerDialogMemory>();
+        pdm = player.GetComponent<PlayerMemory>();
 
         availablePeaceBarks = RebuildAvailableBarks(ref allPeaceBarks);
         availableReplyBarks = RebuildAvailableBarks(ref allReplyBarks);

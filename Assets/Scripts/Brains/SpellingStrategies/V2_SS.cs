@@ -11,7 +11,7 @@ public class V2_SS : SpellingStrategy
     public override void Start()
     {
         base.Start();
-        currentPatience = sv.Patience;
+        currentPatience = ep.Patience;
     }
 
     public override void UpdateStrategy()
@@ -20,7 +20,7 @@ public class V2_SS : SpellingStrategy
         string cw = wb.GetCurrentWord();
         int cp = wb.CurrentPower;
 
-        if (cp >= sv.MinimumPoints && wv.CheckWordValidity(cw) && wwz.CheckIfSufficientEnergyToCast())
+        if (cp >= ep.MinimumPoints && wv.CheckWordValidity(cw) && wwz.CheckIfSufficientEnergyToCast())
         {
             pwo = PossibleWordStrategies.FireWord;
             OnRecommendedStrategyChange?.Invoke(pwo);
@@ -33,11 +33,13 @@ public class V2_SS : SpellingStrategy
             Debug.Log("losing patience");
             if (currentPatience <= 0)
             {
+                // Perhaps allow computer to lop off most recent letters, or anagram a bit
+
                 Debug.Log($"erasing {cw}.");
                 pwo = PossibleWordStrategies.EraseWord;
                 OnRecommendedStrategyChange?.Invoke(pwo);
                 CurrentRecommendedStrategy = pwo;
-                currentPatience = sv.Patience;
+                currentPatience = ep.Patience;
             }
 
         }
@@ -63,20 +65,19 @@ public class V2_SS : SpellingStrategy
         string possWord = wb.GetCurrentWord() + evaluatedLT.Letter;
         float possPower = wb.CurrentPower + evaluatedLT.Power_Enemy;
 
-        float wordPowerFactor = sv.PointsWeight * possPower;
-        float wordValidityFactor = ConvertWordValidityToBoolint(possWord) * (possPower / sv.MinimumPoints);
+        float wordPowerFactor = ep.PointsWeight * possPower; // include a way to increase value based on Letter Masks
+
+        float wordValidityFactor = ConvertWordValidityToBoolint(possWord) * (possPower / ep.MinimumPoints);
         //Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{sv.MinimumPoints}, validity: {ConvertFutureWordValidityToBoolint(possWord)}");
 
-        float futureWordFactor = sv.FutureWordsWeight * ConvertFutureWordsToValue(possWord) * ((float)sv.MinimumPoints/possPower);
-        Debug.Log($"fwf: {futureWordFactor}, from {sv.FutureWordsWeight} * {ConvertFutureWordsToValue(possWord)}*" +
-            $"{((float)sv.MinimumPoints / possPower)}");
+        float futureWordFactor = ep.FutureWordsWeight * ConvertFutureWordsToValue(possWord) * ((float)ep.MinimumPoints/possPower);
 
-        float distFactor = sv.DistanceWeight * (evaluatedLT.transform.position - transform.position).magnitude;
+        float distFactor = ep.DistanceWeight * (evaluatedLT.transform.position - transform.position).magnitude;
 
         float value = ((wordPowerFactor * wordValidityFactor * futureWordFactor)- distFactor);
         evaluatedLT.AssignAIValueForDebug(value);
 
-        Debug.Log($"evaluated {evaluatedLT.Letter} to be worth {value} " +
+        Debug.Log($"had {wb.GetCurrentWord()}, evaluated {evaluatedLT.Letter} as worth {value} " +
             $"(wpf: {wordPowerFactor}, wvf: {wordValidityFactor}, fwf: {futureWordFactor}, df: {distFactor})");
 
         return value;
@@ -84,7 +85,7 @@ public class V2_SS : SpellingStrategy
 
     private int ConvertWordValidityToBoolint(string futureWord)
     {
-        if (sv.ShouldWordAlwaysBeValid == true && futureWord.Length > 1)
+        if (ep.ShouldWordAlwaysBeValid == true && futureWord.Length > 2)
         {
             if (wv.CheckWordValidity(futureWord))
             {
@@ -110,8 +111,7 @@ public class V2_SS : SpellingStrategy
         else
         {
             int futureWordCount = wv.FindWordBandWithStubWord(futureWord).Range;
-            Debug.Log($"given {futureWord}, evaluated as {Mathf.Clamp01((float)futureWordCount / (float)sv.FutureWordsThreshold)}");
-            return Mathf.Clamp01((float)futureWordCount / (float)sv.FutureWordsThreshold);
+            return Mathf.Clamp01((float)futureWordCount / (float)ep.FutureWordsThreshold);
         }
         
     }

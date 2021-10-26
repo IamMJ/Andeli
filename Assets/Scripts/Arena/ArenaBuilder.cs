@@ -64,7 +64,7 @@ public class ArenaBuilder : MonoBehaviour
         FindObjectOfType<BagManager>().RequestClearOutBag();
 
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
-
+        enemy.GetComponent<SpellingStrategy>().ImplementSpeedEnergySettingsFromEP();
         vm = gc.GetVictoryMeter();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         SetupStatueCameraMouse(centroid);
@@ -221,6 +221,8 @@ public class ArenaBuilder : MonoBehaviour
         arenaStarter.DeactivateArenaStarter();
         // For now, destroy the statue, but later replace with a broken statue, perhaps?
         player.GetComponent<WordBuilder>().ClearCurrentWord();
+        playerWWZ.ResetEnergyStats();
+        player.GetComponent<SpeedKeeper>().ResetSpeedStats();
 
         Destroy(gameObject);
     }

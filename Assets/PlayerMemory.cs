@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerDialogMemory : MonoBehaviour
+public class PlayerMemory : MonoBehaviour
 {
     [SerializeField] List<string> knownKeywords = new List<string>(); //This is used to 
     //check if a particular bark or convo should be used or suppressed
 
     public Action<string> OnKeywordAdded;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public float BaseEnergyRegenRate;
+    public float BaseMoveSpeed;
+
 
     public bool CheckForPlayerKnowledgeOfARequiredKeyword(string testRequiredKeyword)
     {

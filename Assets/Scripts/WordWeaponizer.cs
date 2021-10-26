@@ -22,6 +22,7 @@ public class WordWeaponizer : MonoBehaviour
     ArenaLetterEffectsHandler aleh;
     UIDriver uid;
     JewelManager jm;
+    PlayerMemory pm;
     string testWord;
 
 
@@ -35,7 +36,7 @@ public class WordWeaponizer : MonoBehaviour
     //state
     bool isPlayer = false;
     int powerSign = -1;
-    [SerializeField] float energyRegenRate_Target = 0.5f; // units per second;
+    float energyRegenRate_Target = 0.5f; // units per second;
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.1f; //how fast the current energy regen rate drifts back to its target. 
     float currentEnergyLevel;
@@ -47,7 +48,7 @@ public class WordWeaponizer : MonoBehaviour
     {
         memory = GetComponent<WordMakerMemory>();
         wbd = GetComponent<WordBuilder>();
-        
+
         if (GetComponent<PlayerInput>()) //Must be a player
         {
             isPlayer = true;
@@ -55,18 +56,33 @@ public class WordWeaponizer : MonoBehaviour
             uid = FindObjectOfType<UIDriver>();
             jm = FindObjectOfType<JewelManager>();
             jm.UpdateJewelImage(100);
+
+            pm = GetComponent<PlayerMemory>();
+            pm.BaseEnergyRegenRate = energyRegenRate_Target;
         }
         gc = FindObjectOfType<GameController>();
         dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
         auso = GetComponent<AudioSource>();
+
+        ResetEnergyStats();
+    }
+
+    public void ResetEnergyStats()
+    {
+        if (isPlayer)
+        {
+            energyRegenRate_Target = pm.BaseEnergyRegenRate;
+        }
+
         currentEnergyLevel = maxEnergy; //maxEnergy;
         energyRegenRate_Current = energyRegenRate_Target;
     }
 
     void Update()
     {
+        if (!gc.isInArena) { return; }
         energyRegenRate_Current = Mathf.MoveTowards(
             energyRegenRate_Current, energyRegenRate_Target, energyRegenDriftRate * Time.deltaTime);
         currentEnergyLevel += energyRegenRate_Current * Time.deltaTime;
@@ -85,21 +101,28 @@ public class WordWeaponizer : MonoBehaviour
     /// Checks the current energy supply. Returns 'true' if sufficient energy to erase a letter
     /// and deducts that amount. Returns 'false' if insufficient energy, but doesn't change energy supply.
     /// </summary>
-    //public bool CheckSpendForLetterErasure()
-    //{
-    //    if (wbd.GetCurrentWord().Length == 0) { return false; }
-    //    if (letterErasureCost <= currentEnergyLevel)
-    //    {
-    //        currentEnergyLevel -= letterErasureCost;
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
+    public bool CheckSpendForLetterErasure()
+    {
+        if (wbd.GetCurrentWord().Length == 0) { return false; }
+        if (letterErasureCost <= currentEnergyLevel)
+        {
+            currentEnergyLevel -= letterErasureCost;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     #region Public Methods
+
+    public void ModifyEnergyRate(float multiplier)
+    {
+        energyRegenRate_Target *= multiplier;
+        energyRegenRate_Current = energyRegenRate_Target;
+    }
+
     public bool CheckIfSufficientEnergyToCast()
     {
         if (currentEnergyLevel >= spellFiringCost)
@@ -196,8 +219,7 @@ public class WordWeaponizer : MonoBehaviour
 
     public void HandleArenaEntry()
     {
-        energyRegenRate_Current = energyRegenRate_Target;
-        currentEnergyLevel = maxEnergy;
+        ResetEnergyStats();
         jm.ProvideFeedbackAboutInsufficientEnergy(99);
     }
 

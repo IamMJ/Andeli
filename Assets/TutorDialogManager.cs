@@ -42,7 +42,7 @@ public class TutorDialogManager : NPCDialogManager
         this.playerWWZ = playerWWZ;
         playerWWZ.OnFireWord += HandleWordFired;
 
-        if (player.GetComponent<PlayerDialogMemory>().CheckForPlayerKnowledgeOfARequiredKeyword("ITUT1"))
+        if (player.GetComponent<PlayerMemory>().CheckForPlayerKnowledgeOfARequiredKeyword("ITUT1"))
         {
             uid.ShowHideIgnitionChancePanel(false);
             uid.ShowHideTopPanel(false);

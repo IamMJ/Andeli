@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu(fileName = "StrategyValues")]
-public class StrategyValues : ScriptableObject
+public class EnemyProfile : ScriptableObject
 {
     public int MinimumPoints = 2;
     public float PointsWeight = 1f;
@@ -15,4 +15,7 @@ public class StrategyValues : ScriptableObject
     public float DistanceWeight = 1;
 
     public float Patience = 10f;
+
+    public float BaseSpeedMultiplier = 2;
+    public float BaseEnergyRegenMultiplier = 0.5f;
 }
