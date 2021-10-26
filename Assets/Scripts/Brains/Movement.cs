@@ -12,7 +12,6 @@ public class Movement : MonoBehaviour, IFollowable
     /// from entering invalid terrain.
     /// </summary>
 
-    WordBuilder_NPC wb;
     protected Animator anim;
     //public Action OnLeaderMoved;
     protected SpeedKeeper sk;
@@ -44,7 +43,6 @@ public class Movement : MonoBehaviour, IFollowable
         gc = FindObjectOfType<GameController>();
         //GameObject reknitterGO = Instantiate(reknitterPrefab);
         //reknitterGO.GetComponent<Reknitter>().SetOwners(this, GetComponent<TailPieceManager>());
-        wb = GetComponent<WordBuilder_NPC>();
         truePosition = transform.position;
         anim = GetComponentInChildren<Animator>();
     }

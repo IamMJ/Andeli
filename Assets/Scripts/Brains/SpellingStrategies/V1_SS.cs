@@ -26,20 +26,21 @@ public class V1_SS : SpellingStrategy
         currentTime = Time.time;
         if (Time.time > timeToRethinkStrategy)
         {
-            if (!wb.TargetLetterTile)
+            if (!sb.TargetLetterTile)
             {
                 shouldFireOrEraseNow = true;
-                EvaluateWordAfterGainingALetter();
+                UpdateStrategy();
             }
 
         }
     }
 
-    public override void EvaluateWordAfterGainingALetter()
+    public override void UpdateStrategy()
     {
         FireOffOREraseCurrentWordIfFutureWordsUnlikely(minPossibleWordsToConsider);
         timeToRethinkStrategy = Time.time + (timeBetweenPickups * (float)Math.Pow(.75f, wb.GetCurrentWord().Length));
         shouldFireOrEraseNow = false;
+//
     }
 
     public override LetterTile FindBestLetterFromAllOnBoard()
@@ -94,4 +95,8 @@ public class V1_SS : SpellingStrategy
   
     }
 
+    protected override float GenerateValueForLetterTile(LetterTile evaluatedLT)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -9,7 +9,7 @@ public class LetterMask : ScriptableObject
     //state
     public Sprite ShownSprite;
     public Color ShownColor;
-    int powerMod;
+    public int PowerMod = 0;
     [SerializeField] TrueLetter.Ability ability = TrueLetter.Ability.Normal;
     int experience_Current = 12;
     int experience_NextLevel = 345;
@@ -43,7 +43,7 @@ public class LetterMask : ScriptableObject
 
     public int GetPower()
     {
-        return AssociatedTrueLetter.GetPower() + powerMod;
+        return AssociatedTrueLetter.GetPower() + PowerMod;
     }
 
     public string GetExperienceString()

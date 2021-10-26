@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5854897102321952828}
   - component: {fileID: 5850972780588285791}
-  - component: {fileID: 2686717575923516469}
   - component: {fileID: 7905437399472185518}
   - component: {fileID: 9175583922732671321}
   - component: {fileID: -5731959307713958461}
@@ -23,6 +22,7 @@ GameObject:
   - component: {fileID: -1054305028273398252}
   - component: {fileID: -4259656899091234111}
   - component: {fileID: -2252836795853682444}
+  - component: {fileID: 6793219992752338228}
   m_Layer: 10
   m_Name: Enemy_Master
   m_TagString: Wordmaker
@@ -58,26 +58,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTime: 0
   timeToRethinkStrategy: Infinity
---- !u!114 &2686717575923516469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6646722358577865907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f58403573c0a2f94c8114a3053b1ff15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addLetterToSwordClip: {fileID: 0}
-  addLetterToBagClip: {fileID: 0}
-  destroyLetterClip: {fileID: 0}
-  lettersOnSword: []
-  currentWord: 
-  CurrentPower: 0
-  TargetLetterTile: {fileID: 0}
-  currentTargetChar: 0
 --- !u!114 &7905437399472185518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +73,7 @@ MonoBehaviour:
   strategicDestination: {x: 0, y: 0}
   GraphIndex: 1
   status: 0
+  previousLTT: {fileID: 0}
 --- !u!114 &9175583922732671321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,3 +378,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6793219992752338228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6646722358577865907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d4274fef04f0a4f8c3ad4d6ce33906, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  addLetterToSwordClip: {fileID: 0}
+  addLetterToBagClip: {fileID: 0}
+  destroyLetterClip: {fileID: 0}
+  lettersOnSword: []
+  currentWord: 
+  CurrentPower: 0

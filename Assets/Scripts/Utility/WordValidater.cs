@@ -91,7 +91,10 @@ public class WordValidater : MonoBehaviour
 
         char[] stubWordAsChar = stubWord.ToCharArray();
 
-
+        if (stubWordAsChar.Length == 0)
+        {
+            return new WordBand(-1,-1,-1);
+        }
         if (stubWordAsChar.Length < 2)
         {
             WordBand wb = GetWordBandForStartingChar(stubWordAsChar[0]);

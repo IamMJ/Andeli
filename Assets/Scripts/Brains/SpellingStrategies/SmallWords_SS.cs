@@ -8,10 +8,11 @@ public class SmallWords_SS : SpellingStrategy
     //param
     int minWordOptions = 15;
 
-    public override void EvaluateWordAfterGainingALetter()
+    public override void UpdateStrategy()
     {
         FireOffCurrentWordIfPossible();
         EraseWordIfLowChanceOfFinishing(minWordOptions);
+
     }
 
     public override LetterTile FindBestLetterFromAllOnBoard()
@@ -64,4 +65,8 @@ public class SmallWords_SS : SpellingStrategy
         return count / 10000f;
     }
 
+    protected override float GenerateValueForLetterTile(LetterTile evaluatedLT)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -447,8 +447,9 @@ public class LetterTileDropper : MonoBehaviour
 
     public void AddLetterToSpawnedLetterList(LetterTile newLetterTile)
     {
-        OnLetterListModified?.Invoke(newLetterTile, true);
+
         letterTilesOnBoard.Add(newLetterTile);
+        OnLetterListModified?.Invoke(newLetterTile, true);
         doesBoardHaveLettersAvailable = true;
     }
 

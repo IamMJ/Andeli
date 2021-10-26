@@ -35,7 +35,7 @@ public class WordWeaponizer : MonoBehaviour
     //state
     bool isPlayer = false;
     int powerSign = -1;
-    float energyRegenRate_Target = 0.5f; // units per second;
+    [SerializeField] float energyRegenRate_Target = 0.5f; // units per second;
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.1f; //how fast the current energy regen rate drifts back to its target. 
     float currentEnergyLevel;
@@ -100,6 +100,15 @@ public class WordWeaponizer : MonoBehaviour
     //}
 
     #region Public Methods
+    public bool CheckIfSufficientEnergyToCast()
+    {
+        if (currentEnergyLevel >= spellFiringCost)
+        {
+            return true;
+        }
+        else { return false; }
+    }
+
     public bool AttemptToFireWordAsPlayer()
     {
         //Check for sufficient Spell Energy...
@@ -130,8 +139,6 @@ public class WordWeaponizer : MonoBehaviour
         }
     }
 
-
-
     /// <summary>
     /// This is the same as 'AttemptToFireWordAsPlayer' except it does not check for word validity first. The NPC
     /// should be checking word validity earlier as part of its strategy.
@@ -142,7 +149,7 @@ public class WordWeaponizer : MonoBehaviour
         //Check for sufficient Spell Energy...
         if (spellFiringCost > currentEnergyLevel)
         {
-            Debug.Log("insufficient energy to fire at this moment");
+            Debug.Log("NPC has insufficient energy to fire at this moment");
             return false;
         }
         else

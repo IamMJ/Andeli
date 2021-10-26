@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33ced10710a629e4aa62c8c7510a3d40, type: 3}
+  m_Name: Rat_SV
+  m_EditorClassIdentifier: 
+  MinimumPoints: 7
+  PointsWeight: 1
+  FutureWordsThreshold: 50
+  FutureWordsWeight: 5
+  ShouldWordAlwaysBeValid: 0
+  DistanceWeight: 0.05
+  Patience: 10

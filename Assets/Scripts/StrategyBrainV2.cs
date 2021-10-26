@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Pathfinding;
+[RequireComponent(typeof(SpellingStrategy))]
 
 public class StrategyBrainV2 : MonoBehaviour
 {
@@ -16,13 +17,17 @@ public class StrategyBrainV2 : MonoBehaviour
     AILerp ail;
     Seeker seeker;
     Movement wmm;
-    WordBuilder_NPC wb;
+    WordBuilder wb;
+    WordWeaponizer wwz;
     ArenaBuilder ab;
     GraphMask graphMask;
+    SpellingStrategy ss;
+
 
     public Vector2 strategicDestination;
 
     Path path;
+    Vector3 currentPathDestination;
 
     //param
     float closeEnough = 1.0f;
@@ -30,21 +35,26 @@ public class StrategyBrainV2 : MonoBehaviour
 
 
     //state
-    public int GraphIndex = 1;  //public so this can be set by an arena builder in the even of many enemies
+    public LetterTile TargetLetterTile; //{ get; private set; }
+    [SerializeField] LetterTile previousLTT;
+    int GraphIndex = 1;  // If ever have multiple enemies, will need to have the Arena Builder change this for each.
     bool hasValidPath = false;
-    public NavMeshPathStatus status;
+    NavMeshPathStatus status;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
     Vector2 previousDirection = Vector2.zero;
-    [SerializeField] LetterTile previousLTT;
+
 
     void Start()
     {
         ail = GetComponent<AILerp>();
         seeker = GetComponent<Seeker>();
         wmm = GetComponent<Movement>();
-        wb = GetComponent<WordBuilder_NPC>();
-        wb.OnNewTargetLetterTile += SetNewTargetLetterTileAsStrategicDestination;
+        wwz = GetComponent<WordWeaponizer>();
+        wb = GetComponent<WordBuilder>();
+        wb.OnAddLetterToSword += ReactToPickingUpLetter;
+        ss = GetComponent<SpellingStrategy>();
+        ss.OnRecommendedStrategyChange += ReactToStrategyChange;
         ab = FindObjectOfType<ArenaBuilder>();
         graphMask = 1 << GraphIndex;
 
@@ -55,16 +65,10 @@ public class StrategyBrainV2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!wb.TargetLetterTile)
+        if (ss.CurrentRecommendedStrategy == SpellingStrategy.PossibleWordStrategies.NoStrategyAvailable)
         {
             SetRandomStrategicDestination();
         }
-        if (wb.TargetLetterTile && wb.TargetLetterTile != previousLTT)
-        {
-            previousLTT = wb.TargetLetterTile;
-            SetTLLasStrategicDestination();
-        }
-
         PassTacticalDestinationToMoveBrain();
     }
 
@@ -73,26 +77,66 @@ public class StrategyBrainV2 : MonoBehaviour
         if ((transform.position - (Vector3)strategicDestination).magnitude < closeEnough)
         {
             strategicDestination = ab.CreatePassableRandomPointWithinArena();
-            StartPathToStrategicDestination();
+            StartPathToStrategicDestination(strategicDestination);
         }
         
     }
 
     private void SetTLLasStrategicDestination()
     {
-        if ((strategicDestination - (Vector2)wb.TargetLetterTile.transform.position).magnitude > Mathf.Epsilon)
+        if ((strategicDestination - (Vector2)TargetLetterTile.transform.position).magnitude > Mathf.Epsilon)
         {
-            strategicDestination = wb.TargetLetterTile.transform.position;
-            StartPathToStrategicDestination();
+            strategicDestination = TargetLetterTile.transform.position;
+            StartPathToStrategicDestination(strategicDestination);
         }
 
     }
 
-    private void StartPathToStrategicDestination()
+    private void ReactToStrategyChange(SpellingStrategy.PossibleWordStrategies newStrategy)
     {
+        switch (newStrategy)
+        {
+            //case SpellingStrategy.PossibleWordStrategies.NoStrategyAvailable:
+            //    SetRandomStrategicDestination();
+            //    ss.ResetRecommendedStrategy();
+            //    return;
+
+            case SpellingStrategy.PossibleWordStrategies.FireWord:
+                wwz.AttemptToFireWordAsNPC();
+                ss.ResetRecommendedStrategy();
+                return;
+
+            case SpellingStrategy.PossibleWordStrategies.EraseWord:
+                wb.ClearCurrentWord();
+                ss.ResetRecommendedStrategy();
+                return;
+
+            case SpellingStrategy.PossibleWordStrategies.KeepBuildingCurrentWord:
+                TargetLetterTile = ss.CurrentBestLTT;
+                GridModifier.ReknitAllGridGraphs(TargetLetterTile.transform);//, graphMask);
+
+                    //if (previousLTT && TargetLetterTile != previousLTT)
+                    //{
+                    //    GridModifier.UnknitSpecificGridGraph(previousLTT.transform, graphMask);
+                    //    previousLTT = TargetLetterTile;
+                    //}
+            
+                SetTLLasStrategicDestination();
+                return;
+
+        }
+    }
+
+    private void StartPathToStrategicDestination(Vector3 destination)
+    {
+        if ((currentPathDestination - (Vector3)strategicDestination).magnitude < Mathf.Epsilon)
+        {
+            //Don't create a new path to the same point.
+            return;
+        }
         if (seeker?.IsDone() == true)
         {
-            seeker?.StartPath(transform.position, strategicDestination, HandleCompletedPath, graphMask);
+            seeker?.StartPath(transform.position, destination, HandleCompletedPath, graphMask);
         }
     }
 
@@ -141,6 +185,7 @@ public class StrategyBrainV2 : MonoBehaviour
         //Debug.Log($"path calculated. Error? {p.error}");
         path = p;
         currentWaypoint = 0;
+        currentPathDestination = p.vectorPath[p.vectorPath.Count - 1];
     }
 
     private void SetNewTargetLetterTileAsStrategicDestination()
@@ -148,14 +193,14 @@ public class StrategyBrainV2 : MonoBehaviour
         //strategicDestination = wb.TargetLetterTile.transform.position;
     }
 
-    public int GetGraphIndex()
+    private void ReactToPickingUpLetter()
     {
-        return GraphIndex;
+
     }
 
     private void OnDestroy()
     {
-        wb.OnNewTargetLetterTile -= SetNewTargetLetterTileAsStrategicDestination;
+        wb.OnAddLetterToSword -= ReactToPickingUpLetter;
     }
 
     //public static void DebugDrawPath(Vector3[] corners)

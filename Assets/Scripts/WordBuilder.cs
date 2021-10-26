@@ -11,8 +11,6 @@ public class WordBuilder : MonoBehaviour
     protected WordWeaponizer wwz;
     protected WordMakerMemory memory;
     UIDriver uid;
-    WordValidater wv;
-    ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
     GameController gc;
     BagManager bagman;
@@ -20,6 +18,7 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] AudioClip addLetterToSwordClip = null;
     [SerializeField] AudioClip addLetterToBagClip = null;
     [SerializeField] AudioClip destroyLetterClip = null;
+    public Action OnAddLetterToSword;
     public struct SwordWordPower
     {
         public Sprite[] letterSprites;
@@ -57,7 +56,6 @@ public class WordBuilder : MonoBehaviour
         pi = GetComponent<PlayerInput>();
         auso = GetComponent<AudioSource>();
         memory = GetComponent<WordMakerMemory>();
-        wv = FindObjectOfType<WordValidater>();
         if (pi)
         {
             hasUI = true;
@@ -70,9 +68,9 @@ public class WordBuilder : MonoBehaviour
 
     protected virtual void AddLetterToSword(LetterTile newLetter)
     {
-        if (currentWord.Length >= maxWordLength) { return; }
+    
         lettersOnSword.Add(newLetter);
-
+        OnAddLetterToSword?.Invoke();
         RewriteCurrentWordFromLettersOnSword();
         modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         //IncreasePower(newLetter.Power_Player);
@@ -303,6 +301,7 @@ public class WordBuilder : MonoBehaviour
     public virtual void ClearCurrentWord()
     {
         currentWord = "";
+        CurrentPower = 0;
         foreach (var letter in lettersOnSword)
         {
             letter.DestroyLetterTile();

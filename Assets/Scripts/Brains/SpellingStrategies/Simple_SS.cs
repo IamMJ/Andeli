@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Simple_SS : SpellingStrategy
 {
-    public override void EvaluateWordAfterGainingALetter()
+    public override void UpdateStrategy()
     {
-        wb.TargetLetterTile = ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed / 2)[0];
+        sb.TargetLetterTile = ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed / 2)[0];
+
     }
 
     public override LetterTile FindBestLetterFromAllOnBoard()
@@ -15,4 +16,8 @@ public class Simple_SS : SpellingStrategy
         return bestLT;
     }
 
+    protected override float GenerateValueForLetterTile(LetterTile evaluatedLT)
+    {
+        throw new System.NotImplementedException();
+    }
 }

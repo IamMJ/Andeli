@@ -17,6 +17,7 @@ public class LetterTile : MonoBehaviour
     [SerializeField] SpriteRenderer sr = null;
     [SerializeField] MeshRenderer mr = null;
     [SerializeField] TextMeshPro tmp = null;
+    [SerializeField] TextMeshPro valueTMP = null;
     LetterTileDropShadow assignedShadow;
     LetterTileDropper letterTileDropper;
 
@@ -206,6 +207,11 @@ public class LetterTile : MonoBehaviour
     #endregion
 
     #region Public Methods
+
+    public void AssignAIValueForDebug(float value)
+    {
+        valueTMP.text = value.ToString("0.00");
+    }
     public void InactivateLetterTile()
     {
         IsInactivated = true;
@@ -221,6 +227,7 @@ public class LetterTile : MonoBehaviour
         }
         GridModifier.ReknitAllGridGraphs(transform);
         ps.Stop();
+        valueTMP.text = "";
     }
 
     public void DestroyLetterTile()

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Dummy_SpellingStrategy : SpellingStrategy
 {
-    public override void EvaluateWordAfterGainingALetter()
+    public override void UpdateStrategy()
     {
-        
+
     }
 
     public override LetterTile FindBestLetterFromAllOnBoard()
@@ -14,4 +14,8 @@ public class Dummy_SpellingStrategy : SpellingStrategy
         return null;
     }
 
+    protected override float GenerateValueForLetterTile(LetterTile evaluatedLT)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -1,45 +1,123 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Threading;
 public abstract class SpellingStrategy : MonoBehaviour
 {
-    protected WordBuilder_NPC wb;
+    /// <summary>
+    /// A spelling strategy should hold some preset values to determine min point goal,
+    /// if it will accept a non-valid word enroute to a stronger valid word, and what it considers a 
+    /// "good enough" future for a word stub, plus how it weights those different factors.
+    /// 
+    /// It should always strive to have a Current Best LTT available for the strategy brain. 
+    /// </summary>
+    protected WordBuilder wb;
     protected MoveBrain_NPC mb;
     protected WordWeaponizer wwz;
     protected SpeedKeeper sk;
-    protected StrategyBrain_NPC sb;
+    protected StrategyBrainV2 sb;
     protected WordValidater wv;
     protected DebugHelper dh;
     protected LetterTileDropper ltd;
+    //protected List<(string, float)> evaluatedList = new List<(string, float)>();
+    protected Dictionary<LetterTile, float> evaluatedLTs = new Dictionary<LetterTile, float>();
+    [SerializeField] protected StrategyValues sv;
+
+    public enum PossibleWordStrategies {EraseWord, FireWord, KeepBuildingCurrentWord, NoStrategyAvailable};
+    public Action<PossibleWordStrategies> OnRecommendedStrategyChange;
 
     //state
+    public PossibleWordStrategies CurrentRecommendedStrategy = PossibleWordStrategies.NoStrategyAvailable;
+    public LetterTile CurrentBestLTT = null;
     protected bool shouldFireOrEraseNow = false;
+
     public virtual void Start()
     {
-        wb = GetComponent<WordBuilder_NPC>();
+        wb = GetComponent<WordBuilder>();
+        wb.OnAddLetterToSword += UpdateStrategy;
         mb = GetComponent<MoveBrain_NPC>();
-        sb = GetComponent<StrategyBrain_NPC>();
+        sb = GetComponent<StrategyBrainV2>();
         sk = GetComponent<SpeedKeeper>();
 
         wwz = GetComponent<WordWeaponizer>();
         wv = FindObjectOfType<WordValidater>();
         dh = FindObjectOfType<DebugHelper>();
         ltd = FindObjectOfType<LetterTileDropper>();
+        if (ltd)
+        {
+            ltd.OnLetterListModified += ModifyEvaluatedLetterDictionary;
+        }
 
     }
-    /// <summary>
-    /// This should determine the AI's next course of action after gaining a letter.
-    /// </summary>
-    public abstract void EvaluateWordAfterGainingALetter();
 
     /// <summary>
-    /// This should pull all letter tiles currently on board, regardless of remaining lifetime, and then output a 'best' LTT
+    /// This should determine the AI's next course of action after gaining a letter. Strat Brain calls this
+    /// after picking up a letter
     /// </summary>
+    public abstract void UpdateStrategy();
+
+    public virtual void ResetRecommendedStrategy()
+    {
+        CurrentRecommendedStrategy = PossibleWordStrategies.NoStrategyAvailable;
+    }
+
+
+    /// <summary>
+    /// Generate a utility value for a given Letter Tile. This should vary between different strategies.
+    /// </summary>
+    /// <param name="evaluatedLT"></param>
     /// <returns></returns>
-    public abstract LetterTile FindBestLetterFromAllOnBoard();
+    protected abstract float GenerateValueForLetterTile(LetterTile evaluatedLT);
+       
+    /// <summary>
+    /// This is called whenever the LTD's OnLetterChanged event is fired.
+    /// </summary>
+    /// <param name="modifiedLT"></param>
+    /// <param name="wasAdded"></param>
+    protected virtual void ModifyEvaluatedLetterDictionary(LetterTile modifiedLT, bool wasAdded)
+    {
+        evaluatedLTs.Clear();
+        foreach (var elem in ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed / 2f))
+        {
+            evaluatedLTs.Add(elem, GenerateValueForLetterTile(elem));
+        }
+        UpdateBestLTTOnDictionaryValueCalculated();
+    }
 
-    protected void FireOffOREraseCurrentWordIfFutureWordsUnlikely(int thresholdForTooUnlikely)
+    protected virtual void UpdateBestLTTOnDictionaryValueCalculated()
+    {
+        float currentBestPower = 0;
+        LetterTile currentBestLT = null;
+        foreach (var lt in evaluatedLTs)
+        {
+            if (lt.Value > currentBestPower)
+            {
+                currentBestPower = lt.Value;
+                currentBestLT = lt.Key;
+            }
+        }
+        CurrentBestLTT = currentBestLT;
+
+        UpdateStrategy();
+
+       
+    }
+
+
+    protected virtual void OnDestroy()
+    {
+        ltd.OnLetterListModified -= ModifyEvaluatedLetterDictionary;
+    }
+
+
+    #region Legacy methods
+
+    public virtual LetterTile FindBestLetterFromAllOnBoard()
+    {
+        return null;
+    }
+    protected virtual void FireOffOREraseCurrentWordIfFutureWordsUnlikely(int thresholdForTooUnlikely)
     {
         string currentWord = wb.GetCurrentWord();
         int currentWordOptions = wv.FindWordBandWithStubWord(currentWord).Range;
@@ -57,12 +135,12 @@ public abstract class SpellingStrategy : MonoBehaviour
             if (shouldFireOrEraseNow || currentWordOptions < thresholdForTooUnlikely) /// ...and its future is too unpromising...
             {
                 dh.DisplayDebugLog($"Erasing {currentWord} with only {currentWordOptions} possible options");
-                wb.EraseWord(); // ...so erase it now.  How did we get here though?
+                wb.ClearCurrentWord(); // ...so erase it now.  How did we get here though?
                 return;
             }
         }
     }
-    protected void EraseWordIfLowChanceOfFinishing(int threshold)
+    protected virtual void EraseWordIfLowChanceOfFinishing(int threshold)
     {
         string currentWord = wb.GetCurrentWord();
         int count = wv.FindWordBandWithStubWord(currentWord).Range;
@@ -70,10 +148,10 @@ public abstract class SpellingStrategy : MonoBehaviour
         {
 
             dh.DisplayDebugLog($"erasing {currentWord} with only {count} options");
-            wb.EraseWord();
+            wb.ClearCurrentWord();
         }
     }
-    protected void FireOffCurrentWordIfPossible()
+    protected virtual void FireOffCurrentWordIfPossible()
     {
         string currentWord = wb.GetCurrentWord();
         if (wv.CheckWordValidity(currentWord))
@@ -82,6 +160,6 @@ public abstract class SpellingStrategy : MonoBehaviour
             wwz.AttemptToFireWordAsNPC();
         }
     }
-
+    #endregion
 
 }
