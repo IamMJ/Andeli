@@ -65,7 +65,7 @@ public class StrategyBrainV2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ss.CurrentRecommendedStrategy == SpellingStrategy.PossibleWordStrategies.NoStrategyAvailable)
+        if (ss.CurrentBestLTT == null || ss.CurrentRecommendedStrategy != SpellingStrategy.PossibleWordStrategies.KeepBuildingCurrentWord)
         {
             SetRandomStrategicDestination();
         }
@@ -101,7 +101,7 @@ public class StrategyBrainV2 : MonoBehaviour
             //    ss.ResetRecommendedStrategy();
             //    return;
 
-            case SpellingStrategy.PossibleWordStrategies.FireWord:
+            case SpellingStrategy.PossibleWordStrategies.FireWordWhenAble:
                 wwz.AttemptToFireWordAsNPC();
                 ss.ResetRecommendedStrategy();
                 return;

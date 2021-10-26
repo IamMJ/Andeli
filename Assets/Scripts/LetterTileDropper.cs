@@ -20,7 +20,7 @@ public class LetterTileDropper : MonoBehaviour
     ArenaBuilder ab;
     GameController gc;
     LetterMaskHolder lmh_Player; // the player's letter mask holder is needed to assign correct sprite/color/power/ability to each letter Tile
-    LetterMaskHolder lmh_Enemy;
+    EnemyProfile enemyProfile;
     int layerMask_Impassable = 1 << 13;
     int layerMask_Letter = 1 << 9;
     int layerMask_Player = 1 << 8;
@@ -64,7 +64,7 @@ public class LetterTileDropper : MonoBehaviour
         gc = FindObjectOfType<GameController>();
         wv = FindObjectOfType<WordValidater>();
         ab = FindObjectOfType<ArenaBuilder>();
-        lmh_Enemy = ab.GetEnemyInArena().GetComponent<LetterMaskHolder>();
+        enemyProfile = ab.GetEnemyInArena().GetComponent<SpellingStrategy>().GetEnemyProfile();
         lmh_Player = FindObjectOfType<GameController>().GetPlayer().GetComponent<LetterMaskHolder>();
 
         if (shouldSeparateVowelsFromConsonants)
@@ -306,11 +306,9 @@ public class LetterTileDropper : MonoBehaviour
             letterTile.Power_Player = playerLM.GetPower();
             letterTile.Ability_Player = playerLM.GetAbility();
 
-            if (lmh_Enemy)
+            if (false) // lmh_Enemy)
             {
-                LetterMask enemyLM = lmh_Enemy.GetLetterMaskForTrueLetter(randomLetter);
-                letterTile.Power_Enemy = enemyLM.GetPower();
-                letterTile.Ability_Enemy = enemyLM.GetAbility();
+                //pull enemy powers from the Enemy Profile
             }
             else
             {

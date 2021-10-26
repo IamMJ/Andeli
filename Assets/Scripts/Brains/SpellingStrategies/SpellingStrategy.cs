@@ -24,7 +24,7 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected Dictionary<LetterTile, float> evaluatedLTs = new Dictionary<LetterTile, float>();
     [SerializeField] protected EnemyProfile ep;
 
-    public enum PossibleWordStrategies {EraseWord, FireWord, KeepBuildingCurrentWord, NoStrategyAvailable};
+    public enum PossibleWordStrategies {EraseWord, FireWordWhenAble, KeepBuildingCurrentWord, NoStrategyAvailable};
     public Action<PossibleWordStrategies> OnRecommendedStrategyChange;
     public enum DeadEndSubstrategy { TrimRecent, EraseAll, Anagram};
 
@@ -124,6 +124,11 @@ public abstract class SpellingStrategy : MonoBehaviour
     {
         GetComponent<WordWeaponizer>().ModifyEnergyRate(ep.BaseEnergyRegenMultiplier);
         GetComponent<SpeedKeeper>().ModifyTargetSpeed(ep.BaseSpeedMultiplier);
+    }
+
+    public virtual EnemyProfile GetEnemyProfile()
+    {
+        return ep;
     }
 
 

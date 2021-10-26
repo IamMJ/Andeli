@@ -20,82 +20,128 @@ public class V2_SS : SpellingStrategy
         string cw = wb.GetCurrentWord();
         int cp = wb.CurrentPower;
 
-        if (cp >= ep.MinimumPoints && wv.CheckWordValidity(cw) && wwz.CheckIfSufficientEnergyToCast())
+        //*((float)currentPatience/(float)ep.Patience)
+        Debug.Log($"cp: {cp}, vs der val: {ep.MinimumPoints * (currentPatience / ep.Patience)}: is {cp >= ep.MinimumPoints * (currentPatience / ep.Patience)}");
+
+        if (cp >= ep.MinimumPoints && wv.CheckWordValidity(cw))
         {
-            pwo = PossibleWordStrategies.FireWord;
-            OnRecommendedStrategyChange?.Invoke(pwo);
-            CurrentRecommendedStrategy = pwo;
+            currentPatience = ep.Patience;
+            if (wwz.CheckIfSufficientEnergyToCast())
+            {
+                pwo = PossibleWordStrategies.FireWordWhenAble;
+                OnRecommendedStrategyChange?.Invoke(pwo);
+                CurrentRecommendedStrategy = pwo;
+            }
+            return;
+        }  
+        
+        if (currentPatience <= 1f && wv.CheckWordValidity(cw))
+        {
+            currentPatience = ep.Patience;
+            if (wwz.CheckIfSufficientEnergyToCast())
+            {
+                pwo = PossibleWordStrategies.FireWordWhenAble;
+                OnRecommendedStrategyChange?.Invoke(pwo);
+                CurrentRecommendedStrategy = pwo;
+            }
             return;
         }
 
         if (CurrentBestLTT)
         {
+            currentPatience = ep.Patience;
             pwo = PossibleWordStrategies.KeepBuildingCurrentWord;
             OnRecommendedStrategyChange?.Invoke(pwo);
             CurrentRecommendedStrategy = pwo;
+
             return;
         }
-        else
+
+        currentPatience--;
+        Debug.Log($"losing patience, at {currentPatience}");
+
+        if (currentPatience <= -ep.Patience)
         {
-            pwo = PossibleWordStrategies.NoStrategyAvailable;
+            currentPatience = ep.Patience;
+            Debug.Log($", erasing {cw}.");
+            pwo = PossibleWordStrategies.EraseWord;
             OnRecommendedStrategyChange?.Invoke(pwo);
             CurrentRecommendedStrategy = pwo;
+
+            return;
         }
 
-        if (cw.Length > 1 &&  wv.CheckWordValidity(cw) == false && !CurrentBestLTT)
+        if (currentPatience <= 0f)
         {
-            if (ep.ShouldWordAlwaysBeValid)
-            {
-                Debug.Log($"dead end and must be valid, erasing {cw}.");
+            ExecuteDeadendStrategy();
+        }
+
+            //pwo = PossibleWordStrategies.NoStrategyAvailable;
+            //OnRecommendedStrategyChange?.Invoke(pwo);
+            //CurrentRecommendedStrategy = pwo;
+        
+
+        //if (true)// cw.Length >= 1 && wv.CheckWordValidity(cw) == false && !CurrentBestLTT)
+        //{
+        //    if (ep.ShouldWordAlwaysBeValid)
+        //    {
+        //        Debug.Log($"dead end and must be valid, erasing {cw}.");
+        //        pwo = PossibleWordStrategies.EraseWord;
+        //        OnRecommendedStrategyChange?.Invoke(pwo);
+        //        CurrentRecommendedStrategy = pwo;
+        //        currentPatience = ep.Patience;
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        currentPatience--;
+        //        Debug.Log("losing patience");
+        //        if (currentPatience <= 0)
+        //        {
+        //            if (wv.CheckWordValidity(cw))
+        //            {
+        //                Debug.Log($"firing {cw} as subpar.");
+        //                pwo = PossibleWordStrategies.FireWord;
+        //                OnRecommendedStrategyChange?.Invoke(pwo);
+        //                CurrentRecommendedStrategy = pwo;
+        //                currentPatience = ep.Patience;
+        //                return;
+        //            }
+        //            else
+        //            {
+        //                ExecuteDeadendStrategy();
+        //            }
+        //        }
+        //    }
+        //}
+
+
+    }
+
+    private void ExecuteDeadendStrategy()
+    {
+        Debug.Log("deadend executed");
+        PossibleWordStrategies pwo;
+        switch (ep.deadEndSubstrategy)
+        {
+            case DeadEndSubstrategy.EraseAll:
                 pwo = PossibleWordStrategies.EraseWord;
                 OnRecommendedStrategyChange?.Invoke(pwo);
                 CurrentRecommendedStrategy = pwo;
                 currentPatience = ep.Patience;
                 return;
-            }
-            else
-            {
-                currentPatience--;
-                Debug.Log("losing patience");
-                if (currentPatience <= 0)
-                {
-                    if (wv.CheckWordValidity(cw))
-                    {
-                        Debug.Log($"firing {cw} as subpar.");
-                        pwo = PossibleWordStrategies.FireWord;
-                        OnRecommendedStrategyChange?.Invoke(pwo);
-                        CurrentRecommendedStrategy = pwo;
-                        currentPatience = ep.Patience;
-                        return;
-                    }
-                    else
-                    {
-                        switch (ep.deadEndSubstrategy)
-                        {
-                            case DeadEndSubstrategy.EraseAll:
-                                pwo = PossibleWordStrategies.EraseWord;
-                                OnRecommendedStrategyChange?.Invoke(pwo);
-                                CurrentRecommendedStrategy = pwo;
-                                currentPatience = ep.Patience;
-                                return;
 
-                            case DeadEndSubstrategy.TrimRecent:
-                                wb.ClearLastLetterInWord();
-                                currentPatience = Mathf.Round((float)ep.Patience / 2f);
-                                return;
+            case DeadEndSubstrategy.TrimRecent:
+                wb.ClearLastLetterInWord();
+                return;
 
-                            case DeadEndSubstrategy.Anagram:
-                                Debug.Log("no anagram implementation yet");
-                                currentPatience = Mathf.Round((float)ep.Patience / 2f);
-                                return;
+            case DeadEndSubstrategy.Anagram:
+                Debug.Log("no anagram implementation yet");
+                currentPatience = Mathf.Round((float)ep.Patience / 2f);
+                return;
 
 
-                        }
-                    }
-                }
-            }
         }
-
     }
 
 
@@ -104,11 +150,11 @@ public class V2_SS : SpellingStrategy
         string possWord = wb.GetCurrentWord() + evaluatedLT.Letter;
         float possPower = wb.CurrentPower + evaluatedLT.Power_Enemy;
 
-        float wordPowerFactor = Mathf.Clamp(ep.PointsWeight * possPower, 1, 999); // include a way to increase value based on Letter Masks
+        float wordPowerFactor = Mathf.Clamp(ep.PointsWeight * possPower, 1f, 999f); // include a way to increase value based on Letter Masks
 
 
-        float wordValidityFactor = ConvertWordValidityToBoolint(possWord) * (possPower / ep.MinimumPoints);
-        //Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{sv.MinimumPoints}, validity: {ConvertFutureWordValidityToBoolint(possWord)}");
+        float wordValidityFactor = ConvertWordValidityToValue(possWord) * (possPower / (float)ep.MinimumPoints);
+        Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{ep.MinimumPoints}, validity: {ConvertWordValidityToValue(possWord)}");
 
         //float futureWordFactor = ep.FutureWordsWeight * ConvertFutureWordsToValue(possWord) * ((float)ep.MinimumPoints/possPower);
 
@@ -117,48 +163,40 @@ public class V2_SS : SpellingStrategy
         float value = ((wordPowerFactor * wordValidityFactor )- distFactor);
         evaluatedLT.AssignAIValueForDebug(value);
 
-        //Debug.Log($"had {wb.GetCurrentWord()}, evaluated {evaluatedLT.Letter} as worth {value} " +
-        //    $"(wpf: {wordPowerFactor}, wvf: {wordValidityFactor}, fwf: <in wvf>, df: {distFactor})");
+        Debug.Log($"had {wb.GetCurrentWord()}, evaluated {evaluatedLT.Letter} as worth {value} " +
+            $"(wpf: {wordPowerFactor}, wvf: {wordValidityFactor}, fwf: <in wvf>, df: {distFactor})");
 
         return value;
     }
 
-    private float ConvertWordValidityToBoolint(string futureWord)
+    private float ConvertWordValidityToValue(string futureWord)
     {
+        if (futureWord.Length < 2) { return 1f; }
         if (ep.ShouldWordAlwaysBeValid == true )
         {
-            if (futureWord.Length >= 2)
+            if (wv.CheckWordValidity(futureWord))
             {
-                if (wv.CheckWordValidity(futureWord))
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 1f;
             }
             else
             {
-                return 1;
+                return 0f;
             }
-
         }
         else
         {
-            if (futureWord.Length >= 2 && wv.CheckWordValidity(futureWord))
+            if (wv.CheckWordValidity(futureWord))
             {
-                return 1;
+                return 1f;
             }
             else
             {
-                float futureWordFactor = ep.FutureWordsWeight * ConvertFutureWordsToValue(futureWord); //* ((float)ep.MinimumPoints / possPower);
+                float futureWordFactor = ConvertFutureWordsToValue(futureWord) / ep.FutureWordsWeight; //* ((float)ep.MinimumPoints / possPower);
                 return futureWordFactor;
             }
 
         }
 
-        return 0;
     }
 
     private float ConvertFutureWordsToValue(string futureWord)

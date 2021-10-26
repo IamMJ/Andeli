@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: Elephant_SV
   m_EditorClassIdentifier: 
   MinimumPoints: 10
-  PointsWeight: 1
-  FutureWordsThreshold: 50
-  FutureWordsWeight: 5
+  PointsWeight: 3
+  FutureWordsThreshold: 400
+  FutureWordsWeight: 10
   ShouldWordAlwaysBeValid: 0
+  deadEndSubstrategy: 0
   DistanceWeight: 0.05
   Patience: 10
   BaseSpeedMultiplier: 1

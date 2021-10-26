@@ -19,6 +19,6 @@ MonoBehaviour:
   ShouldWordAlwaysBeValid: 1
   deadEndSubstrategy: 1
   DistanceWeight: 0.1
-  Patience: 10
+  Patience: 3
   BaseSpeedMultiplier: 2
   BaseEnergyRegenMultiplier: 2
