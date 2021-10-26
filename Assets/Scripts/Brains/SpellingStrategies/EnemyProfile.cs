@@ -12,9 +12,11 @@ public class EnemyProfile : ScriptableObject
     
     public bool ShouldWordAlwaysBeValid = true;
 
+    public SpellingStrategy.DeadEndSubstrategy deadEndSubstrategy = SpellingStrategy.DeadEndSubstrategy.TrimRecent;
+
     public float DistanceWeight = 1;
 
-    public float Patience = 10f;
+    public int Patience = 10;
 
     public float BaseSpeedMultiplier = 2;
     public float BaseEnergyRegenMultiplier = 0.5f;

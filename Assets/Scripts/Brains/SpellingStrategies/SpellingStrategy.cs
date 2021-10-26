@@ -26,6 +26,7 @@ public abstract class SpellingStrategy : MonoBehaviour
 
     public enum PossibleWordStrategies {EraseWord, FireWord, KeepBuildingCurrentWord, NoStrategyAvailable};
     public Action<PossibleWordStrategies> OnRecommendedStrategyChange;
+    public enum DeadEndSubstrategy { TrimRecent, EraseAll, Anagram};
 
     //state
     public PossibleWordStrategies CurrentRecommendedStrategy = PossibleWordStrategies.NoStrategyAvailable;
@@ -78,10 +79,19 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected virtual void ModifyEvaluatedLetterDictionary(LetterTile modifiedLT, bool wasAdded)
     {
         evaluatedLTs.Clear();
-        foreach (var elem in ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed / 2f))
+        if (true) // TODO hook this into a debug thing later
         {
-            evaluatedLTs.Add(elem, GenerateValueForLetterTile(elem));
+            List<LetterTile> allLTs = ltd.FindAllReachableLetterTiles(transform.position, 100);
+            foreach (var el in allLTs)
+            {
+                el.AssignAIValueForDebug(0f);
+            }
+            foreach (var elem in ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed))
+            {
+                evaluatedLTs.Add(elem, GenerateValueForLetterTile(elem));
+            }
         }
+
         UpdateBestLTTOnDictionaryValueCalculated();
     }
 

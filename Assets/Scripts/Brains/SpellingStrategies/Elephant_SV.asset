@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ced10710a629e4aa62c8c7510a3d40, type: 3}
   m_Name: Elephant_SV
   m_EditorClassIdentifier: 
-  MinimumPoints: 5
+  MinimumPoints: 10
   PointsWeight: 1
   FutureWordsThreshold: 50
   FutureWordsWeight: 5
-  ShouldWordAlwaysBeValid: 1
+  ShouldWordAlwaysBeValid: 0
   DistanceWeight: 0.05
   Patience: 10
-  BaseSpeedMultiplier: 0.25
+  BaseSpeedMultiplier: 1
   BaseEnergyRegenMultiplier: 1

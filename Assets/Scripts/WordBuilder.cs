@@ -74,7 +74,7 @@ public class WordBuilder : MonoBehaviour
         RewriteCurrentWordFromLettersOnSword();
         modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         //IncreasePower(newLetter.Power_Player);
-        SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
+        SwordWordPower swordWord = CreateSwordWordPowerFromCurrentLettersOnSword();
         CurrentPower = swordWord.Power;
         if (hasUI)
         {
@@ -193,19 +193,22 @@ public class WordBuilder : MonoBehaviour
         }
     }
 
-    private SwordWordPower CreateSwordWordPowerFromCurrentWord()
+
+    private SwordWordPower CreateSwordWordPowerFromCurrentLettersOnSword()
     {
-        SwordWordPower newSwordWord = new SwordWordPower(currentWord.Length, 0);
-        newSwordWord.word = currentWord;
+        SwordWordPower newSwordWord = new SwordWordPower(lettersOnSword.Count, 0);
         newSwordWord.Power = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
-        for (int i = 0; i < currentWord.Length; i++)
+        for (int i = 0; i < lettersOnSword.Count; i++)
         {
             newSwordWord.letterSprites[i] = lettersOnSword[i].GetComponent<SpriteRenderer>().sprite;
             newSwordWord.letterColors[i] = lettersOnSword[i].GetComponent<SpriteRenderer>().color;
             newSwordWord.letterColors[i].a = 1;
             newSwordWord.letterLetters[i] = lettersOnSword[i].Letter.ToString();
             newSwordWord.Power += lettersOnSword[i].Power_Player;
+            newSwordWord.word += lettersOnSword[i].Letter;
+            Debug.Log($"new sword word: {newSwordWord.word}");
         }
+        currentWord = newSwordWord.word;
         CurrentPower = newSwordWord.Power;
         return newSwordWord;
     }
@@ -217,7 +220,7 @@ public class WordBuilder : MonoBehaviour
         {
             AddLetterToSword(incomingLT);
             RewriteCurrentWordFromLettersOnSword();
-            SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
+            SwordWordPower swordWord = CreateSwordWordPowerFromCurrentLettersOnSword();
             uid.UpdateLettersOnSwordAndPower(swordWord);
             return true;
         }
@@ -234,7 +237,7 @@ public class WordBuilder : MonoBehaviour
             auso?.PlayOneShot(addLetterToBagClip);
             lettersOnSword.RemoveAt(index);
             RewriteCurrentWordFromLettersOnSword();
-            SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
+            SwordWordPower swordWord = CreateSwordWordPowerFromCurrentLettersOnSword();
             uid.UpdateLettersOnSwordAndPower(swordWord);
             modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         }
@@ -245,7 +248,7 @@ public class WordBuilder : MonoBehaviour
         lettersOnSword.RemoveAt(index);
         letterToRemove.DestroyLetterTile();
         RewriteCurrentWordFromLettersOnSword();
-        SwordWordPower swordWord = CreateSwordWordPowerFromCurrentWord();
+        SwordWordPower swordWord = CreateSwordWordPowerFromCurrentLettersOnSword();
         uid.UpdateLettersOnSwordAndPower(swordWord);
         modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         auso?.PlayOneShot(destroyLetterClip);
@@ -316,9 +319,11 @@ public class WordBuilder : MonoBehaviour
         //tpm.DestroyEntireTail();
     }
 
-    public void ClearCurrentWord(int numberOfLettersToRemoveFromEnd)
+    public void ClearLastLetterInWord()
     {
-        //TODO
+        Debug.Log($"letters on sword: {lettersOnSword.Count}, removing at {lettersOnSword.Count - 1}");
+        lettersOnSword.RemoveAt(lettersOnSword.Count - 1);
+        CreateSwordWordPowerFromCurrentLettersOnSword();
     }
 
     public List<LetterTile> GetLettersCollected()

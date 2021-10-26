@@ -9,13 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5854897102321952828}
-  - component: {fileID: 5850972780588285791}
+  - component: {fileID: -1571524137001912816}
   - component: {fileID: 7905437399472185518}
   - component: {fileID: 9175583922732671321}
   - component: {fileID: -5731959307713958461}
   - component: {fileID: 5268930924742682721}
   - component: {fileID: 436350664284734195}
-  - component: {fileID: 8536609093349855839}
   - component: {fileID: -1046275462294711525}
   - component: {fileID: 4273840345302285748}
   - component: {fileID: 6799207916021881675}
@@ -44,7 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5850972780588285791
+--- !u!114 &-1571524137001912816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,11 +52,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6646722358577865907}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810d812ec95c1a34d86f0181520a6d8c, type: 3}
+  m_Script: {fileID: 11500000, guid: 557bc3d4bfb84f845833db7945d4473c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTime: 0
-  timeToRethinkStrategy: Infinity
+  ep: {fileID: 11400000, guid: fdffbc8630ebd664dba24cbc5c9a9362, type: 2}
+  CurrentRecommendedStrategy: 3
+  CurrentBestLTT: {fileID: 0}
 --- !u!114 &7905437399472185518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,8 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   strategicDestination: {x: 0, y: 0}
-  GraphIndex: 1
-  status: 0
+  TargetLetterTile: {fileID: 0}
   previousLTT: {fileID: 0}
 --- !u!114 &9175583922732671321
 MonoBehaviour:
@@ -93,6 +92,7 @@ MonoBehaviour:
   normalSpellCastClip: {fileID: 8300000, guid: d11792a99ee7c3143a190790c99351bc, type: 3}
   memory: {fileID: 0}
   currentEnemy: {fileID: 0}
+  currentEnergyLevel: 0
 --- !u!114 &-5731959307713958461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,20 +144,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8536609093349855839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6646722358577865907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d85d64b1eb1f4342af2dd6982aded87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tailPiecePrefab: {fileID: 7956891001027729849, guid: ac7e6469ef9606e4b91400bb937c6dbe, type: 3}
-  tailPieces: []
 --- !u!114 &-1046275462294711525
 MonoBehaviour:
   m_ObjectHideFlags: 0

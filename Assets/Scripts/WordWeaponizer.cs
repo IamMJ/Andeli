@@ -39,7 +39,7 @@ public class WordWeaponizer : MonoBehaviour
     float energyRegenRate_Target = 0.5f; // units per second;
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.1f; //how fast the current energy regen rate drifts back to its target. 
-    float currentEnergyLevel;
+    [SerializeField] float currentEnergyLevel;
     TrueLetter.Ability abilityToAutoIgnite = TrueLetter.Ability.Normal;
 
     public Action OnFireWord;

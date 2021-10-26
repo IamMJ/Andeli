@@ -186,6 +186,7 @@ public class StrategyBrainV2 : MonoBehaviour
         path = p;
         currentWaypoint = 0;
         currentPathDestination = p.vectorPath[p.vectorPath.Count - 1];
+        Debug.DrawLine(transform.position, currentPathDestination, Color.blue, 3);
     }
 
     private void SetNewTargetLetterTileAsStrategicDestination()
