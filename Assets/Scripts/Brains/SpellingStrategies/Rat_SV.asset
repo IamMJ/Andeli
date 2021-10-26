@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ced10710a629e4aa62c8c7510a3d40, type: 3}
   m_Name: Rat_SV
   m_EditorClassIdentifier: 
-  MinimumPoints: 4
-  PointsWeight: 1
+  MinimumPoints: 2
+  PointsWeight: 0
   FutureWordsThreshold: 50
-  FutureWordsWeight: 5
+  FutureWordsWeight: 1
   ShouldWordAlwaysBeValid: 1
   deadEndSubstrategy: 1
-  DistanceWeight: 0.5
+  DistanceWeight: 0.1
   Patience: 10
   BaseSpeedMultiplier: 2
   BaseEnergyRegenMultiplier: 2

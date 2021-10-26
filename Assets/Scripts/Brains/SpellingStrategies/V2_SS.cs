@@ -104,7 +104,8 @@ public class V2_SS : SpellingStrategy
         string possWord = wb.GetCurrentWord() + evaluatedLT.Letter;
         float possPower = wb.CurrentPower + evaluatedLT.Power_Enemy;
 
-        float wordPowerFactor = ep.PointsWeight * possPower; // include a way to increase value based on Letter Masks
+        float wordPowerFactor = Mathf.Clamp(ep.PointsWeight * possPower, 1, 999); // include a way to increase value based on Letter Masks
+
 
         float wordValidityFactor = ConvertWordValidityToBoolint(possWord) * (possPower / ep.MinimumPoints);
         //Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{sv.MinimumPoints}, validity: {ConvertFutureWordValidityToBoolint(possWord)}");
@@ -124,21 +125,28 @@ public class V2_SS : SpellingStrategy
 
     private float ConvertWordValidityToBoolint(string futureWord)
     {
-        if (ep.ShouldWordAlwaysBeValid == true && futureWord.Length > 0)
+        if (ep.ShouldWordAlwaysBeValid == true )
         {
-            if (wv.CheckWordValidity(futureWord))
+            if (futureWord.Length >= 2)
             {
-                return 1;
+                if (wv.CheckWordValidity(futureWord))
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
             }
             else
             {
-                return 0;
+                return 1;
             }
-        }
 
-        if (ep.ShouldWordAlwaysBeValid == false)
+        }
+        else
         {
-            if (futureWord.Length > 2 && wv.CheckWordValidity(futureWord))
+            if (futureWord.Length >= 2 && wv.CheckWordValidity(futureWord))
             {
                 return 1;
             }

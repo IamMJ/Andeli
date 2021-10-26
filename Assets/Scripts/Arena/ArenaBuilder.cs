@@ -209,7 +209,7 @@ public class ArenaBuilder : MonoBehaviour
         uid.ShowOverworldUIElements();
         Destroy(camMouse);
         cvc.Follow = player.transform;
-
+        //Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
         Destroy(enemy);
 
         ltd.DestroyAllLetters();
