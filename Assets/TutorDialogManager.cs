@@ -40,10 +40,9 @@ public class TutorDialogManager : NPCDialogManager
     public void SetupTutorDM(WordWeaponizer playerWWZ)
     {
         this.playerWWZ = playerWWZ;
-        playerWWZ.OnFireWord += HandleWordFired;
-
         if (player.GetComponent<PlayerMemory>().CheckForPlayerKnowledgeOfARequiredKeyword("ITUT1"))
         {
+            playerWWZ.OnFireWord += HandleWordFired;
             uid.ShowHideIgnitionChancePanel(false);
             uid.ShowHideTopPanel(false);
             bagman = FindObjectOfType<BagManager>();

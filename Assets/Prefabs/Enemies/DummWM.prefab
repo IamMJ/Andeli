@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -7595902614654926620}
   - component: {fileID: -5034509803925688497}
   - component: {fileID: -5284322125733642703}
+  - component: {fileID: -1172098940333857655}
   m_Layer: 10
   m_Name: DummWM
   m_TagString: Wordmaker
@@ -66,8 +67,10 @@ MonoBehaviour:
   normalSpellPrefab: {fileID: 7941282901840960525, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
   freezeSpellPrefab: {fileID: 6886851091308245794, guid: c5bafa82922014b4d9a8b3634cc06e3f, type: 3}
   wispySpellPrefab: {fileID: 6886851091308245794, guid: a35557762df88b341b3f36074fdbfd8c, type: 3}
+  normalSpellCastClip: {fileID: 0}
   memory: {fileID: 0}
   currentEnemy: {fileID: 0}
+  currentEnergyLevel: 0
 --- !u!114 &-4259656899091234111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac6abb10efad4346add361fc271ba64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ep: {fileID: 11400000, guid: 0251a04308251584c97e48e502fb8a31, type: 2}
+  CurrentRecommendedStrategy: 3
+  CurrentBestLTT: {fileID: 0}
 --- !u!114 &-5034509803925688497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,6 +110,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed792ca1792f84445969c2512101a125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  addLetterToSwordClip: {fileID: 0}
+  addLetterToBagClip: {fileID: 0}
+  destroyLetterClip: {fileID: 0}
   lettersOnSword: []
   currentWord: 
   CurrentPower: 0
@@ -158,3 +167,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-1172098940333857655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6646722358577865907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2326eeb7b702722479497ea232e2244d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strategicDestination: {x: 0, y: 0}
+  TargetLetterTile: {fileID: 0}
+  previousLTT: {fileID: 0}

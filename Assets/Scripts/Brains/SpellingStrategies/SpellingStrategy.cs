@@ -13,7 +13,6 @@ public abstract class SpellingStrategy : MonoBehaviour
     /// It should always strive to have a Current Best LTT available for the strategy brain. 
     /// </summary>
     protected WordBuilder wb;
-    protected MoveBrain_NPC mb;
     protected WordWeaponizer wwz;
     protected SpeedKeeper sk;
     protected StrategyBrainV2 sb;
@@ -37,7 +36,6 @@ public abstract class SpellingStrategy : MonoBehaviour
     {
         wb = GetComponent<WordBuilder>();
         wb.OnAddLetterToSword += HandleLetterPickup;
-        mb = GetComponent<MoveBrain_NPC>();
         sb = GetComponent<StrategyBrainV2>();
         sk = GetComponent<SpeedKeeper>();
 

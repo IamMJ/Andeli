@@ -118,9 +118,10 @@ public class V2_SS : SpellingStrategy
 
     public override void HandleLetterPickup(LetterTile newLetter)
     {
-        Debug.Log($"picked up a {newLetter.Letter}, trying to get a {CurrentBestLTT.Letter}");
+
         if (newLetter != CurrentBestLTT)
         {
+            Debug.Log($"picked up a {newLetter.Letter}, trying to get a {CurrentBestLTT.Letter}");
             wb.ClearLastLetterInWord();
         }
         else

@@ -16,6 +16,6 @@ public class Dummy_SpellingStrategy : SpellingStrategy
 
     protected override float GenerateValueForLetterTile(LetterTile evaluatedLT)
     {
-        throw new System.NotImplementedException();
+        return 0f;
     }
 }

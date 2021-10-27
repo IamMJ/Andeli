@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33ced10710a629e4aa62c8c7510a3d40, type: 3}
-  m_Name: Elephant_SV
+  m_Name: Dummy_EP
   m_EditorClassIdentifier: 
-  MinimumPoints: 10
+  MinimumPoints: 2
   PointsWeight: 1
-  FutureWordsThreshold: 400
-  FutureWordsWeight: 10
-  ShouldWordAlwaysBeValid: 0
+  FutureWordsThreshold: 50
+  FutureWordsWeight: 0
+  ShouldWordAlwaysBeValid: 1
   deadEndSubstrategy: 0
-  DistanceWeight: 0.05
-  Patience: 4
-  BaseSpeedMultiplier: 1
-  BaseEnergyRegenMultiplier: 1
+  DistanceWeight: 1
+  Patience: 10
+  BaseSpeedMultiplier: 2
+  BaseEnergyRegenMultiplier: 0.5

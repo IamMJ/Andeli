@@ -24,7 +24,7 @@ public class NPCDialogManager : MonoBehaviour
     protected NPC_Brain brain;
     protected GameObject player;
     protected ConversationPanelDriver cpd;
-    protected PlayerMemory pdm;
+    protected PlayerMemory pm;
 
     //param
     [SerializeField] float timeBetweenBarks_average = 4;
@@ -54,7 +54,7 @@ public class NPCDialogManager : MonoBehaviour
     private void RespondToGameStart()
     {
         player = gc.GetPlayer();
-        pdm = player.GetComponent<PlayerMemory>();
+        pm = player.GetComponent<PlayerMemory>();
 
         availablePeaceBarks = RebuildAvailableBarks(ref allPeaceBarks);
         availableReplyBarks = RebuildAvailableBarks(ref allReplyBarks);
@@ -65,7 +65,7 @@ public class NPCDialogManager : MonoBehaviour
             ActivateNoticeMe();
         }
 
-        pdm.OnKeywordAdded += RespondToPlayerGainingKeyword;
+        pm.OnKeywordAdded += RespondToPlayerGainingKeyword;
     }
 
 
@@ -151,7 +151,7 @@ public class NPCDialogManager : MonoBehaviour
 
     public void PassNewKeywordToPlayerDialogMemory(string newKeyword)
     {
-        pdm.AddKeyword(newKeyword);
+        pm.AddKeyword(newKeyword);
     }
 
     #endregion
@@ -220,8 +220,8 @@ public class NPCDialogManager : MonoBehaviour
         {
             string testKeyword = bark.KeywordToShowFor;
             string bannedKeyword = bark.KeywordToHideFrom;
-            if (pdm.CheckForPlayerKnowledgeOfARequiredKeyword(testKeyword) &&
-                !pdm.CheckForPlayerKnowledgeOfABannedKeyword(bannedKeyword))
+            if (pm.CheckForPlayerKnowledgeOfARequiredKeyword(testKeyword) &&
+                !pm.CheckForPlayerKnowledgeOfABannedKeyword(bannedKeyword))
             {
                 availBarks.Add(bark);
             }
@@ -267,8 +267,8 @@ public class NPCDialogManager : MonoBehaviour
         {
             string testKeyword = convo.KeywordToShowFor;
             string bannedKeyword = convo.KeywordToHideFrom;
-            if (pdm.CheckForPlayerKnowledgeOfARequiredKeyword(testKeyword) &&
-                !pdm.CheckForPlayerKnowledgeOfABannedKeyword(bannedKeyword))
+            if (pm.CheckForPlayerKnowledgeOfARequiredKeyword(testKeyword) &&
+                !pm.CheckForPlayerKnowledgeOfABannedKeyword(bannedKeyword))
             {
                 availConvos.Add(convo);
             }
