@@ -20,9 +20,7 @@ public class V2_SS : SpellingStrategy
         string cw = wb.GetCurrentWord();
         int cp = wb.CurrentPower;
 
-        //*((float)currentPatience/(float)ep.Patience)
-        Debug.Log($"cp: {cp}, vs der val: {ep.MinimumPoints * (currentPatience / ep.Patience)}: is {cp >= ep.MinimumPoints * (currentPatience / ep.Patience)}");
-
+        
         if (cp >= ep.MinimumPoints && wv.CheckWordValidity(cw))
         {
             currentPatience = ep.Patience;
@@ -57,7 +55,7 @@ public class V2_SS : SpellingStrategy
             return;
         }
 
-        currentPatience--;
+        currentPatience -= 1f;
         Debug.Log($"losing patience, at {currentPatience}");
 
         if (currentPatience <= -ep.Patience)
@@ -118,6 +116,20 @@ public class V2_SS : SpellingStrategy
 
     }
 
+    public override void HandleLetterPickup(LetterTile newLetter)
+    {
+        Debug.Log($"picked up a {newLetter.Letter}, trying to get a {CurrentBestLTT.Letter}");
+        if (newLetter != CurrentBestLTT)
+        {
+            wb.ClearLastLetterInWord();
+        }
+        else
+        {
+            UpdateStrategy();
+        }
+
+    }
+
     private void ExecuteDeadendStrategy()
     {
         Debug.Log("deadend executed");
@@ -137,7 +149,7 @@ public class V2_SS : SpellingStrategy
 
             case DeadEndSubstrategy.Anagram:
                 Debug.Log("no anagram implementation yet");
-                currentPatience = Mathf.Round((float)ep.Patience / 2f);
+                currentPatience = ep.Patience;
                 return;
 
 
@@ -153,7 +165,7 @@ public class V2_SS : SpellingStrategy
         float wordPowerFactor = Mathf.Clamp(ep.PointsWeight * possPower, 1f, 999f); // include a way to increase value based on Letter Masks
 
 
-        float wordValidityFactor = ConvertWordValidityToValue(possWord) * (possPower / (float)ep.MinimumPoints);
+        float wordValidityFactor = ConvertWordValidityToValue(possWord); //* (possPower / ep.MinimumPoints);
         Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{ep.MinimumPoints}, validity: {ConvertWordValidityToValue(possWord)}");
 
         //float futureWordFactor = ep.FutureWordsWeight * ConvertFutureWordsToValue(possWord) * ((float)ep.MinimumPoints/possPower);
@@ -191,7 +203,7 @@ public class V2_SS : SpellingStrategy
             }
             else
             {
-                float futureWordFactor = ConvertFutureWordsToValue(futureWord) / ep.FutureWordsWeight; //* ((float)ep.MinimumPoints / possPower);
+                float futureWordFactor = ConvertFutureWordsToValue(futureWord) * ep.FutureWordsWeight; //* ((float)ep.MinimumPoints / possPower);
                 return futureWordFactor;
             }
 

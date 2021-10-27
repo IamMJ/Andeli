@@ -65,9 +65,13 @@ public class StrategyBrainV2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ss.CurrentBestLTT == null || ss.CurrentRecommendedStrategy != SpellingStrategy.PossibleWordStrategies.KeepBuildingCurrentWord)
+        if (ss.CurrentBestLTT == null)
         {
             SetRandomStrategicDestination();
+        }
+        if (ss.CurrentBestLTT && wmm.GetValidDesMove().magnitude <= Mathf.Epsilon)
+        {
+            ReactToStrategyChange(SpellingStrategy.PossibleWordStrategies.KeepBuildingCurrentWord);
         }
         PassTacticalDestinationToMoveBrain();
     }

@@ -36,7 +36,7 @@ public abstract class SpellingStrategy : MonoBehaviour
     public virtual void Start()
     {
         wb = GetComponent<WordBuilder>();
-        wb.OnAddLetterToSword += UpdateStrategy;
+        wb.OnAddLetterToSword += HandleLetterPickup;
         mb = GetComponent<MoveBrain_NPC>();
         sb = GetComponent<StrategyBrainV2>();
         sk = GetComponent<SpeedKeeper>();
@@ -58,6 +58,10 @@ public abstract class SpellingStrategy : MonoBehaviour
     /// </summary>
     public abstract void UpdateStrategy();
 
+    public virtual void HandleLetterPickup(LetterTile newLetter)
+    {
+
+    }
     public virtual void ResetRecommendedStrategy()
     {
         CurrentRecommendedStrategy = PossibleWordStrategies.NoStrategyAvailable;

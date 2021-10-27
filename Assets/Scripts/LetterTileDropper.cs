@@ -216,7 +216,7 @@ public class LetterTileDropper : MonoBehaviour
     }
     private bool CheckRandomPositionAgainstImpassableTerrain(Vector2 randomPos)
     {
-        var coll = Physics2D.OverlapCircle(randomPos, 0.05f, layerMask_Impassable);
+        var coll = Physics2D.OverlapCircle(randomPos, 0.48f, layerMask_Impassable);
         if (coll)
         {
             return true;

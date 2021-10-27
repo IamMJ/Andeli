@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33ced10710a629e4aa62c8c7510a3d40, type: 3}
   m_Name: Rat_SV
   m_EditorClassIdentifier: 
-  MinimumPoints: 2
+  MinimumPoints: 4
   PointsWeight: 0
   FutureWordsThreshold: 50
   FutureWordsWeight: 1

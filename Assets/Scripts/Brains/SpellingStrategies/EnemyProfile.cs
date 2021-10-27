@@ -16,7 +16,7 @@ public class EnemyProfile : ScriptableObject
 
     public float DistanceWeight = 1;
 
-    public int Patience = 10;
+    public float Patience = 10;
 
     public float BaseSpeedMultiplier = 2;
     public float BaseEnergyRegenMultiplier = 0.5f;

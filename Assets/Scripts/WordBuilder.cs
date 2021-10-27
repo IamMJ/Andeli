@@ -18,7 +18,7 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] AudioClip addLetterToSwordClip = null;
     [SerializeField] AudioClip addLetterToBagClip = null;
     [SerializeField] AudioClip destroyLetterClip = null;
-    public Action OnAddLetterToSword;
+    public Action<LetterTile> OnAddLetterToSword;
     public struct SwordWordPower
     {
         public Sprite[] letterSprites;
@@ -70,7 +70,7 @@ public class WordBuilder : MonoBehaviour
     {
     
         lettersOnSword.Add(newLetter);
-        OnAddLetterToSword?.Invoke();
+        OnAddLetterToSword?.Invoke(newLetter);
         RewriteCurrentWordFromLettersOnSword();
         modifiedWordLength = CalculateWordLengthAndUpdateIgnitionChance();
         //IncreasePower(newLetter.Power_Player);
