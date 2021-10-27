@@ -28,7 +28,7 @@ public class JewelManager : MonoBehaviour
         for (int i = jewelsInstalled-1; i >= 0; i--)
         {
             float specificFactor = Mathf.Clamp01((factor - (subamount * i)) / subamount);
-            jewelImages[i].color = Color.HSVToRGB(0, specificFactor, 1);
+            jewelImages[i].color = Color.HSVToRGB(.16f, specificFactor, 1);
             if (specificFactor < 1)
             {
                 lowestEmpty = i;
