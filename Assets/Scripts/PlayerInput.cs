@@ -11,7 +11,6 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] GameObject moveArrowPrefab = null;
     [SerializeField] GameObject strategicDestinationPrefab = null;
     GameController gc;
-    DebugHelper dh;
     GraphUpdateScene gus;
     Movement movement;
     Seeker seeker;
@@ -46,7 +45,6 @@ public class PlayerInput : MonoBehaviour
     {
         movement = GetComponent<Movement>();
         seeker = GetComponent<Seeker>();
-        dh = FindObjectOfType<DebugHelper>();
         gc = FindObjectOfType<GameController>();
         cpd = FindObjectOfType<ConversationPanelDriver>();
         isMobile = Application.isMobilePlatform;
@@ -155,6 +153,11 @@ public class PlayerInput : MonoBehaviour
     }
 
     #region Public Methods
+
+    public void ToggleDebugMenu()
+    {
+        gc.ToggleDebugMenuMode();
+    }
 
     public void HaltPlayerMovement()
     {

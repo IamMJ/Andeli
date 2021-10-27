@@ -106,7 +106,7 @@ public class LetterTile : MonoBehaviour
         fadeColor_sr = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
         fadeColor_mr = new Color(tmp.color.r, tmp.color.g, tmp.color.b, 1);
         ps = GetComponent<ParticleSystem>();
-
+        valueTMP.enabled = false;
     }
 
     private void AssignStartingSprite()
@@ -210,6 +210,7 @@ public class LetterTile : MonoBehaviour
 
     public void AssignAIValueForDebug(float value)
     {
+        valueTMP.enabled = true;
         valueTMP.text = value.ToString("0.00");
     }
     public void InactivateLetterTile()

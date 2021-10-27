@@ -38,6 +38,11 @@ public class MainMenuDriver : MonoBehaviour
         gc.StartNewGame();
     }
 
+    public void ToggleDebugMenuOption()
+    {
+        gc = FindObjectOfType<GameController>();
+        gc.ToggleDebugMenuMode();
+    }
 
 
 }

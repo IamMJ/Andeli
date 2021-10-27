@@ -59,6 +59,8 @@ public class GameController : MonoBehaviour
 
     [SerializeField] float currentZoom;
     public bool debug_IgniteAll = false;
+    public bool debug_ShowAILetterValues = false;
+    public bool debug_ShowDebugMenu = false;
 
 
     //void Awake()
@@ -97,8 +99,7 @@ public class GameController : MonoBehaviour
         mc = FindObjectOfType<MusicController>();
         uid.HideAllOverworldUIElements();
         uid.ShowHideMainMenu(true);
-
-
+        uid.ShowHideDebugMenu(debug_ShowDebugMenu);
 
         gash = FindObjectOfType<GameStateHolder>();
         vm = FindObjectOfType<VictoryMeter>();
@@ -204,6 +205,7 @@ public class GameController : MonoBehaviour
         SetCameraToFollowPlayer();
         SetCameraToOverworldOffset();
         AdjustGameForStartMode();
+        uid.ShowHideDebugMenu(debug_ShowDebugMenu);
         OnGameStart.Invoke();
     }
 
@@ -271,6 +273,16 @@ public class GameController : MonoBehaviour
     #endregion
 
     #region Public Methods
+
+    public void ToggleDebugMenuMode()
+    {
+        Debug.Log($"Debug Menu is {debug_ShowDebugMenu}");
+        debug_ShowDebugMenu = !debug_ShowDebugMenu;
+        if (isInGame)
+        {
+            uid.ShowHideDebugMenu(debug_ShowDebugMenu);
+        }
+    }
     public void SetCameraToArenaOffset()
     {
         cvc.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = cameraOffset_Arena;
@@ -297,7 +309,6 @@ public class GameController : MonoBehaviour
 
     public void PauseGame()
     {
-        Debug.Log("attempted to pause");
         isPaused = true;
         Time.timeScale = 0;
         pauseRequests++;

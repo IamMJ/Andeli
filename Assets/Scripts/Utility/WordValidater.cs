@@ -26,7 +26,6 @@ public class WordValidater : MonoBehaviour
         public int EndIndex;
     }
 
-    DebugHelper dh;
     WordMakerMemory pm;
 
 
@@ -50,7 +49,6 @@ public class WordValidater : MonoBehaviour
     void Start()
     {
         pm = FindObjectOfType<WordMakerMemory>();
-        dh = FindObjectOfType<DebugHelper>();
         var arr = wordListRaw.text.Split();
         masterWordHashSet = new HashSet<string>(arr);
         masterWordList = new List<string>(arr);

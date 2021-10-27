@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class V2_SS : SpellingStrategy
 {
+    GameController gc;
 
     //state
     float currentPatience;
@@ -11,6 +12,7 @@ public class V2_SS : SpellingStrategy
     public override void Start()
     {
         base.Start();
+        gc = FindObjectOfType<GameController>();
         currentPatience = ep.Patience;
     }
 
@@ -167,17 +169,24 @@ public class V2_SS : SpellingStrategy
 
 
         float wordValidityFactor = ConvertWordValidityToValue(possWord); //* (possPower / ep.MinimumPoints);
-        Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{ep.MinimumPoints}, validity: {ConvertWordValidityToValue(possWord)}");
 
         //float futureWordFactor = ep.FutureWordsWeight * ConvertFutureWordsToValue(possWord) * ((float)ep.MinimumPoints/possPower);
 
         float distFactor = ep.DistanceWeight * (evaluatedLT.transform.position - transform.position).magnitude;
 
         float value = ((wordPowerFactor * wordValidityFactor )- distFactor);
-        evaluatedLT.AssignAIValueForDebug(value);
 
-        Debug.Log($"had {wb.GetCurrentWord()}, evaluated {evaluatedLT.Letter} as worth {value} " +
-            $"(wpf: {wordPowerFactor}, wvf: {wordValidityFactor}, fwf: <in wvf>, df: {distFactor})");
+        if (gc.debug_ShowAILetterValues)
+        {
+            Debug.Log($" wvf is: {wordValidityFactor}, from a Poss power is {possPower}, MinP is{ep.MinimumPoints}, validity: {ConvertWordValidityToValue(possWord)}");
+
+            Debug.Log($"had {wb.GetCurrentWord()}, evaluated {evaluatedLT.Letter} as worth {value} " +
+                $"(wpf: {wordPowerFactor}, wvf: {wordValidityFactor}, fwf: <in wvf>, df: {distFactor})");
+
+            evaluatedLT.AssignAIValueForDebug(value);
+        }
+
+
 
         return value;
     }

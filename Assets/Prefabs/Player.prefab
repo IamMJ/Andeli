@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 4683094222974374877}
   - component: {fileID: -2790034786816923024}
   - component: {fileID: -2667806667165884307}
+  - component: {fileID: 7026920443051747979}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -215,6 +216,7 @@ MonoBehaviour:
   normalSpellCastClip: {fileID: 8300000, guid: d11792a99ee7c3143a190790c99351bc, type: 3}
   memory: {fileID: 0}
   currentEnemy: {fileID: 0}
+  currentEnergyLevel: 0
 --- !u!95 &5293917446488848811
 Animator:
   serializedVersion: 3
@@ -373,6 +375,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knownKeywords:
   - ALWAYS
+  BaseEnergyRegenRate: 0
+  BaseMoveSpeed: 0
 --- !u!82 &-2667806667165884307
 AudioSource:
   m_ObjectHideFlags: 0
@@ -469,3 +473,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7026920443051747979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3319382006745120615}
+          m_TargetAssemblyTypeName: PlayerInput, Assembly-CSharp
+          m_MethodName: ToggleDebugMenu
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

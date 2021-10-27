@@ -31,6 +31,8 @@ public class UIDriver : MonoBehaviour
     [SerializeField] GameObject ignitionChancePanel = null;
     [SerializeField] TextMeshProUGUI ignitionChanceTMP = null;
 
+    [SerializeField] GameObject debugMenuPanel = null;
+
     //[SerializeField] Slider spellEnergySlider_0 = null;
     //[SerializeField] Slider spellEnergySlider_1 = null;
     //[SerializeField] Slider spellEnergySlider_2 = null;
@@ -335,6 +337,11 @@ public class UIDriver : MonoBehaviour
         ShowHideVictoryMeter(false);
         ShowHideLetterPowerButton(false);
         ShowHideOptionMenuButton(true);
+    }
+
+    public void ShowHideDebugMenu(bool shouldBeShown)
+    {
+        debugMenuPanel.SetActive(shouldBeShown);
     }
 
     private void ModifyAttackButtonWithWordValidationUponNewSwordWord(bool isValid)

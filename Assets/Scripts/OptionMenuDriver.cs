@@ -8,6 +8,7 @@ public class OptionMenuDriver : MonoBehaviour
     GameController gc;
     VictoryMeter vm;
     [SerializeField] TextMeshProUGUI letterRoutingTMP = null;
+    [SerializeField] TextMeshProUGUI AIvaluesTMP = null;
 
     public void HidePauseMenu()
     {
@@ -70,6 +71,19 @@ public class OptionMenuDriver : MonoBehaviour
         else
         {
             letterRoutingTMP.text = $"Letter Routing: Bag";
+        }
+    }
+
+    public void ToggleAIValues()
+    {
+        gc.debug_ShowAILetterValues = !gc.debug_ShowAILetterValues;
+        if (gc.debug_ShowAILetterValues)
+        {
+            AIvaluesTMP.text = "Debug: AI letter values: ON";
+        }
+        else
+        {
+            AIvaluesTMP.text = "Debug: AI letter values: OFF";
         }
     }
 

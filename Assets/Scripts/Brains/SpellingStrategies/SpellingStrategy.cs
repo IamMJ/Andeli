@@ -17,7 +17,6 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected SpeedKeeper sk;
     protected StrategyBrainV2 sb;
     protected WordValidater wv;
-    protected DebugHelper dh;
     protected LetterTileDropper ltd;
     //protected List<(string, float)> evaluatedList = new List<(string, float)>();
     protected Dictionary<LetterTile, float> evaluatedLTs = new Dictionary<LetterTile, float>();
@@ -41,7 +40,6 @@ public abstract class SpellingStrategy : MonoBehaviour
 
         wwz = GetComponent<WordWeaponizer>();
         wv = FindObjectOfType<WordValidater>();
-        dh = FindObjectOfType<DebugHelper>();
         ltd = FindObjectOfType<LetterTileDropper>();
         if (ltd)
         {
@@ -148,7 +146,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         {
             if (shouldFireOrEraseNow || currentWordOptions < thresholdForTooUnlikely) // ...but its future is too unpromising...
             {
-                dh.DisplayDebugLog($"Firing {currentWord} with only {currentWordOptions} possible options ahead");
+               
                 wwz.AttemptToFireWordAsNPC();
                 return;
             }
@@ -157,7 +155,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         {
             if (shouldFireOrEraseNow || currentWordOptions < thresholdForTooUnlikely) /// ...and its future is too unpromising...
             {
-                dh.DisplayDebugLog($"Erasing {currentWord} with only {currentWordOptions} possible options");
+                
                 wb.ClearCurrentWord(); // ...so erase it now.  How did we get here though?
                 return;
             }
@@ -170,7 +168,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         if (count < threshold)
         {
 
-            dh.DisplayDebugLog($"erasing {currentWord} with only {count} options");
+           
             wb.ClearCurrentWord();
         }
     }
@@ -179,7 +177,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         string currentWord = wb.GetCurrentWord();
         if (wv.CheckWordValidity(currentWord))
         {
-            dh.DisplayDebugLog("firing off " + currentWord);
+            
             wwz.AttemptToFireWordAsNPC();
         }
     }

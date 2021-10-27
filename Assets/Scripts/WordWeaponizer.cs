@@ -14,7 +14,6 @@ public class WordWeaponizer : MonoBehaviour
     AudioSource auso;
     GameController gc;
     WordBuilder wbd;
-    DebugHelper dh;
     WordValidater wv;
     VictoryMeter vm;
     [SerializeField] WordMakerMemory memory;
@@ -61,7 +60,6 @@ public class WordWeaponizer : MonoBehaviour
             pm.BaseEnergyRegenRate = energyRegenRate_Target;
         }
         gc = FindObjectOfType<GameController>();
-        dh = FindObjectOfType<DebugHelper>();
         wv = FindObjectOfType<WordValidater>();
         vm = FindObjectOfType<VictoryMeter>();
         auso = GetComponent<AudioSource>();
