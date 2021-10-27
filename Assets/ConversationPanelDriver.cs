@@ -129,6 +129,14 @@ public class ConversationPanelDriver : MonoBehaviour
                 currentConvoStepIndex++;
                 convoStep = convo.GetConversationStepAtIndex(currentConvoStepIndex);
                 UpdateUIWithCurrentConvoStep();
+                if (convoStep.ResultFromAdvancement == ConversationStep.AdvancementOption.GrantPowerInDemo)
+                {
+                    player.GetComponent<LetterMaskHolder>().ModifyLetterMaskAbilityForGivenLetter('A', TrueLetter.Ability.Frozen);
+                    player.GetComponent<LetterMaskHolder>().ModifyLetterMaskAbilityForGivenLetter('E', TrueLetter.Ability.Frozen);
+                    player.GetComponent<LetterMaskHolder>().ModifyLetterMaskAbilityForGivenLetter('I', TrueLetter.Ability.Frozen);
+                    player.GetComponent<LetterMaskHolder>().ModifyLetterMaskAbilityForGivenLetter('O', TrueLetter.Ability.Frozen);
+                    player.GetComponent<LetterMaskHolder>().ModifyLetterMaskAbilityForGivenLetter('U', TrueLetter.Ability.Frozen);
+                }
                 return;
 
             case ConversationStep.ReplyOption.AdvanceTwoSteps:
@@ -239,7 +247,7 @@ public class ConversationPanelDriver : MonoBehaviour
     {
         if (convoStep.NPCSprite)
         {
-            NPCMainImage.color = Color.white;
+            NPCMainImage.color = convoStep.SpriteColor;
             NPCMainImage.sprite = convoStep.NPCSprite;
         }
         else

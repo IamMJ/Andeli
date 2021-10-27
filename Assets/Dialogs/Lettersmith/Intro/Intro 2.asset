@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
   m_Name: Intro 2
   m_EditorClassIdentifier: 
-  NPCText: Unfortunately, all of my supplies are stuck on the other side of the bridges.
-    Hopefully I get them soon!
-  NPCSprite: {fileID: 0}
-  PlayerText_0: Good luck
-  resultFromOption0: 3
+  NPCText: For now, I have just enough to make some Frozen letters. Here, now your
+    vowels are Frozen.
+  NPCSprite: {fileID: 21300000, guid: c25dd675a14cd744099cbf45f24d68fd, type: 3}
+  SpriteColor: {r: 1, g: 1, b: 1, a: 1}
+  PlayerText_0: Thanks
+  resultFromOption0: 0
   PlayerText_1: 
   resultFromOption1: 3
   Destination: {x: 0, y: 0}
+  ResultFromAdvancement: 0

@@ -206,9 +206,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b9b3d3a697c4a849bf5efdaad0e71fe, type: 2}
   - {fileID: 11400000, guid: 5918a8e0e92f4674eb7e95d451968c73, type: 2}
   allReplyBarks: []
-  allCombatBarks:
-  - {fileID: 11400000, guid: 5731fb2b3f6e0cf49ba39907c57077ca, type: 2}
-  - {fileID: 11400000, guid: 87f7e7d8d660f5740a33fc4ac756ad3d, type: 2}
+  allCombatBarks: []
   allConversations: []
   availablePeaceBarks: []
   availableReplyBarks: []

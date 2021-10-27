@@ -36,6 +36,11 @@ public class LetterMask : ScriptableObject
         return ability;
     }
 
+    public void SetAbility(TrueLetter.Ability newAbility)
+    {
+        ability = newAbility;
+    }
+
     public string GetAbilityDescription()
     {
         return "this is the ability description";
