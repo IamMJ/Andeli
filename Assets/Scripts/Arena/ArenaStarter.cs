@@ -17,11 +17,15 @@ public class ArenaStarter : MonoBehaviour
     GameObject player;
     SpriteRenderer sr;
     Animator anim;
+    PlayerMemory pm;
 
     //param
+    [SerializeField] string[] keywordsRequiredForCombat = null;
+    [SerializeField] string keywordGivenUponVictory = null;
+    [SerializeField] string keywordGivenUponDefeat = null;
     [SerializeField] bool canBeDestroyed = true;
     [SerializeField] float arenaTriggerRange;
-    float timeBetweenPlayerResponses = 10f;
+    float timeBetweenPlayerResponses = 3f;
 
     //state
     bool isActivated = true;
@@ -39,11 +43,13 @@ public class ArenaStarter : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         activeSprite = sr.sprite;
         anim = GetComponent<Animator>();
+        pm = GetComponent<PlayerMemory>();
     }
 
     private void HandleOnGameStart()
     {
         player = gc.GetPlayer();
+        pm = player.GetComponent<PlayerMemory>();
     }
 
     private void Update()
@@ -54,9 +60,27 @@ public class ArenaStarter : MonoBehaviour
         if (Time.time < timeToBecomeResponsiveToPlayer) { return; }
         if ((player.transform.position - transform.position).magnitude <= arenaTriggerRange)
         {
-            bpd.ActivateBriefPanel(this, ash.arenaSetting);
-            gc.PauseGame();
-            timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
+            bool hasRequiredKeywords = true;
+            foreach (var keyword in keywordsRequiredForCombat)
+            {
+                hasRequiredKeywords = pm.CheckForPlayerKnowledgeOfARequiredKeyword(keyword);
+                if (hasRequiredKeywords == false)
+                {
+                    break;
+                }
+            }
+
+            if (hasRequiredKeywords)
+            {
+                bpd.ActivateBriefPanel(this, ash.arenaSetting);
+                gc.PauseGame();
+                timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
+            }
+            else
+            {
+                Debug.Log($"player is missing at least one keyword required to fight here");
+            }
+
         }
     }
 
@@ -74,10 +98,10 @@ public class ArenaStarter : MonoBehaviour
         gc.ResumeGameSpeed(false);
     }
 
-    public void DeactivateArenaStarter()
+    public void DeactivateArenaStarter(bool didPlayerWin)
     {
         //GridModifier.ReknitAllGridGraphs(transform);
-        if (canBeDestroyed)
+        if (canBeDestroyed && didPlayerWin)
         {
             isActivated = false;
             if (anim)
@@ -90,6 +114,21 @@ public class ArenaStarter : MonoBehaviour
         else
         {
             timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
+        }
+
+        if (didPlayerWin)
+        {
+            if (keywordGivenUponVictory != "")
+            {
+                pm.AddKeyword(keywordGivenUponVictory);   
+            }
+        }
+        else
+        {
+            if (keywordGivenUponDefeat != "")
+            {
+                pm.AddKeyword(keywordGivenUponDefeat);
+            }
         }
 
         //gameObject.SetActive(false);

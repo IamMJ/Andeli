@@ -458,7 +458,17 @@ public class LetterTileDropper : MonoBehaviour
 
     public void DestroyAllLetters()
     {
-        for (int i = allLettersDropped.Count -1; i >= 0; i--)
+        //foreach (var letter in allLettersDropped)
+        //{
+        //    letter.DestroyLetterTile();
+        //}
+
+        //for (int i = 0; i < allLettersDropped.Count; i++)
+        //{
+        //    allLettersDropped[i].DestroyLetterTile();
+        //}
+
+        for (int i = allLettersDropped.Count - 1; i >= 0; i--)
         {
             allLettersDropped[i].DestroyLetterTile();
         }

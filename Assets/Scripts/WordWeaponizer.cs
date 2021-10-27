@@ -36,7 +36,7 @@ public class WordWeaponizer : MonoBehaviour
     //state
     bool isPlayer = false;
     int powerSign = -1;
-    float energyRegenRate_Target = 0.5f; // units per second;
+    float energyRegenRate_Target = 1.0f; // units per second; previously 0.5
     float energyRegenRate_Current;
     float energyRegenDriftRate = 0.1f; //how fast the current energy regen rate drifts back to its target. 
     [SerializeField] float currentEnergyLevel;

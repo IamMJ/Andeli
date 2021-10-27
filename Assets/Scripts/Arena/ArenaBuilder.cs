@@ -197,6 +197,7 @@ public class ArenaBuilder : MonoBehaviour
 
         CloseDownArena();
         dpd.ActivateDebriefPanel(didPlayerWin, player, enemy, timeElapsed);
+        arenaStarter.DeactivateArenaStarter(didPlayerWin);
         vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
     }
 
@@ -218,7 +219,7 @@ public class ArenaBuilder : MonoBehaviour
         //{
         //    element.RemoveArenaWall();
         //}
-        arenaStarter.DeactivateArenaStarter();
+
         // For now, destroy the statue, but later replace with a broken statue, perhaps?
         player.GetComponent<WordBuilder>().ClearCurrentWord();
         playerWWZ.ResetEnergyStats();
