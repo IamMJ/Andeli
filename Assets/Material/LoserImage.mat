@@ -106,7 +106,7 @@ Material:
     - _DistortTexXSpeed: 5
     - _DistortTexYSpeed: 5
     - _EnableExternalAlpha: 0
-    - _FadeAmount: 1.0013875
+    - _FadeAmount: 1.0023111
     - _FadeBurnGlow: 16
     - _FadeBurnTransition: 0.075
     - _FadeBurnWidth: 0.025
