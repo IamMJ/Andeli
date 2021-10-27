@@ -86,7 +86,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puffPrefab: {fileID: 3275589096942137550, guid: f7bd7c40ecca9e4478d0440b0fb5675a, type: 3}
-  normalSpellPrefab: {fileID: 7941282901840960525, guid: 78ce9360bedd441439864ad2c4ce958f, type: 3}
+  normalSpellPrefab: {fileID: 2434395926495251379, guid: 4801c0bfbed988b428de47e80cfb57f5, type: 3}
+  shinySpellPrefab: {fileID: 7220383005889565796, guid: f2f1dcce4e4e8ab40a8612d7a74089ec, type: 3}
   freezeSpellPrefab: {fileID: 6886851091308245794, guid: c5bafa82922014b4d9a8b3634cc06e3f, type: 3}
   wispySpellPrefab: {fileID: 6886851091308245794, guid: a35557762df88b341b3f36074fdbfd8c, type: 3}
   normalSpellCastClip: {fileID: 8300000, guid: d11792a99ee7c3143a190790c99351bc, type: 3}

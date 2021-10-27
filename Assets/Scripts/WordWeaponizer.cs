@@ -7,6 +7,7 @@ public class WordWeaponizer : MonoBehaviour
 {
     [SerializeField] GameObject puffPrefab = null;
     [SerializeField] GameObject normalSpellPrefab = null;
+    [SerializeField] GameObject shinySpellPrefab = null;
     [SerializeField] GameObject freezeSpellPrefab = null;
     [SerializeField] GameObject wispySpellPrefab = null;
     [SerializeField] AudioClip normalSpellCastClip = null;
@@ -238,7 +239,7 @@ public class WordWeaponizer : MonoBehaviour
 
                 case TrueLetter.Ability.Shiny:
                     float bonusPower = activatedLetter.Power_Player;
-                    CreateSpell(targetWMM.transform, bonusPower, TrueLetter.Ability.Normal);
+                    CreateSpell(targetWMM.transform, bonusPower, TrueLetter.Ability.Shiny);
                     break;
 
                 case TrueLetter.Ability.Frozen:
@@ -309,6 +310,12 @@ public class WordWeaponizer : MonoBehaviour
             case TrueLetter.Ability.Normal:
                 spell = Instantiate(normalSpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
                 spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed;
+                spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Normal);
+                return;
+
+            case TrueLetter.Ability.Shiny:
+                spell = Instantiate(shinySpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
+                spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed/2f;
                 spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Normal);
                 return;
 
