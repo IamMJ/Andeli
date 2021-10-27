@@ -234,9 +234,13 @@ public class NPCDialogManager : MonoBehaviour
             string testKeyword = bark.KeywordToShowFor;
             string bannedKeyword = bark.KeywordToHideFrom;
 
-            if (specificKeyword == testKeyword && specificKeyword != bannedKeyword)
+            if (specificKeyword != bannedKeyword)
             {
-                availBarks.Add(bark);
+                if (testKeyword == "" || (testKeyword != "" && specificKeyword == testKeyword))
+                {
+                    availBarks.Add(bark);
+                }
+
             }
         }
         return availBarks;

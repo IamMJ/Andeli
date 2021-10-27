@@ -206,8 +206,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5918a8e0e92f4674eb7e95d451968c73, type: 2}
   allReplyBarks: []
   allCombatBarks:
-  - {fileID: 11400000, guid: 1b9b3d3a697c4a849bf5efdaad0e71fe, type: 2}
-  - {fileID: 11400000, guid: 5918a8e0e92f4674eb7e95d451968c73, type: 2}
+  - {fileID: 11400000, guid: 5731fb2b3f6e0cf49ba39907c57077ca, type: 2}
+  - {fileID: 11400000, guid: 87f7e7d8d660f5740a33fc4ac756ad3d, type: 2}
   allConversations: []
   availablePeaceBarks: []
   availableReplyBarks: []
@@ -224,7 +224,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6135404392772274270}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: cc8b1f171b55c4f41bf22bddc8cdfd17, type: 3}
