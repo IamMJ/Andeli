@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deb91c28e7d83994dbbd65fee2cabde6, type: 3}
+  m_Name: Conv0 1
+  m_EditorClassIdentifier: 
+  NPCText: Terrible Obelisks have arisen overnight. They threaten my people.
+  NPCSprite: {fileID: 7627744279514922280, guid: 725ba54183346334bbe8dd53a52e7a8b, type: 3}
+  PlayerText_0: I see
+  resultFromOption0: 0
+  PlayerText_1: I can not help you
+  resultFromOption1: 3
+  Destination: {x: 0, y: 0}

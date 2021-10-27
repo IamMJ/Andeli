@@ -13,6 +13,7 @@ public abstract class SpellingStrategy : MonoBehaviour
     /// It should always strive to have a Current Best LTT available for the strategy brain. 
     /// </summary>
     protected WordBuilder wb;
+    protected GameController gc;
     protected WordWeaponizer wwz;
     protected SpeedKeeper sk;
     protected StrategyBrainV2 sb;
@@ -39,6 +40,7 @@ public abstract class SpellingStrategy : MonoBehaviour
         sk = GetComponent<SpeedKeeper>();
 
         wwz = GetComponent<WordWeaponizer>();
+        gc = FindObjectOfType<GameController>();
         wv = FindObjectOfType<WordValidater>();
         ltd = FindObjectOfType<LetterTileDropper>();
         if (ltd)
@@ -79,18 +81,20 @@ public abstract class SpellingStrategy : MonoBehaviour
     protected virtual void ModifyEvaluatedLetterDictionary(LetterTile modifiedLT, bool wasAdded)
     {
         evaluatedLTs.Clear();
-        if (true) // TODO hook this into a debug thing later
+        if (gc.debug_ShowAILetterValues) // TODO hook this into a debug thing later
         {
             List<LetterTile> allLTs = ltd.FindAllReachableLetterTiles(transform.position, 100);
             foreach (var el in allLTs)
             {
                 el.AssignAIValueForDebug(0f);
             }
-            foreach (var elem in ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed))
-            {
-                evaluatedLTs.Add(elem, GenerateValueForLetterTile(elem));
-            }
         }
+
+        foreach (var elem in ltd.FindAllReachableLetterTiles(transform.position, sk.CurrentSpeed))
+        {
+            evaluatedLTs.Add(elem, GenerateValueForLetterTile(elem));
+        }
+
 
         UpdateBestLTTOnDictionaryValueCalculated();
     }

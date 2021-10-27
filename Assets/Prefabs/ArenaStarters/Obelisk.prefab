@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7149435787994042500}
   - component: {fileID: 7295456817403015966}
   - component: {fileID: 6243443088450445721}
+  - component: {fileID: 8770432451960211169}
   m_Layer: 13
   m_Name: Obelisk
   m_TagString: Obelisk
@@ -149,6 +150,9 @@ MonoBehaviour:
   arenaBuilderPrefab: {fileID: 7351801026652380497, guid: a2f7ccd8cac18f14bbddbcce0f833d87, type: 3}
   inactiveSprite: {fileID: 21300000, guid: 61b37b9c66f3f094e87f6f2086d91554, type: 3}
   ArenaEnemyPrefab: {fileID: 6646722358577865907, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
+  keywordsRequiredForCombat: []
+  keywordGivenUponVictory: 
+  keywordGivenUponDefeat: 
   canBeDestroyed: 1
   arenaTriggerRange: 1.5
 --- !u!95 &7295456817403015966
@@ -184,3 +188,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arenaSetting_Default: {fileID: 11400000, guid: ac7ffc8e33905ce46b1c5448d2280cb3, type: 2}
   arenaSetting: {fileID: 11400000, guid: ac7ffc8e33905ce46b1c5448d2280cb3, type: 2}
+--- !u!114 &8770432451960211169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6135404392772274270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa74b9e7b180a34795f92947b9ef330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allPeaceBarks:
+  - {fileID: 11400000, guid: 1b9b3d3a697c4a849bf5efdaad0e71fe, type: 2}
+  - {fileID: 11400000, guid: 5918a8e0e92f4674eb7e95d451968c73, type: 2}
+  allReplyBarks: []
+  allCombatBarks:
+  - {fileID: 11400000, guid: 1b9b3d3a697c4a849bf5efdaad0e71fe, type: 2}
+  - {fileID: 11400000, guid: 5918a8e0e92f4674eb7e95d451968c73, type: 2}
+  allConversations: []
+  availablePeaceBarks: []
+  availableReplyBarks: []
+  availableCombatBarks: []
+  availableConversations: []
+  barkPrefab: {fileID: 4643434310906258457, guid: 27b3356d5353b874db5335774864c84c, type: 3}
+  noticeMePrefab: {fileID: 0}
+  timeBetweenBarks_average: 4

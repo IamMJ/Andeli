@@ -33,9 +33,9 @@ public class NPCDialogManager : MonoBehaviour
 
     //state
     bool isPlayerInRange = false;
-    int currentBarkIndex = -1;
+    [SerializeField] int currentBarkIndex = -1;
     protected float timeForNextConvo = 0;
-    protected float timeForNextBark;
+    protected float timeForNextBark = 0;
     BarkShell currentBark;
 
 
@@ -48,6 +48,10 @@ public class NPCDialogManager : MonoBehaviour
         gc.OnGameStart += RespondToGameStart;
         timeForNextBark = Time.time + 2;
         timeForNextConvo = Time.time + 2;
+
+        currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
+        currentBark.ActivateBark(null, transform);
+
 
     }
 
@@ -68,8 +72,6 @@ public class NPCDialogManager : MonoBehaviour
         pm.OnKeywordAdded += RespondToPlayerGainingKeyword;
     }
 
-
-
     private void RespondToPlayerGainingKeyword(string newKeyword)
     {
         availableConversations = RebuildAvailableConversationsBasedOnPlayerKnownKeywords(newKeyword);
@@ -88,17 +90,18 @@ public class NPCDialogManager : MonoBehaviour
         currentBarkIndex = 0;
     }
 
-    // Update is called once per frame
+
     protected virtual void Update()
     {
         if (gc.isPaused) { return; }
 
         if (Time.time > timeForNextBark && gc.isInGame && isPlayerInRange)
         {
+            //Debug.Log("in range, updating bark for " + gameObject.name);
             UpdateBark();
         }
 
-        if (noticeMe && noticeMe.isActivated)
+        if (brain && noticeMe && noticeMe.isActivated)
         {
             ListenForConversationEntryAttempt();
         }       
@@ -177,6 +180,7 @@ public class NPCDialogManager : MonoBehaviour
 
     protected void UpdateBark()
     {
+        
         Bark bark;
         if (gc.isInArena)
         {
@@ -199,16 +203,10 @@ public class NPCDialogManager : MonoBehaviour
             }
             bark = availablePeaceBarks[currentBarkIndex];
         }
-        
-        if (currentBark == null)
-        {
-            currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
-        }
-        else
-        {
-            currentBark.ActivateBark(bark, transform);
-            timeForNextBark = Time.time + (timeBetweenBarks_average * UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
-        }
+
+        currentBark.ActivateBark(bark, transform);
+        timeForNextBark = Time.time + (timeBetweenBarks_average * UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;
+
     }
         
     

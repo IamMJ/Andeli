@@ -16,6 +16,14 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allReplyBarks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allCombatBarks.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: allPeaceBarks.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 2031bc8c04161b945821d65b6bc7c736, type: 2}
@@ -23,6 +31,18 @@ PrefabInstance:
       propertyPath: allPeaceBarks.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 8e8a0e50c1837734daced27bd40d3305, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allReplyBarks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 27c0c34d5717399449ce2305e01aaf39, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allCombatBarks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b75005bca86a9c42a97a824cd15428e, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allCombatBarks.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: bcf72225637b000439aa90ea06e5a83a, type: 2}
     - target: {fileID: 1629728869582127544, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_Sprite
       value: 

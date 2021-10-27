@@ -12,7 +12,7 @@ public class BarkShell : MonoBehaviour
     SpriteRenderer sr;
 
     //param
-    Vector3 offsetVector = new Vector3(0, 1,0);
+    [SerializeField] Vector3 offsetVector = new Vector3(0, 1,0);
     float fadeoutTime = 1;
     Color defaultTextColor = Color.black;
     Color defaultBGColor = new Color(1,1,1,0.5f);
@@ -30,12 +30,17 @@ public class BarkShell : MonoBehaviour
         sr = GetComponentInChildren<SpriteRenderer>();
         tmp = GetComponent<TextMeshPro>();
         tmpRT = GetComponent<RectTransform>();
+        DeactivateBark();
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = followTarget.position + offsetVector;
+        if (followTarget)
+        {
+            transform.position = followTarget.position + offsetVector;
+        }
+
         //if (Time.time > beginFadeTime)
         //{
         //    factor -= (Time.deltaTime / fadeoutTime);
@@ -51,14 +56,17 @@ public class BarkShell : MonoBehaviour
     public void ActivateBark(Bark bark, Transform transformToFollow)
     {
         if (bark == null) { return; }
-        if (transformToFollow == null) { return; }
+
         currentBark = bark;
         tmp.color = currentBark.DisplayColor;
         tmp.SetText(currentBark.BarkText);
         sr.color = defaultBGColor;
         RescaleImageToFitText();
-        
-        followTarget = transformToFollow;
+
+        if (transformToFollow)
+        {
+            followTarget = transformToFollow;
+        }
         beginFadeTime = Time.time + bark.DisplayTime;
     }
 

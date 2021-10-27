@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
     public enum StartMode { Story, Skirmish, Tutorial};
 
     //param
-    Vector2 storyStartLocation = new Vector2(10, -15);
+    Vector2 storyStartLocation = new Vector2(-3, -15);
     Vector2 tutorialStartLocation = new Vector2(102, 66);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
     int cameraSize_ZoomedIn = 10;

@@ -76,6 +76,10 @@ public class OptionMenuDriver : MonoBehaviour
 
     public void ToggleAIValues()
     {
+        if (!gc)
+        {
+            gc = FindObjectOfType<GameController>();
+        }
         gc.debug_ShowAILetterValues = !gc.debug_ShowAILetterValues;
         if (gc.debug_ShowAILetterValues)
         {
