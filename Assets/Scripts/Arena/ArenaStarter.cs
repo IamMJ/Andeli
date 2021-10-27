@@ -7,6 +7,7 @@ public class ArenaStarter : MonoBehaviour
 {
     [SerializeField] GameObject arenaBuilderPrefab = null;
     [SerializeField] Sprite inactiveSprite = null;
+    [SerializeField] AudioClip defeatedSound = null;
     Sprite activeSprite;
     [SerializeField] public GameObject ArenaEnemyPrefab = null;
 
@@ -18,6 +19,8 @@ public class ArenaStarter : MonoBehaviour
     SpriteRenderer sr;
     Animator anim;
     PlayerMemory pm;
+    NPCDialogManager ndm;
+    AudioSource auso;
 
     //param
     [SerializeField] string[] keywordsRequiredForCombat = null;
@@ -44,6 +47,8 @@ public class ArenaStarter : MonoBehaviour
         activeSprite = sr.sprite;
         anim = GetComponent<Animator>();
         pm = GetComponent<PlayerMemory>();
+        ndm = GetComponent<NPCDialogManager>();
+        auso = GetComponent<AudioSource>();
     }
 
     private void HandleOnGameStart()
@@ -109,6 +114,11 @@ public class ArenaStarter : MonoBehaviour
                 anim.enabled = false;
             }
 
+            if (ndm)
+            {
+                ndm.enabled = false;
+            }
+            auso.PlayOneShot(defeatedSound);
             sr.sprite = inactiveSprite;
         }
         else
@@ -143,7 +153,10 @@ public class ArenaStarter : MonoBehaviour
         {
             anim.enabled = true;
         }
-
+        if (ndm)
+        {
+            ndm.enabled = true;
+        }
         //GridModifier.UnknitAllGridGraphs(transform);
     }
 

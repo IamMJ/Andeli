@@ -14,10 +14,6 @@ GameObject:
   - component: {fileID: -8068871392914338238}
   - component: {fileID: 7149435787994042500}
   - component: {fileID: 6243443088450445721}
-  - component: {fileID: -1865689111700366826}
-  - component: {fileID: -2115503530108020786}
-  - component: {fileID: 5588489789330998112}
-  - component: {fileID: 8617796335467865059}
   m_Layer: 13
   m_Name: Quintain_ArenaStarter
   m_TagString: Obelisk
@@ -152,6 +148,9 @@ MonoBehaviour:
   arenaBuilderPrefab: {fileID: 7351801026652380497, guid: d404e3b67bb25074497454435e73c70b, type: 3}
   inactiveSprite: {fileID: 21300000, guid: 61b37b9c66f3f094e87f6f2086d91554, type: 3}
   ArenaEnemyPrefab: {fileID: 6646722358577865907, guid: 0a0819c3d6dbeaf4f9958e8b39440fd7, type: 3}
+  keywordsRequiredForCombat: []
+  keywordGivenUponVictory: 
+  keywordGivenUponDefeat: 
   canBeDestroyed: 0
   arenaTriggerRange: 1.5
 --- !u!114 &6243443088450445721
@@ -168,66 +167,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arenaSetting_Default: {fileID: 11400000, guid: ac7ffc8e33905ce46b1c5448d2280cb3, type: 2}
   arenaSetting: {fileID: 11400000, guid: ac7ffc8e33905ce46b1c5448d2280cb3, type: 2}
---- !u!114 &-1865689111700366826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6135404392772274270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0779bd952808024449fbf46c6c046b21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-2115503530108020786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6135404392772274270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e359333152cd32b4290df3b6669d511d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  puffPrefab: {fileID: 0}
-  normalSpellPrefab: {fileID: 0}
-  freezeSpellPrefab: {fileID: 0}
-  wispySpellPrefab: {fileID: 0}
-  normalSpellCastClip: {fileID: 0}
-  memory: {fileID: 0}
-  currentEnemy: {fileID: 0}
---- !u!114 &5588489789330998112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6135404392772274270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fac6abb10efad4346add361fc271ba64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8617796335467865059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6135404392772274270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f58403573c0a2f94c8114a3053b1ff15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  addLetterToSwordClip: {fileID: 0}
-  addLetterToBagClip: {fileID: 0}
-  destroyLetterClip: {fileID: 0}
-  lettersOnSword: []
-  currentWord: 
-  CurrentPower: 0
-  TargetLetterTile: {fileID: 0}
-  currentTargetChar: 0

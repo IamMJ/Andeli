@@ -143,10 +143,6 @@ public class NPCDialogManager : MonoBehaviour
         if (availableReplyBarks.Count == 0) { return; }
         int rand = UnityEngine.Random.Range(0, availableReplyBarks.Count);
         Bark bark = availableReplyBarks[rand];
-        if (!currentBark)
-        {
-            currentBark = Instantiate(barkPrefab).GetComponent<BarkShell>();
-        }
         currentBark.ActivateBark(bark, transform);
 
         timeForNextBark = Time.time + (timeBetweenBarks_average*UnityEngine.Random.Range(0.8f, 1.2f)) + bark.DisplayTime;

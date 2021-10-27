@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arenaBuilderPrefab: {fileID: 7351801026652380497, guid: a2f7ccd8cac18f14bbddbcce0f833d87, type: 3}
   inactiveSprite: {fileID: 21300000, guid: 61b37b9c66f3f094e87f6f2086d91554, type: 3}
+  defeatedSound: {fileID: 8300000, guid: 92ab54679daacca4cb28f150626786cc, type: 3}
   ArenaEnemyPrefab: {fileID: 6646722358577865907, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
   keywordsRequiredForCombat: []
   keywordGivenUponVictory: 
@@ -224,20 +225,20 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6135404392772274270}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: cc8b1f171b55c4f41bf22bddc8cdfd17, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0
   MaxDistance: 5
   Pan2D: 0
   rolloffMode: 1
@@ -273,7 +274,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0

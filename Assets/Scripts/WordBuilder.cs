@@ -206,7 +206,6 @@ public class WordBuilder : MonoBehaviour
             newSwordWord.letterLetters[i] = lettersOnSword[i].Letter.ToString();
             newSwordWord.Power += lettersOnSword[i].Power_Player;
             newSwordWord.word += lettersOnSword[i].Letter;
-            Debug.Log($"new sword word: {newSwordWord.word}");
         }
         currentWord = newSwordWord.word;
         CurrentPower = newSwordWord.Power;
