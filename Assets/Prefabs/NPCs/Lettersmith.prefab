@@ -107,6 +107,38 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 3dac0b326777f394992cafd7ac09a56b, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allConversations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allReplyBarks.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allConversations.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3fb925df926a0424eb0ae56374f21c3f, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 81c18a8413c07cd4b9af6b0b4230d80f, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: df68d1f0d44406d4c99cf79e3cfec1c5, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allPeaceBarks.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 806a2ed036f49ed43b132b584653b7d5, type: 2}
+    - target: {fileID: 1069922844137786055, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
+      propertyPath: allReplyBarks.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 27c0c34d5717399449ce2305e01aaf39, type: 2}
     - target: {fileID: 1629728869582127544, guid: 02673df20e1180e4ab833d7b02506d12, type: 3}
       propertyPath: m_Sprite
       value: 
