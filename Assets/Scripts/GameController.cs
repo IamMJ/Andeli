@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject playerPrefab = null;
     [SerializeField] GameObject driftingThingPrefab = null;
 
+    Librarian lib;
+
     GameObject driftingThing;
     GameObject player;
     CinemachineVirtualCamera cvc;
@@ -18,6 +20,7 @@ public class GameController : MonoBehaviour
     WordValidater wv;
     VictoryMeter vm;
     GameStateHolder gash;
+    UI_Controller uic;
 
     UIDriver uid;
     ConversationPanelDriver cpd;
@@ -25,7 +28,7 @@ public class GameController : MonoBehaviour
     DebriefPanelDriver dpd;
     RewardPanelDriver rpd;
     AdvertPanelDriver apd;
-    MainMenuDriver mmd;
+    StartMenuPanel mmd;
     LetterPowerMenuDriver lpmd;
     OptionMenuDriver pmd;
 
@@ -36,7 +39,6 @@ public class GameController : MonoBehaviour
 
     public Action OnGameStart;
 
-    public enum StartMode { Story, Skirmish, Tutorial};
 
     //param
     Vector2 storyStartLocation = new Vector2(-3, -15);
@@ -47,10 +49,6 @@ public class GameController : MonoBehaviour
     int zoomRate = 10;
     Vector3 cameraOffset_Arena = new Vector3(0, -1.5f, 0);
     Vector3 cameraOffset_Overworld = Vector3.zero;
-
-
-    //state
-    public StartMode startMode = StartMode.Story;
 
     int pauseRequests = 0;
     public bool isPaused = false;
@@ -80,26 +78,25 @@ public class GameController : MonoBehaviour
     {
         //sl = FindObjectOfType<SceneLoader>();
         //sl.OnSceneChange += CheckGameStateBasedOnSceneChange;
+        lib = FindObjectOfType<Librarian>();
+        uic = lib.ui_Controller;
+        uic.SetContext(UI_Controller.Context.StartMenu);
+
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         ppc = Camera.main.GetComponent<PixelPerfectCamera>();
-        uid = FindObjectOfType<UIDriver>();
-        cpd = FindObjectOfType<ConversationPanelDriver>();
-        dpd = FindObjectOfType<DebriefPanelDriver>();
-        bpd = FindObjectOfType<BriefPanelDriver>();
-        rpd = FindObjectOfType<RewardPanelDriver>();
-        apd = FindObjectOfType<AdvertPanelDriver>();
+        //uid = FindObjectOfType<UIDriver>();
+        //cpd = FindObjectOfType<ConversationPanelDriver>();
+        //dpd = FindObjectOfType<DebriefPanelDriver>();
+        //bpd = FindObjectOfType<BriefPanelDriver>();
+        //rpd = FindObjectOfType<RewardPanelDriver>();
+        //apd = FindObjectOfType<AdvertPanelDriver>();
 
-        cpd.ShowHideEntirePanel(false);
-        dpd.ShowHideEntirePanel(false);
-        bpd.ShowHideEntirePanel(false);
-        rpd.ShowHideEntirePanel(false);
-        apd.ShowHideEntirePanel(false);
 
 
         mc = FindObjectOfType<MusicController>();
-        uid.HideAllOverworldUIElements();
-        uid.ShowHideMainMenu(true);
-        uid.ShowHideDebugMenu(debug_ShowDebugMenu);
+        //uid.HideAllOverworldUIElements();
+        //uid.ShowHideMainMenu(true);
+        //uid.ShowHideDebugMenu(debug_ShowDebugMenu);
 
         gash = FindObjectOfType<GameStateHolder>();
         vm = FindObjectOfType<VictoryMeter>();
@@ -108,77 +105,77 @@ public class GameController : MonoBehaviour
         currentZoom = cameraSize_ZoomedOut;
         ppc.enabled = true;
 
-        BeginIdleMode();
+        //BeginIdleMode();
     }
 
-    private void BeginIdleMode()
-    {
-        ResumeGameSpeed(true);
-        if (!driftingThing)
-        {
-            driftingThing = Instantiate(driftingThingPrefab, Vector2.zero, Quaternion.identity);
-        }
+    //private void BeginIdleMode()
+    //{
+    //    ResumeGameSpeed(true);
+    //    if (!driftingThing)
+    //    {
+    //        driftingThing = Instantiate(driftingThingPrefab, Vector2.zero, Quaternion.identity);
+    //    }
 
-        SetCameraToIdleMode();
-        // Create a bird or fox to run around the map?
+    //    SetCameraToIdleMode();
+    //    // Create a bird or fox to run around the map?
  
-    }
+    //}
 
-    private void SetCameraToIdleMode()
-    {
-        cvc.Follow = driftingThing.transform;
-        driftingThing.SetActive(true);
-        StopAllCoroutines();
-        StartCoroutine(ZoomCamera(false));
-        SetCameraToOverworldOffset();
-        // move cvc somewhere other than location where player quit?
-    }
+    //private void SetCameraToIdleMode()
+    //{
+    //    cvc.Follow = driftingThing.transform;
+    //    driftingThing.SetActive(true);
+    //    StopAllCoroutines();
+    //    StartCoroutine(ZoomCamera(false));
+    //    SetCameraToOverworldOffset();
+    //    // move cvc somewhere other than location where player quit?
+    //}
 
-    IEnumerator ZoomCamera(bool shouldZoomIn)
-    {
-        if (shouldZoomIn)
-        {
+    //IEnumerator ZoomCamera(bool shouldZoomIn)
+    //{
+    //    if (shouldZoomIn)
+    //    {
             
-            Time.timeScale = 1;
-            ppc.enabled = false;
-            while (currentZoom > cameraSize_ZoomedIn)
-            {
-                currentZoom -= Time.deltaTime * zoomRate;
+    //        Time.timeScale = 1;
+    //        ppc.enabled = false;
+    //        while (currentZoom > cameraSize_ZoomedIn)
+    //        {
+    //            currentZoom -= Time.deltaTime * zoomRate;
                 
-                float factor = Mathf.InverseLerp(cameraSize_ZoomedIn, cameraSize_ZoomedOut, currentZoom);
-                mc.FadeMainThemeWithZoom(factor);
-                if (currentZoom - cameraSize_ZoomedIn <= 1)
-                {
-                    ppc.enabled = true;
-                    ppc.assetsPPU = 16;
-                }
-                currentZoom = Mathf.Clamp(currentZoom, cameraSize_ZoomedIn, cameraSize_ZoomedOut);
-                cvc.m_Lens.OrthographicSize = currentZoom;
-                yield return new WaitForEndOfFrame();
-            }
-        }
-        else
-        {
-            Time.timeScale = 1;
-            ppc.enabled = false;
-            while (currentZoom < cameraSize_ZoomedOut)
-            {
-                currentZoom += Time.deltaTime * zoomRate;
-                float factor = Mathf.InverseLerp(cameraSize_ZoomedIn, cameraSize_ZoomedOut, currentZoom);
-                mc.FadeMainThemeWithZoom(factor);
-                if (cameraSize_ZoomedOut - currentZoom <= 1)
-                {
-                    ppc.enabled = true;
-                    ppc.assetsPPU = 4;
-                }
-                currentZoom = Mathf.Clamp(currentZoom, cameraSize_ZoomedIn, cameraSize_ZoomedOut);
-                cvc.m_Lens.OrthographicSize = currentZoom;
-                yield return new WaitForEndOfFrame();
-            }
+    //            float factor = Mathf.InverseLerp(cameraSize_ZoomedIn, cameraSize_ZoomedOut, currentZoom);
+    //            mc.FadeMainThemeWithZoom(factor);
+    //            if (currentZoom - cameraSize_ZoomedIn <= 1)
+    //            {
+    //                ppc.enabled = true;
+    //                ppc.assetsPPU = 16;
+    //            }
+    //            currentZoom = Mathf.Clamp(currentZoom, cameraSize_ZoomedIn, cameraSize_ZoomedOut);
+    //            cvc.m_Lens.OrthographicSize = currentZoom;
+    //            yield return new WaitForEndOfFrame();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Time.timeScale = 1;
+    //        ppc.enabled = false;
+    //        while (currentZoom < cameraSize_ZoomedOut)
+    //        {
+    //            currentZoom += Time.deltaTime * zoomRate;
+    //            float factor = Mathf.InverseLerp(cameraSize_ZoomedIn, cameraSize_ZoomedOut, currentZoom);
+    //            mc.FadeMainThemeWithZoom(factor);
+    //            if (cameraSize_ZoomedOut - currentZoom <= 1)
+    //            {
+    //                ppc.enabled = true;
+    //                ppc.assetsPPU = 4;
+    //            }
+    //            currentZoom = Mathf.Clamp(currentZoom, cameraSize_ZoomedIn, cameraSize_ZoomedOut);
+    //            cvc.m_Lens.OrthographicSize = currentZoom;
+    //            yield return new WaitForEndOfFrame();
+    //        }
 
-        }
+    //    }
 
-    }
+    //}
 
     //private void CheckGameStateBasedOnSceneChange(int newScene)
     //{
@@ -196,17 +193,17 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         isInGame = true;
-        gash.RestoreAllObelisks();
-        uid.ShowOverworldUIElements();
+        //gash.RestoreAllObelisks();
+        uic.SetContext(UI_Controller.Context.ArenaMenu);
         //ResumeGameSpeed(true);
-        SpawnPlayer();
-        uid.ShowHideMainMenu(false);
-        uid.ShowOverworldUIElements();
-        SetCameraToFollowPlayer();
-        SetCameraToOverworldOffset();
-        AdjustGameForStartMode();
-        uid.ShowHideDebugMenu(debug_ShowDebugMenu);
-        OnGameStart.Invoke();
+        //SpawnPlayer();
+        //uid.ShowHideMainMenu(false);
+        //uid.ShowOverworldUIElements();
+        //SetCameraToFollowPlayer();
+        //SetCameraToOverworldOffset();
+        ////AdjustGameForStartMode();
+        //uid.ShowHideDebugMenu(debug_ShowDebugMenu);
+        //OnGameStart.Invoke();
     }
 
     private void SpawnPlayer()
@@ -227,24 +224,24 @@ public class GameController : MonoBehaviour
             cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         }
         cvc.Follow = player.transform;
-        StopAllCoroutines();
-        StartCoroutine(ZoomCamera(true));
+        //StopAllCoroutines();
+        //StartCoroutine(ZoomCamera(true));
     }
 
-    private void AdjustGameForStartMode()
-    {
+    //private void AdjustGameForStartMode()
+    //{
 
-        switch (startMode)
-        {
-            case StartMode.Story:
-                player.transform.position = tutorialStartLocation;
-                return;
+    //    switch (startMode)
+    //    {
+    //        case StartMode.Story:
+    //            player.transform.position = tutorialStartLocation;
+    //            return;
 
-            case StartMode.Skirmish:
-                player.transform.position = skirmishStartLocation;
-                return;
-        }
-    }
+    //        case StartMode.Skirmish:
+    //            player.transform.position = skirmishStartLocation;
+    //            return;
+    //    }
+    //}
 
 
     #endregion
@@ -260,12 +257,12 @@ public class GameController : MonoBehaviour
             ResumeGameSpeed(true);
         }
         Destroy(player);
-        uid.HideAllOverworldUIElements();
-        uid.ShowHideMainMenu(true);
-        cpd.ShowHideEntirePanel(false);
-        dpd.ShowHideEntirePanel(false);
-        bpd.ShowHideEntirePanel(false);
-        BeginIdleMode();
+        //uid.HideAllOverworldUIElements();
+        //uid.ShowHideMainMenu(true);
+        //cpd.ShowHideEntirePanel(false);
+        //dpd.ShowHideEntirePanel(false);
+        //bpd.ShowHideEntirePanel(false);
+        //BeginIdleMode();
         // uid.disable or hide everything
         //
     }

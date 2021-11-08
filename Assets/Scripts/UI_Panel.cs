@@ -4,5 +4,13 @@ using UnityEngine;
 
 public abstract class UI_Panel : MonoBehaviour
 {
-    abstract public void ShowHideElements(bool shouldBeShown);
+    [SerializeField] protected GameObject[] elements = null;
+     
+    public virtual void ShowHideElements(bool shouldBeShown) 
+    {
+        foreach (var element in elements)
+        {
+            element.SetActive(shouldBeShown);
+        }
+    }
 }
