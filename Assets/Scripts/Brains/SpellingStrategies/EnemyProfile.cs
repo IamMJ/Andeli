@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "StrategyValues")]
+[CreateAssetMenu(fileName = "EnemyProfile")]
 public class EnemyProfile : ScriptableObject
 {
+    [SerializeField] string enemyName;
+    [SerializeField] Sprite mugShot;
+    [SerializeField] Animator animator;
+
+
     public float MinimumPoints = 2;
     public float PointsWeight = 1f;
 

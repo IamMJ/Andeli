@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "Conversation Step")]
+//[CreateAssetMenu(fileName = "Conversation Step")]
 public class ConversationStep : ScriptableObject
 {
     [SerializeField] public string NPCText = "";

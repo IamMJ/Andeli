@@ -82,6 +82,7 @@ public class GameController : MonoBehaviour
         uic = lib.ui_Controller;
         uic.SetContext(UI_Controller.Context.StartMenu);
 
+
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         ppc = Camera.main.GetComponent<PixelPerfectCamera>();
         //uid = FindObjectOfType<UIDriver>();
@@ -194,6 +195,11 @@ public class GameController : MonoBehaviour
     {
         isInGame = true;
         //gash.RestoreAllObelisks();
+
+
+        //Populate enemies on the ArenaMenu, then switch to it.
+
+
         uic.SetContext(UI_Controller.Context.ArenaMenu);
         //ResumeGameSpeed(true);
         //SpawnPlayer();

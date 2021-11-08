@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "Bark")]
+//[CreateAssetMenu(fileName = "My Assets/Bark")]
 
 public class Bark : ScriptableObject
 {
