@@ -5,18 +5,18 @@ using UnityEngine.UI;
 using System;
 using TMPro;
 
-public class UIDriver : MonoBehaviour
+public class CombatPanel : UI_Panel
 {
     //init
-    [SerializeField] GameObject mainMenu = null;
-    [SerializeField] GameObject optionsMenu = null;
-    [SerializeField] GameObject optionsMenuButton = null;
-    [SerializeField] GameObject letterPowersMenu = null;
-    [SerializeField] GameObject letterPowersMenuButton = null;
+    //[SerializeField] GameObject mainMenu = null;
+    //[SerializeField] GameObject optionsMenu = null;
+    //[SerializeField] GameObject optionsMenuButton = null;
+    //[SerializeField] GameObject letterPowersMenu = null;
+    //[SerializeField] GameObject letterPowersMenuButton = null;
+
+    [SerializeField] GameObject[] topPanelElements = null;
 
     [SerializeField] Slider victoryBarSlider = null;
-    [SerializeField] GameObject topBarPanel = null;
-    [SerializeField] GameObject bottomBarPanel = null;
 
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Image attackButtonMain = null;
@@ -33,19 +33,6 @@ public class UIDriver : MonoBehaviour
 
     [SerializeField] GameObject debugMenuPanel = null;
 
-    //[SerializeField] Slider spellEnergySlider_0 = null;
-    //[SerializeField] Slider spellEnergySlider_1 = null;
-    //[SerializeField] Slider spellEnergySlider_2 = null;
-
-    //[SerializeField] Image energySliderFill_0 = null;
-    //[SerializeField] Image energySliderFill_1 = null;
-    //[SerializeField] Image energySliderFill_2 = null;
-
-
-
-    Color fullBar = new Color(1, 1, 0);
-    Color partialBar = new Color(.7169f, .7169f, .3551f);
-
     WordBuilder playerWB;
     BagManager bagman;
     WordWeaponizer playerWWZ;
@@ -54,12 +41,6 @@ public class UIDriver : MonoBehaviour
     Tutor tutor;
     SwordGlowDriver sgd;
     WordValidater wv;
-
-    //param
-    float panelDeployRate = 100f; // pixels per second
-    float topPanelShown_Y = -77f;
-    float topPanelHidden_Y = 100f;
-
 
     //state
     [SerializeField] bool wasLongPress = false;
@@ -70,16 +51,16 @@ public class UIDriver : MonoBehaviour
     [SerializeField] bool canPressAttackButton = false;
     
     public float timeSpentLongPressing { get; private set; }
-    [SerializeField] int wordbarScroll = 0;
-
-
 
     private void Start()
     {
+        Librarian lib = FindObjectOfType<Librarian>();
         sgd = GetComponent<SwordGlowDriver>();
-        wv = FindObjectOfType<WordValidater>();
+        wv = lib.wordValidater;
         bagman = FindObjectOfType<BagManager>();
+
         ClearWordBar();
+        ResetWordTilesToMax();
     }
 
     // Update is called once per frame
@@ -314,35 +295,35 @@ public class UIDriver : MonoBehaviour
 
 
 
-    public void ShowHideMainMenu(bool shouldBeShown)
-    {
-        mainMenu.gameObject.SetActive(shouldBeShown);
-    }
+    //public void ShowHideMainMenu(bool shouldBeShown)
+    //{
+    //    mainMenu.gameObject.SetActive(shouldBeShown);
+    //}
 
-    public void HideAllOverworldUIElements()
-    {
-        //ShowHideTutorialPanel(false);
-        ShowHideBottomPanel(false);
-        ShowHideTopPanel(false);
-        ShowHideVictoryMeter(false);
-        ShowHideLetterPowerButton(false);
-        ShowHideOptionMenuButton(false);
-        ShowHideOptionsMenu(false);
-        ShowHideLetterPowersMenu(false);
-    }
-    public void ShowOverworldUIElements()
-    {
-        ShowHideBottomPanel(false);
-        ShowHideTopPanel(false);
-        ShowHideVictoryMeter(false);
-        ShowHideLetterPowerButton(false);
-        ShowHideOptionMenuButton(true);
-    }
+    //public void HideAllOverworldUIElements()
+    //{
+    //    //ShowHideTutorialPanel(false);
+    //    ShowHideBottomPanel(false);
+    //    ShowHideTopPanel(false);
+    //    ShowHideVictoryMeter(false);
+    //    ShowHideLetterPowerButton(false);
+    //    ShowHideOptionMenuButton(false);
+    //    ShowHideOptionsMenu(false);
+    //    ShowHideLetterPowersMenu(false);
+    //}
+    //public void ShowOverworldUIElements()
+    //{
+    //    ShowHideBottomPanel(false);
+    //    ShowHideTopPanel(false);
+    //    ShowHideVictoryMeter(false);
+    //    ShowHideLetterPowerButton(false);
+    //    ShowHideOptionMenuButton(true);
+    //}
 
-    public void ShowHideDebugMenu(bool shouldBeShown)
-    {
-        debugMenuPanel.SetActive(shouldBeShown);
-    }
+    //public void ShowHideDebugMenu(bool shouldBeShown)
+    //{
+    //    debugMenuPanel.SetActive(shouldBeShown);
+    //}
 
     private void ModifyAttackButtonWithWordValidationUponNewSwordWord(bool isValid)
     {
@@ -360,23 +341,15 @@ public class UIDriver : MonoBehaviour
         }
     }
 
-    private void ShowHideLetterPowerButton(bool shouldBeShown)
-    {
-        letterPowersMenuButton.gameObject.SetActive(shouldBeShown);
-    }
+    //private void ShowHideLetterPowerButton(bool shouldBeShown)
+    //{
+    //    letterPowersMenuButton.gameObject.SetActive(shouldBeShown);
+    //}
 
-    private void ShowHideOptionMenuButton(bool shouldBeShown)
-    {
-        optionsMenuButton.gameObject.SetActive(shouldBeShown);
-    }
-
-    public void ShowArenaUIElements()
-    {
-        ResetWordTilesToMax();
-        ShowHideBottomPanel(true);
-        ShowHideTopPanel(true);
-        ShowHideVictoryMeter(true);
-    }
+    //private void ShowHideOptionMenuButton(bool shouldBeShown)
+    //{
+    //    optionsMenuButton.gameObject.SetActive(shouldBeShown);
+    //}
 
     private void ResetWordTilesToMax()
     {
@@ -393,14 +366,17 @@ public class UIDriver : MonoBehaviour
     public void ShowHideTopPanel(bool shouldBeShown)
     {
         //StartCoroutine(ShowHideTopPanel_Coroutine(shouldBeShown));
-        topBarPanel.SetActive(shouldBeShown);
+        foreach (var element in topPanelElements)
+        {
+            element.SetActive(shouldBeShown);
+        }
 
     }
 
-    private void ShowHideBottomPanel(bool shouldBeShown)
-    {
-        bottomBarPanel.SetActive(shouldBeShown);
-    }
+    //private void ShowHideBottomPanel(bool shouldBeShown)
+    //{
+    //    bottomBarPanel.SetActive(shouldBeShown);
+    //}
 
     private void ShowHideVictoryMeter(bool shouldBeShown)
     {
@@ -440,28 +416,28 @@ public class UIDriver : MonoBehaviour
     //        bagman.ModifyBagsEnabled(2);
     //    }
     //}
-    public void ShowHideOptionsMenu(bool shouldBeShown)
-    {
-        if (!gc)
-        {
-            gc = FindObjectOfType<GameController>();
-        }
-        gc.PauseGame();
+    //public void ShowHideOptionsMenu(bool shouldBeShown)
+    //{
+    //    if (!gc)
+    //    {
+    //        gc = FindObjectOfType<GameController>();
+    //    }
+    //    gc.PauseGame();
 
-        optionsMenu.SetActive(shouldBeShown);
+    //    optionsMenu.SetActive(shouldBeShown);
 
-    }
+    //}
 
-    public void ShowHideLetterPowersMenu(bool shouldBeShown)
-    {
-        if (!gc)
-        {
-            gc = FindObjectOfType<GameController>();
-        }
-        gc.PauseGame();
-        letterPowersMenu.SetActive(shouldBeShown);
+    //public void ShowHideLetterPowersMenu(bool shouldBeShown)
+    //{
+    //    if (!gc)
+    //    {
+    //        gc = FindObjectOfType<GameController>();
+    //    }
+    //    gc.PauseGame();
+    //    letterPowersMenu.SetActive(shouldBeShown);
 
-    }
+    //}
 
     //public TextMeshProUGUI GetTutorialTMP()
     //{

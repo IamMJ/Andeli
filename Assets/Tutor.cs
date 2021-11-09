@@ -18,7 +18,7 @@ public class Tutor : MonoBehaviour
     [SerializeField] GameObject arrowPrefab_UI = null;
     [SerializeField] GameObject arrowPrefab_Worldspace = null;
 
-    UIDriver uid;
+    CombatPanel uid;
     public GameController gc;
 
     RectTransform arrow_UI;
@@ -30,7 +30,7 @@ public class Tutor : MonoBehaviour
 
     private void Start()
     {
-        uid = FindObjectOfType<UIDriver>();
+        uid = FindObjectOfType<CombatPanel>();
         uid.SetTutorRef(this);
         //tutorialTMP = uid.GetTutorialTMP();
         gc = FindObjectOfType<GameController>();

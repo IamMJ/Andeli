@@ -20,7 +20,7 @@ public class WordWeaponizer : MonoBehaviour
     [SerializeField] WordMakerMemory memory;
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
-    UIDriver uid;
+    CombatPanel uid;
     JewelManager jm;
     PlayerMemory pm;
     string testWord;
@@ -53,7 +53,7 @@ public class WordWeaponizer : MonoBehaviour
         {
             isPlayer = true;
             powerSign = 1;
-            uid = FindObjectOfType<UIDriver>();
+            uid = FindObjectOfType<CombatPanel>();
             jm = FindObjectOfType<JewelManager>();
             jm.UpdateJewelImage(100);
 

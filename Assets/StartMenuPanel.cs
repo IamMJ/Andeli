@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class StartMenuPanel : UI_Panel
 {
+    [SerializeField] TextMeshProUGUI lastLetter = null;
+
     Librarian lib;
     GameController gc;
 
@@ -22,6 +25,13 @@ public class StartMenuPanel : UI_Panel
     public void ToggleDebugMenuOption()
     {
         gc = FindObjectOfType<GameController>();
-        gc.ToggleDebugMenuMode();
+        if (gc.ToggleDebugMenuMode())
+        {
+            lastLetter.fontStyle = FontStyles.Italic;
+        }
+        else
+        {
+            lastLetter.fontStyle = FontStyles.Normal;
+        }
     }
 }

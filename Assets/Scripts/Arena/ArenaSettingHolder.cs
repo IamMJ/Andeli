@@ -15,14 +15,14 @@ public class ArenaSettingHolder : MonoBehaviour
     WordBuilder wbd_Player;
     WordBuilder wbd_Enemy;
     VictoryMeter vm;
-    UIDriver uid;
+    CombatPanel uid;
     TutorDialogManager tutorDM;
     
 
     public enum ArenaSettingOptions {Plain, Mists, Sandy, Blizzard, Jungle, Graveyard, Training }
 
     public void SetupArena(LetterTileDropper letterTileDropper, WordMakerMemory playerPlayMem, WordMakerMemory enemyPlayMem,
-        WordWeaponizer wwzPlayer, WordWeaponizer wwzEnemy, WordBuilder wbPlayer, WordBuilder wbEnemy, VictoryMeter vicmet, UIDriver uIDriver)
+        WordWeaponizer wwzPlayer, WordWeaponizer wwzEnemy, WordBuilder wbPlayer, WordBuilder wbEnemy, VictoryMeter vicmet, CombatPanel uIDriver)
     {
         ltd = letterTileDropper;
         playerMemory = playerPlayMem;

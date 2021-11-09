@@ -11,6 +11,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] UI_Panel combatPanel = null;
     [SerializeField] UI_Panel debriefPanel = null;
     [SerializeField] UI_Panel rewardPanel = null;
+    [SerializeField] UI_Panel debugPanel = null;
 
     public enum Context {StartMenu, ArenaMenu, CharacterMenu, Combat, Debrief, Reward}
     void Start()
@@ -75,5 +76,10 @@ public class UI_Controller : MonoBehaviour
                 rewardPanel.ShowHideElements(true);
                 return;
         }
+    }
+
+    public void ShowHideDebugMenu(bool shouldBeShown)
+    {
+        debugPanel.ShowHideElements(shouldBeShown);
     }
 }

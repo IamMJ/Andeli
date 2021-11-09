@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
     GameStateHolder gash;
     UI_Controller uic;
 
-    UIDriver uid;
+    CombatPanel uid;
     ConversationPanelDriver cpd;
     BriefPanelDriver bpd;
     DebriefPanelDriver dpd;
@@ -277,14 +277,15 @@ public class GameController : MonoBehaviour
 
     #region Public Methods
 
-    public void ToggleDebugMenuMode()
+    public bool ToggleDebugMenuMode()
     {
         Debug.Log($"Debug Menu is {debug_ShowDebugMenu}");
         debug_ShowDebugMenu = !debug_ShowDebugMenu;
         if (isInGame)
         {
-            uid.ShowHideDebugMenu(debug_ShowDebugMenu);
+            uic.ShowHideDebugMenu(debug_ShowDebugMenu);
         }
+        return debug_ShowDebugMenu;
     }
     public void SetCameraToArenaOffset()
     {

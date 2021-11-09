@@ -5,7 +5,7 @@ using UnityEngine;
 public class TutorDialogManager : NPCDialogManager
 {
     WordWeaponizer playerWWZ;
-    UIDriver uid;
+    CombatPanel uid;
     BagManager bagman;
 
     //param
@@ -22,7 +22,7 @@ public class TutorDialogManager : NPCDialogManager
     protected override void Start()
     {
         base.Start();
-        uid = FindObjectOfType<UIDriver>();
+        uid = FindObjectOfType<CombatPanel>();
     }
 
     protected override void Update()

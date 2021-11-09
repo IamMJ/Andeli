@@ -10,7 +10,7 @@ public class WordBuilder : MonoBehaviour
     PlayerInput pi;
     protected WordWeaponizer wwz;
     protected WordMakerMemory memory;
-    UIDriver uid;
+    CombatPanel uid;
     ArenaLetterEffectsHandler aleh;
     GameController gc;
     BagManager bagman;
@@ -59,7 +59,7 @@ public class WordBuilder : MonoBehaviour
         if (pi)
         {
             hasUI = true;
-            uid = FindObjectOfType<UIDriver>();
+            uid = FindObjectOfType<CombatPanel>();
             uid.SetPlayerObject(this, wwz, bagman);
             bagman = FindObjectOfType<BagManager>();
             uid.UpdateIgnitionChanceTMP(0);

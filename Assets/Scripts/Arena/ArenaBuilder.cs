@@ -18,7 +18,7 @@ public class ArenaBuilder : MonoBehaviour
     GameController gc;
     VictoryMeter vm;
     GameObject player;
-    UIDriver uid;
+    CombatPanel uid;
     ArenaStarter arenaStarter;
     List<ArenaWall> arenaWallObjects = new List<ArenaWall>();
     TutorDialogManager tutorDM;
@@ -54,8 +54,8 @@ public class ArenaBuilder : MonoBehaviour
         minY += Mathf.RoundToInt(transform.position.y);
         maxY += Mathf.RoundToInt(transform.position.y);
 
-        uid = FindObjectOfType<UIDriver>();
-        uid.ShowArenaUIElements();
+        uid = FindObjectOfType<CombatPanel>();
+        //uid.ShowArenaUIElements();
 
         player = gc.GetPlayer();
         playerWWZ = player.GetComponent<WordWeaponizer>();
@@ -207,7 +207,7 @@ public class ArenaBuilder : MonoBehaviour
 
         gc.SetCameraToOverworldOffset();
         gc.isInArena = false;
-        uid.ShowOverworldUIElements();
+        //uid.ShowOverworldUIElements(); NERG
         Destroy(camMouse);
         cvc.Follow = player.transform;
         //Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
