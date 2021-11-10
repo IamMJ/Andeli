@@ -13,15 +13,27 @@ public class StartMenuPanel : UI_Panel
     private void Start()
     {
         lib = FindObjectOfType<Librarian>();
-        ShowHideElements(true); // This is should always turn itself on
+        gc = lib.gameController;
+        ShowHideElements(true); // The start menu panel should always turn itself on
     }
 
     public void StartGameSelected()
     {
-        gc = lib.gameController;
-        gc.debug_IgniteAll = false;
         gc.StartNewGame();
     }
+
+    public void StartTutorial()
+    {
+        //Start tutorial
+        Debug.Log("Start Tutorial");
+    }
+
+    public void GoToPlayerSelectPanel()
+    {
+        //Switch context to player select screen
+        Debug.Log("Select different player");
+    }
+
     public void ToggleDebugMenuOption()
     {
         gc = FindObjectOfType<GameController>();

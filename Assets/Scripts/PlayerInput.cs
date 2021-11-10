@@ -55,7 +55,7 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        if (!gc.isPaused && !cpd.isDisplayed)
+        if (!gc.isPaused) //&& !cpd.isDisplayed)
         {
             HandleTouchInput();
             HandleMouseInput();

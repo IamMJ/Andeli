@@ -11,7 +11,8 @@ public class ArenaStarter : MonoBehaviour
     Sprite activeSprite;
     [SerializeField] public GameObject ArenaEnemyPrefab = null;
 
-    BriefPanelDriver bpd;
+    Librarian lib;
+    BriefPanel bp;
     ArenaSettingHolder ash;
     GameObject ab;
     GameController gc;
@@ -37,10 +38,12 @@ public class ArenaStarter : MonoBehaviour
 
     private void Start()
     {
-        bpd = FindObjectOfType<BriefPanelDriver>();
+        lib = FindObjectOfType<Librarian>();
+
+        bp = lib.ui_Controller.briefPanel.GetComponent<BriefPanel>();
         gc = FindObjectOfType<GameController>();
         gc.OnGameStart += HandleOnGameStart;
-        player = gc.GetPlayer();
+
         ash = GetComponent<ArenaSettingHolder>();
         GridModifier.UnknitAllGridGraphs(transform);
         sr = GetComponent<SpriteRenderer>();
@@ -77,7 +80,8 @@ public class ArenaStarter : MonoBehaviour
 
             if (hasRequiredKeywords)
             {
-                bpd.ActivateBriefPanel(this, ash.arenaSetting);
+                lib.ui_Controller.SetContext(UI_Controller.Context.Brief);
+                bp.PopulateBriefPanel(this, ash.arenaSetting);
                 gc.PauseGame();
                 timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
             }
@@ -92,15 +96,19 @@ public class ArenaStarter : MonoBehaviour
     public void RetreatFromArena()
     {
         gc.ResumeGameSpeed(false);
+        bp.ShowHideElements(false);
     }
 
     public void StartArena()
     {
+        gc.ResumeGameSpeed(false);
+        bp.ShowHideElements(false);
+
         ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
         arenaBuilder.SetArenaStarter(this, ash);
         arenaBuilder.SetupArena(transform.position);
-        gc.ResumeGameSpeed(false);
+
     }
 
     public void DeactivateArenaStarter(bool didPlayerWin)

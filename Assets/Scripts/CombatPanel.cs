@@ -480,41 +480,13 @@ public class CombatPanel : UI_Panel
 
     public void AddLetterToWordBar(LetterTile letterTile, char letter, int indexInWord)
     {
-        if (indexInWord >= wordboxImages.Length)
-        {
-            ScrollLettersLeft();
-        }
         SpriteRenderer sr = letterTile.GetComponent<SpriteRenderer>();
         LetterTile.SpriteColorYMod sc = letterTile.GetSpriteColorFromAbility(letterTile.Ability_Player);
-        wordboxImages[indexInWord - wordbarScroll].sprite = sc.Sprite;
-        wordboxImages[indexInWord - wordbarScroll].color = sc.Color;
-        wordboxTMPs[indexInWord - wordbarScroll].text = letter.ToString();
+        wordboxImages[indexInWord].sprite = sc.Sprite;
+        wordboxImages[indexInWord].color = sc.Color;
+        wordboxTMPs[indexInWord].text = letter.ToString();
         //wordboxTMPs[indexInWord - wordbarScroll].GetComponent<RectTransform>().anchoredPosition = new Vector2(0, sc.YMod);
-    }
-
-    private void ScrollLettersLeft()
-    {
-        wordbarScroll++;
-        wordboxTMPs[0].text = "...";
-        wordboxImages[0].sprite = blankTileDefault.sprite;
-        wordboxImages[0].color = Color.white;
-        //RemoveParticleEffectsAtIndexInWord(0 + wordbarScroll);
-
-        for (int i = 1; i < wordboxImages.Length-1; i++)
-        {
-            wordboxTMPs[i].text = wordboxTMPs[i+1].text;
-            wordboxImages[i].sprite = wordboxImages[i+1].sprite;
-            wordboxImages[i].color = wordboxImages[i+1].color;
-            if (wordboxImages[i + 1].gameObject.transform.childCount > 0)
-            {
-                GameObject particleGO = wordboxImages[i + 1].gameObject.transform.GetChild(0).gameObject;
-                particleGO.transform.parent = wordboxImages[i].gameObject.transform;
-                particleGO.transform.localPosition = Vector3.zero;
-            }
-
-        }
-
-    }
+    }   
 
     /// <summary>
     /// This resets the entire wordbar, erasing all chars and particle effects, and resets the 
@@ -537,7 +509,6 @@ public class CombatPanel : UI_Panel
         {
             TMP.text = "";
         }
-        wordbarScroll = 0;
         sgd.UpdateTargetSpellswordGlow(0);
     }
 
@@ -550,10 +521,10 @@ public class CombatPanel : UI_Panel
     {
         ignitionChanceTMP.text = (value).ToString() + "%";
     }
-    public GameObject GetTileForLetterBasedOnIndexInWord(int indexInWord)
-    {
-        return wordboxImages[indexInWord - wordbarScroll].gameObject;
-    }
+    //public GameObject GetTileForLetterBasedOnIndexInWord(int indexInWord)
+    //{
+    //    return wordboxImages[indexInWord].gameObject;
+    //}
 
     //public void UpdateSpellEnergySlider( float currentEnergy)
     //{

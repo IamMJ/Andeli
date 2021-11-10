@@ -24,13 +24,13 @@ public class GameController : MonoBehaviour
 
     CombatPanel uid;
     ConversationPanelDriver cpd;
-    BriefPanelDriver bpd;
+    BriefPanel bpd;
     DebriefPanelDriver dpd;
     RewardPanelDriver rpd;
     AdvertPanelDriver apd;
     StartMenuPanel mmd;
     LetterPowerMenuDriver lpmd;
-    OptionMenuDriver pmd;
+    DebugPanel pmd;
 
 
     ArenaBuilder currentArenaBuilder;
@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour
 
 
     //param
-    Vector2 storyStartLocation = new Vector2(-3, -15);
+    Vector2 normalStartLocation = new Vector2(93, -72);
     Vector2 tutorialStartLocation = new Vector2(102, 66);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
     int cameraSize_ZoomedIn = 10;
@@ -58,7 +58,7 @@ public class GameController : MonoBehaviour
     [SerializeField] float currentZoom;
     public bool debug_IgniteAll = false;
     public bool debug_ShowAILetterValues = false;
-    public bool debug_ShowDebugMenu = false;
+    public bool debug_ShowDebugMenuButton = false;
 
 
     //void Awake()
@@ -194,13 +194,20 @@ public class GameController : MonoBehaviour
     public void StartNewGame()
     {
         isInGame = true;
+        uic.SetContext(UI_Controller.Context.Overworld);
+        SpawnPlayer();
+        SetCameraToFollowPlayer();
+        SetCameraToOverworldOffset();
+
+        uic.ShowHideDebugMenuButton(debug_ShowDebugMenuButton);
+
         //gash.RestoreAllObelisks();
 
 
         //Populate enemies on the ArenaMenu, then switch to it.
 
 
-        uic.SetContext(UI_Controller.Context.ArenaMenu);
+
         //ResumeGameSpeed(true);
         //SpawnPlayer();
         //uid.ShowHideMainMenu(false);
@@ -209,14 +216,14 @@ public class GameController : MonoBehaviour
         //SetCameraToOverworldOffset();
         ////AdjustGameForStartMode();
         //uid.ShowHideDebugMenu(debug_ShowDebugMenu);
-        //OnGameStart.Invoke();
+        OnGameStart.Invoke();
     }
 
     private void SpawnPlayer()
     {
         if (!player)
         {
-            player = Instantiate(playerPrefab, tutorialStartLocation, Quaternion.identity) as GameObject;
+            player = Instantiate(playerPrefab, normalStartLocation, Quaternion.identity) as GameObject;
         }
     }
     private void SetCameraToFollowPlayer()
@@ -279,13 +286,9 @@ public class GameController : MonoBehaviour
 
     public bool ToggleDebugMenuMode()
     {
-        Debug.Log($"Debug Menu is {debug_ShowDebugMenu}");
-        debug_ShowDebugMenu = !debug_ShowDebugMenu;
-        if (isInGame)
-        {
-            uic.ShowHideDebugMenu(debug_ShowDebugMenu);
-        }
-        return debug_ShowDebugMenu;
+        Debug.Log($"Debug Menu is {debug_ShowDebugMenuButton}");
+        debug_ShowDebugMenuButton = !debug_ShowDebugMenuButton;
+        return debug_ShowDebugMenuButton;
     }
     public void SetCameraToArenaOffset()
     {

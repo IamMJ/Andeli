@@ -6,14 +6,14 @@ public class UI_Controller : MonoBehaviour
 {
     [SerializeField] UI_Panel[] allPanels = null;
     [SerializeField] UI_Panel startMenuPanel = null;
-    [SerializeField] UI_Panel arenaMenuPanel = null;
+    [SerializeField] public UI_Panel briefPanel = null;
     [SerializeField] UI_Panel characterMenuPanel = null;
     [SerializeField] UI_Panel combatPanel = null;
     [SerializeField] UI_Panel debriefPanel = null;
     [SerializeField] UI_Panel rewardPanel = null;
     [SerializeField] UI_Panel debugPanel = null;
 
-    public enum Context {StartMenu, ArenaMenu, CharacterMenu, Combat, Debrief, Reward}
+    public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, Debrief, Reward}
     void Start()
     {
         foreach (var panel in allPanels)
@@ -36,12 +36,20 @@ public class UI_Controller : MonoBehaviour
                 startMenuPanel.ShowHideElements(true);
                 return;
 
-            case Context.ArenaMenu:
+            case Context.Brief:
                 foreach (var panel in allPanels)
                 {
                     panel.ShowHideElements(false);
                 }
-                arenaMenuPanel.ShowHideElements(true);
+                briefPanel.ShowHideElements(true);
+                return;
+
+            case Context.Overworld:
+                foreach (var panel in allPanels)
+                {
+                    panel.ShowHideElements(false);
+                }
+                //could show any overworld-centric panels here, like a map?
                 return;
 
             case Context.CharacterMenu:
@@ -78,8 +86,9 @@ public class UI_Controller : MonoBehaviour
         }
     }
 
-    public void ShowHideDebugMenu(bool shouldBeShown)
+    public void ShowHideDebugMenuButton(bool shouldBeShown)
     {
-        debugPanel.ShowHideElements(shouldBeShown);
+        debugPanel.gameObject.SetActive(shouldBeShown);
+        debugPanel.GetComponent<DebugPanel>().ShowHideDebugButton(shouldBeShown);
     }
 }
