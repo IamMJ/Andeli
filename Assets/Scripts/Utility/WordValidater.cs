@@ -65,6 +65,10 @@ public class WordValidater : MonoBehaviour
     #region Public Methods
     public bool CheckWordValidity(string testWord)
     {
+        if (testWord.Length == 0)
+        {
+            return false;
+        }
         if (masterWordHashSet.Contains(testWord))
         {
             return true;

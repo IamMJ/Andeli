@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
     //init
     [SerializeField] GameObject playerPrefab = null;
     [SerializeField] GameObject driftingThingPrefab = null;
+    [SerializeField] GameObject grid = null;
 
     Librarian lib;
     GameObject driftingThing;
@@ -33,7 +34,7 @@ public class GameController : MonoBehaviour
     public bool isPaused = false;
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
-    public bool debug_IgniteAll = false;
+    public bool debug_AlwaysIgniteLetters = false;
     public bool debug_ShowAILetterValues = false;
     public bool debug_ShowDebugMenuButton = false;
 
@@ -49,6 +50,7 @@ public class GameController : MonoBehaviour
         vm = FindObjectOfType<VictoryMeter>();
         wv = GetComponent<WordValidater>();
 
+        grid.SetActive(true);
         //currentZoom = cameraSize_ZoomedOut;
 
 

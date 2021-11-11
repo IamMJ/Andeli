@@ -143,8 +143,8 @@ public class WordWeaponizer : MonoBehaviour
         testWord = wbd.GetCurrentWord();
         if (wv.CheckWordValidity(testWord))
         {
-            memory.UpdateCurrentArenaData(wbd.CurrentPower, testWord);
-            CreateWordPuff(testWord, wbd.CurrentPower);
+            memory.UpdateCurrentArenaData(wbd.CurrentWordPack.Power, testWord);
+            CreateWordPuff(testWord, wbd.CurrentWordPack.Power);
             FireKnownValidWord();
             currentEnergyLevel -= spellFiringCost;
             if (isPlayer)
@@ -178,7 +178,7 @@ public class WordWeaponizer : MonoBehaviour
         {
             testWord = wbd.GetCurrentWord();
             //playmem.IncrementWordCount(); // implement a memory for the enemy IF combat requires tracking played words
-            CreateWordPuff(testWord, wbd.CurrentPower);
+            CreateWordPuff(testWord, wbd.CurrentWordPack.Power);
             FireKnownValidWord();
             wbd.ClearCurrentWord();
             currentEnergyLevel -= spellFiringCost;
@@ -190,7 +190,7 @@ public class WordWeaponizer : MonoBehaviour
     public void FireKnownValidWord()
     {
         TargetBestEnemy();
-        float spellpower = (wbd.CurrentPower + memory.GetCurrentArenaData().wordsSpelled 
+        float spellpower = (wbd.CurrentWordPack.Power + memory.GetCurrentArenaData().wordsSpelled 
             * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount);
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
         auso?.PlayOneShot(normalSpellCastClip);
@@ -201,7 +201,7 @@ public class WordWeaponizer : MonoBehaviour
                 int roll = UnityEngine.Random.Range(1, 20);
 
 
-                if (wbd.GetModifiedWordLength() >= roll)
+                if (wbd.CurrentWordPack.ModifiedWordLength >= roll)
                 {
                     TriggerActiveLetterEffects(letter, gameObject, currentEnemy);
                 }
@@ -228,7 +228,7 @@ public class WordWeaponizer : MonoBehaviour
         GameObject puff = Instantiate(puffPrefab, transform.position, Quaternion.identity) as GameObject;
         WordPuff wordPuff = puff.GetComponent<WordPuff>();
         wordPuff.SetText(testWord);
-        wordPuff.SetColorByPower(wbd.CurrentPower);
+        wordPuff.SetColorByPower(wbd.CurrentWordPack.Power);
     }
     private void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
     {
@@ -244,7 +244,7 @@ public class WordWeaponizer : MonoBehaviour
 
                 case TrueLetter.Ability.Frozen:
                     // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
-                    float freezePower = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    float freezePower = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
                     break;
 
@@ -253,12 +253,12 @@ public class WordWeaponizer : MonoBehaviour
                     break;
 
                 case TrueLetter.Ability.Wispy:
-                    float speedBoost = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    float speedBoost = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
                     break;
 
                 case TrueLetter.Ability.Mystic:
-                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     int count = Mathf.RoundToInt(mysticPower / 2);
                     ab.ltd.SpawnMysticLetters(count, mysticPower);
                     break;
@@ -276,7 +276,7 @@ public class WordWeaponizer : MonoBehaviour
 
                 case TrueLetter.Ability.Frozen:
                     // Freezing combines the Frozen letters power with the wordlength to get actual freezing penalty to apply
-                    float freezePower = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    float freezePower = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     CreateSpell(targetWMM.transform, freezePower, TrueLetter.Ability.Frozen);
                     break;
 
@@ -285,12 +285,12 @@ public class WordWeaponizer : MonoBehaviour
                     break;
 
                 case TrueLetter.Ability.Wispy:
-                    float speedBoost = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    float speedBoost = activatedLetter.Power_Player / 10f * sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     CreateSpell(sourceWMM.transform, speedBoost, TrueLetter.Ability.Wispy);
                     break;
 
                 case TrueLetter.Ability.Mystic:
-                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentPower;
+                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     int count = Mathf.RoundToInt(mysticPower / 2);
                     ab.ltd.SpawnMysticLetters(count, mysticPower);
                     break;

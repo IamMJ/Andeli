@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SwordGlowDriver : MonoBehaviour
+public class SwordGlowDriver : UI_Panel
 {
     [SerializeField] Image swordBGglow = null;
     [SerializeField] Image swordFGglow = null;

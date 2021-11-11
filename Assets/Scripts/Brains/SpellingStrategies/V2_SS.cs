@@ -20,7 +20,7 @@ public class V2_SS : SpellingStrategy
     {
         PossibleWordStrategies pwo = PossibleWordStrategies.KeepBuildingCurrentWord;
         string cw = wb.GetCurrentWord();
-        int cp = wb.CurrentPower;
+        int cp = wb.CurrentWordPack.Power;
 
         
         if (cp >= ep.MinimumPoints && wv.CheckWordValidity(cw))
@@ -163,7 +163,7 @@ public class V2_SS : SpellingStrategy
     protected override float GenerateValueForLetterTile(LetterTile evaluatedLT)
     {
         string possWord = wb.GetCurrentWord() + evaluatedLT.Letter;
-        float possPower = wb.CurrentPower + evaluatedLT.Power_Enemy;
+        float possPower = wb.CurrentWordPack.Power + evaluatedLT.Power_Enemy;
 
         float wordPowerFactor = Mathf.Clamp(ep.PointsWeight * possPower, 1f, 999f); // include a way to increase value based on Letter Masks
 

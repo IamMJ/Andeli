@@ -9,7 +9,7 @@ public class SpeedKeeper : MonoBehaviour
 
     //param
     float accelPerValidWord = 0.3f;
-    float minSpeed = 1.0f;
+    float minSpeed = 0f;
     float maxSpeed = 6.0f;
     float speedRecoveryRate = 0.1f; // speed recovered every second
 

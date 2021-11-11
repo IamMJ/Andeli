@@ -5,7 +5,7 @@ using UnityEngine;
 public class TutorDialogManager : NPCDialogManager
 {
     WordWeaponizer playerWWZ;
-    CombatPanel uid;
+    CombatPanel cp;
     BagManager bagman;
 
     //param
@@ -22,7 +22,7 @@ public class TutorDialogManager : NPCDialogManager
     protected override void Start()
     {
         base.Start();
-        uid = FindObjectOfType<CombatPanel>();
+        cp = Librarian.GetLibrarian().ui_Controller.combatPanel;
     }
 
     protected override void Update()
@@ -43,8 +43,8 @@ public class TutorDialogManager : NPCDialogManager
         if (player.GetComponent<PlayerMemory>().CheckForPlayerKnowledgeOfARequiredKeyword("ITUT1"))
         {
             playerWWZ.OnFireWord += HandleWordFired;
-            uid.ShowHideIgnitionChancePanel(false);
-            uid.ShowHideTopPanel(false);
+            cp.ShowHideIgnitionChancePanel(false);
+            cp.ShowHideTopPanel(false);
             bagman = FindObjectOfType<BagManager>();
             bagman.ModifyBagsEnabled(0);
         }
@@ -61,12 +61,12 @@ public class TutorDialogManager : NPCDialogManager
         if (wordsFired == wordFiredToStartConvo2)
         {
             StartCombatConversation(combatConvo2);
-            uid.ShowHideTopPanel(true);
+            cp.ShowHideTopPanel(true);
         }
         if (wordsFired == wordFiredToStartConvo3)
         {
             StartCombatConversation(combatConvo3);
-            uid.ShowHideIgnitionChancePanel(true);
+            cp.ShowHideIgnitionChancePanel(true);
 
         }
     }
