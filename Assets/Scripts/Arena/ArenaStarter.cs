@@ -38,7 +38,7 @@ public class ArenaStarter : MonoBehaviour
 
     private void Start()
     {
-        lib = FindObjectOfType<Librarian>();
+        lib = Librarian.GetLibrarian();
 
         bp = lib.ui_Controller.briefPanel.GetComponent<BriefPanel>();
         gc = FindObjectOfType<GameController>();

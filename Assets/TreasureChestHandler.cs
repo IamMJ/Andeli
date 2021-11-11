@@ -6,10 +6,10 @@ public class TreasureChestHandler : MonoBehaviour
 {
     GameController gc;
     GameObject player;
-    RewardPanelDriver rpd;
+    RewardPanel rpd;
     void Start()
     {
-        rpd = FindObjectOfType<RewardPanelDriver>();
+        rpd = FindObjectOfType<RewardPanel>();
         gc = FindObjectOfType<GameController>();
         gc.OnGameStart += HandleGameStart;
     }

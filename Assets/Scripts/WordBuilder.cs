@@ -304,10 +304,14 @@ public class WordBuilder : MonoBehaviour
     {
         currentWord = "";
         CurrentPower = 0;
-        foreach (var letter in lettersOnSword)
+        for (int i = lettersOnSword.Count-1; i >= 0; i--)
         {
-            letter.DestroyLetterTile();
+            lettersOnSword[i].DestroyLetterTile();
         }
+        //foreach (var letter in lettersOnSword)
+        //{
+        //    letter.DestroyLetterTile();
+        //}
 
         lettersOnSword.Clear();
         if (hasUI)

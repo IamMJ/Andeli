@@ -11,7 +11,12 @@ public class ArenaBuilder : MonoBehaviour
     //[SerializeField] GameObject[] enemyPrefabs = null;
     [SerializeField] GameObject letterTileDropperPrefab = null;
 
-    DebriefPanelDriver dpd;
+
+    Librarian lib;
+    CameraController cc;
+    UI_Controller uic;
+
+
     GameObject enemy;
     ArenaSettingHolder ash;
     CinemachineVirtualCamera cvc;
@@ -43,25 +48,23 @@ public class ArenaBuilder : MonoBehaviour
 
     public void SetupArena(Vector2 centroid)
     {
-        dpd = FindObjectOfType<DebriefPanelDriver>();
-        gc = FindObjectOfType<GameController>();
+        lib = Librarian.GetLibrarian();
+
+        gc = lib.gameController;
         gc.isInArena = true;
         gc.RegisterCurrentArenaBuilder(this);
-        gc.SetCameraToArenaOffset();
+        
         startTime = Time.time;
         minX += Mathf.RoundToInt(transform.position.x);
         maxX += Mathf.RoundToInt(transform.position.x);
         minY += Mathf.RoundToInt(transform.position.y);
         maxY += Mathf.RoundToInt(transform.position.y);
 
-        uid = FindObjectOfType<CombatPanel>();
-        //uid.ShowArenaUIElements();
-
         player = gc.GetPlayer();
         playerWWZ = player.GetComponent<WordWeaponizer>();
         playerWWZ.HandleArenaEntry();
         player.GetComponent<WordBuilder>().ClearCurrentWord();
-        FindObjectOfType<BagManager>().RequestClearOutBag();
+        lib.bagManager.RequestClearOutBag();
 
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
         enemy.GetComponent<SpellingStrategy>().ImplementSpeedEnergySettingsFromEP();
@@ -72,6 +75,9 @@ public class ArenaBuilder : MonoBehaviour
             playerWWZ, enemy.GetComponent<WordWeaponizer>(), 
             player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), vm, uid);
 
+        lib.ui_Controller.SetContext(UI_Controller.Context.Combat);
+        cc = lib.cameraController;
+        cc.SetCameraToArenaOffset();
 
         //SetupArenaBoundaries(centroid);
 
@@ -196,7 +202,8 @@ public class ArenaBuilder : MonoBehaviour
         float timeElapsed = Mathf.Round(Time.time - startTime);
 
         CloseDownArena();
-        dpd.ActivateDebriefPanel(didPlayerWin, player, enemy, timeElapsed);
+        lib.ui_Controller.SetContext(UI_Controller.Context.Debrief);
+        lib.ui_Controller.debriefPanel.ActivateDebriefPanel(didPlayerWin, player, enemy, timeElapsed);
         arenaStarter.DeactivateArenaStarter(didPlayerWin);
         vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
     }
@@ -204,12 +211,11 @@ public class ArenaBuilder : MonoBehaviour
 
     public void CloseDownArena()
     {
-
-        gc.SetCameraToOverworldOffset();
         gc.isInArena = false;
         //uid.ShowOverworldUIElements(); NERG
         Destroy(camMouse);
-        cvc.Follow = player.transform;
+        cc.SetCameraToOverworldOffset();
+        cc.SetCameraToFollowObject(player);
         //Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
         Destroy(enemy);
 

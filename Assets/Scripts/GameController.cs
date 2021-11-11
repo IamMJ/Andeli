@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
-using UnityEngine.U2D;
 
 public class GameController : MonoBehaviour
 {
@@ -12,99 +10,47 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject driftingThingPrefab = null;
 
     Librarian lib;
-
     GameObject driftingThing;
-    GameObject player;
-    CinemachineVirtualCamera cvc;
-    //SceneLoader sl;
+    MusicController mc;
     WordValidater wv;
     VictoryMeter vm;
     GameStateHolder gash;
     UI_Controller uic;
-
-    CombatPanel uid;
-    ConversationPanelDriver cpd;
-    BriefPanel bpd;
-    DebriefPanelDriver dpd;
-    RewardPanelDriver rpd;
-    AdvertPanelDriver apd;
-    StartMenuPanel mmd;
-    LetterPowerMenuDriver lpmd;
-    DebugPanel pmd;
-
-
-    ArenaBuilder currentArenaBuilder;
-    PixelPerfectCamera ppc;
-    MusicController mc;
+    CameraController cc;
 
     public Action OnGameStart;
 
+    ArenaBuilder currentArenaBuilder;
+    GameObject player;
 
     //param
     Vector2 normalStartLocation = new Vector2(93, -72);
     Vector2 tutorialStartLocation = new Vector2(102, 66);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
-    int cameraSize_ZoomedIn = 10;
-    int cameraSize_ZoomedOut = 30;
-    int zoomRate = 10;
-    Vector3 cameraOffset_Arena = new Vector3(0, -1.5f, 0);
-    Vector3 cameraOffset_Overworld = Vector3.zero;
 
+    //state
     int pauseRequests = 0;
     public bool isPaused = false;
     public bool isInArena { get; set; } = false;
     public bool isInGame { get; set; } = false;
-
-    [SerializeField] float currentZoom;
     public bool debug_IgniteAll = false;
     public bool debug_ShowAILetterValues = false;
     public bool debug_ShowDebugMenuButton = false;
 
-
-    //void Awake()
-    //{
-    //    int count = FindObjectsOfType<GameController>().Length;
-    //    if (count > 1)
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //    else
-    //    {
-    //        DontDestroyOnLoad(gameObject);
-    //    }
-    //}
-
     void Start()
     {
-        //sl = FindObjectOfType<SceneLoader>();
-        //sl.OnSceneChange += CheckGameStateBasedOnSceneChange;
-        lib = FindObjectOfType<Librarian>();
+        lib = Librarian.GetLibrarian();
         uic = lib.ui_Controller;
         uic.SetContext(UI_Controller.Context.StartMenu);
-
-
-        cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
-        ppc = Camera.main.GetComponent<PixelPerfectCamera>();
-        //uid = FindObjectOfType<UIDriver>();
-        //cpd = FindObjectOfType<ConversationPanelDriver>();
-        //dpd = FindObjectOfType<DebriefPanelDriver>();
-        //bpd = FindObjectOfType<BriefPanelDriver>();
-        //rpd = FindObjectOfType<RewardPanelDriver>();
-        //apd = FindObjectOfType<AdvertPanelDriver>();
-
-
-
-        mc = FindObjectOfType<MusicController>();
-        //uid.HideAllOverworldUIElements();
-        //uid.ShowHideMainMenu(true);
-        //uid.ShowHideDebugMenu(debug_ShowDebugMenu);
+        cc = lib.cameraController;
+        mc = lib.musicController;
 
         gash = FindObjectOfType<GameStateHolder>();
         vm = FindObjectOfType<VictoryMeter>();
         wv = GetComponent<WordValidater>();
 
-        currentZoom = cameraSize_ZoomedOut;
-        ppc.enabled = true;
+        //currentZoom = cameraSize_ZoomedOut;
+
 
         //BeginIdleMode();
     }
@@ -196,8 +142,8 @@ public class GameController : MonoBehaviour
         isInGame = true;
         uic.SetContext(UI_Controller.Context.Overworld);
         SpawnPlayer();
-        SetCameraToFollowPlayer();
-        SetCameraToOverworldOffset();
+        cc.SetCameraToFollowObject(player);
+        cc.SetCameraToOverworldOffset();
 
         uic.ShowHideDebugMenuButton(debug_ShowDebugMenuButton);
 
@@ -226,20 +172,7 @@ public class GameController : MonoBehaviour
             player = Instantiate(playerPrefab, normalStartLocation, Quaternion.identity) as GameObject;
         }
     }
-    private void SetCameraToFollowPlayer()
-    {
-        if (driftingThing)
-        {
-            driftingThing.SetActive(false);
-        }
-        if (!cvc)
-        {
-            cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
-        }
-        cvc.Follow = player.transform;
-        //StopAllCoroutines();
-        //StartCoroutine(ZoomCamera(true));
-    }
+
 
     //private void AdjustGameForStartMode()
     //{
@@ -290,15 +223,7 @@ public class GameController : MonoBehaviour
         debug_ShowDebugMenuButton = !debug_ShowDebugMenuButton;
         return debug_ShowDebugMenuButton;
     }
-    public void SetCameraToArenaOffset()
-    {
-        cvc.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = cameraOffset_Arena;
-    }
-
-    public void SetCameraToOverworldOffset()
-    {
-        cvc.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset = cameraOffset_Overworld;
-    }
+   
     public void RegisterCurrentArenaBuilder(ArenaBuilder ab)
     {
         currentArenaBuilder = ab;

@@ -5,22 +5,31 @@ using UnityEngine;
 public class UI_Controller : MonoBehaviour
 {
     [SerializeField] UI_Panel[] allPanels = null;
-    [SerializeField] UI_Panel startMenuPanel = null;
-    [SerializeField] public UI_Panel briefPanel = null;
-    [SerializeField] UI_Panel characterMenuPanel = null;
-    [SerializeField] UI_Panel combatPanel = null;
-    [SerializeField] UI_Panel debriefPanel = null;
-    [SerializeField] UI_Panel rewardPanel = null;
-    [SerializeField] UI_Panel debugPanel = null;
+    [SerializeField] public StartMenuPanel startMenuPanel = null;
+    [SerializeField] public BriefPanel briefPanel = null;
+    [SerializeField] public UI_Panel characterMenuPanel = null;
+    [SerializeField] public CombatPanel combatPanel = null;
+    [SerializeField] public DebriefPanel debriefPanel = null;
+    [SerializeField] public RewardPanel rewardPanel = null;
+    [SerializeField] public AdvertPanel advertPanel = null;
+    [SerializeField] public UI_Panel debugPanel = null;
 
-    public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, Debrief, Reward}
+    public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, Debrief, Reward, Advert}
+
+    GameController gc;
+
     void Start()
     {
+        gc = Librarian.GetLibrarian().gameController;
+
         foreach (var panel in allPanels)
         {
             panel.gameObject.SetActive(true);
             panel.ShowHideElements(false);
         }
+        debugPanel.gameObject.SetActive(true);
+        debugPanel.ShowHideElements(false);
+
         startMenuPanel.ShowHideElements(true);
     }
 
@@ -34,6 +43,7 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 startMenuPanel.ShowHideElements(true);
+                gc.PauseGame();
                 return;
 
             case Context.Brief:
@@ -42,6 +52,7 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 briefPanel.ShowHideElements(true);
+                gc.PauseGame();
                 return;
 
             case Context.Overworld:
@@ -50,6 +61,7 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 //could show any overworld-centric panels here, like a map?
+                gc.ResumeGameSpeed(true);
                 return;
 
             case Context.CharacterMenu:
@@ -58,6 +70,7 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 characterMenuPanel.ShowHideElements(true);
+                gc.PauseGame();
                 return;
 
             case Context.Combat:
@@ -66,6 +79,7 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 combatPanel.ShowHideElements(true);
+                gc.ResumeGameSpeed(true);
                 return;
 
             case Context.Debrief:
@@ -74,6 +88,7 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 debriefPanel.ShowHideElements(true);
+                gc.PauseGame();
                 return;
 
             case Context.Reward:
@@ -82,6 +97,16 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 rewardPanel.ShowHideElements(true);
+                gc.PauseGame();
+                return;
+
+            case Context.Advert:
+                foreach (var panel in allPanels)
+                {
+                    panel.ShowHideElements(false);
+                }
+                advertPanel.ShowHideElements(true);
+                gc.PauseGame();
                 return;
         }
     }
