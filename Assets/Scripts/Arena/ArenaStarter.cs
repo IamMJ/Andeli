@@ -28,10 +28,13 @@ public class ArenaStarter : MonoBehaviour
     [SerializeField] string keywordGivenUponVictory = null;
     [SerializeField] string keywordGivenUponDefeat = null;
     [SerializeField] bool canBeDestroyed = true;
-    [SerializeField] float arenaTriggerRange;
+    [SerializeField] GameObject arenaCentroid = null;
+    Vector2 centroidOffset = new Vector2(1, -1);
+    float arenaTriggerRange = 1.5f;
     float timeBetweenPlayerResponses = 3f;
 
     //state
+    Vector2 locationToReturnPlayerTo;
     bool isActivated = true;
     float timeToBecomeResponsiveToPlayer = 0;
 
@@ -101,10 +104,15 @@ public class ArenaStarter : MonoBehaviour
     {
         lib.ui_Controller.SetContext(UI_Controller.Context.Combat);
 
-        ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
+        locationToReturnPlayerTo = player.transform.position;
+        player.transform.position = arenaCentroid.transform.position + (Vector3)centroidOffset;
+        player.GetComponent<Movement>().HaltPlayerMovement();
+        player.GetComponent<PlayerInput>().HaltPlayerMovement();
+
+        ab = Instantiate(arenaBuilderPrefab, arenaCentroid.transform.position, transform.rotation) as GameObject;
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
         arenaBuilder.SetArenaStarter(this, ash);
-        arenaBuilder.SetupArena(transform.position);
+        arenaBuilder.SetupArena(arenaCentroid);
 
     }
 
@@ -145,6 +153,10 @@ public class ArenaStarter : MonoBehaviour
                 pm.AddKeyword(keywordGivenUponDefeat);
             }
         }
+
+        player.transform.position = locationToReturnPlayerTo;
+        player.GetComponent<Movement>().HaltPlayerMovement();
+        player.GetComponent<PlayerInput>().HaltPlayerMovement();
 
         //gameObject.SetActive(false);
     }

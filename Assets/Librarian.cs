@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class Librarian : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Librarian : MonoBehaviour
     public MusicController musicController;
     public BagManager bagManager;
 
+
     public void Start()
     {
         gameController = FindObjectOfType<GameController>();
@@ -19,6 +21,7 @@ public class Librarian : MonoBehaviour
         cameraController = FindObjectOfType<CameraController>();
         musicController = FindObjectOfType<MusicController>();
         bagManager = FindObjectOfType<BagManager>();
+
     }
 
     public static Librarian GetLibrarian()

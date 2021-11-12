@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
     GameObject player;
 
     //param
-    Vector2 normalStartLocation = new Vector2(93, -72);
+    Vector2 normalStartLocation = new Vector2(100, -75);
     Vector2 tutorialStartLocation = new Vector2(102, 66);
     Vector2 skirmishStartLocation = new Vector2(93, -72);
 

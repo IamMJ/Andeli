@@ -46,7 +46,7 @@ public class ArenaBuilder : MonoBehaviour
     GameObject camMouse;
     float startTime;
 
-    public void SetupArena(Vector2 centroid)
+    public void SetupArena(GameObject arenaCentroid)
     {
         lib = Librarian.GetLibrarian();
 
@@ -70,7 +70,7 @@ public class ArenaBuilder : MonoBehaviour
         enemy.GetComponent<SpellingStrategy>().ImplementSpeedEnergySettingsFromEP();
         vm = gc.GetVictoryMeter();
         vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
-        SetupStatueCameraMouse(centroid);
+        SetupStatueCameraMouse(arenaCentroid);
         ash.SetupArena(ltd, player.GetComponent<WordMakerMemory>(), enemy.GetComponent<WordMakerMemory>(),
             playerWWZ, enemy.GetComponent<WordWeaponizer>(), 
             player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), vm, uid);
@@ -147,14 +147,14 @@ public class ArenaBuilder : MonoBehaviour
     //    }
     //}
 
-    private void SetupStatueCameraMouse(Vector2 centroid)
+    private void SetupStatueCameraMouse(GameObject arenaCentroid)
     {
-        ltd = Instantiate(letterTileDropperPrefab, centroid, Quaternion.identity).GetComponent<LetterTileDropper>();
+        ltd = Instantiate(letterTileDropperPrefab, arenaCentroid.transform.position, Quaternion.identity).GetComponent<LetterTileDropper>();
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
-        camMouse = Instantiate(cameraMousePrefab, centroid, Quaternion.identity) as GameObject;
+        camMouse = Instantiate(cameraMousePrefab, arenaCentroid.transform.position, Quaternion.identity) as GameObject;
         CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
 
-        cameraMouse1.SetAnchor(arenaStarter.gameObject);
+        cameraMouse1.SetAnchor(arenaCentroid);
         cameraMouse1.SetPlayer(gc.GetPlayer());
         cvc = Camera.main.GetComponentInChildren<CinemachineVirtualCamera>();
         cvc.Follow = camMouse.transform; //arenaStarter.transform;
