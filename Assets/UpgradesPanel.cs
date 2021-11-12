@@ -5,10 +5,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class LetterPowerMenuDriver : MonoBehaviour
+public class UpgradesPanel : UI_Panel
 {
-    GameController gc;
-    VictoryMeter vm;
+    Librarian lib;
+
     string topBand = "ACEGIKMOQSUWY";
     string bottomBand = "BDFHJLNPRTVXZ";
     List<LetterMask> topBandLetters = new List<LetterMask>();
@@ -41,7 +41,7 @@ public class LetterPowerMenuDriver : MonoBehaviour
     LetterMask[] displayedLetterMod_Bottom = new LetterMask[5];
     private void Start()
     {
-        gc = FindObjectOfType<GameController>();
+        Librarian lib = Librarian.GetLibrarian();
         scroll_max = topBand.Length - topTMPs.Length;
         PrepLetterMods();
         AssignInitialLettersModsToUI();
@@ -61,7 +61,7 @@ public class LetterPowerMenuDriver : MonoBehaviour
     private void PrepLetterMods()
     {
         List<LetterMask> letters = new List<LetterMask>();
-        letters = gc.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMods();
+        letters = lib.gameController.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMods();
         foreach (var letter in letters)
         {
             if (topBand.Contains(letter.GetLetter().ToString()))
@@ -80,7 +80,16 @@ public class LetterPowerMenuDriver : MonoBehaviour
             displayedLetterMod_Bottom[i] = bottomBandLetters[i];
         }
     }
-
+    private void DisplaySelectedLetter()
+    {
+        selectedLetterTMP.text = selectedLetterMod.GetLetter().ToString();
+        float rarity = Mathf.Round(selectedLetterMod.GetRarity());
+        selectedRarityTMP.text = rarity.ToString() + "%";
+        selectedBlurbTMP.text = selectedLetterMod.GetBlurb();
+        selectedAbilityTMP.text = selectedLetterMod.GetAbilityDescription();
+        selectedPowerTMP.text = selectedLetterMod.GetPower().ToString();
+        selectedExperienceTMP.text = selectedLetterMod.GetExperienceString();
+    }
     private void AssignInitialLettersModsToUI()
     {
         for (int i = 0; i < topTMPs.Length; i++)
@@ -93,14 +102,10 @@ public class LetterPowerMenuDriver : MonoBehaviour
         }
     }
 
-    public void HideMenu()
+    #region Public Button Handlers
+    public void ReturnToOverworld()
     {
-        if (!gc)
-        {
-            gc = FindObjectOfType<GameController>();
-        }
-        gc.ResumeGameSpeed(false);
-        gameObject.SetActive(false);
+        lib.ui_Controller.SetContext(UI_Controller.Context.Overworld);
     }
 
     public void SelectLetterToInspect(int buttonIndex)
@@ -120,17 +125,6 @@ public class LetterPowerMenuDriver : MonoBehaviour
 
         // Display these selected PlayerLetterMod at the top.
         DisplaySelectedLetter();
-    }
-
-    private void DisplaySelectedLetter()
-    {
-        selectedLetterTMP.text = selectedLetterMod.GetLetter().ToString();
-        float rarity = Mathf.Round(selectedLetterMod.GetRarity());
-        selectedRarityTMP.text = rarity.ToString() + "%";
-        selectedBlurbTMP.text = selectedLetterMod.GetBlurb();
-        selectedAbilityTMP.text = selectedLetterMod.GetAbilityDescription();
-        selectedPowerTMP.text = selectedLetterMod.GetPower().ToString();
-        selectedExperienceTMP.text = selectedLetterMod.GetExperienceString();
     }
 
     public void ScrollLettersLeft()
@@ -168,4 +162,8 @@ public class LetterPowerMenuDriver : MonoBehaviour
         }
         SelectLetterToInspect(selectedButton);
     }
+    #endregion
+
+
+   
 }

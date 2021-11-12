@@ -19,7 +19,7 @@ public class RewardPanel : UI_Panel
     public void HandleAccceptRewardClick()
     {
         //grant rewards
-        uic.SetContext(UI_Controller.Context.Overworld);
+        uic.SetContext(UI_Controller.Context.Upgrades);
     }
 
     public void ActivateRewardPanel(int testAmount)

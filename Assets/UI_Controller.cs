@@ -12,9 +12,11 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] public DebriefPanel debriefPanel = null;
     [SerializeField] public RewardPanel rewardPanel = null;
     [SerializeField] public AdvertPanel advertPanel = null;
+    [SerializeField] public UpgradesPanel upgradesPanel = null;
     [SerializeField] public UI_Panel debugPanel = null;
 
-    public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, Debrief, Reward, Advert}
+    public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, 
+        Debrief, Reward, Advert, Upgrades}
 
     GameController gc;
 
@@ -106,6 +108,15 @@ public class UI_Controller : MonoBehaviour
                     panel.ShowHideElements(false);
                 }
                 advertPanel.ShowHideElements(true);
+                gc.PauseGame();
+                return;
+
+            case Context.Upgrades:
+                foreach (var panel in allPanels)
+                {
+                    panel.ShowHideElements(false);
+                }
+                upgradesPanel.ShowHideElements(true);
                 gc.PauseGame();
                 return;
         }

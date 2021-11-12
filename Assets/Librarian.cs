@@ -20,7 +20,7 @@ public class Librarian : MonoBehaviour
         ui_Controller = FindObjectOfType<UI_Controller>();
         cameraController = FindObjectOfType<CameraController>();
         musicController = FindObjectOfType<MusicController>();
-        bagManager = FindObjectOfType<BagManager>();
+        bagManager = ui_Controller.combatPanel.GetComponent<BagManager>();
 
     }
 
