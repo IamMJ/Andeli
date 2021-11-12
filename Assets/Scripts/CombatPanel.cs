@@ -34,12 +34,12 @@ public class CombatPanel : UI_Panel
     WordPack emptyWordPack = new WordPack(0, 0, "init", 0, false);
 
     //state
-    [SerializeField] bool wasLongPress = false;
+    bool wasLongPress = false;
     int selectedSwordLetterIndex = -1;
     bool isFireWeaponButtonPressed = false;
     bool isEraseWeaponButtonPressed = false;
     float timeButtonDepressed = 0;
-    [SerializeField] bool canPressAttackButton = false;
+    bool canPressAttackButton = false;
     
     public float timeSpentLongPressing { get; private set; }
 
@@ -131,17 +131,17 @@ public class CombatPanel : UI_Panel
         if (isEraseWeaponButtonPressed == false)
         {
             isFireWeaponButtonPressed = true;
+            isEraseWeaponButtonPressed = false;
+            selectedSwordLetterIndex = -1;
         }
         Debug.Log("Fire word pressed");
 
     }
-
     public void OnReleaseFireWord()
     {
         Debug.Log("Fire word released");
         IncompleteLongPress_WordBoxActions();
     }
-
     public void OnPressDownEraseWord()
     {
         if (playerWB.GetCurrentWord().Length == 0) { return; }
@@ -149,19 +149,20 @@ public class CombatPanel : UI_Panel
         if (isFireWeaponButtonPressed == false)
         {
             isEraseWeaponButtonPressed = true;
+            isFireWeaponButtonPressed = false;
+            selectedSwordLetterIndex = -1;
         }
     }
-
     public void OnReleaseEraseWord()
     {
         IncompleteLongPress_WordBoxActions();
     }
-
     public void OnPressDownLetterOnSword(int index)
     {
         selectedSwordLetterIndex = index;
+        isEraseWeaponButtonPressed = false;
+        isFireWeaponButtonPressed = false;
     }
-
     public void OnReleaseLetterOnSword(int index)
     {
         if (selectedSwordLetterIndex == -1) { return; }
@@ -173,9 +174,7 @@ public class CombatPanel : UI_Panel
         {
             NotifyWordBuilderToPassLetterToBagAtIndex(index);
         }
-        wasLongPress = false;
-        selectedSwordLetterIndex = -1;
-        timeButtonDepressed = 0;
+        IncompleteLongPress_WordBoxActions();
     }
     #endregion
 
@@ -264,8 +263,10 @@ public class CombatPanel : UI_Panel
         ClearWordEraseSlider();
         UpdateAttackButtonPressGlow(0);
         timeButtonDepressed = 0;
+        wasLongPress = false;
         isFireWeaponButtonPressed = false;
         isEraseWeaponButtonPressed = false;
+        selectedSwordLetterIndex = -1;
 
     }
     #endregion
@@ -338,5 +339,17 @@ public class CombatPanel : UI_Panel
     }
 
     #endregion
+
+    public override void ShowHideElements(bool shouldBeShown)
+    {
+        if (shouldBeShown == false)
+        {
+            isFireWeaponButtonPressed = false;
+            isEraseWeaponButtonPressed = false;
+            selectedSwordLetterIndex = -1;
+        }
+        base.ShowHideElements(shouldBeShown);
+
+    }
 
 }
