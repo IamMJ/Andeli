@@ -78,7 +78,6 @@ public class CombatPanel : UI_Panel
         powerMeterTMP.text = newWordPack.Power.ToString();
         ModifyAttackButtonWithWordValidation(newWordPack.IsValid);
         sgd.UpdateTargetSpellswordGlow(newWordPack.Power);
-        Debug.Log("igd: " + igd + "worpak: " + newWordPack.Word) ;
         igd.SetIgnitionChance(newWordPack.ModifiedWordLength);
 
         for (int i = 0; i < wordboxTMPs.Length; i++)
@@ -256,7 +255,7 @@ public class CombatPanel : UI_Panel
 
     private void CompleteLongPress_WordBoxActions()
     {
-        playerWB.ClearCurrentWord();
+        playerWB.ClearLettersOnSword();
         //playerWB.ClearPowerLevel();
         IncompleteLongPress_WordBoxActions();
     }

@@ -9,16 +9,17 @@ public class RewardPanel : UI_Panel
     [SerializeField] TextMeshProUGUI glyphRewardTMP = null;
     [SerializeField] TextMeshProUGUI expRewardTMP = null;
 
-    GameController gc;
+    UI_Controller uic;
 
     void Start()
     {
-        gc = FindObjectOfType<GameController>();   
+        uic = Librarian.GetLibrarian().ui_Controller;
     }
 
     public void HandleAccceptRewardClick()
     {
-        ShowHideElements(false);
+        //grant rewards
+        uic.SetContext(UI_Controller.Context.Overworld);
     }
 
     public void ActivateRewardPanel(int testAmount)
@@ -26,7 +27,6 @@ public class RewardPanel : UI_Panel
         //populate reward amounts here.
         glyphRewardTMP.text = "+" + testAmount;
         expRewardTMP.text = "+" + testAmount*5;
-        //grant rewards
-        ShowHideElements(true);
+
     }   
 }

@@ -82,7 +82,6 @@ public class ArenaStarter : MonoBehaviour
             {
                 lib.ui_Controller.SetContext(UI_Controller.Context.Brief);
                 bp.PopulateBriefPanel(this, ash.arenaSetting);
-                gc.PauseGame();
                 timeToBecomeResponsiveToPlayer = Time.time + timeBetweenPlayerResponses;
             }
             else
@@ -95,14 +94,12 @@ public class ArenaStarter : MonoBehaviour
 
     public void RetreatFromArena()
     {
-        gc.ResumeGameSpeed(false);
-        bp.ShowHideElements(false);
+        lib.ui_Controller.SetContext(UI_Controller.Context.Overworld);
     }
 
     public void StartArena()
     {
-        gc.ResumeGameSpeed(false);
-        bp.ShowHideElements(false);
+        lib.ui_Controller.SetContext(UI_Controller.Context.Combat);
 
         ab = Instantiate(arenaBuilderPrefab, transform.position, transform.rotation) as GameObject;
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();

@@ -52,7 +52,6 @@ public class LetterTileDropper : MonoBehaviour
     int currentProbabilityCount_Vowels = 0;
     float timeForNextWave;
 
-    public bool doesBoardHaveLettersAvailable { get; private set; } = true;
 
     Vector2 randomPosition = Vector2.zero;
 
@@ -426,14 +425,14 @@ public class LetterTileDropper : MonoBehaviour
         DropLettersAtDropLocations(ref mysticDropPoints, true, mysticPower);
         
     }
-    public void RemoveLetterFromSpawnedLetterList(LetterTile letterTileToRemove)
+    public void RemoveLetterFromListOfLettersOnBoard(LetterTile letterTileToRemove, bool wasCalledDueToEnemyWordClear)
     {
-        OnLetterListModified?.Invoke(letterTileToRemove, false);
-        letterTilesOnBoard.Remove(letterTileToRemove);
-        if (letterTilesOnBoard.Count == 0)
+        if (!wasCalledDueToEnemyWordClear)
         {
-            doesBoardHaveLettersAvailable = false;
+            OnLetterListModified?.Invoke(letterTileToRemove, false);
         }
+        letterTilesOnBoard.Remove(letterTileToRemove);
+
         int letterToRemove = lettersOnBoard.IndexOf(letterTileToRemove.Letter);
         if (letterToRemove >= 0)
         {
@@ -448,7 +447,6 @@ public class LetterTileDropper : MonoBehaviour
 
         letterTilesOnBoard.Add(newLetterTile);
         OnLetterListModified?.Invoke(newLetterTile, true);
-        doesBoardHaveLettersAvailable = true;
     }
 
     public void RemoveLetterFromAllLettersSpawnedList(LetterTile letterTile)
@@ -470,7 +468,7 @@ public class LetterTileDropper : MonoBehaviour
 
         for (int i = allLettersDropped.Count - 1; i >= 0; i--)
         {
-            allLettersDropped[i].DestroyLetterTile();
+            allLettersDropped[i].DestroyLetterTile(false);
         }
         letterTilesOnBoard.Clear();
         allLettersDropped.Clear();

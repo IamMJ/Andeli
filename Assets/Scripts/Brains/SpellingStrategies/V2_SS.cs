@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class V2_SS : SpellingStrategy
 {
-    GameController gc;
 
     //state
     float currentPatience;

@@ -111,7 +111,7 @@ public class StrategyBrainV2 : MonoBehaviour
                 return;
 
             case SpellingStrategy.PossibleWordStrategies.EraseWord:
-                wb.ClearCurrentWord();
+                wb.ClearLettersOnSword();
                 ss.ResetRecommendedStrategy();
                 return;
 

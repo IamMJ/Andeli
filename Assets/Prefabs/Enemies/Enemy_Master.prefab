@@ -382,3 +382,4 @@ MonoBehaviour:
   destroyLetterClip: {fileID: 0}
   lettersOnSword: []
   currentWord: 
+  CurrentPower: 0

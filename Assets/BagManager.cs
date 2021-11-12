@@ -186,7 +186,7 @@ public class BagManager : MonoBehaviour
         ParticleSystem.MainModule newMod = bagImages[index].GetComponent<ParticleSystem>().main;
         newMod.startColor = bagImages[index].color;
         bagImages[index].GetComponent<ParticleSystem>().Play();
-        letterTilesInBag[index].DestroyLetterTile();
+        letterTilesInBag[index].DestroyLetterTile(false);
         letterTilesInBag[index] = null;
         UpdateUI();
         wb_player.PlayDestroyLetterClip();

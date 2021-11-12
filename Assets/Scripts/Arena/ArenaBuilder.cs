@@ -63,7 +63,7 @@ public class ArenaBuilder : MonoBehaviour
         player = gc.GetPlayer();
         playerWWZ = player.GetComponent<WordWeaponizer>();
         playerWWZ.HandleArenaEntry();
-        player.GetComponent<WordBuilder>().ClearCurrentWord();
+        player.GetComponent<WordBuilder>().ClearLettersOnSword();
         lib.bagManager.RequestClearOutBag();
 
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
@@ -227,7 +227,7 @@ public class ArenaBuilder : MonoBehaviour
         //}
 
         // For now, destroy the statue, but later replace with a broken statue, perhaps?
-        player.GetComponent<WordBuilder>().ClearCurrentWord();
+        player.GetComponent<WordBuilder>().ClearLettersOnSword();
         playerWWZ.ResetEnergyStats();
         player.GetComponent<SpeedKeeper>().ResetSpeedStats();
 

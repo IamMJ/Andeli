@@ -46,24 +46,26 @@ public class WordWeaponizer : MonoBehaviour
 
     void Start()
     {
+        Librarian lib = Librarian.GetLibrarian();
         memory = GetComponent<WordMakerMemory>();
         wbd = GetComponent<WordBuilder>();
+        auso = GetComponent<AudioSource>();
 
         if (GetComponent<PlayerInput>()) //Must be a player
         {
             isPlayer = true;
             powerSign = 1;
-            uid = FindObjectOfType<CombatPanel>();
-            jm = FindObjectOfType<JewelManager>();
+
+            uid = lib.ui_Controller.combatPanel;
+            jm = uid.GetComponent<JewelManager>();
             jm.UpdateJewelImage(100);
 
             pm = GetComponent<PlayerMemory>();
             pm.BaseEnergyRegenRate = energyRegenRate_Target;
         }
-        gc = FindObjectOfType<GameController>();
-        wv = FindObjectOfType<WordValidater>();
-        vm = FindObjectOfType<VictoryMeter>();
-        auso = GetComponent<AudioSource>();
+        gc = lib.gameController;
+        wv = lib.wordValidater;
+        vm = lib.ui_Controller.combatPanel.GetComponent<VictoryMeter>();
 
         ResetEnergyStats();
     }
@@ -88,7 +90,6 @@ public class WordWeaponizer : MonoBehaviour
         currentEnergyLevel = Mathf.Clamp(currentEnergyLevel, 0, maxEnergy);
         if (uid)
         {
-            //uid.UpdateSpellEnergySlider(currentEnergyLevel);
             if (gc.isInArena)
             {
                 jm.UpdateJewelImage(currentEnergyLevel / maxEnergy * 100);
@@ -177,10 +178,11 @@ public class WordWeaponizer : MonoBehaviour
         else
         {
             testWord = wbd.GetCurrentWord();
+            Debug.Log($"attempting to fire {testWord}");
             //playmem.IncrementWordCount(); // implement a memory for the enemy IF combat requires tracking played words
             CreateWordPuff(testWord, wbd.CurrentWordPack.Power);
             FireKnownValidWord();
-            wbd.ClearCurrentWord();
+            wbd.ClearLettersOnSword();
             currentEnergyLevel -= spellFiringCost;
             return true;
         }

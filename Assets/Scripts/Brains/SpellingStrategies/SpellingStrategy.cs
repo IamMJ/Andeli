@@ -160,7 +160,7 @@ public abstract class SpellingStrategy : MonoBehaviour
             if (shouldFireOrEraseNow || currentWordOptions < thresholdForTooUnlikely) /// ...and its future is too unpromising...
             {
                 
-                wb.ClearCurrentWord(); // ...so erase it now.  How did we get here though?
+                wb.ClearLettersOnSword(); // ...so erase it now.  How did we get here though?
                 return;
             }
         }
@@ -170,10 +170,8 @@ public abstract class SpellingStrategy : MonoBehaviour
         string currentWord = wb.GetCurrentWord();
         int count = wv.FindWordBandWithStubWord(currentWord).Range;
         if (count < threshold)
-        {
-
-           
-            wb.ClearCurrentWord();
+        {           
+            wb.ClearLettersOnSword();
         }
     }
     protected virtual void FireOffCurrentWordIfPossible()

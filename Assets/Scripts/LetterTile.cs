@@ -170,7 +170,7 @@ public class LetterTile : MonoBehaviour
 
         if (!IsInactivated && LifetimeRemaining <= 0f)
         {
-            DestroyLetterTile();
+            DestroyLetterTile(false);
         }
                
     }
@@ -213,14 +213,14 @@ public class LetterTile : MonoBehaviour
         valueTMP.enabled = true;
         valueTMP.text = value.ToString("0.00");
     }
-    public void InactivateLetterTile()
+    public void InactivateLetterTile(bool wasCalledDueToEnemyWordClear)
     {
         IsInactivated = true;
         GetComponent<Collider2D>().enabled = false;
         sr.enabled = false;
         GetComponentInChildren<TextMeshPro>().enabled = false;
 
-        letterTileDropper.RemoveLetterFromSpawnedLetterList(this);
+        letterTileDropper.RemoveLetterFromListOfLettersOnBoard(this, wasCalledDueToEnemyWordClear);
 
         if (assignedShadow)
         {
@@ -231,9 +231,9 @@ public class LetterTile : MonoBehaviour
         valueTMP.text = "";
     }
 
-    public void DestroyLetterTile()
+    public void DestroyLetterTile(bool wasCalledDueToEnemyWordClear)
     {
-        InactivateLetterTile();
+        InactivateLetterTile(wasCalledDueToEnemyWordClear);
         letterTileDropper.RemoveLetterFromAllLettersSpawnedList(this);
         Destroy(gameObject);
     }

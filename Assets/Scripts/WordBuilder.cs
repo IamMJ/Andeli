@@ -29,7 +29,7 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] List<LetterTile> lettersOnSword = new List<LetterTile>();
     [SerializeField] protected string currentWord = "";
     //int modifiedWordLength = 0;
-    //public int CurrentPower = 0;
+    public int CurrentPower = 0;
     bool shouldLettersGoToSwordFirst = true;
 
     protected virtual void Start()
@@ -45,23 +45,26 @@ public class WordBuilder : MonoBehaviour
         {
             hasUI = true;
             cp = lib.ui_Controller.combatPanel;
-            Debug.Log($"Told {cp} to set player wb to ths ({this})");
             cp.SetPlayerObject(this, wwz, bagman);
             bagman = lib.bagManager;
         }
     }
 
+    private void Update()
+    {
+        CurrentPower = CurrentWordPack.Power;
+    }
     protected virtual void AddLetterToSword(LetterTile newLetter)
     {
     
         lettersOnSword.Add(newLetter);
         OnAddLetterToSword?.Invoke(newLetter);
         //RewriteCurrentWordFromLettersOnSword();
-        WordPack newWordPack = CreateWordPackFromCurrentLettersOnSword();
+        CurrentWordPack = CreateWordPackFromCurrentLettersOnSword(hasUI) ;
         if (hasUI)
         { 
             auso?.PlayOneShot(addLetterToSwordClip);
-            cp.UpdatePanelWithNewWordPack(newWordPack);
+            cp.UpdatePanelWithNewWordPack(CurrentWordPack);
         }      
 
     }
@@ -95,9 +98,14 @@ public class WordBuilder : MonoBehaviour
     //}
 
 
-    private WordPack CreateWordPackFromCurrentLettersOnSword()
+    private WordPack CreateWordPackFromCurrentLettersOnSword(bool isPlayer)
     {
         WordPack newWordPack = new WordPack(lettersOnSword.Count, 0, "", 0, false);
+        if (lettersOnSword.Count == 0)
+        {
+            currentWord = newWordPack.Word;
+            return newWordPack;
+        }        
         newWordPack.Power = (powerModifierForWordCount * memory.GetCurrentArenaData().wordsSpelled);
         for (int i = 0; i < lettersOnSword.Count; i++)
         {
@@ -105,12 +113,20 @@ public class WordBuilder : MonoBehaviour
             newWordPack.letterColors[i] = lettersOnSword[i].GetComponent<SpriteRenderer>().color;
             newWordPack.letterColors[i].a = 1;
             newWordPack.letterLetters[i] = lettersOnSword[i].Letter.ToString();
-            newWordPack.Power += lettersOnSword[i].Power_Player;
+            if (isPlayer)
+            {
+                newWordPack.Power += lettersOnSword[i].Power_Player;
+            }
+            else
+            {
+                newWordPack.Power += lettersOnSword[i].Power_Enemy;
+            }
             newWordPack.Word += lettersOnSword[i].Letter;
         }
         newWordPack.IsValid = wv.CheckWordValidity(newWordPack.Word);
-        newWordPack.ModifiedWordLength = CalculateWordLength();
         currentWord = newWordPack.Word;
+        newWordPack.ModifiedWordLength = CalculateWordLength();
+
         return newWordPack;
     }
     #region Public Methods
@@ -136,7 +152,7 @@ public class WordBuilder : MonoBehaviour
         {
             auso?.PlayOneShot(addLetterToBagClip);
             lettersOnSword.RemoveAt(index);
-            CurrentWordPack = CreateWordPackFromCurrentLettersOnSword();
+            CurrentWordPack = CreateWordPackFromCurrentLettersOnSword(hasUI);
             cp.UpdatePanelWithNewWordPack(CurrentWordPack);
         }
     }
@@ -144,9 +160,9 @@ public class WordBuilder : MonoBehaviour
     {
         LetterTile letterToRemove = lettersOnSword[index];
         lettersOnSword.RemoveAt(index);
-        letterToRemove.DestroyLetterTile();
+        letterToRemove.DestroyLetterTile(false);
 
-        CurrentWordPack = CreateWordPackFromCurrentLettersOnSword();
+        CurrentWordPack = CreateWordPackFromCurrentLettersOnSword(hasUI);
         cp.UpdatePanelWithNewWordPack(CurrentWordPack);
         auso?.PlayOneShot(destroyLetterClip);
         //// Subtract the base word power from current power
@@ -185,19 +201,19 @@ public class WordBuilder : MonoBehaviour
     //    return currentWord.Length + wordLengthBonus;
     //}
 
-    public virtual void ClearCurrentWord()
+    public virtual void ClearLettersOnSword()
     {
-        CurrentWordPack = new WordPack(0, 0, "", 0, false);
-        for (int i = lettersOnSword.Count-1; i >= 0; i--)
+        if (lettersOnSword.Count > 0)
         {
-            lettersOnSword[i].DestroyLetterTile();
+            for (int i = 0; i < lettersOnSword.Count; i++)
+            {
+                lettersOnSword[i].DestroyLetterTile(true);
+            }
         }
-        //foreach (var letter in lettersOnSword)
-        //{
-        //    letter.DestroyLetterTile();
-        //}
 
         lettersOnSword.Clear();
+        CurrentWordPack = CreateWordPackFromCurrentLettersOnSword(hasUI);
+        Debug.Log("just tried to clear out the current word");
         if (hasUI)
         {
             cp.UpdatePanelWithNewWordPack(CurrentWordPack);
@@ -209,7 +225,7 @@ public class WordBuilder : MonoBehaviour
     {
         Debug.Log($"letters on sword: {lettersOnSword.Count}, removing at {lettersOnSword.Count - 1}");
         lettersOnSword.RemoveAt(lettersOnSword.Count - 1);
-        CreateWordPackFromCurrentLettersOnSword();
+        CurrentWordPack = CreateWordPackFromCurrentLettersOnSword(hasUI);
     }
 
     public List<LetterTile> GetLettersCollected()
@@ -277,12 +293,12 @@ public class WordBuilder : MonoBehaviour
         {
             if (AttemptToAddLetterToSword(letterTile))
             {
-                letterTile.InactivateLetterTile();
+                letterTile.InactivateLetterTile(false);
                 return true;
             }
             if (bagman.AttemptToReceiveLetter(letterTile))
             {
-                letterTile.InactivateLetterTile();
+                letterTile.InactivateLetterTile(false);
                 return true;
             }
             else
@@ -294,12 +310,12 @@ public class WordBuilder : MonoBehaviour
         {
             if (bagman.AttemptToReceiveLetter(letterTile))
             {
-                letterTile.InactivateLetterTile();
+                letterTile.InactivateLetterTile(false);
                 return true;
             }
             if (AttemptToAddLetterToSword(letterTile))
             {
-                letterTile.InactivateLetterTile();
+                letterTile.InactivateLetterTile(false);
                 return true;
             }
             else
@@ -313,6 +329,6 @@ public class WordBuilder : MonoBehaviour
     {
         //NPCs don't have a word length limit to check against
         AddLetterToSword(letterTile);
-        letterTile.InactivateLetterTile();
+        letterTile.InactivateLetterTile(false);
     }
 }
