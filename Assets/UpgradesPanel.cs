@@ -114,9 +114,9 @@ public class UpgradesPanel : UI_Panel
 
 
     #region Public Button Handlers
-    public void ReturnToOverworld()
+    public void ReturnToPreviousContext()
     {
-        lib.ui_Controller.SetContext(UI_Controller.Context.Overworld);
+        lib.ui_Controller.ReturnToPreviousContext();
     }
 
     public void SelectLetterToInspect(int buttonIndex)

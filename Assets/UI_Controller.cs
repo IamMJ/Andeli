@@ -15,10 +15,14 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] public UpgradesPanel upgradesPanel = null;
     [SerializeField] public DebugPanel debugPanel = null;
 
-    public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, 
+    public enum Context {Null, StartMenu, Brief, Overworld, CharacterMenu, Combat, 
         Debrief, Reward, Advert, Upgrades}
 
     GameController gc;
+
+    //state
+    Context currentContext = Context.Null;
+    Context previousContext = Context.Null;
 
     void Start()
     {
@@ -37,6 +41,8 @@ public class UI_Controller : MonoBehaviour
 
     public void SetContext(Context newContext)
     {
+        previousContext = currentContext;
+        currentContext = newContext;
         switch (newContext)
         {
             case Context.StartMenu:
@@ -129,5 +135,18 @@ public class UI_Controller : MonoBehaviour
     {
         debugPanel.gameObject.SetActive(shouldBeShown);
         debugPanel.GetComponent<DebugPanel>().ShowHideDebugButton(shouldBeShown);
+    }
+
+    public void ReturnToPreviousContext()
+    {
+        if (previousContext == Context.Null)
+        {
+            Debug.Log("Previous Context is Nul!");
+        }
+        else
+        {
+            SetContext(previousContext);
+        }
+
     }
 }

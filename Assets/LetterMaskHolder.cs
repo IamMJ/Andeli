@@ -42,6 +42,8 @@ public class LetterMaskHolder : MonoBehaviour
         return targetLetterMask;
     }
 
+    //GetLetterMaskStructForTrueLetterChar
+
     public void ModifyLetterMaskAbilityForGivenLetter(char givenLetter, TrueLetter.Ability newAbility)
     {
         for (int i = 0; i < letterMasks.Count; i++)

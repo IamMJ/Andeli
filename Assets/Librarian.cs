@@ -11,6 +11,7 @@ public class Librarian : MonoBehaviour
     public CameraController cameraController;
     public MusicController musicController;
     public BagManager bagManager;
+    public LetterTileDropper letterTileDropper;
 
 
     public void Start()
@@ -21,6 +22,7 @@ public class Librarian : MonoBehaviour
         cameraController = FindObjectOfType<CameraController>();
         musicController = FindObjectOfType<MusicController>();
         bagManager = ui_Controller.combatPanel.GetComponent<BagManager>();
+        letterTileDropper = wordValidater.GetComponent<LetterTileDropper>();
 
     }
 

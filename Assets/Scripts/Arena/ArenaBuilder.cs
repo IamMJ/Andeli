@@ -9,12 +9,13 @@ public class ArenaBuilder : MonoBehaviour
     [SerializeField] GameObject cameraMousePrefab = null;
     //[SerializeField] GameObject wallPrefab = null;
     //[SerializeField] GameObject[] enemyPrefabs = null;
-    [SerializeField] GameObject letterTileDropperPrefab = null;
+    //[SerializeField] GameObject letterTileDropperPrefab = null;
 
 
     Librarian lib;
     CameraController cc;
     UI_Controller uic;
+    LetterTileDropper ltd;
 
 
     GameObject enemy;
@@ -42,7 +43,6 @@ public class ArenaBuilder : MonoBehaviour
 
 
     //state
-    public LetterTileDropper ltd;
     GameObject camMouse;
     float startTime;
 
@@ -66,6 +66,9 @@ public class ArenaBuilder : MonoBehaviour
         player.GetComponent<WordBuilder>().ClearLettersOnSword();
         lib.bagManager.RequestClearOutBag();
 
+        ltd = lib.letterTileDropper;
+
+
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
         enemy.GetComponent<SpellingStrategy>().ImplementSpeedEnergySettingsFromEP();
         vm = gc.GetVictoryMeter();
@@ -79,6 +82,7 @@ public class ArenaBuilder : MonoBehaviour
         cc = lib.cameraController;
         cc.SetCameraToArenaOffset();
 
+        ltd.StartStopDroppingLetters(true, this);
         //SetupArenaBoundaries(centroid);
 
     }
@@ -149,7 +153,6 @@ public class ArenaBuilder : MonoBehaviour
 
     private void SetupStatueCameraMouse(GameObject arenaCentroid)
     {
-        ltd = Instantiate(letterTileDropperPrefab, arenaCentroid.transform.position, Quaternion.identity).GetComponent<LetterTileDropper>();
         //statue = Instantiate(statuePrefab, centroid, Quaternion.identity) as GameObject;
         camMouse = Instantiate(cameraMousePrefab, arenaCentroid.transform.position, Quaternion.identity) as GameObject;
         CameraMouse cameraMouse1 = camMouse.GetComponent<CameraMouse>();
@@ -220,7 +223,7 @@ public class ArenaBuilder : MonoBehaviour
         Destroy(enemy);
 
         ltd.DestroyAllLetters();
-        Destroy(ltd?.gameObject);
+        ltd.StartStopDroppingLetters(false, null);
         //foreach(var element in arenaWallObjects)
         //{
         //    element.RemoveArenaWall();

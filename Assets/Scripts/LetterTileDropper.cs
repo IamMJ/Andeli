@@ -45,6 +45,7 @@ public class LetterTileDropper : MonoBehaviour
     int maxLettersOnBoard;
 
     //state
+    bool isDropping = false;
     bool shouldSeparateVowelsFromConsonants = false;
     int dropsSinceLastVowel = 0;
     int currentProbabilityCount_AllLetters = 0;
@@ -60,12 +61,10 @@ public class LetterTileDropper : MonoBehaviour
     {
         // Rather than starting will all 26 True Letters, probably should pull this from the player every time an Arena is built
         // trueLetters = GetPlayersTrueLetters();
-        gc = FindObjectOfType<GameController>();
-        wv = FindObjectOfType<WordValidater>();
-        ab = FindObjectOfType<ArenaBuilder>();
-        enemyProfile = ab.GetEnemyInArena().GetComponent<SpellingStrategy>().GetEnemyProfile();
-        lmh_Player = FindObjectOfType<GameController>().GetPlayer().GetComponent<LetterMaskHolder>();
-
+        Librarian lib = Librarian.GetLibrarian();
+        gc = lib.gameController;
+        wv = lib.wordValidater;
+        
         if (shouldSeparateVowelsFromConsonants)
         {
             SeparateVowelsFromConsonants();
@@ -123,6 +122,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private void Update()
     {
+        if (!isDropping) { return; }
         if (gc.isPaused) { return; }
         if (!wv.GetPreppedStatus()) { return; }        
        
@@ -418,6 +418,16 @@ public class LetterTileDropper : MonoBehaviour
 
     #region Public Methods
 
+    public void StartStopDroppingLetters(bool shouldBeDropping, ArenaBuilder owningArenaBuilder)
+    {
+        isDropping = shouldBeDropping;
+        if (isDropping)
+        {
+            ab = owningArenaBuilder;
+            enemyProfile = ab.GetEnemyInArena().GetComponent<SpellingStrategy>().GetEnemyProfile();
+            lmh_Player = gc.GetPlayer().GetComponent<LetterMaskHolder>();
+        }
+    }
     public void SpawnMysticLetters(int count, float mysticPower)
     {
         List<Vector2> mysticDropPoints = new List<Vector2>(3);

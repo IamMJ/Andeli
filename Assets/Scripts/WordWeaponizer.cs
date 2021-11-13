@@ -23,6 +23,7 @@ public class WordWeaponizer : MonoBehaviour
     CombatPanel uid;
     JewelManager jm;
     PlayerMemory pm;
+    LetterTileDropper ltd;
     string testWord;
 
 
@@ -47,6 +48,7 @@ public class WordWeaponizer : MonoBehaviour
     void Start()
     {
         Librarian lib = Librarian.GetLibrarian();
+        ltd = lib.letterTileDropper;
         memory = GetComponent<WordMakerMemory>();
         wbd = GetComponent<WordBuilder>();
         auso = GetComponent<AudioSource>();
@@ -262,7 +264,7 @@ public class WordWeaponizer : MonoBehaviour
                 case TrueLetter.Ability.Mystic:
                     float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     int count = Mathf.RoundToInt(mysticPower / 2);
-                    ab.ltd.SpawnMysticLetters(count, mysticPower);
+                    ltd.SpawnMysticLetters(count, mysticPower);
                     break;
             }
         }
@@ -294,7 +296,7 @@ public class WordWeaponizer : MonoBehaviour
                 case TrueLetter.Ability.Mystic:
                     float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     int count = Mathf.RoundToInt(mysticPower / 2);
-                    ab.ltd.SpawnMysticLetters(count, mysticPower);
+                    ltd.SpawnMysticLetters(count, mysticPower);
                     break;
             }
         }
