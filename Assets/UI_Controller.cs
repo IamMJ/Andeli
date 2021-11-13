@@ -13,7 +13,7 @@ public class UI_Controller : MonoBehaviour
     [SerializeField] public RewardPanel rewardPanel = null;
     [SerializeField] public AdvertPanel advertPanel = null;
     [SerializeField] public UpgradesPanel upgradesPanel = null;
-    [SerializeField] public UI_Panel debugPanel = null;
+    [SerializeField] public DebugPanel debugPanel = null;
 
     public enum Context {StartMenu, Brief, Overworld, CharacterMenu, Combat, 
         Debrief, Reward, Advert, Upgrades}
@@ -64,6 +64,7 @@ public class UI_Controller : MonoBehaviour
                 }
                 //could show any overworld-centric panels here, like a map?
                 gc.ResumeGameSpeed(true);
+                debugPanel.ShowHideDebugButton(gc.debug_ShowDebugMenuButton);
                 return;
 
             case Context.CharacterMenu:
@@ -82,6 +83,7 @@ public class UI_Controller : MonoBehaviour
                 }
                 combatPanel.ShowHideElements(true);
                 gc.ResumeGameSpeed(true);
+                debugPanel.ShowHideDebugButton(gc.debug_ShowDebugMenuButton);
                 return;
 
             case Context.Debrief:
@@ -118,6 +120,7 @@ public class UI_Controller : MonoBehaviour
                 }
                 upgradesPanel.ShowHideElements(true);
                 gc.PauseGame();
+                debugPanel.ShowHideDebugButton(gc.debug_ShowDebugMenuButton);
                 return;
         }
     }

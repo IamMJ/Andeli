@@ -5,21 +5,29 @@ using TMPro;
 
 public class DebugPanel : UI_Panel
 {
+    Librarian lib;
     GameController gc;
     VictoryMeter vm;
     [SerializeField] TextMeshProUGUI letterRoutingTMP = null;
     [SerializeField] TextMeshProUGUI AIvaluesTMP = null;
     [SerializeField] GameObject debugButton = null;
 
+    private void Start()
+    {
+        lib = Librarian.GetLibrarian();
+        gc = lib.gameController;
+    }
+
     public void HidePauseMenu()
     {
-        if (!gc)
-        {
-            gc = FindObjectOfType<GameController>();
-        }
         gc.ResumeGameSpeed(false);
         ShowHideElements(false);
         debugButton.SetActive(gc.debug_ShowDebugMenuButton);
+    }
+
+    public void ShowHideDebugButton(bool shouldBeShown)
+    {
+        debugButton.SetActive(shouldBeShown);
     }
 
     public void BringUpDebugMenu()
@@ -28,8 +36,12 @@ public class DebugPanel : UI_Panel
         {
             element.SetActive(true);
         }
+        gc.PauseGame();
+        ShowHideElements(true);
         debugButton.SetActive(false);
     }
+
+    #region Debug Options
     public void ReturnToWelcomeScene()
     {
         if (!gc)
@@ -102,10 +114,10 @@ public class DebugPanel : UI_Panel
         }
     }
 
-    public void ShowHideDebugButton(bool shouldBeShown)
+    public void Debug_SwitchToUpgradeMenu()
     {
-        debugButton.SetActive(shouldBeShown);
+        lib.ui_Controller.SetContext(UI_Controller.Context.Upgrades);
     }
 
-
+    #endregion
 }

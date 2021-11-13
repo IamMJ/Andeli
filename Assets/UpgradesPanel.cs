@@ -39,15 +39,22 @@ public class UpgradesPanel : UI_Panel
     int selectedButton = 0;
     LetterMask[] displayedLetterMod_Top = new LetterMask[5];
     LetterMask[] displayedLetterMod_Bottom = new LetterMask[5];
+
     private void Start()
     {
-        Librarian lib = Librarian.GetLibrarian();
+        lib = Librarian.GetLibrarian();
         scroll_max = topBand.Length - topTMPs.Length;
+        lib.gameController.OnGameStart += HandleOnGameStart;
+    }
+
+    private void HandleOnGameStart()
+    {
         PrepLetterMods();
         AssignInitialLettersModsToUI();
         PrepAbilityButtons();
     }
 
+    #region Helpers
     private void PrepAbilityButtons()
     {
         for (int i = 0; i < abilityPurchaseButtonsImages.Length; i++)
@@ -62,6 +69,7 @@ public class UpgradesPanel : UI_Panel
     {
         List<LetterMask> letters = new List<LetterMask>();
         letters = lib.gameController.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMods();
+        
         foreach (var letter in letters)
         {
             if (topBand.Contains(letter.GetLetter().ToString()))
@@ -101,6 +109,9 @@ public class UpgradesPanel : UI_Panel
             bottomTMPs[j].text = bottomBandLetters[j].GetLetter().ToString();
         }
     }
+
+    #endregion
+
 
     #region Public Button Handlers
     public void ReturnToOverworld()
