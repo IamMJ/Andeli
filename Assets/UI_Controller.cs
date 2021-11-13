@@ -41,8 +41,8 @@ public class UI_Controller : MonoBehaviour
 
     public void SetContext(Context newContext)
     {
-        previousContext = currentContext;
-        currentContext = newContext;
+        //previousContext = currentContext;
+        //currentContext = newContext;
         switch (newContext)
         {
             case Context.StartMenu:

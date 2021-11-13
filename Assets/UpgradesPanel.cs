@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UpgradesPanel : UI_Panel
@@ -16,10 +14,14 @@ public class UpgradesPanel : UI_Panel
     List<LetterMask> topBandLetterMasks = new List<LetterMask>();
     List<LetterMask> bottomBandLetterMasks = new List<LetterMask>();
 
+    [SerializeField] Image[] topImages = null;
+    [SerializeField] Image[] bottomImages = null;
+
     [SerializeField] TextMeshProUGUI[] topTMPs = null;
     [SerializeField] TextMeshProUGUI[] bottomTMPs = null;
     [SerializeField] Slider scrollSlider = null;
 
+    [SerializeField] Image selectedLetterImage = null;
     [SerializeField] TextMeshProUGUI selectedLetterTMP = null;
     [SerializeField] TextMeshProUGUI selectedRarityTMP = null;
     [SerializeField] TextMeshProUGUI selectedBlurbTMP = null;
@@ -33,15 +35,21 @@ public class UpgradesPanel : UI_Panel
 
     [SerializeField] RectTransform selectionFrame = null;
 
+    [SerializeField] TextMeshProUGUI costTMP = null;
+
 
     //state
-    LetterMask selectedLetterMod = null;
+    LetterMask selectedLetterMask = null;
+    TrueLetter.Ability abilityInCart;
+    int costOfCart = 0;
+
     int scroll_current = 0;
     int scroll_max;
     int selectedButton = 0;
     LetterMask[] displayedLetterMod_Top = new LetterMask[5];
     LetterMask[] displayedLetterMod_Bottom = new LetterMask[5];
     bool[] isAbilityButtonActivated = new bool[10];
+
 
     private void Start()
     {
@@ -67,8 +75,8 @@ public class UpgradesPanel : UI_Panel
     private void InitializeUpgradePanel()
     {
         pm = lib.gameController.GetPlayer().GetComponent<PlayerMemory>();
-        PrepLetterMods();
-        AssignInitialLettersModsToUI();
+        PrepLetterMasks();
+        AssignLettersMasksToUI();
         PrepAbilityButtons();
     }
 
@@ -89,7 +97,7 @@ public class UpgradesPanel : UI_Panel
 
     }
 
-    private void PrepLetterMods()
+    private void PrepLetterMasks()
     {
         List<LetterMask> letterMasks = new List<LetterMask>();
         letterMasks = lib.gameController.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMasks();
@@ -115,23 +123,31 @@ public class UpgradesPanel : UI_Panel
     }
     private void DisplaySelectedLetter()
     {
-        selectedLetterTMP.text = "asdf"; //selectedLetterMod.letter.ToString();
-        float rarity = Mathf.Round(selectedLetterMod.rarity);
+        selectedLetterTMP.text = selectedLetterMask.letter.ToString();
+        float rarity = Mathf.Round(selectedLetterMask.rarity);
         selectedRarityTMP.text = rarity.ToString() + "%";
-        selectedAbilityTMP.text = updh.GetDescriptionForAbility(selectedLetterMod.ability);
-        selectedPowerTMP.text = selectedLetterMod.PowerMod.ToString();
-        selectedExperienceTMP.text = $"{selectedLetterMod.experience_Current} / " +
-            $"{selectedLetterMod.experience_NextLevel}";
+        selectedAbilityTMP.text = updh.GetDescriptionForAbility(selectedLetterMask.ability);
+        selectedPowerTMP.text = selectedLetterMask.PowerMod.ToString();
+        selectedExperienceTMP.text = $"{selectedLetterMask.experience_Current} / " +
+            $"{selectedLetterMask.experience_NextLevel}";
+        selectedLetterImage.sprite = sourceLetterTile.GetSpriteColorFromAbility(selectedLetterMask.ability).Sprite;
+        selectedLetterImage.color = sourceLetterTile.GetSpriteColorFromAbility(selectedLetterMask.ability).Color;
+        costOfCart = 0;
+        abilityInCart = selectedLetterMask.ability;
     }
-    private void AssignInitialLettersModsToUI()
+    private void AssignLettersMasksToUI()
     {
         for (int i = 0; i < topTMPs.Length; i++)
         {
-            topTMPs[i].text = topBandLetterMasks[i].letter.ToString();
+            topTMPs[i].text = displayedLetterMod_Top[i].letter.ToString();
+            topImages[i].sprite = sourceLetterTile.GetSpriteColorFromAbility(displayedLetterMod_Top[i].ability).Sprite;
+            topImages[i].color = sourceLetterTile.GetSpriteColorFromAbility(displayedLetterMod_Top[i].ability).Color;
         }
         for (int j = 0; j < topTMPs.Length; j++)
         {
-            bottomTMPs[j].text = bottomBandLetterMasks[j].letter.ToString();
+            bottomTMPs[j].text = displayedLetterMod_Bottom[j].letter.ToString();
+            bottomImages[j].sprite = sourceLetterTile.GetSpriteColorFromAbility(displayedLetterMod_Bottom[j].ability).Sprite;
+            bottomImages[j].color = sourceLetterTile.GetSpriteColorFromAbility(displayedLetterMod_Bottom[j].ability).Color;
         }
     }
 
@@ -140,7 +156,7 @@ public class UpgradesPanel : UI_Panel
     #region Public Button Handlers
     public void ReturnToPreviousContext()
     {
-        lib.ui_Controller.ReturnToPreviousContext();
+        lib.ui_Controller.SetContext(UI_Controller.Context.Overworld);
     }
 
     public void SelectLetterToInspect(int buttonIndex)
@@ -150,12 +166,12 @@ public class UpgradesPanel : UI_Panel
         if (buttonIndex < topTMPs.Length)
         {
             selectionFrame.position = topTMPs[buttonIndex].GetComponent<RectTransform>().position;
-            selectedLetterMod = displayedLetterMod_Top[buttonIndex];
+            selectedLetterMask = displayedLetterMod_Top[buttonIndex];
         }
         if (buttonIndex >= topTMPs.Length)
         {
             selectionFrame.position = bottomTMPs[buttonIndex - topTMPs.Length].GetComponent<RectTransform>().position;
-            selectedLetterMod = displayedLetterMod_Bottom[buttonIndex - topTMPs.Length];
+            selectedLetterMask = displayedLetterMod_Bottom[buttonIndex - topTMPs.Length];
         }
 
         // Display these selected PlayerLetterMod at the top.
@@ -169,14 +185,13 @@ public class UpgradesPanel : UI_Panel
         scrollSlider.value = scroll_current;
         for (int i = 0; i < topTMPs.Length; i++)
         {
-            displayedLetterMod_Top[i] = topBandLetterMasks[i + scroll_current];
-            topTMPs[i].text = displayedLetterMod_Top[i].letter.ToString();
+            displayedLetterMod_Top[i] = topBandLetterMasks[i + scroll_current];           
         }
         for (int j = 0; j < topTMPs.Length; j++)
         {
-            displayedLetterMod_Bottom[j] = bottomBandLetterMasks[j + scroll_current];
-            bottomTMPs[j].text = displayedLetterMod_Bottom[j].letter.ToString();
+            displayedLetterMod_Bottom[j] = bottomBandLetterMasks[j + scroll_current];            
         }
+        AssignLettersMasksToUI();
         SelectLetterToInspect(selectedButton);
     }
 
@@ -188,13 +203,12 @@ public class UpgradesPanel : UI_Panel
         for (int i = 0; i < topTMPs.Length; i++)
         {
             displayedLetterMod_Top[i] = topBandLetterMasks[i + scroll_current];
-            topTMPs[i].text = displayedLetterMod_Top[i].letter.ToString();
         }
         for (int j = 0; j < topTMPs.Length; j++)
         {
             displayedLetterMod_Bottom[j] = bottomBandLetterMasks[j + scroll_current];
-            bottomTMPs[j].text = displayedLetterMod_Bottom[j].letter.ToString();
         }
+        AssignLettersMasksToUI();
         SelectLetterToInspect(selectedButton);
     }
 
@@ -202,6 +216,56 @@ public class UpgradesPanel : UI_Panel
     {
         if (isAbilityButtonActivated[buttonIndex] == false) { return; }
 
+        abilityInCart = (TrueLetter.Ability)buttonIndex;
+        selectedAbilityTMP.text = updh.GetDescriptionForAbility(abilityInCart);
+        if (abilityInCart == selectedLetterMask.ability)
+        {
+            selectedLetterImage.sprite = sourceLetterTile.GetSpriteColorFromAbility(selectedLetterMask.ability).Sprite;
+            selectedLetterImage.color = sourceLetterTile.GetSpriteColorFromAbility(selectedLetterMask.ability).Color;
+        }
+        else
+        {
+            selectedLetterImage.sprite = sourceLetterTile.GetSpriteColorFromAbility(abilityInCart).Sprite;
+            Color newColor = sourceLetterTile.GetSpriteColorFromAbility(abilityInCart).Color;
+            newColor.a = 0.5f;
+            selectedLetterImage.color = newColor;
+        }
+        // Update cost of cart
+        costOfCart = Mathf.RoundToInt(selectedLetterMask.rarity) * updh.GetCostForAbility(abilityInCart);
+
+        //Update the cost portion of the "buy" button
+        costTMP.text = costOfCart.ToString();
+        //Adjust color of buy button if too expensive
+        UpdateCostTMP();
+    }
+
+    private void UpdateCostTMP()
+    {
+        if (pm.CheckMoney(costOfCart))
+        {
+            costTMP.color = Color.black;
+        }
+        else
+        {
+            costTMP.color = Color.red;
+        }
+    }
+
+    public void HandleBuyButtonPress()
+    {
+        if (pm.CheckSpendMoney(costOfCart))
+        {
+            selectedLetterMask.ability = abilityInCart;
+            Debug.Log($"{selectedLetterMask.letter} now is {abilityInCart}");
+            AssignLettersMasksToUI();
+            DisplaySelectedLetter();
+            costOfCart = 0;
+            UpdateCostTMP();
+        }
+        else
+        {
+            //play "insufficient funds" sound
+        }
 
     }
     #endregion

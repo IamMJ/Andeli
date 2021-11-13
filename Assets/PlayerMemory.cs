@@ -11,17 +11,19 @@ public class PlayerMemory : MonoBehaviour
     public Action<string> OnKeywordAdded;
     public Action OnAbilityGained;
 
-
-
     //state
-    float BaseEnergyRegenRate;
-    float BaseMoveSpeed;
+    float baseEnergyRegenRate;
+    float baseMoveSpeed;
     List<TrueLetter.Ability> knownAbilities = new List<TrueLetter.Ability>();
+    int money;
 
     private void Start()
     {
         knownAbilities.Add(TrueLetter.Ability.Normal);
         knownAbilities.Add(TrueLetter.Ability.Heavy);
+        knownAbilities.Add(TrueLetter.Ability.Shiny);
+
+        money = 1000;
     }
 
     #region Keyword public methods
@@ -76,32 +78,32 @@ public class PlayerMemory : MonoBehaviour
 
     public float GetBaseMoveSpeed()
     {
-        return BaseMoveSpeed;
+        return baseMoveSpeed;
     }
 
     public void AdjustBaseMoveSpeed(float adjustmentToSpeed)
     {
-        BaseMoveSpeed += adjustmentToSpeed;
+        baseMoveSpeed += adjustmentToSpeed;
     }
 
     public void SetBaseMoveSpeed(float moveSpeed)
     {
-        BaseMoveSpeed = moveSpeed;
+        baseMoveSpeed = moveSpeed;
     }
 
     public float GetBaseEnergyRegenRate()
     {
-        return BaseEnergyRegenRate;
+        return baseEnergyRegenRate;
     }
 
     public void AdjustBaseEnergyRegenRate(float adjustmentToEnergy)
     {
-        BaseEnergyRegenRate += adjustmentToEnergy;
+        baseEnergyRegenRate += adjustmentToEnergy;
     }
 
     public void SetBaseEnergyRegenRate(float regenRate)
     {
-        BaseEnergyRegenRate = regenRate;
+        baseEnergyRegenRate = regenRate;
     }
 
     #endregion
@@ -119,5 +121,34 @@ public class PlayerMemory : MonoBehaviour
         return knownAbilities;
     }
 
+    public void AdjustMoney(int moneyGained)
+    {
+        money += moneyGained;
+    }
+
+    public bool CheckMoney(int potentialTransactionCost)
+    {
+        if (money - potentialTransactionCost >= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool CheckSpendMoney(int transactionCost)
+    {
+        if (CheckMoney(transactionCost))
+        {
+            money -= transactionCost;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     #endregion
 }

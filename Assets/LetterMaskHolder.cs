@@ -30,6 +30,7 @@ public class LetterMaskHolder : MonoBehaviour
             LetterMask newLetterMask = new LetterMask();
             newLetterMask.letter = trueLetter.GetLetter();
             newLetterMask.rarity = trueLetter.GetRarity();
+            newLetterMask.PowerMod = trueLetter.GetPower();
             newLetterMask.ability = TrueLetter.Ability.Normal;
             letterMasks.Add(newLetterMask);
         }
@@ -77,4 +78,5 @@ public class LetterMaskHolder : MonoBehaviour
             }
         }
     }
+
 }
