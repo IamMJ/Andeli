@@ -301,9 +301,9 @@ public class LetterTileDropper : MonoBehaviour
             LetterTile letterTile = newTile.GetComponent<LetterTile>();
             letterTile.Letter = randomLetter.GetLetter();
 
-            LetterMask playerLM = lmh_Player.GetLetterMaskForTrueLetter(randomLetter);
-            letterTile.Power_Player = playerLM.GetPower();
-            letterTile.Ability_Player = playerLM.GetAbility();
+            LetterMask playerLM = lmh_Player.GetLetterMaskForTrueLetter(randomLetter.GetLetter());
+            letterTile.Power_Player = playerLM.PowerMod;
+            letterTile.Ability_Player = playerLM.ability;
 
             if (false) // lmh_Enemy)
             {
@@ -312,7 +312,7 @@ public class LetterTileDropper : MonoBehaviour
             else
             {
                 letterTile.Power_Enemy = randomLetter.GetPower();
-                letterTile.Ability_Enemy = randomLetter.GetAbility();
+                letterTile.Ability_Enemy = TrueLetter.Ability.Normal; //;randomLetter.GetAbility();
             }
 
 
@@ -498,6 +498,11 @@ public class LetterTileDropper : MonoBehaviour
             }
         }
         return letterTilesInRange;
+    }
+
+    public List<TrueLetter> GetAllTrueLetters()
+    {
+        return trueLetters;
     }
 
 

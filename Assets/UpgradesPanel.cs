@@ -8,11 +8,12 @@ using UnityEngine.UI;
 public class UpgradesPanel : UI_Panel
 {
     Librarian lib;
+    UpgradePanelDescriptionHelper updh;
 
     string topBand = "ACEGIKMOQSUWY";
     string bottomBand = "BDFHJLNPRTVXZ";
-    List<LetterMask> topBandLetters = new List<LetterMask>();
-    List<LetterMask> bottomBandLetters = new List<LetterMask>();
+    List<LetterMask> topBandLetterMasks = new List<LetterMask>();
+    List<LetterMask> bottomBandLetterMasks = new List<LetterMask>();
 
     [SerializeField] TextMeshProUGUI[] topTMPs = null;
     [SerializeField] TextMeshProUGUI[] bottomTMPs = null;
@@ -44,10 +45,20 @@ public class UpgradesPanel : UI_Panel
     {
         lib = Librarian.GetLibrarian();
         scroll_max = topBand.Length - topTMPs.Length;
-        lib.gameController.OnGameStart += HandleOnGameStart;
+        //lib.gameController.OnGameStart += HandleOnGameStart;
+        updh = GetComponent<UpgradePanelDescriptionHelper>();
     }
 
-    private void HandleOnGameStart()
+    public override void ShowHideElements(bool shouldBeShown)
+    {
+        base.ShowHideElements(shouldBeShown);
+        if (shouldBeShown)
+        {
+            InitializeUpgradePanel();
+        }
+    }
+
+    private void InitializeUpgradePanel()
     {
         PrepLetterMods();
         AssignInitialLettersModsToUI();
@@ -67,46 +78,47 @@ public class UpgradesPanel : UI_Panel
 
     private void PrepLetterMods()
     {
-        List<LetterMask> letters = new List<LetterMask>();
-        letters = lib.gameController.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMods();
+        List<LetterMask> letterMasks = new List<LetterMask>();
+        letterMasks = lib.gameController.GetPlayer().GetComponent<LetterMaskHolder>().GetLetterMasks();
+        //Debug.Log($"received {letterMasks.Count} letter masks, and #3 is {letterMasks[2].letter}");
         
-        foreach (var letter in letters)
+        foreach (LetterMask letterMask in letterMasks)
         {
-            if (topBand.Contains(letter.GetLetter().ToString()))
+            if (topBand.Contains(letterMask.letter.ToString()))
             {
-                topBandLetters.Add(letter);
+                topBandLetterMasks.Add(letterMask);
             }
             else
             {
-                bottomBandLetters.Add(letter);
+                bottomBandLetterMasks.Add(letterMask);
             }
         }
 
         for (int i = 0; i < topTMPs.Length; i++)
         {
-            displayedLetterMod_Top[i] = topBandLetters[i];
-            displayedLetterMod_Bottom[i] = bottomBandLetters[i];
+            displayedLetterMod_Top[i] = topBandLetterMasks[i];
+            displayedLetterMod_Bottom[i] = bottomBandLetterMasks[i];
         }
     }
     private void DisplaySelectedLetter()
     {
-        selectedLetterTMP.text = selectedLetterMod.GetLetter().ToString();
-        float rarity = Mathf.Round(selectedLetterMod.GetRarity());
+        selectedLetterTMP.text = "asdf"; //selectedLetterMod.letter.ToString();
+        float rarity = Mathf.Round(selectedLetterMod.rarity);
         selectedRarityTMP.text = rarity.ToString() + "%";
-        selectedBlurbTMP.text = selectedLetterMod.GetBlurb();
-        selectedAbilityTMP.text = selectedLetterMod.GetAbilityDescription();
-        selectedPowerTMP.text = selectedLetterMod.GetPower().ToString();
-        selectedExperienceTMP.text = selectedLetterMod.GetExperienceString();
+        selectedAbilityTMP.text = updh.GetDescriptionForAbility(selectedLetterMod.ability);
+        selectedPowerTMP.text = selectedLetterMod.PowerMod.ToString();
+        selectedExperienceTMP.text = $"{selectedLetterMod.experience_Current} / " +
+            $"{selectedLetterMod.experience_NextLevel}";
     }
     private void AssignInitialLettersModsToUI()
     {
         for (int i = 0; i < topTMPs.Length; i++)
         {
-            topTMPs[i].text = topBandLetters[i].GetLetter().ToString();
+            topTMPs[i].text = topBandLetterMasks[i].letter.ToString();
         }
         for (int j = 0; j < topTMPs.Length; j++)
         {
-            bottomTMPs[j].text = bottomBandLetters[j].GetLetter().ToString();
+            bottomTMPs[j].text = bottomBandLetterMasks[j].letter.ToString();
         }
     }
 
@@ -145,13 +157,13 @@ public class UpgradesPanel : UI_Panel
         scrollSlider.value = scroll_current;
         for (int i = 0; i < topTMPs.Length; i++)
         {
-            displayedLetterMod_Top[i] = topBandLetters[i + scroll_current];
-            topTMPs[i].text = displayedLetterMod_Top[i].GetLetter().ToString();
+            displayedLetterMod_Top[i] = topBandLetterMasks[i + scroll_current];
+            topTMPs[i].text = displayedLetterMod_Top[i].letter.ToString();
         }
         for (int j = 0; j < topTMPs.Length; j++)
         {
-            displayedLetterMod_Bottom[j] = bottomBandLetters[j + scroll_current];
-            bottomTMPs[j].text = displayedLetterMod_Bottom[j].GetLetter().ToString();
+            displayedLetterMod_Bottom[j] = bottomBandLetterMasks[j + scroll_current];
+            bottomTMPs[j].text = displayedLetterMod_Bottom[j].letter.ToString();
         }
         SelectLetterToInspect(selectedButton);
     }
@@ -163,13 +175,13 @@ public class UpgradesPanel : UI_Panel
         scrollSlider.value = scroll_current;
         for (int i = 0; i < topTMPs.Length; i++)
         {
-            displayedLetterMod_Top[i] = topBandLetters[i + scroll_current];
-            topTMPs[i].text = displayedLetterMod_Top[i].GetLetter().ToString();
+            displayedLetterMod_Top[i] = topBandLetterMasks[i + scroll_current];
+            topTMPs[i].text = displayedLetterMod_Top[i].letter.ToString();
         }
         for (int j = 0; j < topTMPs.Length; j++)
         {
-            displayedLetterMod_Bottom[j] = bottomBandLetters[j + scroll_current];
-            bottomTMPs[j].text = displayedLetterMod_Bottom[j].GetLetter().ToString();
+            displayedLetterMod_Bottom[j] = bottomBandLetterMasks[j + scroll_current];
+            bottomTMPs[j].text = displayedLetterMod_Bottom[j].letter.ToString();
         }
         SelectLetterToInspect(selectedButton);
     }

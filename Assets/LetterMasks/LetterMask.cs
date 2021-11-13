@@ -1,59 +1,61 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(fileName = "PlayerLetterMod")]
-public class LetterMask : ScriptableObject
+
+public class LetterMask : object
 {
-    public TrueLetter AssociatedTrueLetter = null;
+    public char letter = '*';
 
     //state
-    public Sprite ShownSprite;
-    public Color ShownColor;
     public int PowerMod = 0;
-    [SerializeField] TrueLetter.Ability ability = TrueLetter.Ability.Normal;
-    int experience_Current = 12;
-    int experience_NextLevel = 345;
+    public float rarity = 0;
+    public TrueLetter.Ability ability = TrueLetter.Ability.Normal;
+    public int experience_Current = 12;
+    public int experience_NextLevel = 345;
 
-   
+    //public char GetLetter()
+    //{
+    //    return letter;
+    //}
 
-    public char GetLetter()
-    {
-        return AssociatedTrueLetter.GetLetter();
-    }
+    //public void SetLetter(char letter)
+    //{
+    //    this.letter = letter;
+    //}
 
-    public float GetRarity()
-    {
-        return AssociatedTrueLetter.GetRarity();
-    }
+    //public float GetRarity()
+    //{
+    //    return rarity;
+    //}
 
-    public string GetBlurb()
-    {
-        return AssociatedTrueLetter.GetBlurb();
-    }
+    //public string GetBlurb()
+    //{
+    //    return "";
+    //}
 
-    public TrueLetter.Ability GetAbility()
-    {
-        return ability;
-    }
+    //public TrueLetter.Ability GetAbility()
+    //{
+    //    return ability;
+    //}
 
-    public void SetAbility(TrueLetter.Ability newAbility)
-    {
-        ability = newAbility;
-    }
+    //public void SetAbility(TrueLetter.Ability newAbility)
+    //{
+    //    ability = newAbility;
+    //}
 
-    public string GetAbilityDescription()
-    {
-        return "this is the ability description";
-    }
+    //public string GetAbilityDescription()
+    //{
+    //    return "this is the ability description";
+    //}
 
-    public int GetPower()
-    {
-        return AssociatedTrueLetter.GetPower() + PowerMod;
-    }
+    //public int GetPower()
+    //{
+    //    return 0;
+    //    //return AssociatedTrueLetter.GetPower() + PowerMod;
+    //}
 
-    public string GetExperienceString()
-    {
-        return $"{experience_Current} / {experience_NextLevel}";
-    }
-
+    //public string GetExperienceString()
+    //{
+    //    return $"{experience_Current} / {experience_NextLevel}";
+    //}
 }

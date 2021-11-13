@@ -9,10 +9,11 @@ public class TrueLetter : ScriptableObject
     [SerializeField] char Letter;
     [SerializeField] int weight;
     [SerializeField] int Power;
-    [SerializeField] Ability ability = Ability.Normal;
+    //[SerializeField] Ability ability = Ability.Normal;
     [SerializeField] string letterBlurb;
 
     public enum Ability { Normal, Shiny, Frozen, Lucky, Wispy, Mystic, Healthy, Heavy, Armored, Charged};
+    
     public int ProbabilityTop;
 
 
@@ -32,10 +33,10 @@ public class TrueLetter : ScriptableObject
         return Power;
     }
 
-    public Ability GetAbility()
-    {
-        return ability;
-    }
+    //public Ability GetAbility()
+    //{
+    //    return ability;
+    //}
 
     public string GetBlurb()
     {

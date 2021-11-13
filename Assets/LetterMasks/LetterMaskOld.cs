@@ -1,39 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class LetterMaskStruct : MonoBehaviour
+[CreateAssetMenu(fileName = "PlayerLetterMod")]
+public class LetterMaskOld : ScriptableObject
 {
-    public char letter = '*';
+    public TrueLetter AssociatedTrueLetter = null;
 
     //state
-    Sprite ShownSprite;
-    Color ShownColor;
-    int PowerMod = 0;
-    float rarity = 0;
-    TrueLetter.Ability ability = TrueLetter.Ability.Normal;
+    public Sprite ShownSprite;
+    public Color ShownColor;
+    public int PowerMod = 0;
+    [SerializeField] TrueLetter.Ability ability = TrueLetter.Ability.Normal;
     int experience_Current = 12;
     int experience_NextLevel = 345;
 
-    private void Start()
-    {
-        GetRarity();
-    }
+   
 
     public char GetLetter()
     {
-        return letter;
+        return AssociatedTrueLetter.GetLetter();
     }
 
     public float GetRarity()
     {
-
-        return rarity;
+        return AssociatedTrueLetter.GetRarity();
     }
 
     public string GetBlurb()
     {
-        return "";
+        return AssociatedTrueLetter.GetBlurb();
     }
 
     public TrueLetter.Ability GetAbility()
@@ -53,12 +48,12 @@ public class LetterMaskStruct : MonoBehaviour
 
     public int GetPower()
     {
-        return 0;
-        //return AssociatedTrueLetter.GetPower() + PowerMod;
+        return AssociatedTrueLetter.GetPower() + PowerMod;
     }
 
     public string GetExperienceString()
     {
         return $"{experience_Current} / {experience_NextLevel}";
     }
+
 }

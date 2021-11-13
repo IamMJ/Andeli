@@ -5,34 +5,54 @@ using UnityEngine;
 
 public class LetterMaskHolder : MonoBehaviour
 {
+    //[SerializeField] List<LetterMaskOld> letterMasks = new List<LetterMaskOld>();
     [SerializeField] List<LetterMask> letterMasks = new List<LetterMask>();
+
+
+    //state
+    public int numberOfLetterMasks = 0;
+
+    Librarian lib;
 
     private void Start()
     {
-        //ResetLetterAbilities();
+        lib = Librarian.GetLibrarian();
+        GenerateInitialLetterMaskStructs();
+        ApplySpecialLetterMasksStructs();
     }
-
-    private void ResetLetterAbilities()
+    private void GenerateInitialLetterMaskStructs()
     {
-        //TODO have a way for this not need to occur each time. Save the state of each letter mask separately?
-        foreach(var elem in letterMasks)
+        LetterTileDropper ltd = lib.letterTileDropper;
+        List<TrueLetter> trueLettersList = ltd.GetAllTrueLetters();
+
+        foreach (var trueLetter in trueLettersList)
         {
-            elem.SetAbility(TrueLetter.Ability.Normal);
+            LetterMask newLetterMask = new LetterMask();
+            newLetterMask.letter = trueLetter.GetLetter();
+            newLetterMask.rarity = trueLetter.GetRarity();
+            newLetterMask.ability = TrueLetter.Ability.Normal;
+            letterMasks.Add(newLetterMask);
         }
+        numberOfLetterMasks = letterMasks.Count;
+    }
+    private void ApplySpecialLetterMasksStructs()
+    {
+        //use either the player character or the enemy profile's scriptable object to modify
+        //certain Letter Masks 
     }
 
-    public List<LetterMask> GetLetterMods()
+    public List<LetterMask> GetLetterMasks()
     {
         return letterMasks;
     }
 
-    public LetterMask GetLetterMaskForTrueLetter(TrueLetter targetLetter)
+    public LetterMask GetLetterMaskForTrueLetter(char targetLetter)
     {
         LetterMask targetLetterMask = null;
 
         foreach (var letterMask in letterMasks)
         {
-            if (letterMask.AssociatedTrueLetter == targetLetter)
+            if (letterMask.letter == targetLetter)
             {
                 targetLetterMask = letterMask;
                 break;
@@ -48,9 +68,9 @@ public class LetterMaskHolder : MonoBehaviour
     {
         for (int i = 0; i < letterMasks.Count; i++)
         {
-            if (letterMasks[i].GetLetter() == givenLetter)
+            if (letterMasks[i].letter == givenLetter)
             {
-                letterMasks[i].SetAbility(newAbility);
+                letterMasks[i].ability = newAbility;
                 break;
             }
         }
