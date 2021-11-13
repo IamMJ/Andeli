@@ -28,7 +28,7 @@ public class SpeedKeeper : MonoBehaviour
         {
             isPlayer = true;
             pm = GetComponent<PlayerMemory>();
-            pm.BaseMoveSpeed = targetCurrentSpeed;
+            pm.SetBaseMoveSpeed(targetCurrentSpeed);
         }
         //WordMakerMemory pm = GetComponent<WordMakerMemory>();
         //if (pm)
@@ -44,7 +44,7 @@ public class SpeedKeeper : MonoBehaviour
     {
         if (isPlayer)
         {
-            targetCurrentSpeed = pm.BaseMoveSpeed;
+            targetCurrentSpeed = pm.GetBaseMoveSpeed();
         }
 
 

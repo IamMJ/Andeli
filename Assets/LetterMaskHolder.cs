@@ -39,6 +39,8 @@ public class LetterMaskHolder : MonoBehaviour
     {
         //use either the player character or the enemy profile's scriptable object to modify
         //certain Letter Masks 
+
+        
     }
 
     public List<LetterMask> GetLetterMasks()

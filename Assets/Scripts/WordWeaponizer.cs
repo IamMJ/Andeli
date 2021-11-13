@@ -63,7 +63,7 @@ public class WordWeaponizer : MonoBehaviour
             jm.UpdateJewelImage(100);
 
             pm = GetComponent<PlayerMemory>();
-            pm.BaseEnergyRegenRate = energyRegenRate_Target;
+            pm.SetBaseEnergyRegenRate(energyRegenRate_Target);
         }
         gc = lib.gameController;
         wv = lib.wordValidater;
@@ -76,7 +76,7 @@ public class WordWeaponizer : MonoBehaviour
     {
         if (isPlayer)
         {
-            energyRegenRate_Target = pm.BaseEnergyRegenRate;
+            energyRegenRate_Target = pm.GetBaseEnergyRegenRate(); ;
         }
 
         currentEnergyLevel = maxEnergy; //maxEnergy;

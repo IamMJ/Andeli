@@ -9,6 +9,7 @@ public class UpgradesPanel : UI_Panel
 {
     Librarian lib;
     UpgradePanelDescriptionHelper updh;
+    PlayerMemory pm;
 
     string topBand = "ACEGIKMOQSUWY";
     string bottomBand = "BDFHJLNPRTVXZ";
@@ -40,6 +41,7 @@ public class UpgradesPanel : UI_Panel
     int selectedButton = 0;
     LetterMask[] displayedLetterMod_Top = new LetterMask[5];
     LetterMask[] displayedLetterMod_Bottom = new LetterMask[5];
+    bool[] isAbilityButtonActivated = new bool[10];
 
     private void Start()
     {
@@ -47,6 +49,10 @@ public class UpgradesPanel : UI_Panel
         scroll_max = topBand.Length - topTMPs.Length;
         //lib.gameController.OnGameStart += HandleOnGameStart;
         updh = GetComponent<UpgradePanelDescriptionHelper>();
+        for (int i = 0; i < isAbilityButtonActivated.Length; i++)
+        {
+            isAbilityButtonActivated[i] = false;
+        }
     }
 
     public override void ShowHideElements(bool shouldBeShown)
@@ -60,6 +66,7 @@ public class UpgradesPanel : UI_Panel
 
     private void InitializeUpgradePanel()
     {
+        pm = lib.gameController.GetPlayer().GetComponent<PlayerMemory>();
         PrepLetterMods();
         AssignInitialLettersModsToUI();
         PrepAbilityButtons();
@@ -68,12 +75,18 @@ public class UpgradesPanel : UI_Panel
     #region Helpers
     private void PrepAbilityButtons()
     {
+        List<TrueLetter.Ability> knownAbilities = pm.GetAllKnownAbilities();
         for (int i = 0; i < abilityPurchaseButtonsImages.Length; i++)
         {
-            LetterTile.SpriteColorYMod sc = sourceLetterTile.GetSpriteColorFromAbility((TrueLetter.Ability)i);
-            abilityPurchaseButtonsImages[i].sprite = sc.Sprite;
-            abilityPurchaseButtonsImages[i].color = sc.Color;
+            if (knownAbilities.Contains((TrueLetter.Ability)i))
+            {
+                LetterTile.SpriteColorYMod sc = sourceLetterTile.GetSpriteColorFromAbility((TrueLetter.Ability)i);
+                abilityPurchaseButtonsImages[i].sprite = sc.Sprite;
+                abilityPurchaseButtonsImages[i].color = sc.Color;
+                isAbilityButtonActivated[i] = true;
+            }
         }
+
     }
 
     private void PrepLetterMods()
@@ -123,7 +136,6 @@ public class UpgradesPanel : UI_Panel
     }
 
     #endregion
-
 
     #region Public Button Handlers
     public void ReturnToPreviousContext()
@@ -185,8 +197,16 @@ public class UpgradesPanel : UI_Panel
         }
         SelectLetterToInspect(selectedButton);
     }
+
+    public void SelectLetterPower(int buttonIndex)
+    {
+        if (isAbilityButtonActivated[buttonIndex] == false) { return; }
+
+
+    }
     #endregion
 
 
-   
+
+
 }

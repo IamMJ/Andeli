@@ -9,11 +9,22 @@ public class PlayerMemory : MonoBehaviour
     //check if a particular bark or convo should be used or suppressed
 
     public Action<string> OnKeywordAdded;
-
-    public float BaseEnergyRegenRate;
-    public float BaseMoveSpeed;
+    public Action OnAbilityGained;
 
 
+
+    //state
+    float BaseEnergyRegenRate;
+    float BaseMoveSpeed;
+    List<TrueLetter.Ability> knownAbilities = new List<TrueLetter.Ability>();
+
+    private void Start()
+    {
+        knownAbilities.Add(TrueLetter.Ability.Normal);
+        knownAbilities.Add(TrueLetter.Ability.Heavy);
+    }
+
+    #region Keyword public methods
     public bool CheckForPlayerKnowledgeOfARequiredKeyword(string testRequiredKeyword)
     {
         bool result = false;
@@ -58,4 +69,55 @@ public class PlayerMemory : MonoBehaviour
         OnKeywordAdded?.Invoke(newKeyword);
 
     }
+
+    #endregion
+
+    #region Player Stats public methods
+
+    public float GetBaseMoveSpeed()
+    {
+        return BaseMoveSpeed;
+    }
+
+    public void AdjustBaseMoveSpeed(float adjustmentToSpeed)
+    {
+        BaseMoveSpeed += adjustmentToSpeed;
+    }
+
+    public void SetBaseMoveSpeed(float moveSpeed)
+    {
+        BaseMoveSpeed = moveSpeed;
+    }
+
+    public float GetBaseEnergyRegenRate()
+    {
+        return BaseEnergyRegenRate;
+    }
+
+    public void AdjustBaseEnergyRegenRate(float adjustmentToEnergy)
+    {
+        BaseEnergyRegenRate += adjustmentToEnergy;
+    }
+
+    public void SetBaseEnergyRegenRate(float regenRate)
+    {
+        BaseEnergyRegenRate = regenRate;
+    }
+
+    #endregion
+
+    #region Inventory public methods
+
+    public void LearnNewAbility(TrueLetter.Ability newAbility)
+    {
+        knownAbilities.Add(newAbility);
+        OnAbilityGained?.Invoke();
+    }
+
+    public List<TrueLetter.Ability> GetAllKnownAbilities()
+    {
+        return knownAbilities;
+    }
+
+    #endregion
 }
