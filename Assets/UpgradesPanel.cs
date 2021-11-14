@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,8 +35,11 @@ public class UpgradesPanel : UI_Panel
     [SerializeField] TextMeshProUGUI[] abilityPurchaseButtonsTMPs = null;
 
     [SerializeField] RectTransform selectionFrame = null;
+    [SerializeField] RectTransform unselectionSpot = null;
 
     [SerializeField] TextMeshProUGUI costTMP = null;
+
+    [SerializeField] TextMeshProUGUI moneyOnHandTMP = null;
 
 
     //state
@@ -45,7 +49,7 @@ public class UpgradesPanel : UI_Panel
 
     int scroll_current = 0;
     int scroll_max;
-    int selectedButton = 0;
+    int selectedButton = -1;
     LetterMask[] displayedLetterMod_Top = new LetterMask[5];
     LetterMask[] displayedLetterMod_Bottom = new LetterMask[5];
     bool[] isAbilityButtonActivated = new bool[10];
@@ -75,12 +79,79 @@ public class UpgradesPanel : UI_Panel
     private void InitializeUpgradePanel()
     {
         pm = lib.gameController.GetPlayer().GetComponent<PlayerMemory>();
+        UnselectLetter();
         PrepLetterMasks();
         AssignLettersMasksToUI();
         PrepAbilityButtons();
+        UpdateMoneyOnHand();
     }
 
+
     #region Helpers
+
+    private void UpdateMoneyOnHand()
+    {
+        moneyOnHandTMP.text = pm.GetMoneyOnHand().ToString();
+    }
+    private void AdjustSelectedLetterDuringScrollLeft()
+    {
+        if (selectedButton <= 4 && selectedButton >= 0)
+        {
+            selectedButton++;
+            if (selectedButton < 0 || selectedButton > 4)
+            {
+                UnselectLetter();
+            }
+        }
+        if (selectedButton >= 5)
+        {
+            selectedButton++;
+            if (selectedButton < 5 || selectedButton > 9)
+            {
+                UnselectLetter();
+            }
+        }
+    }
+
+    private void AdjustSelectedLetterDuringScrollRight()
+    {
+        if (selectedButton <= 4 && selectedButton >= 0)
+        {
+            selectedButton--;
+            if (selectedButton < 0 || selectedButton > 4)
+            {
+                UnselectLetter();
+            }
+        }
+        if (selectedButton >= 5)
+        {
+            selectedButton--;
+            if (selectedButton < 5 || selectedButton > 9)
+            {
+                UnselectLetter();
+            }
+        }
+    }
+
+    private void UnselectLetter()
+    {
+        selectedButton = -1;
+        selectionFrame.position = unselectionSpot.position;
+        ResetSelectionPanel();
+    }
+    private void ResetSelectionPanel()
+    {
+        selectedLetterTMP.text = "-";
+        selectedRarityTMP.text = "-";
+        selectedAbilityTMP.text = "-";
+        selectedPowerTMP.text = "-";
+        selectedExperienceTMP.text = "-/-";
+        selectedLetterImage.sprite = sourceLetterTile.GetComponent<SpriteRenderer>().sprite;
+        selectedLetterImage.color = sourceLetterTile.GetComponent<SpriteRenderer>().color;
+        costOfCart = 0;
+        abilityInCart = TrueLetter.Ability.Normal;
+    }
+
     private void PrepAbilityButtons()
     {
         List<TrueLetter.Ability> knownAbilities = pm.GetAllKnownAbilities();
@@ -125,7 +196,15 @@ public class UpgradesPanel : UI_Panel
     {
         selectedLetterTMP.text = selectedLetterMask.letter.ToString();
         float rarity = Mathf.Round(selectedLetterMask.rarity);
-        selectedRarityTMP.text = rarity.ToString() + "%";
+        if (rarity < 1f)
+        {
+            selectedRarityTMP.text = "<1%";
+        }
+        else
+        {
+            selectedRarityTMP.text = rarity.ToString() + "%";
+        }
+
         selectedAbilityTMP.text = updh.GetDescriptionForAbility(selectedLetterMask.ability);
         selectedPowerTMP.text = selectedLetterMask.PowerMod.ToString();
         selectedExperienceTMP.text = $"{selectedLetterMask.experience_Current} / " +
@@ -162,6 +241,7 @@ public class UpgradesPanel : UI_Panel
     public void SelectLetterToInspect(int buttonIndex)
     {
         selectedButton = buttonIndex;
+        if (selectedButton == -1) { return; }
         // move selection frame to that button Index
         if (buttonIndex < topTMPs.Length)
         {
@@ -182,6 +262,7 @@ public class UpgradesPanel : UI_Panel
     {
         if (scroll_current <= 0) { return; }
         scroll_current--;
+        AdjustSelectedLetterDuringScrollLeft();
         scrollSlider.value = scroll_current;
         for (int i = 0; i < topTMPs.Length; i++)
         {
@@ -199,6 +280,7 @@ public class UpgradesPanel : UI_Panel
     {
         if (scroll_current >= scroll_max) { return; }
         scroll_current++;
+        AdjustSelectedLetterDuringScrollRight();
         scrollSlider.value = scroll_current;
         for (int i = 0; i < topTMPs.Length; i++)
         {
@@ -211,6 +293,8 @@ public class UpgradesPanel : UI_Panel
         AssignLettersMasksToUI();
         SelectLetterToInspect(selectedButton);
     }
+
+    
 
     public void SelectLetterPower(int buttonIndex)
     {
@@ -231,16 +315,21 @@ public class UpgradesPanel : UI_Panel
             selectedLetterImage.color = newColor;
         }
         // Update cost of cart
-        costOfCart = Mathf.RoundToInt(selectedLetterMask.rarity) * updh.GetCostForAbility(abilityInCart);
+        if (selectedLetterMask.ability == abilityInCart)
+        {
+            costOfCart = 0;
+        }
+        else
+        {
+            costOfCart = Mathf.RoundToInt(selectedLetterMask.rarity) * updh.GetCostForAbility(abilityInCart);
+        }      
 
-        //Update the cost portion of the "buy" button
-        costTMP.text = costOfCart.ToString();
-        //Adjust color of buy button if too expensive
-        UpdateCostTMP();
+        UpdateCostTMPwithCostofCart();
     }
 
-    private void UpdateCostTMP()
+    private void UpdateCostTMPwithCostofCart()
     {
+        costTMP.text = costOfCart.ToString();
         if (pm.CheckMoney(costOfCart))
         {
             costTMP.color = Color.black;
@@ -255,12 +344,13 @@ public class UpgradesPanel : UI_Panel
     {
         if (pm.CheckSpendMoney(costOfCart))
         {
+            UpdateMoneyOnHand();
             selectedLetterMask.ability = abilityInCart;
             Debug.Log($"{selectedLetterMask.letter} now is {abilityInCart}");
             AssignLettersMasksToUI();
             DisplaySelectedLetter();
             costOfCart = 0;
-            UpdateCostTMP();
+            UpdateCostTMPwithCostofCart();
         }
         else
         {

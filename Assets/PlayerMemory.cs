@@ -150,5 +150,10 @@ public class PlayerMemory : MonoBehaviour
             return false;
         }
     }
+
+    public int GetMoneyOnHand()
+    {
+        return money;
+    }
     #endregion
 }
