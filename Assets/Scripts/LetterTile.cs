@@ -123,6 +123,7 @@ public class LetterTile : MonoBehaviour
         sr.sprite = sc.Sprite;
         if (IsMystic)
         {
+            //TODO need to indicate when a letter is phantom (ie, worth nothing and no power)
             sc.Color.a = mysticAlpha;
             sc.Color = Color.grey; 
         }

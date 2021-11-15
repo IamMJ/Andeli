@@ -126,11 +126,13 @@ public class DebugPanel : UI_Panel
         if (gc.debug_AlwaysIgniteLetters)
         {
             autoigniteTMP.text = "Autoignite: ON";
+            gc.GetPlayer().GetComponent<PlayerMemory>().Debug_GainAllAbilities();
         }
         else
         {
             autoigniteTMP.text = "Autoignite: OFF";
         }
+
     }
 
     #endregion

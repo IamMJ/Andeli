@@ -264,8 +264,8 @@ public class WordWeaponizer : MonoBehaviour
                     break;
 
                 case TrueLetter.Ability.Mystic:
-                    float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
-                    int count = Mathf.RoundToInt(mysticPower / 2);
+                    float mysticPower = activatedLetter.Power_Player; //+ sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
+                    int count = Mathf.Clamp(Mathf.RoundToInt(mysticPower / 2), 1, 5);
                     ltd.SpawnMysticLetters(count, mysticPower);
                     break;
 

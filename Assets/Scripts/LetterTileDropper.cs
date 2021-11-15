@@ -149,9 +149,17 @@ public class LetterTileDropper : MonoBehaviour
 
         foreach (var dropLocation in targetDropLocations)
         {
-            limit--;
-            if (limit <= 0) { break; }
-            DropLetterTile(dropLocation, isMystic, mysticPower);
+            if (isMystic == false)
+            {
+                limit--;
+                if (limit <= 0) { break; }
+                DropLetterTile(dropLocation, isMystic, mysticPower);
+            }
+            else
+            {
+                DropLetterTile(dropLocation, isMystic, mysticPower);
+            }
+
         }
         dropLocations.Clear();              
     }
@@ -430,8 +438,8 @@ public class LetterTileDropper : MonoBehaviour
     }
     public void SpawnMysticLetters(int count, float mysticPower)
     {
-        List<Vector2> mysticDropPoints = new List<Vector2>(3);
-        CreateLetterDropLocations(ref mysticDropPoints, 3);
+        List<Vector2> mysticDropPoints = new List<Vector2>(count);
+        CreateLetterDropLocations(ref mysticDropPoints, count);
         DropLettersAtDropLocations(ref mysticDropPoints, true, mysticPower);
         
     }

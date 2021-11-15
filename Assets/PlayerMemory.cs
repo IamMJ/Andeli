@@ -20,9 +20,6 @@ public class PlayerMemory : MonoBehaviour
     private void Start()
     {
         knownAbilities.Add(TrueLetter.Ability.Normal);
-        knownAbilities.Add(TrueLetter.Ability.Heavy);
-        knownAbilities.Add(TrueLetter.Ability.Shiny);
-
         money = 1000;
     }
 
@@ -114,6 +111,20 @@ public class PlayerMemory : MonoBehaviour
     {
         knownAbilities.Add(newAbility);
         OnAbilityGained?.Invoke();
+    }
+
+    public void Debug_GainAllAbilities()
+    {
+        LearnNewAbility(TrueLetter.Ability.Shiny);
+        LearnNewAbility(TrueLetter.Ability.Frozen);
+        LearnNewAbility(TrueLetter.Ability.Lucky);
+        LearnNewAbility(TrueLetter.Ability.Wispy);
+        LearnNewAbility(TrueLetter.Ability.Mystic);
+        LearnNewAbility(TrueLetter.Ability.Healthy);
+        LearnNewAbility(TrueLetter.Ability.Heavy);
+        LearnNewAbility(TrueLetter.Ability.Armored);
+        LearnNewAbility(TrueLetter.Ability.Charged);
+        AdjustMoney(1000);
     }
 
     public List<TrueLetter.Ability> GetAllKnownAbilities()
