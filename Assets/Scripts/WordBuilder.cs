@@ -55,8 +55,7 @@ public class WordBuilder : MonoBehaviour
         CurrentPower = CurrentWordPack.Power;
     }
     protected virtual void AddLetterToSword(LetterTile newLetter)
-    {
-    
+    {    
         lettersOnSword.Add(newLetter);
         OnAddLetterToSword?.Invoke(newLetter);
         //RewriteCurrentWordFromLettersOnSword();

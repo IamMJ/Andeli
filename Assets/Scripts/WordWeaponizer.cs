@@ -10,6 +10,7 @@ public class WordWeaponizer : MonoBehaviour
     [SerializeField] GameObject shinySpellPrefab = null;
     [SerializeField] GameObject freezeSpellPrefab = null;
     [SerializeField] GameObject wispySpellPrefab = null;
+    [SerializeField] GameObject heavySpellPrefab = null;
     [SerializeField] AudioClip normalSpellCastClip = null;
 
     AudioSource auso;
@@ -198,16 +199,17 @@ public class WordWeaponizer : MonoBehaviour
             * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount);
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
         auso?.PlayOneShot(normalSpellCastClip);
-        foreach (var letter in wbd.GetLettersCollected())
+        List<LetterTile> letterTilesInWord = wbd.GetLettersCollected();
+        for (int index = 0; index < letterTilesInWord.Count; index++)
         {
-            if (letter.Ability_Player != abilityToAutoIgnite)
+            if (letterTilesInWord[index].Ability_Player != abilityToAutoIgnite)
             {
                 int roll = UnityEngine.Random.Range(1, 20);
 
 
                 if (wbd.CurrentWordPack.ModifiedWordLength >= roll)
                 {
-                    TriggerActiveLetterEffects(letter, gameObject, currentEnemy);
+                    TriggerActiveLetterEffects(letterTilesInWord[index], gameObject, currentEnemy, index);
                 }
             }
 
@@ -234,7 +236,7 @@ public class WordWeaponizer : MonoBehaviour
         wordPuff.SetText(testWord);
         wordPuff.SetColorByPower(wbd.CurrentWordPack.Power);
     }
-    private void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM)
+    private void TriggerActiveLetterEffects(LetterTile activatedLetter, GameObject sourceWMM, GameObject targetWMM, int indexOfLetterInWord)
     {
         if (isPlayer)
         {
@@ -265,6 +267,11 @@ public class WordWeaponizer : MonoBehaviour
                     float mysticPower = activatedLetter.Power_Player + sourceWMM.GetComponent<WordBuilder>().CurrentWordPack.Power;
                     int count = Mathf.RoundToInt(mysticPower / 2);
                     ltd.SpawnMysticLetters(count, mysticPower);
+                    break;
+
+                case TrueLetter.Ability.Heavy:
+                    float heavyPower = indexOfLetterInWord + 1;
+                    CreateSpell(targetWMM.transform, heavyPower, TrueLetter.Ability.Heavy);
                     break;
             }
         }
@@ -333,6 +340,14 @@ public class WordWeaponizer : MonoBehaviour
                 spell = Instantiate(wispySpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
                 spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * spellSpeed*3;
                 spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Wispy);
+                return;
+
+            case TrueLetter.Ability.Heavy:
+                spell = Instantiate(heavySpellPrefab, transform.position, Quaternion.identity).GetComponent<SpellSeeker>();
+                float speed = spellSpeed / spellPotency;
+                speed = Mathf.Clamp(speed, spellSpeed * 0.1f, spellSpeed * 0.5f);
+                spell.GetComponent<Rigidbody2D>().velocity = (randRot * spell.transform.up) * speed;
+                spell.SetupSpell(target, vm, gc, spellPotency, TrueLetter.Ability.Normal);
                 return;
         }
     }

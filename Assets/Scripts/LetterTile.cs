@@ -88,7 +88,15 @@ public class LetterTile : MonoBehaviour
 
     private void Start()
     {
-        fallSpeed += UnityEngine.Random.Range(-1f, 1f);
+        if (Ability_Player == TrueLetter.Ability.Heavy)
+        {
+            fallSpeed = 8f;
+        }
+        else
+        {
+            fallSpeed += UnityEngine.Random.Range(-1f, 1f);
+        }
+
         LifetimeRemaining = StartingLifetime;
         if (IsMystic)
         {

@@ -10,6 +10,7 @@ public class DebugPanel : UI_Panel
     VictoryMeter vm;
     [SerializeField] TextMeshProUGUI letterRoutingTMP = null;
     [SerializeField] TextMeshProUGUI AIvaluesTMP = null;
+    [SerializeField] TextMeshProUGUI autoigniteTMP = null;
     [SerializeField] GameObject debugButton = null;
 
     private void Start()
@@ -117,6 +118,19 @@ public class DebugPanel : UI_Panel
     public void Debug_SwitchToUpgradeMenu()
     {
         lib.ui_Controller.SetContext(UI_Controller.Context.Upgrades);
+    }
+
+    public void Debug_ToggleAutoIgnite()
+    {
+        gc.debug_AlwaysIgniteLetters = !gc.debug_AlwaysIgniteLetters;
+        if (gc.debug_AlwaysIgniteLetters)
+        {
+            autoigniteTMP.text = "Autoignite: ON";
+        }
+        else
+        {
+            autoigniteTMP.text = "Autoignite: OFF";
+        }
     }
 
     #endregion
