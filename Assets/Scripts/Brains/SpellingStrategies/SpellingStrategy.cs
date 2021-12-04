@@ -65,7 +65,6 @@ public abstract class SpellingStrategy : MonoBehaviour
         CurrentRecommendedStrategy = PossibleWordStrategies.NoStrategyAvailable;
     }
 
-
     /// <summary>
     /// Generate a utility value for a given Letter Tile. This should vary between different strategies.
     /// </summary>

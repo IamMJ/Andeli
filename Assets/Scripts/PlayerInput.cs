@@ -8,6 +8,7 @@ using Pathfinding;
 public class PlayerInput : MonoBehaviour
 {
     //init
+
     [SerializeField] GameObject moveArrowPrefab = null;
     [SerializeField] GameObject strategicDestinationPrefab = null;
     GameController gc;
@@ -20,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     List<GameObject> moveArrows = new List<GameObject>();
     Camera mc;
     GameObject currentStrategicDestinationIcon;
+    [SerializeField] Sprite playerMugShot = null;
     int layerMask_Letter = 1 << 9;
     int layerMask_NPC = 1 << 17;
     public GameObject currentTargetGO;
@@ -153,6 +155,11 @@ public class PlayerInput : MonoBehaviour
     }
 
     #region Public Methods
+
+    public Sprite GetPlayerMugShot()
+    {
+        return playerMugShot;
+    }
 
     public void ToggleDebugMenu()
     {

@@ -7,7 +7,7 @@ public class SpellSeeker : MonoBehaviour
 {
     //init
     Rigidbody2D rb;
-    VictoryMeter vm;
+    HealthManager hm;
     GameController gc;
     [SerializeField] GameObject particleImpactFXprefab = null;
     [SerializeField] AudioClip impactSoundClip = null;
@@ -33,10 +33,10 @@ public class SpellSeeker : MonoBehaviour
 
     }
 
-    public void SetupSpell(Transform targetTransform, VictoryMeter vmRef, GameController gcRef, float payload, TrueLetter.Ability spellTypeIn)
+    public void SetupSpell(Transform targetTransform, HealthManager hmRef, GameController gcRef, float payload, TrueLetter.Ability spellTypeIn)
     {
         target = targetTransform;
-        vm = vmRef;
+        hm = hmRef;
         powerPayload = payload;
         spellType = spellTypeIn;
         gc = gcRef;
@@ -96,7 +96,14 @@ public class SpellSeeker : MonoBehaviour
         switch (spellType)
         {
             case TrueLetter.Ability.Normal:
-                vm.ModifyBalanceAndCheckForArenaEnd(powerPayload);
+                if (powerPayload > 0)
+                {
+                    hm.ModifyEnemyHealth(-1 * Mathf.Abs(powerPayload) / 100f);
+                }
+                else
+                {
+                    hm.ModifyPlayerHealth(-1 * Mathf.Abs(powerPayload) / 100f);
+                }
                 return;
 
             case TrueLetter.Ability.Frozen:

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: -4259656899091234111}
   - component: {fileID: -2252836795853682444}
   - component: {fileID: 6793219992752338228}
+  - component: {fileID: 2113824442310748648}
   m_Layer: 10
   m_Name: Enemy_Master
   m_TagString: Wordmaker
@@ -90,6 +91,7 @@ MonoBehaviour:
   shinySpellPrefab: {fileID: 7220383005889565796, guid: f2f1dcce4e4e8ab40a8612d7a74089ec, type: 3}
   freezeSpellPrefab: {fileID: 6886851091308245794, guid: c5bafa82922014b4d9a8b3634cc06e3f, type: 3}
   wispySpellPrefab: {fileID: 6886851091308245794, guid: a35557762df88b341b3f36074fdbfd8c, type: 3}
+  heavySpellPrefab: {fileID: 0}
   normalSpellCastClip: {fileID: 8300000, guid: d11792a99ee7c3143a190790c99351bc, type: 3}
   memory: {fileID: 0}
   currentEnemy: {fileID: 0}
@@ -383,3 +385,15 @@ MonoBehaviour:
   lettersOnSword: []
   currentWord: 
   CurrentPower: 0
+--- !u!114 &2113824442310748648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6646722358577865907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b548702e9dafec44888c2db863c7705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

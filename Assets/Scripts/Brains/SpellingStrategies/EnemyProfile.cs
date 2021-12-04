@@ -4,11 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyProfile")]
 public class EnemyProfile : ScriptableObject
 {
-    [SerializeField] string enemyName;
-    [SerializeField] Sprite mugShot;
-    [SerializeField] Animator animator;
-
-
     public float MinimumPoints = 2;
     public float PointsWeight = 1f;
 

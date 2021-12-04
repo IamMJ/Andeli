@@ -71,6 +71,7 @@ GameObject:
   - component: {fileID: -2790034786816923024}
   - component: {fileID: -2667806667165884307}
   - component: {fileID: 4586341928337824859}
+  - component: {fileID: -6084067912690752427}
   m_Layer: 8
   m_Name: Player
   m_TagString: Wordmaker
@@ -195,6 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveArrowPrefab: {fileID: 6160719834766047818, guid: 0a463ccee2aa9ce4aa1debf6b8e8102a, type: 3}
   strategicDestinationPrefab: {fileID: 7910314228762140595, guid: 36498f27111132e4cadd7de16ca5efda, type: 3}
+  playerMugShot: {fileID: -8421231220077389961, guid: 58568bd0c960e224a929a0646bc0e4ca, type: 3}
   currentTargetGO: {fileID: 0}
   wasValidButtonDown: 0
 --- !u!114 &-2375094335787212340
@@ -502,3 +504,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &-6084067912690752427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5608652954252347955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b548702e9dafec44888c2db863c7705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mugShot: {fileID: -8421231220077389961, guid: 58568bd0c960e224a929a0646bc0e4ca, type: 3}
+  wordbuilderName: Player

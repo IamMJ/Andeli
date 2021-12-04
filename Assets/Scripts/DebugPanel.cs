@@ -7,7 +7,7 @@ public class DebugPanel : UI_Panel
 {
     Librarian lib;
     GameController gc;
-    VictoryMeter vm;
+    HealthManager hm;
     [SerializeField] TextMeshProUGUI letterRoutingTMP = null;
     [SerializeField] TextMeshProUGUI AIvaluesTMP = null;
     [SerializeField] TextMeshProUGUI autoigniteTMP = null;
@@ -54,32 +54,29 @@ public class DebugPanel : UI_Panel
 
     public void Debug_ArenaResetToMiddle()
     {
-        if (!vm)
+        if (!hm)
         {
-            vm = FindObjectOfType<VictoryMeter>();
+            hm = lib.ui_Controller.combatPanel.GetComponent<HealthManager>();
         }
-        vm.SetBalance(25f);
-        vm.SetDecayAmount(0f);
+        hm.ResetHealthBars();
     }
 
     public void Debug_ArenaSetToLose()
     {
-        if (!vm)
+        if (!hm)
         {
-            vm = FindObjectOfType<VictoryMeter>();
+            hm = lib.ui_Controller.combatPanel.GetComponent<HealthManager>();
         }
-        vm.SetBalance(3f);
-        vm.SetDecayAmount(3f);
+        hm.ModifyPlayerHealth(-1.1f);
     }
 
     public void Debug_ArenaSetToWin()
     {
-        if (!vm)
+        if (!hm)
         {
-            vm = FindObjectOfType<VictoryMeter>();
+            hm = lib.ui_Controller.combatPanel.GetComponent<HealthManager>();
         }
-        vm.SetBalance(47f);
-        vm.SetDecayAmount(-3f);
+        hm.ModifyEnemyHealth(-1.1f);
     }
 
     public void ToggleLetterRoutingOption()

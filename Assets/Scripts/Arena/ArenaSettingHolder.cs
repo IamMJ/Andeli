@@ -14,7 +14,7 @@ public class ArenaSettingHolder : MonoBehaviour
     WordWeaponizer wwz_Enemy;
     WordBuilder wbd_Player;
     WordBuilder wbd_Enemy;
-    VictoryMeter vm;
+    HealthManager hm;
     CombatPanel uid;
     TutorDialogManager tutorDM;
     
@@ -22,7 +22,7 @@ public class ArenaSettingHolder : MonoBehaviour
     public enum ArenaSettingOptions {Plain, Mists, Sandy, Blizzard, Jungle, Graveyard, Training }
 
     public void SetupArena(LetterTileDropper letterTileDropper, WordMakerMemory playerPlayMem, WordMakerMemory enemyPlayMem,
-        WordWeaponizer wwzPlayer, WordWeaponizer wwzEnemy, WordBuilder wbPlayer, WordBuilder wbEnemy, VictoryMeter vicmet, CombatPanel uIDriver)
+        WordWeaponizer wwzPlayer, WordWeaponizer wwzEnemy, WordBuilder wbPlayer, WordBuilder wbEnemy, HealthManager healthMan, CombatPanel uIDriver)
     {
         ltd = letterTileDropper;
         playerMemory = playerPlayMem;
@@ -31,7 +31,7 @@ public class ArenaSettingHolder : MonoBehaviour
         wwz_Enemy = wwzEnemy;
         wbd_Player = wbPlayer;
         wbd_Enemy = wbEnemy;
-        vm = vicmet;
+        hm = healthMan;
         uid = uIDriver;
         //Modify various things affected in the arena by the arena setttings
         ImplementSelectedArenaSettings();
@@ -55,7 +55,10 @@ public class ArenaSettingHolder : MonoBehaviour
         wwz_Player.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
         wwz_Enemy.SetupArenaParameters_AbilityToAutoIgnite(arenaSetting_Default.abilityToAutoIgnite);
 
-        vm.ResetArena(arenaSetting_Default.startingVictoryMeterBalance);
+        hm.ResetHealthBars();
+        Sprite playerSprite = wbd_Player.GetComponent<WordbuilderData>().GetMugShot();
+        Sprite enemySprite = wbd_Enemy.GetComponent<WordbuilderData>().GetMugShot();
+        hm.SetHealthBarIcons(playerSprite, enemySprite);
 
         switch (arenaSetting.aso)
         {
@@ -100,7 +103,6 @@ public class ArenaSettingHolder : MonoBehaviour
                 ltd.SetupArenaParameters_TimeBetweenWaves(arenaSetting.timeBetweenWaves);
                 ltd.SetupArenaParameters_MaxLettersOnBoard(arenaSetting.maxLettersOnBoard);
                 ltd.SetupArenaParameters_LettersToIgnore(arenaSetting.lettersToIgnore);
-                vm.ResetArena(arenaSetting.startingVictoryMeterBalance);
                 wwz_Player.SetupArenaParameters_EnergyRegenRate(arenaSetting.energyRegenRateModifier);
                 tutorDM = GameObject.FindGameObjectWithTag("Tutor").GetComponent<TutorDialogManager>();
                 tutorDM.SetupTutorDM(wwz_Player);

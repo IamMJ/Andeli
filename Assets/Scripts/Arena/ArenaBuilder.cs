@@ -22,7 +22,7 @@ public class ArenaBuilder : MonoBehaviour
     ArenaSettingHolder ash;
     CinemachineVirtualCamera cvc;
     GameController gc;
-    VictoryMeter vm;
+    HealthManager hm;
     GameObject player;
     CombatPanel uid;
     ArenaStarter arenaStarter;
@@ -71,12 +71,12 @@ public class ArenaBuilder : MonoBehaviour
 
         enemy = Instantiate(arenaStarter.ArenaEnemyPrefab, transform.position + enemySpawnOffset, Quaternion.identity);
         enemy.GetComponent<SpellingStrategy>().ImplementSpeedEnergySettingsFromEP();
-        vm = gc.GetVictoryMeter();
-        vm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
+        hm = lib.ui_Controller.combatPanel.GetComponent<HealthManager>();
+        hm.OnArenaVictory_TrueForPlayerWin += HandleArenaCompletion;
         SetupStatueCameraMouse(arenaCentroid);
         ash.SetupArena(ltd, player.GetComponent<WordMakerMemory>(), enemy.GetComponent<WordMakerMemory>(),
             playerWWZ, enemy.GetComponent<WordWeaponizer>(), 
-            player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), vm, uid);
+            player.GetComponent<WordBuilder>(), enemy.GetComponent<WordBuilder>(), hm, uid);
 
         lib.ui_Controller.SetContext(UI_Controller.Context.Combat);
         cc = lib.cameraController;
@@ -208,7 +208,7 @@ public class ArenaBuilder : MonoBehaviour
         lib.ui_Controller.SetContext(UI_Controller.Context.Debrief);
         lib.ui_Controller.debriefPanel.ActivateDebriefPanel(didPlayerWin, player, enemy, timeElapsed);
         arenaStarter.DeactivateArenaStarter(didPlayerWin);
-        vm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
+        hm.OnArenaVictory_TrueForPlayerWin -= HandleArenaCompletion;
     }
 
 

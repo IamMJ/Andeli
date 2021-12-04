@@ -11,8 +11,6 @@ public class CombatPanel : UI_Panel
 
     [SerializeField] GameObject[] topPanelElements = null;
 
-    [SerializeField] Slider victoryBarSlider = null;
-
     [SerializeField] Slider wordEraseSliderBG = null;
     [SerializeField] Image attackButtonMain = null;
     [SerializeField] Image attackButtonRunes = null;

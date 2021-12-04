@@ -11,10 +11,22 @@ PrefabInstance:
       propertyPath: ep
       value: 
       objectReference: {fileID: 11400000, guid: 298fb7271fc01c84291daac2c278940f, type: 2}
+    - target: {fileID: 2113824442310748648, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
+      propertyPath: mugShot
+      value: 
+      objectReference: {fileID: 7420946542478651529, guid: 01c845692ab98794d8c85f788fe2e821, type: 3}
+    - target: {fileID: 2113824442310748648, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
+      propertyPath: wordbuilderName
+      value: Black Ghost
+      objectReference: {fileID: 0}
     - target: {fileID: 4273840345302285748, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 7420946542478651529, guid: 01c845692ab98794d8c85f788fe2e821, type: 3}
+    - target: {fileID: 4273840345302285748, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5854897102321952828, guid: 995a3fdcf50019c49a677ad2236bb011, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
