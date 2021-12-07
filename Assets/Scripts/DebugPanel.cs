@@ -123,7 +123,6 @@ public class DebugPanel : UI_Panel
         if (gc.debug_AlwaysIgniteLetters)
         {
             autoigniteTMP.text = "Autoignite: ON";
-            gc.GetPlayer().GetComponent<PlayerMemory>().Debug_GainAllAbilities();
         }
         else
         {
@@ -132,5 +131,14 @@ public class DebugPanel : UI_Panel
 
     }
 
+    public void Debug_UnlockAllUpgrades()
+    {
+        gc.GetPlayer().GetComponent<PlayerMemory>().Debug_GainAllAbilities();
+    }
+
+    public void Debug_Add1000Glifs()
+    {
+        gc.GetPlayer().GetComponent<PlayerMemory>().AdjustMoney(1000);
+    }
     #endregion
 }

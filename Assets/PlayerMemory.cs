@@ -20,7 +20,7 @@ public class PlayerMemory : MonoBehaviour
     private void Start()
     {
         knownAbilities.Add(TrueLetter.Ability.Normal);
-        money = 1000;
+        money = 0;
     }
 
     #region Keyword public methods
@@ -124,7 +124,6 @@ public class PlayerMemory : MonoBehaviour
         LearnNewAbility(TrueLetter.Ability.Heavy);
         LearnNewAbility(TrueLetter.Ability.Armored);
         LearnNewAbility(TrueLetter.Ability.Charged);
-        AdjustMoney(1000);
     }
 
     public List<TrueLetter.Ability> GetAllKnownAbilities()

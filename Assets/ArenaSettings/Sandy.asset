@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
   m_Name: Sandy
   m_EditorClassIdentifier: 
-  briefScreenIcon: {fileID: -6621628953360950393, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
-  briefScreenText: The dry desert!
+  settingIcon: {fileID: 0}
+  settingName: 
+  settingDesc_0: 
+  settingDesc_1: 
+  settingDesc_2: 
   aso: 2
   letterLifetime: 10
   lettersPerWave: 2
@@ -21,9 +24,8 @@ MonoBehaviour:
   lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 12
-  startingVictoryMeterBalance: 20
   powerModifierForWordCount: 0
   shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 1
   abilityToAutoIgnite: 0
-  maxWordLength: 7
+  maxWordLength: 8

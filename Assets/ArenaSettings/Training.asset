@@ -24,9 +24,8 @@ MonoBehaviour:
   lettersToIgnore: CHJKMPQVWXYZ
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 6
-  startingVictoryMeterBalance: 1
   powerModifierForWordCount: 0
   shouldNotCountIfRepeatingWord: 0
   energyRegenRateModifier: 3
   abilityToAutoIgnite: 0
-  maxWordLength: 7
+  maxWordLength: 8
