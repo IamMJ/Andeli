@@ -61,6 +61,7 @@ public class ArenaStarter : MonoBehaviour
     {
         player = gc.GetPlayer();
         pm = player.GetComponent<PlayerMemory>();
+        arenaCentroid.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     private void Update()
@@ -113,6 +114,7 @@ public class ArenaStarter : MonoBehaviour
         ArenaBuilder arenaBuilder = ab.GetComponent<ArenaBuilder>();
         arenaBuilder.SetArenaStarter(this, ash);
         arenaBuilder.SetupArena(arenaCentroid);
+
 
     }
 

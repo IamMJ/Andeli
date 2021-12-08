@@ -236,7 +236,7 @@ public class LetterTileDropper : MonoBehaviour
 
     private bool CheckRandomPositionAgainstExistingLettersOnBoard(Vector2 testPos)
     {
-        var coll = Physics2D.OverlapCircle(testPos, 0.05f, layerMask_Letter);
+        var coll = Physics2D.OverlapCircle(testPos, minDistanceBetweenLetters, layerMask_Letter);
         if (coll)
         {
             return true;

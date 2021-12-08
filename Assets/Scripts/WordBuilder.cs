@@ -222,7 +222,8 @@ public class WordBuilder : MonoBehaviour
 
     public void ClearLastLetterInWord()
     {
-        Debug.Log($"letters on sword: {lettersOnSword.Count}, removing at {lettersOnSword.Count - 1}");
+        if (lettersOnSword.Count == 0) { return; }
+        //Debug.Log($"letters on sword: {lettersOnSword.Count}, removing at {lettersOnSword.Count - 1}");
         lettersOnSword.RemoveAt(lettersOnSword.Count - 1);
         CurrentWordPack = CreateWordPackFromCurrentLettersOnSword(hasUI);
     }

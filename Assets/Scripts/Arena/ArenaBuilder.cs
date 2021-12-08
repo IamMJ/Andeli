@@ -34,10 +34,10 @@ public class ArenaBuilder : MonoBehaviour
 
 
     //parameters
-    int minX = -6;
-    int minY = -6;
-    int maxX = 6;
-    int maxY = 6;
+    int minX = -4;
+    int minY = -4;
+    int maxX = 4;
+    int maxY = 4;
     float checkRadius = 0.01f;
     Vector3 enemySpawnOffset = new Vector2(0, 0);
 
@@ -174,6 +174,7 @@ public class ArenaBuilder : MonoBehaviour
         float randX = UnityEngine.Random.Range(minX + 1, maxX);
         float randY = UnityEngine.Random.Range(minY + 1, maxY);
         Vector2 randPos = new Vector2(randX, randY);
+
         return randPos;
     }
 
