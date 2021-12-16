@@ -30,7 +30,7 @@ public class UpgradesPanel : UI_Panel
     [SerializeField] TextMeshProUGUI selectedExperienceTMP = null;
     [SerializeField] TextMeshProUGUI selectedAbilityTMP = null;
 
-    [SerializeField] LetterTile sourceLetterTile = null;
+    LetterTile sourceLetterTile;
     [SerializeField] Image[] abilityPurchaseButtonsImages = null;
     [SerializeField] TextMeshProUGUI[] abilityPurchaseButtonsTMPs = null;
 
@@ -58,6 +58,7 @@ public class UpgradesPanel : UI_Panel
     private void Start()
     {
         lib = Librarian.GetLibrarian();
+        sourceLetterTile = lib.GetSourceLetterTile();
         scroll_max = topBand.Length - topTMPs.Length;
         //lib.gameController.OnGameStart += HandleOnGameStart;
         updh = GetComponent<UpgradePanelDescriptionHelper>();
@@ -205,7 +206,7 @@ public class UpgradesPanel : UI_Panel
             selectedRarityTMP.text = rarity.ToString() + "%";
         }
 
-        selectedAbilityTMP.text = updh.GetDescriptionForAbility(selectedLetterMask.ability);
+        selectedAbilityTMP.text = UpgradePanelDescriptionHelper.GetDescriptionForAbility(selectedLetterMask.ability);
         selectedPowerTMP.text = selectedLetterMask.PowerMod.ToString();
         selectedExperienceTMP.text = $"{selectedLetterMask.experience_Current} / " +
             $"{selectedLetterMask.experience_NextLevel}";
@@ -301,7 +302,7 @@ public class UpgradesPanel : UI_Panel
         if (isAbilityButtonActivated[buttonIndex] == false) { return; }
 
         abilityInCart = (TrueLetter.Ability)buttonIndex;
-        selectedAbilityTMP.text = updh.GetDescriptionForAbility(abilityInCart);
+        selectedAbilityTMP.text = UpgradePanelDescriptionHelper.GetDescriptionForAbility(abilityInCart);
         if (abilityInCart == selectedLetterMask.ability)
         {
             selectedLetterImage.sprite = sourceLetterTile.GetSpriteColorFromAbility(selectedLetterMask.ability).Sprite;
@@ -321,7 +322,7 @@ public class UpgradesPanel : UI_Panel
         }
         else
         {
-            costOfCart = Mathf.RoundToInt(selectedLetterMask.rarity) * updh.GetCostForAbility(abilityInCart);
+            costOfCart = Mathf.RoundToInt(selectedLetterMask.rarity) * UpgradePanelDescriptionHelper.GetCostForAbility(abilityInCart);
         }      
 
         UpdateCostTMPwithCostofCart();

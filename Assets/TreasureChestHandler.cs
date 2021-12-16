@@ -25,7 +25,7 @@ public class TreasureChestHandler : MonoBehaviour
         if (collision.gameObject == player)
         {
             //TODO play creaking open-chest sound
-            rpd.ActivateRewardPanel();
+//TODO tie in to a context switch to reward screen;
             Destroy(gameObject);
         }
     }

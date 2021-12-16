@@ -5,29 +5,29 @@ using UnityEngine;
 public class UpgradePanelDescriptionHelper : MonoBehaviour
 {
     //Normal, Shiny, Frozen, Lucky, Wispy, Mystic, Healthy, Heavy, Armored, Charged
-    string normalAbilityDesc = "normal - ";
-    string shinyAbilityDesc = "shiny";
-    string frozenAbilityDesc = "frozen";
-    string luckyAbilityDesc = "lucky";
-    string wispyAbilityDesc = "wispy";
-    string mysticAbilityDesc = "mystic";
-    string healthyAbilityDesc = "healthy";
-    string heavyAbilityDesc = "heavy";
-    string armoredAbilityDesc = "armored";
-    string chargedAbilityDesc = "charged";
+    static string normalAbilityDesc = "normal - ";
+    static string shinyAbilityDesc = "shiny";
+    static string frozenAbilityDesc = "frozen";
+    static string luckyAbilityDesc = "lucky";
+    static string wispyAbilityDesc = "wispy";
+    static string mysticAbilityDesc = "mystic";
+    static string healthyAbilityDesc = "healthy";
+    static string heavyAbilityDesc = "heavy";
+    static string armoredAbilityDesc = "armored";
+    static string chargedAbilityDesc = "charged";
 
-    int normalAbilityCost = 0;
-    int shinyAbilityCost = 2;
-    int frozenAbilityCost = 3;
-    int luckyAbilityCost = 4;
-    int wispyAbilityCost = 5;
-    int mysticAbilityCost = 6;
-    int healthyAbilityCost = 7;
-    int heavyAbilityCost = 8;
-    int armoredAbilityCost = 8;
-    int chargedAbilityCost = 10;
+    static int normalAbilityCost = 0;
+    static int shinyAbilityCost = 2;
+    static int frozenAbilityCost = 3;
+    static int luckyAbilityCost = 4;
+    static int wispyAbilityCost = 5;
+    static int mysticAbilityCost = 6;
+    static int healthyAbilityCost = 7;
+    static int heavyAbilityCost = 8;
+    static int armoredAbilityCost = 8;
+    static int chargedAbilityCost = 10;
 
-    public string GetDescriptionForAbility(TrueLetter.Ability ability)
+    static public string GetDescriptionForAbility(TrueLetter.Ability ability)
     {
         string output = "default";
         switch (ability)
@@ -75,7 +75,7 @@ public class UpgradePanelDescriptionHelper : MonoBehaviour
         return output;
     }
 
-    public int GetCostForAbility(TrueLetter.Ability ability)
+    static public int GetCostForAbility(TrueLetter.Ability ability)
     {
         int output = 0;
         switch (ability)

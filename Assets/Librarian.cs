@@ -12,6 +12,7 @@ public class Librarian : MonoBehaviour
     public MusicController musicController;
     public BagManager bagManager;
     public LetterTileDropper letterTileDropper;
+    [SerializeField] LetterTile sourceLT = null;
 
 
     public void Start()
@@ -29,5 +30,10 @@ public class Librarian : MonoBehaviour
     public static Librarian GetLibrarian()
     {
         return GameObject.FindGameObjectWithTag("Librarian").GetComponent<Librarian>();
+    }
+
+    public LetterTile GetSourceLetterTile()
+    {
+        return sourceLT;
     }
 }
