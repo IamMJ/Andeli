@@ -8,7 +8,7 @@ public class RewardPanel : UI_Panel
 {
     [SerializeField] TextMeshProUGUI glyphRewardTMP = null;
     [SerializeField] TextMeshProUGUI expRewardTMP = null;
-
+    int amountToGive;
     UI_Controller uic;
 
     void Start()
@@ -19,14 +19,20 @@ public class RewardPanel : UI_Panel
     public void HandleAccceptRewardClick()
     {
         //grant rewards
+        Debug.Log("Button clicked");
         uic.SetContext(UI_Controller.Context.Upgrades);
     }
 
-    public void ActivateRewardPanel(int testAmount)
+    public void SetRewardPanelAmount(int amount)
+    {
+        amountToGive = amount;
+    }
+
+    public void ActivateRewardPanel()
     {
         //populate reward amounts here.
-        glyphRewardTMP.text = "+" + testAmount;
-        expRewardTMP.text = "+" + testAmount*5;
+        glyphRewardTMP.text = "+" + amountToGive;
+        expRewardTMP.text = "+" + amountToGive * 5;
 
     }   
 }

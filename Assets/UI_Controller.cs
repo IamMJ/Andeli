@@ -126,7 +126,7 @@ public class UI_Controller : MonoBehaviour
                 }
                 upgradesPanel.ShowHideElements(true);
                 gc.PauseGame();
-                debugPanel.ShowHideDebugButton(gc.debug_ShowDebugMenuButton);
+                //debugPanel.ShowHideDebugButton(gc.debug_ShowDebugMenuButton);
                 return;
         }
     }

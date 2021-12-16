@@ -32,7 +32,7 @@ public class LetterTileDropper : MonoBehaviour
     public Action<LetterTile, bool> OnLetterListModified;  //True means letter was added, false means letter was removed.
 
     // fixed param
-    float minDistanceBetweenLetters = 1.7f;
+    float minDistanceBetweenLetters = 0.9f;
     Vector2 fallVector = new Vector2(0, 10f);
 
     // changeable params
@@ -180,7 +180,7 @@ public class LetterTileDropper : MonoBehaviour
         {
             randomPosition = ab.CreateRandomPointWithinArena();
             attempts++;
-            if (attempts > 50)
+            if (attempts > 200)
             {
                 Debug.Log("too many attempts - break");
                 break;

@@ -34,10 +34,10 @@ public class ArenaBuilder : MonoBehaviour
 
 
     //parameters
-    int minX = -4;
-    int minY = -4;
-    int maxX = 4;
-    int maxY = 4;
+    int minX = -5;
+    int minY = -5;
+    int maxX = 5;
+    int maxY = 5;
     float checkRadius = 0.01f;
     Vector3 enemySpawnOffset = new Vector2(0, 0);
 

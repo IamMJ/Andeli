@@ -18,7 +18,7 @@ public class WordWeaponizer : MonoBehaviour
     WordBuilder wbd;
     WordValidater wv;
     HealthManager hm;
-    [SerializeField] WordMakerMemory memory;
+    WordMakerMemory memory;
     ArenaBuilder ab;
     ArenaLetterEffectsHandler aleh;
     CombatPanel uid;
@@ -195,8 +195,7 @@ public class WordWeaponizer : MonoBehaviour
     public void FireKnownValidWord()
     {
         TargetBestEnemy();
-        float spellpower = (wbd.CurrentWordPack.Power + memory.GetCurrentArenaData().wordsSpelled 
-            * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount);
+        float spellpower = (wbd.CurrentWordPack.Power); // + (memory.GetCurrentArenaData().wordsSpelled  * ab.GetArenaSettingsHolder().arenaSetting.powerModifierForWordCount));
         CreateSpell(currentEnemy.transform, spellpower * powerSign, TrueLetter.Ability.Normal); ;
         auso?.PlayOneShot(normalSpellCastClip);
         List<LetterTile> letterTilesInWord = wbd.GetLettersCollected();

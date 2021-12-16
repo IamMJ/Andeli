@@ -7,6 +7,7 @@ public class WordMakerMemory : MonoBehaviour
 {
     int consecutiveCompletedWords = 0;
     int totalCompletedWords = 0;
+    public int currentArenaCompletedWords_Debug = 0;
 
     public Action OnIncrementWordCount;
     public Action OnResetConsecutiveWordCount;
@@ -39,6 +40,7 @@ public class WordMakerMemory : MonoBehaviour
     {
         currentArenaData.powerDealt += powerDealtIncrease;
         currentArenaData.wordsSpelled ++;
+        currentArenaCompletedWords_Debug++; //This is just for debugging.
         currentArenaData.playedWords.Add(word);
         if (powerDealtIncrease > currentArenaData.currentBestSinglePowerGain)
         {
@@ -60,6 +62,7 @@ public class WordMakerMemory : MonoBehaviour
         currentArenaData.bestWordSpelled = "";
         currentArenaData.currentBestSinglePowerGain = 0;
         currentArenaData.playedWords.Clear();
+        currentArenaCompletedWords_Debug = 0; //This is just for debugging.
     }
 
     public bool CheckIfWordHasBeenPlayedByPlayerAlready(string testWord)

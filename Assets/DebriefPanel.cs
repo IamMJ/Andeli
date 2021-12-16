@@ -55,7 +55,8 @@ public class DebriefPanel : UI_Panel
     {
         Debug.Log("get the base reward");
         lib.ui_Controller.SetContext(UI_Controller.Context.Reward);
-        lib.ui_Controller.rewardPanel.ActivateRewardPanel(33);
+        lib.ui_Controller.rewardPanel.SetRewardPanelAmount(50);
+        lib.ui_Controller.rewardPanel.ActivateRewardPanel();
     }
 
     public void HandleAdRewardClick()
@@ -63,6 +64,7 @@ public class DebriefPanel : UI_Panel
         Debug.Log("get the ad reward");
         //rpd.ActivateRewardPanel(100);
         lib.ui_Controller.SetContext(UI_Controller.Context.Advert);
+        lib.ui_Controller.rewardPanel.SetRewardPanelAmount(75);
         lib.ui_Controller.advertPanel.ActivateAdvertPanel();
     }
 

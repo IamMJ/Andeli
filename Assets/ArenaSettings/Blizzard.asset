@@ -15,12 +15,12 @@ MonoBehaviour:
   settingIcon: {fileID: -5460322063802268859, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
   settingName: Blizzard
   settingDesc_0: Letters last longer
-  settingDesc_1: Icy Letters Always Trigger
-  settingDesc_2: 
+  settingDesc_1: Old Letters Block New Letters
+  settingDesc_2: Icy Letters Always Trigger
   aso: 3
   letterLifetime: 40
   lettersPerWave: 1
-  timeBetweenWaves: 1
+  timeBetweenWaves: 3
   lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 8

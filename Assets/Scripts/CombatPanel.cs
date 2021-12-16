@@ -74,7 +74,7 @@ public class CombatPanel : UI_Panel
     public void UpdatePanelWithNewWordPack(WordPack newWordPack)
     {
         powerMeterTMP.text = newWordPack.Power.ToString();
-        ModifyAttackButtonWithWordValidation(newWordPack.IsValid);
+        ModifyAttackButtonWithWordValidation(newWordPack.IsValid, newWordPack.Power);
         sgd.UpdateTargetSpellswordGlow(newWordPack.Power);
         igd.SetIgnitionChance(newWordPack.ModifiedWordLength);
 
@@ -178,16 +178,23 @@ public class CombatPanel : UI_Panel
 
     #region Button Helpers
 
-    private void ModifyAttackButtonWithWordValidation(bool isValid)
+    private void ModifyAttackButtonWithWordValidation(bool isValid, int currentWordPower)
     {
-        if (isValid)
+        if (isValid && currentWordPower > 0)
         {
             canPressAttackButton = true;
             attackButtonMain.color = new Color(.37f, .70f, .34f);
             attackButtonRunes.color = new Color(.09f, .56f, 0.0f, 1);
         }
+        else if (isValid && currentWordPower <= 0)
+        {
+            canPressAttackButton = false;
+            attackButtonMain.color = Color.red;
+            attackButtonRunes.color = Color.red;
+        }
         else
         {
+            //Instantiate()
             canPressAttackButton = false;
             attackButtonMain.color = new Color(.70f, .70f, .70f);
             attackButtonRunes.color = new Color(.09f, .56f, 0.0f, 0);

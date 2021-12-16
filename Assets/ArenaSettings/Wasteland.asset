@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: da6b915e5a869ae47b06feb0921345ea, type: 3}
-  m_Name: Graveyard
+  m_Name: Wasteland
   m_EditorClassIdentifier: 
-  settingIcon: {fileID: 0}
-  settingName: Graveyard
-  settingDesc_0: Scary
-  settingDesc_1: Dark
-  settingDesc_2: Hard
+  settingIcon: {fileID: -1819686457256965516, guid: d4c57bf271b17f64485ebb732a6f8db1, type: 3}
+  settingName: Wasteland
+  settingDesc_0: Slower Energy Regen
+  settingDesc_1: Decreasing Word Power
+  settingDesc_2: 
   aso: 5
   letterLifetime: 20
-  lettersPerWave: 3
-  timeBetweenWaves: 7
+  lettersPerWave: 2
+  timeBetweenWaves: 2
   lettersToIgnore: 
   percentageOfLettersAsMisty: 0
   maxLettersOnBoard: 12

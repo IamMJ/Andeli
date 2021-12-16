@@ -33,7 +33,8 @@ public class AdvertPanel : UI_Panel
             if (timeLeftOnAd < 0)
             {
                 lib.ui_Controller.SetContext(UI_Controller.Context.Reward);
-                lib.ui_Controller.rewardPanel.ActivateRewardPanel(100);
+                lib.ui_Controller.rewardPanel.ActivateRewardPanel();
+                isDisplayed = false;
             }
         }
     }
@@ -41,5 +42,6 @@ public class AdvertPanel : UI_Panel
     public void ActivateAdvertPanel()
     {
         timeLeftOnAd = timeForAd;
+        isDisplayed = true;
     }
 }

@@ -22,7 +22,7 @@ public class SpellSeeker : MonoBehaviour
     Vector3 dir;
     float dist = 999;
     float speed;
-    float powerPayload;
+    public float powerPayload;
     TrueLetter.Ability spellType;
     float proximityTurnOnTime;
 

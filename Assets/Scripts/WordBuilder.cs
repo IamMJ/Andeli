@@ -29,7 +29,7 @@ public class WordBuilder : MonoBehaviour
     [SerializeField] List<LetterTile> lettersOnSword = new List<LetterTile>();
     [SerializeField] protected string currentWord = "";
     //int modifiedWordLength = 0;
-    public int CurrentPower = 0;
+    public int CurrentPower_Debug = 0;
     bool shouldLettersGoToSwordFirst = true;
 
     protected virtual void Start()
@@ -52,7 +52,7 @@ public class WordBuilder : MonoBehaviour
 
     private void Update()
     {
-        CurrentPower = CurrentWordPack.Power;
+        CurrentPower_Debug = CurrentWordPack.Power;
     }
     protected virtual void AddLetterToSword(LetterTile newLetter)
     {    
